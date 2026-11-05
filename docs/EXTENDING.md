@@ -3,7 +3,7 @@
 ## 🧪 1. Nowa domena testów (np. data, mobile, accessibility)
 
 1. `mkdir agents/<domena>` i skopiuj szkielet 4 ról z `agents/security/` (planner/writer/refactor/code-review).
-2. Zachowaj strukturę każdego agenta: frontmatter (name/description z keywords PL+EN/tools) → Hard Rules → Mandatory Workflow → Output Format → obowiązkowy Work Summary.
+2. Zachowaj strukturę każdego agenta: frontmatter (name/description z keywords PL+EN/tools) → Hard Rules → Mandatory Workflow → Output Format → obowiązkowy Work Summary. **NIE dodawaj pola `model:`** — agent dziedziczy aktywny model sesji Vibe (bez pinu działa zawsze, niezależnie jaki model jest aktualnie dostępny; pin `model:`/`active_model` stosuj tylko gdy świadomie chcesz wymusić konkretny model).
 3. Dodaj skill: `.vibe/skills/qa-<domena>/SKILL.md` (format wg `vibe:skill-creator`: frontmatter `name` + `description`, treść = pipeline + setup + reguły).
 4. Dodaj setup: `setups/<typ>.instructions.md`.
 5. Zaktualizuj tabelę w `docs/ARCHITECTURE.md` i `README.md`.

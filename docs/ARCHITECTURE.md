@@ -4,7 +4,7 @@ Biblioteka umiejętności i agentów dla testera automatyzującego (TS/JS, Playw
 
 ## 📌 Model: domena × rola
 
-Każda domena testów ma 4 agentów (subagentów) spiętych w pipeline:
+Każda domena testów ma 4 agentów (subagentów) spiętych w pipeline. **Agenci nie pinują modelu** (brak pola `model:` w frontmatter) — każdy subagent dziedziczy aktywny model sesji Vibe:
 
 ```
 planner → writer → refactor → code-review
