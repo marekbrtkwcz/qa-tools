@@ -39,7 +39,8 @@ qa-tools/
 ├── setups/            # setup projektu zależny od typu zadania (.instructions.md)
 ├── .vibe/skills/      # skille Vibe: qa-ui-playwright, qa-api-playwright, qa-e2e-hybrid,
 │                      #   qa-performance-k6, qa-security-data, qa-data-sql, qa-accessibility-wcag, qa-unit-vitest
-├── shared/            # biome.json, tsconfig.base.json, conventions.md (kanoniczne configi do kopiowania)
+├── shared/            # biome.json, tsconfig.base.json, playwright.config.ts, env.ts, env.example, conventions.md
+│                      #   i pozostałe kanoniczne szablony (single source of truth — kopiuj, nie wklejaj inline)
 └── docs/              # ARCHITECTURE.md, EXTENDING.md (jak rozbudowywać), CROSS-PLATFORM.md
 ```
 

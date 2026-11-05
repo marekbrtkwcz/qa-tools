@@ -68,49 +68,21 @@ docs/
 - `src/ui/factories` generates form data (follows UI format, e.g. DD/MM/YYYY dates)
 - `src/data` holds raw shared values that both factory layers can import and format independently
 
-## Step 2: Create `tsconfig.json`
+## Step 2: Create `tsconfig.json` from the shared template
 
-Create `tsconfig.json` in the project root with the following content:
+Copy the canonical base config from this repo (single source of truth):
 
-```json
-{
-  "compilerOptions": {
-    "target": "ES2023",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "paths": {
-      "@api/consts/*": ["./src/api/consts/*"],
-      "@api/requests/*": ["./src/api/requests/*"],
-      "@api/factories/*": ["./src/api/factories/*"],
-      "@api/models/*": ["./src/api/models/*"],
-      "@api/steps/*": ["./src/api/steps/*"],
-      "@ui/pages/*": ["./src/ui/pages/*"],
-      "@ui/components/*": ["./src/ui/components/*"],
-      "@ui/models/*": ["./src/ui/models/*"],
-      "@ui/factories/*": ["./src/ui/factories/*"],
-      "@data/*": ["./src/data/*"],
-      "@utils/*": ["./src/utils/*"],
-      "@fixtures/*": ["./src/fixtures/*"]
-    },
-    "types": ["node", "@playwright/test"],
-    "esModuleInterop": true,
-    "sourceMap": true,
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "skipLibCheck": true
-  },
-  "include": [
-    "src/**/*",
-    "tests/**/*",
-    "playwright.config.ts"
-  ]
-}
+```bash
+cp shared/tsconfig.base.json tsconfig.json   # adjust the path to your qa-tools checkout
 ```
+
+`shared/tsconfig.base.json` already contains: `target: ES2023`, `module` / `moduleResolution: NodeNext`, **`verbatimModuleSyntax: true`**, all `@api/*` / `@ui/*` / `@data/*` / `@utils/*` / `@fixtures/*` path aliases, `strict: true`, and `include` covering `src/`, `tests/`, `scripts/`, `playwright.config.ts`, `vitest.config.ts`. Do NOT paste an inline `tsconfig.json` — it drifts from the shared template.
 
 **Rules:**
 - Do NOT add `baseUrl` — it is deprecated since TypeScript 6.0
 - `paths` work without `baseUrl` when relative to `tsconfig.json` location
 - Alias prefix pattern: `@api/` for API layer, `@ui/` for UI layer — avoids name collisions
+- Keep the file in sync with `shared/tsconfig.base.json`; trim `paths` only for single-layer projects (see `playwright-ui-only` / `api-testing-only`)
 
 ## Step 2a: Install and Configure Biome.js
 
@@ -128,51 +100,13 @@ npm install --save-dev --save-exact @biomejs/biome
 npm i -D -E @biomejs/biome
 ```
 
-Initialize Biome with default configuration:
+Copy the canonical Biome config from this repo — do NOT paste an inline `biome.json`:
 
 ```bash
-npx biome init
+cp shared/biome.json biome.json   # adjust the path to your qa-tools checkout
 ```
 
-This creates a `biome.json` file. For custom configuration, modify it or use the following template:
-
-```json
-{
-  "$schema": "https://biomejs.dev/schemas/1.5.3/schema.json",
-  "organizeImports": {
-    "enabled": true
-  },
-  "formatter": {
-    "enabled": true,
-    "indentStyle": "space",
-    "indentWidth": 2,
-    "lineEnding": "lf",
-    "lineWidth": 120
-  },
-  "linter": {
-    "enabled": true,
-    "rules": {
-      "recommended": true,
-      "correctness": {
-        "noUnusedVariables": "error",
-        "noUnsafeAbstractClassInstantiation": "error"
-      },
-      "suspicious": {
-        "noExplicitAny": "error",
-        "noSuspiciousComment": "warn"
-      },
-      "style": {
-        "useConst": "warn",
-        "useNestedTernary": "warn"
-      }
-    }
-  },
-  "files": {
-    "include": ["src/**/*", "tests/**/*", "playwright.config.ts", "biome.json"],
-    "ignore": ["node_modules/**", "dist/**", "coverage/**"]
-  }
-}
-```
+`shared/biome.json` is the single source of truth (current Biome `$schema`, LF line endings, single quotes, `include`: `src/`, `tests/`, `scripts/`, `*.config.ts`). An inline template with a pinned `$schema` (e.g. 1.5.3) drifts from the installed Biome version and breaks the "always latest versions" security rule. Project-specific overrides go in the project's own `biome.json` via `extends`, never by forking the whole file.
 
 Add Biome scripts to `package.json`:
 
@@ -242,17 +176,15 @@ npm install --save-dev dotenv
 - Never commit `.env` to git (add to `.gitignore`)
 - Use different `.env` files for different environments (`.env.test`, `.env.development`)
 
-## Step 4: Configure `playwright.config.ts`
+## Step 4: Create `playwright.config.ts` from the shared template
 
-Uncomment the dotenv block at the top of `playwright.config.ts`:
+Copy the canonical Playwright config from this repo:
 
-```ts
-import dotenv from 'dotenv';
-import path from 'node:path';
-dotenv.config({ path: path.resolve(__dirname, '.env') });
+```bash
+cp shared/playwright.config.ts playwright.config.ts
 ```
 
-These three lines must be uncommented and placed before `defineConfig(...)`.
+`shared/playwright.config.ts` already imports the env singleton (`src/config/env.ts`), which loads dotenv — so there is NO separate dotenv block in the config and NO direct `process.env` access (see Step 10).
 
 ## Step 5: Update `.gitignore`
 
@@ -475,7 +407,9 @@ export const HTTP_505_HTTP_VERSION_NOT_SUPPORTED = 505;
 Create the file `src/api/consts/api.endpoints.const.ts` with the following template content:
 
 ```ts
-export const API_BASE_URL = process.env.API_URL ?? 'http://localhost:3000';
+import { env } from '../../config/env.js';
+
+export const API_BASE_URL = env.API_URL ?? 'http://localhost:3000';
 
 export const API_ENDPOINTS = {
   // resource: {
@@ -486,7 +420,7 @@ export const API_ENDPOINTS = {
 ```
 
 **Rules:**
-- `API_BASE_URL` reads from `process.env.API_URL` set in `.env` — never hardcode URLs
+- `API_BASE_URL` reads from the env singleton (`env.API_URL` — dotenv + zod in `src/config/env.ts`) — never `process.env`, never hardcode URLs
 - The fallback `'http://localhost:3000'` is a local dev default only
 - Add one key per API resource (e.g. `users`, `orders`) following the commented-out pattern
 - Import from `@api/consts/api.endpoints.const` in request files and steps
@@ -577,9 +511,10 @@ Create the file `src/fixtures/api.logger.fixture.ts` with the following content:
 /* eslint-disable no-console */
 import { test as base, APIRequestContext, APIResponse } from '@playwright/test';
 import chalk from 'chalk';
+import { env } from '../../config/env.js';
 chalk.level = 3;
 
-const isLoggerEnabled = process.env.LOGGER === 'true';
+const isLoggerEnabled = env.LOGGER;
 
 const neon = chalk.hex('#22d3a2');
 const neonB = chalk.hex('#22d3a2').bold;
@@ -819,59 +754,36 @@ export { expect } from '@playwright/test';
 - All three fixture files (`api.logger.fixture`, `api.fixture`, `pages.fixture`) are always merged together — even in API-only tests
 - Never add fixture logic directly to this file — keep it as a pure merge point
 
-## Step 10: Configure projects in `playwright.config.ts`
+## Step 10: Projects in `playwright.config.ts`
 
-In `playwright.config.ts`, replace the default `projects` array with the following three projects:
+The three projects are already defined in `shared/playwright.config.ts` (copied in Step 4) and read base URLs from the env singleton:
 
-```ts
-projects: [
-  {
-    name: 'api',
-    testDir: './tests/api',
-    use: {
-      baseURL: process.env.API_URL,
-    },
-  },
-  {
-    name: 'ui',
-    testDir: './tests/ui',
-    use: {
-      ...devices['Desktop Chrome'],
-      baseURL: process.env.UI_URL,
-    },
-  },
-  {
-    name: 'e2e',
-    testDir: './tests/e2e',
-    use: {
-      ...devices['Desktop Chrome'],
-      baseURL: process.env.UI_URL,
-    },
-  },
-],
-```
+| Project | testDir | baseURL |
+|---|---|---|
+| `api` | `./tests/api` | `env.API_URL` |
+| `ui` | `./tests/ui` | `env.BASE_URL` |
+| `e2e` | `./tests/e2e` | `env.BASE_URL` |
 
 **Rules:**
-- The `api` project uses `process.env.API_URL` as `baseURL` — set this in `.env`
-- The `ui` and `e2e` projects use `process.env.UI_URL` as `baseURL` — set this in `.env`
+- The `api` project uses `env.API_URL`; `ui` and `e2e` use `env.BASE_URL` — both validated by zod in `src/config/env.ts`, never `process.env`
 - Each project has its own `testDir` so tests are isolated by type
 - Do NOT set `baseURL` globally — keep it scoped to each project
-- Remove the default `chromium`, `firefox`, and `webkit` projects generated by Playwright init
+- The shared template already removed the default `chromium`, `firefox`, and `webkit` projects generated by Playwright init
 
 ## Step 11: Create `.env`
 
 Create `.env` in the project root with the following content:
 
 ```
-UI_URL=your_ui_url
+BASE_URL=your_ui_url
 API_URL=your_api_url
 LOGGER=true
 OPENAPI_SPEC=docs/openapi/YOUR_API_SPEC.openapi.json
 ```
 
-- `UI_URL` — base URL for UI/browser tests (used by the `ui` and `e2e` projects in `playwright.config.ts`)
+- `BASE_URL` — base URL for UI/browser tests (used by the `ui` and `e2e` projects in `playwright.config.ts`)
 - `API_URL` — base URL for all API requests (used by the `api` project in `playwright.config.ts`)
-- `LOGGER` — set to `true` to enable the request/response logger in `src/fixtures/api.logger.fixture.ts`
+- `LOGGER` — set to `true` to enable the request/response logger in `src/fixtures/api.logger.fixture.ts` (read via `env.LOGGER`)
 - `OPENAPI_SPEC` — path to the OpenAPI/Swagger spec file used by planning and test-writing agents; replace the placeholder with the actual filename from `docs/openapi/`
 
 ## Step 11b: Create `.env.example`
@@ -879,7 +791,7 @@ OPENAPI_SPEC=docs/openapi/YOUR_API_SPEC.openapi.json
 Create `.env.example` in the project root with the following content:
 
 ```
-UI_URL=
+BASE_URL=
 API_URL=
 LOGGER=true
 OPENAPI_SPEC=docs/openapi/YOUR_API_SPEC.openapi.json
