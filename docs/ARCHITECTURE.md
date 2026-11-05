@@ -31,7 +31,8 @@ planner → writer → refactor → code-review
 ## 🔧 Warstwy wspólne
 
 - `shared/biome.json` — jeden kanoniczny config lintera/formattera.
-- `shared/tsconfig.base.json` — strict TS + aliasy `@api/*`, `@ui/*`.
+- `shared/tsconfig.base.json` — strict TS + `verbatimModuleSyntax` + aliasy `@api/*`, `@ui/*`.
+- `shared/playwright.config.ts` — kanoniczny config Playwright: projekty `api`/`ui`/`e2e` z `baseURL` z singletonu env (`env.API_URL` / `env.BASE_URL`); w configu brak `process.env`.
 - `shared/conventions.md` — nazewnictwo, lokatory, dane testowe, gitignore.
 - `shared/env.ts` — singleton zmiennych środowiskowych (dotenv + zod); `shared/env.example` — szablon `.env.example`.
 - `shared/faker.ts` — szablon instancji @faker-js/faker (`src/utils/faker.ts`) z seedem; dane tylko w factories.

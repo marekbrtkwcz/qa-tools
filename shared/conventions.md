@@ -62,7 +62,7 @@ getByRole > getByLabel > getByPlaceholder > getByText > getByTestId > css (last 
 
 ## 🧪 Test data
 - No hardcoded emails/passwords/URLs in tests — `src/data/` constants or factories (faker for dynamic data, in `beforeEach`/`beforeAll`).
-- Base URL / API URL / tokens only from `.env` (`playwright.config.ts` / `process.env` / k6 `__ENV`). `.env.example` committed, `.env` git-ignored.
+- Base URL / API URL / tokens tylko z singletonu `env` (`env.BASE_URL` / `env.API_URL`, walidowane zod w `src/config/env.ts`) — wyjątek: skrypty k6 (`__ENV`). `.env.example` committed, `.env` git-ignored.
 - API factories follow the backend contract (ISO 8601 dates); UI factories follow UI format (e.g. DD/MM/YYYY). Never mix.
 
 ## 🧪 Generacja danych testowych — @faker-js/faker (standard)

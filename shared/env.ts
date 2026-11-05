@@ -9,6 +9,8 @@ const envSchema = z.object({
   BASE_URL: z.string().url(),
   API_URL: z.string().url().optional(),
   OPENAPI_SPEC: z.string().default('docs/openapi/openapi.json'),
+  // Logger requestów API (fixture api.logger.fixture.ts) — 'true' / 'false'
+  LOGGER: z.enum(['true', 'false']).default('false').transform((v) => v === 'true'),
   // Konta testowe — tylko środowisko testowe
   TEST_USER_EMAIL: z.string().email().optional(),
   TEST_USER_PASSWORD: z.string().min(1).optional(),
