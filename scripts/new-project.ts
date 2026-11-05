@@ -109,7 +109,8 @@ function parseArgs(argv: string[]): Record<string, string> {
 function buildPackageJson(name: string, setup: Setup): Record<string, unknown> {
   const s: Record<string, string> = { ...(JSON.parse(read('shared/package.scripts.json')).scripts as Record<string, string>) };
   if (!setup.playwright) {
-    for (const k of Object.keys(s)) if (k.startsWith('test')) delete s[k];
+    // Playwright-specific scripts — ale testy jednostkowe (Vitest) zostają, jeśli setup.vitest
+    for (const k of ['test', 'test:list', 'test:ui', 'test:api', 'test:e2e', 'test:a11y', 'test:security', 'test:all', 'test:headed', 'test:debug', 'test:report']) delete s[k];
   } else {
     if (!setup.tests.includes('ui')) delete s['test:ui'];
     if (!setup.tests.includes('api')) delete s['test:api'];
@@ -124,6 +125,15 @@ function buildPackageJson(name: string, setup: Setup): Record<string, unknown> {
     delete s['test:unit:watch'];
     delete s['coverage'];
   }
+  // test:everything składamy z tego, co dany setup faktycznie ma
+  const pw: string[] = [];
+  if (setup.playwright) {
+    const projects = [...setup.tests].filter((t) => !t.includes('/'));
+    pw.push(projects.length > 1 ? `playwright test ${projects.map((p) => `--project=${p}`).join(' ')}` : 'playwright test');
+  }
+  if (setup.vitest) pw.push('vitest run --coverage');
+  if (pw.length > 0) s['test:everything'] = pw.join(' && ');
+  else delete s['test:everything'];
   return { name, private: true, type: 'module', scripts: s };
 }
 

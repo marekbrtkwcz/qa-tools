@@ -4,7 +4,7 @@ Applies to every project created from `setups/`.
 
 ## 🧰 Tooling
 - Linter + formatter: **Biome** only (`shared/biome.json`). No Prettier.
-- npm scripts: kanoniczny blok `scripts` z szablonu `shared/package.scripts.json` (scal do `package.json`, w wariancie projektu zostaw tylko odpowiednie testy: `test:ui` / `test:api` / `test:a11y` / `test:security`); Biome: `format`, `format:check`, `lint`, `lint:fix`, `check`; bezpieczeństwo: `audit`, `audit:fix`, `deps:check`, `deps:update`, `deps:update:major`, `deps:interactive`.
+- npm scripts: kanoniczny blok `scripts` z szablonu `shared/package.scripts.json` (scal do `package.json`, w wariancie projektu zostaw tylko odpowiednie testy: `test:ui` / `test:api` / `test:a11y` / `test:security`); `test:everything` — pełny bieg wszystkich warstw, jakie projekt ma (testy Playwright + `vitest run --coverage`); Biome: `format`, `format:check`, `lint`, `lint:fix`, `check`; bezpieczeństwo: `audit`, `audit:fix`, `deps:check`, `deps:update`, `deps:update:major`, `deps:interactive`.
 - Wersje bibliotek: zawsze najnowsze — sekcja poniżej (bezpieczeństwo).
 - CI: szablon `shared/ci/github-actions.yml` → `.github/workflows/ci.yml` w projekcie TS/JS (quality: `npm run check` + `npm audit`; test: `npm run test:all` + `npm run coverage` jako gate; `.env` w CI tylko z GitHub Secrets, nigdy z repo).
 - TypeScript strict mode; `paths` aliases without `baseUrl`.

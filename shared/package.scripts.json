@@ -8,6 +8,7 @@
     "test:a11y": "playwright test tests/accessibility",
     "test:security": "playwright test tests/api/security tests/ui/security",
     "test:all": "playwright test --project=api --project=ui --project=e2e",
+    "test:everything": "playwright test --project=api --project=ui --project=e2e && vitest run --coverage",
     "test:headed": "playwright test --headed",
     "test:debug": "playwright test --debug",
     "test:report": "playwright show-report",
