@@ -17,7 +17,7 @@ planner → writer → refactor → code-review
 | E2E hybrid (API+UI) | `agents/e2e/` | `qa-e2e-hybrid` | `setups/playwright-fullstack` |
 | Wydajność (k6) | `agents/performance/` | `qa-performance-k6` (+ wbudowane skille k6*) | `setups/performance-k6` |
 | Security / dane | `agents/security/` | `qa-security-data` | `setups/security-and-data` |
-| SQL / konwersje danych | — (konwencje) | `qa-data-sql` | `setups/security-and-data` |
+| SQL / konwersje danych | `agents/data/` | `qa-data-sql` | `setups/security-and-data` |
 | Dostępność (WCAG, axe-core) | `agents/accessibility/` | `qa-accessibility-wcag` | `setups/accessibility-wcag` |
 | Unit (Vitest + coverage) | `agents/unit/` | `qa-unit-vitest` | `setups/unit-testing-vitest` |
 
@@ -40,6 +40,7 @@ planner → writer → refactor → code-review
 - `shared/package.scripts.json` — kanoniczny blok `scripts` do `package.json` (testy per warstwa incl. `test:unit`, coverage `coverage`, Biome, audit, deps:*).
 - `shared/vitest.config.ts` — kanoniczny config Vitest: coverage provider v8, raporty text/html/json-summary/lcov do `coverage/`, progi (thresholds) 80% — coverage obowiązkowe w projektach unit.
 - `shared/gitignore` — szablon `.gitignore` (sekrety lokalnie, lockfile w repo).
+- `shared/ci/github-actions.yml` — szablon workflow GitHub Actions → `.github/workflows/ci.yml` (Biome check + `npm audit` → testy → coverage jako gate; `.env` w CI tylko z GitHub Secrets).
 - Każdy projekt testowy ma folder `docs/` (openapi, scenarios per domena, adr, guides, architecture) — konwencja w `shared/conventions.md`.
 - Każdy projekt ma też `scripts/` — skrypty TS na tsx (`npm run script -- ...`), interaktywne CLI na @clack/prompts (szablon `shared/script.example.ts`), menu zadań `shared/menu.ts` (`npm run menu`), porządki `shared/clean.ts` (`npm run clean`); `scripts/sql/` dla SQL.
 - Standard walidacji struktur: **zod** (env, odpowiedzi API, payloady); wyjątek: skrypty k6.

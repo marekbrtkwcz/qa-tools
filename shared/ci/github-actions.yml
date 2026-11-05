@@ -1,0 +1,56 @@
+# Kanoniczny workflow GitHub Actions — kopiuj do .github/workflows/ci.yml w projekcie TS/JS (Playwright/Vitest).
+# UWAGI per setup:
+#  - projekt k6 (bez package.json): osobny job z instalacją k6 (grafana/setup-k6) i `k6 run`, bez npm ci
+#  - projekt unit-only (Vitest): zostaw tylko job quality + coverage
+#  - sekrety NIGDY w repo: .env w CI tworzony z GitHub Secrets (krok "Create .env from secrets")
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    name: Biome + audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+          cache: npm
+      - run: npm ci
+      - run: npm run check # Biome: lint + format check (bez zapisu)
+      - run: npm audit --audit-level=high
+
+  test:
+    name: Testy + coverage
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+          cache: npm
+      - run: npm ci
+      - name: Create .env from secrets
+        run: |
+          printf 'BASE_URL=%s\nAPI_URL=%s\nLOGGER=false\n' \
+            "$TEST_BASE_URL" "$TEST_API_URL" > .env
+        env:
+          TEST_BASE_URL: ${{ secrets.TEST_BASE_URL }}
+          TEST_API_URL: ${{ secrets.TEST_API_URL }}
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:all
+      - run: npm run coverage # gate: progi coverage z vitest.config.ts (np. 80%)
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7

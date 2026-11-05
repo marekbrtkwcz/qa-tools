@@ -15,6 +15,7 @@ Biblioteka wielokrotnego użytku: TypeScript/JavaScript, Playwright (UI / Web AP
 - **Folder `docs/` w każdym projekcie**: dokumentacja i scenariusze — `docs/openapi/`, `docs/scenarios/<domena>/` (plany od agentów), `docs/adr/`, `docs/guides/`, `docs/architecture/` (szczegóły: `shared/conventions.md`).
 - **Wersje zależności (bezpieczeństwo)**: zawsze najnowsze biblioteki (`npm install <pkg>` bez pinów, pin tylko przy udokumentowanej kompatybilności), `package-lock.json` w repo, regularnie `npm audit` + `ncu` (skrypty `deps:check` / `deps:update`, konfig `shared/ncurc.json` → `.ncurc.json`; ncu tylko tam, gdzie jest `package.json` — binarki typu k6 przez menedżera pakietów), najlepiej też Dependabot/Renovate.
 - **Generacja danych testowych**: **@faker-js/faker** (szablon: `shared/faker.ts` → `src/utils/faker.ts`) — tylko w factories / `beforeEach` z `faker.seed()` dla powtarzalności; stałe wartości w `src/data/`.
+- **CI**: szablon workflow GitHub Actions `shared/ci/github-actions.yml` → `.github/workflows/ci.yml` — job `quality` (Biome `check` + `npm audit --audit-level=high`) i job `test` (`test:all` + `coverage` jako gate); `.env` w CI tworzony wyłącznie z GitHub Secrets.
 
 ## 🚀 Jak zacząć (wybierz typ zadania → setup)
 
@@ -35,7 +36,7 @@ Testy Web API i bezpieczeństwa wrzucasz **do tego samego projektu Playwright** 
 ```
 qa-tools/
 ├── agents/            # subagenci .agent.md — 4 role na domenę: planner → writer → refactor → code-review
-│   ├── ui/  api/  e2e/  performance/  security/  accessibility/  unit/
+│   ├── ui/  api/  e2e/  performance/  security/  accessibility/  unit/  data/
 ├── setups/            # setup projektu zależny od typu zadania (.instructions.md)
 ├── .vibe/skills/      # skille Vibe: qa-ui-playwright, qa-api-playwright, qa-e2e-hybrid,
 │                      #   qa-performance-k6, qa-security-data, qa-data-sql, qa-accessibility-wcag, qa-unit-vitest
