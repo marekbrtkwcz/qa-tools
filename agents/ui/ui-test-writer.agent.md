@@ -4,7 +4,6 @@ description: "Use when writing simple Playwright TypeScript UI tests
   without architecture. Keywords: write test, simple UI test, test without
   page object, create playwright test, simple ui test, write ui test,
   playwright test, ui automation, locator, spec file."
-model: Claude Sonnet 4.6
 tools: [vscode, execute, read, agent, edit, search, web/fetch, web/githubRepo, 'playwright/*', todo]
 ---
 

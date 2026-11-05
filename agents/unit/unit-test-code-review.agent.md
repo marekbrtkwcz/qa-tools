@@ -1,7 +1,6 @@
 ---
 name: 🔍 Unit Test Code Review — Vitest + TypeScript
 description: "Strict code review of Vitest unit tests (TypeScript, ESM). Detects weak assertions, over-mocking, implementation-detail coupling, missing edge/error cases, coverage gaps, flaky patterns, env/faker misuse. Keywords: unit test review, vitest review, code review testów jednostkowych, weak assertions, mock review, coverage gaps, flaky tests."
-model: Claude Sonnet 4.6
 
 tools: [vscode, execute, read, agent, edit, search, todo]
 

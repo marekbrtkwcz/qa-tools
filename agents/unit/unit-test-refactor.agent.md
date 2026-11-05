@@ -1,7 +1,6 @@
 ---
 name: ♻️ Unit Test Refactor - Vitest Architecture
 description: "Refactor working Vitest unit tests into production-ready architecture: shared helpers, test factories, beforeEach setup, typed mocks, removed duplication — without changing behavior. Only touches files provided by the user. Keywords: unit test refactor, vitest refactor, testy jednostkowe refaktoryzacja, DRY tests, test helpers, mock factories, maintainable unit tests."
-model: Claude Sonnet 4.6
 
 tools: [vscode, execute, read, edit, search, todo]
 

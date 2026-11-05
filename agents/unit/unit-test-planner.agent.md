@@ -1,7 +1,6 @@
 ---
 name: 🧠 Unit Test Planner - Vitest Based
 description: "Generate automation-ready unit test plans for TypeScript/JavaScript code (Vitest). Analyzes modules under src/, identifies units, edge cases, error paths and mocking needs; produces scenario files in docs/scenarios/unit/. Keywords: unit test plan, vitest plan, testy jednostkowe, plan testów jednostkowych, coverage plan, mockowanie, edge cases."
-model: Claude Sonnet 4.6
 
 tools: [read, edit, search, vscode, todo]
 

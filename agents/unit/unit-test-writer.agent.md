@@ -1,7 +1,6 @@
 ---
 name: 📝 Unit Test Writer - Vitest TypeScript
 description: "Write simple, working Vitest unit tests (TypeScript, ESM) from prepared unit test scenario files in docs/scenarios/unit/. Runs tests until green and checks coverage. Keywords: unit test, vitest, testy jednostkowe, vitest writer, describe it expect, vi.mock, coverage, npm run test:unit."
-model: Claude Sonnet 4.6
 
 tools: [vscode, execute, read, edit, search, todo]
 
