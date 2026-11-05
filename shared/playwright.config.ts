@@ -38,5 +38,13 @@ export default defineConfig({
         baseURL: env.BASE_URL,
       },
     },
+    // Opcjonalny projekt BEZ przeglądarki — testy jednostkowe własnych elementów projektu
+    // (factories, utils, schematy zod, logika stepsów). Brak devices[...] = brak browsera;
+    // fixture `page` jest wtedy niedostępny (błąd przy użyciu), `request` działa.
+    // UWAGA: `tests/unit/` należy do Vitest — tu użyj osobnego katalogu `tests/unit-pw/`.
+    // {
+    //   name: 'unit-pw',
+    //   testDir: './tests/unit-pw',
+    // },
   ],
 });

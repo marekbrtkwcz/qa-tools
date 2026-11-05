@@ -98,6 +98,7 @@ getByRole > getByLabel > getByPlaceholder > getByText > getByTestId > css (last 
 - Mocki: `vi.mock` / `vi.fn` / `vi.spyOn`; `vi.restoreAllMocks()` w `afterEach`; brak prawdziwego I/O (fs, network, timery) w testach jednostkowych.
 - Dane dynamiczne tylko przez faker (`src/utils/faker.ts`) z `faker.seed()` w `beforeEach`; env tylko przez singleton `env.X`.
 - Scenariusze/plan per moduł: `docs/scenarios/unit/{module}-unit.scenario.md` (happy path / edge / błędy / mocki).
+- Testy jednostkowe własnych elementów projektu Playwright (factories, utils, steps): domyślnie Vitest (`tests/unit/` + coverage). Alternatywnie — projekt Playwright BEZ przeglądarki (zakomentowany `unit-pw` w `shared/playwright.config.ts`, katalog `tests/unit-pw/`), gdy chcesz użyć runnera/fixture'ów Playwright (np. `request`); wtedy bez coverage — Vitest pozostaje bramką.
 
 ## 🌿 Git
 - `.gitignore`: szablon `shared/gitignore` → kopiuj jako `.gitignore` (node_modules, dist, coverage, playwright-report, test-results, `.env` + warianty, logi, pliki systemowe/IDE, k6-results).
