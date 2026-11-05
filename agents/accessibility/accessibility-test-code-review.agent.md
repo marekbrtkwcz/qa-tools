@@ -1,7 +1,6 @@
 ---
 name: 🔍 Accessibility Test Code Review - WCAG Coverage
 description: "Strict review of WCAG/accessibility tests: axe coverage per page/state, no unjustified disabled rules, keyboard/focus checks present, violations handled as findings. Keywords: a11y review, WCAG review, przegląd dostępności."
-model: Claude Sonnet 4.6
 tools: [vscode, execute, read, search, todo]
 ---
 

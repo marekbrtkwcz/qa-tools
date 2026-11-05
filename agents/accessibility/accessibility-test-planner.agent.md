@@ -1,7 +1,6 @@
 ---
 name: 🧠 Accessibility Test Planner - WCAG
 description: "Plan automation-ready WCAG accessibility test scenarios for pages/flows using axe-core and manual keyboard checks in Playwright. Keywords: WCAG plan, accessibility plan, testy dostępności, a11y plan, axe-core, WCAG 2.2 AA."
-model: Claude Sonnet 4.6
 tools: [read, edit, search, vscode, todo]
 ---
 

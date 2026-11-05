@@ -1,7 +1,6 @@
 ---
 name: 📝 Accessibility Test Writer - axe-core + Playwright
 description: "Write WCAG accessibility tests with @axe-core/playwright and keyboard checks based on a prepared accessibility plan. Keywords: WCAG test, axe-core test, accessibility test, testy dostępności, a11y spec."
-model: Claude Sonnet 4.6
 tools: [vscode, execute, read, edit, search, todo]
 ---
 

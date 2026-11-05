@@ -1,7 +1,6 @@
 ---
 name: ♻️ Accessibility Test Refactor - Shared Axe Config
 description: "Refactor accessibility specs toward a maintainable suite: shared AxeBuilder config (WCAG tags), scan helper, per-page fixtures, violation-reporting helper. Keywords: a11y refactor, axe refactor, refaktoryzacja testów dostępności."
-model: Claude Sonnet 4.6
 tools: [vscode, execute, read, edit, search, todo]
 ---
 
