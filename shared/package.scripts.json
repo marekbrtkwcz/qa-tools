@@ -1,0 +1,32 @@
+{
+  "scripts": {
+    "test": "playwright test",
+    "test:list": "playwright test --list",
+    "test:ui": "playwright test tests/ui --project=ui",
+    "test:api": "playwright test tests/api --project=api",
+    "test:e2e": "playwright test tests/e2e --project=e2e",
+    "test:a11y": "playwright test tests/accessibility",
+    "test:security": "playwright test tests/api/security tests/ui/security",
+    "test:all": "playwright test --project=api --project=ui --project=e2e",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "test:report": "playwright show-report",
+    "test:unit": "vitest run",
+    "test:unit:watch": "vitest",
+    "coverage": "vitest run --coverage",
+    "format": "biome format --write",
+    "format:check": "biome format",
+    "lint": "biome lint",
+    "lint:fix": "biome lint --write",
+    "check": "biome check",
+    "audit": "npm audit",
+    "audit:fix": "npm audit fix",
+    "deps:check": "ncu",
+    "deps:update": "ncu -u",
+    "deps:update:major": "ncu -u --upgrade",
+    "deps:interactive": "ncu -i",
+    "script": "tsx",
+    "menu": "tsx scripts/menu.ts",
+    "clean": "tsx scripts/clean.ts"
+  }
+}
