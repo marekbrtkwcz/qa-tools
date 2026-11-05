@@ -1,0 +1,51 @@
+# 🧵 Architecture — qa-tools
+
+Biblioteka umiejętności i agentów dla testera automatyzującego (TS/JS, Playwright, k6, SQL, Biome).
+
+## 📌 Model: domena × rola
+
+Każda domena testów ma 4 agentów (subagentów) spiętych w pipeline:
+
+```
+planner → writer → refactor → code-review
+```
+
+| Domena | Katalog agentów | Skill (Vibe) | Setup |
+|---|---|---|---|
+| UI (Playwright) | `agents/ui/` | `qa-ui-playwright` | `setups/playwright-ui-only` / `playwright-fullstack` |
+| Web API | `agents/api/` | `qa-api-playwright` | `setups/api-testing-only` / `playwright-fullstack` |
+| E2E hybrid (API+UI) | `agents/e2e/` | `qa-e2e-hybrid` | `setups/playwright-fullstack` |
+| Wydajność (k6) | `agents/performance/` | `qa-performance-k6` (+ wbudowane skille k6*) | `setups/performance-k6` |
+| Security / dane | `agents/security/` | `qa-security-data` | `setups/security-and-data` |
+| SQL / konwersje danych | — (konwencje) | `qa-data-sql` | `setups/security-and-data` |
+| Dostępność (WCAG, axe-core) | `agents/accessibility/` | `qa-accessibility-wcag` | `setups/accessibility-wcag` |
+| Unit (Vitest + coverage) | `agents/unit/` | `qa-unit-vitest` | `setups/unit-testing-vitest` |
+
+## ⛓️ Przepływ pracy
+
+1. Użytkownik wybiera **typ zadania** → właściwy **setup** tworzy projekt.
+2. Właściwy **skill** ładuje pipeline agentów dla domeny.
+3. Agenci pracują jako subagenci w kolejności: plan (walidacja względem realnego UI / OpenAPI / kodu źródłowego) → kod → refaktoryzacja → review.
+4. Każdy agent kończy obowiązkowym **Work Summary** (pliki, decyzje, założenia).
+
+## 🔧 Warstwy wspólne
+
+- `shared/biome.json` — jeden kanoniczny config lintera/formattera.
+- `shared/tsconfig.base.json` — strict TS + aliasy `@api/*`, `@ui/*`.
+- `shared/conventions.md` — nazewnictwo, lokatory, dane testowe, gitignore.
+- `shared/env.ts` — singleton zmiennych środowiskowych (dotenv + zod); `shared/env.example` — szablon `.env.example`.
+- `shared/faker.ts` — szablon instancji @faker-js/faker (`src/utils/faker.ts`) z seedem; dane tylko w factories.
+- `shared/ncurc.json` — konfig npm-check-updates (`.ncurc.json`, target: latest); aktualizacje zależności tylko tam, gdzie jest `package.json`.
+- `shared/package.scripts.json` — kanoniczny blok `scripts` do `package.json` (testy per warstwa incl. `test:unit`, coverage `coverage`, Biome, audit, deps:*).
+- `shared/vitest.config.ts` — kanoniczny config Vitest: coverage provider v8, raporty text/html/json-summary/lcov do `coverage/`, progi (thresholds) 80% — coverage obowiązkowe w projektach unit.
+- `shared/gitignore` — szablon `.gitignore` (sekrety lokalnie, lockfile w repo).
+- Każdy projekt testowy ma folder `docs/` (openapi, scenarios per domena, adr, guides, architecture) — konwencja w `shared/conventions.md`.
+- Każdy projekt ma też `scripts/` — skrypty TS na tsx (`npm run script -- ...`), interaktywne CLI na @clack/prompts (szablon `shared/script.example.ts`), menu zadań `shared/menu.ts` (`npm run menu`), porządki `shared/clean.ts` (`npm run clean`); `scripts/sql/` dla SQL.
+- Standard walidacji struktur: **zod** (env, odpowiedzi API, payloady); wyjątek: skrypty k6.
+- Konwencja bezpieczeństwa: zawsze najnowsze wersje bibliotek, `package-lock.json` commitujemy, `npm audit` + `ncu -u` regularnie.
+- Wszystkie projekty TS/JS w ESM: `"type": "module"`, `NodeNext` + `verbatimModuleSyntax` (wyjątek: skrypty k6).
+
+## 🧰 Wbudowane skille (narzędzia)
+
+Skill `qa-performance-k6` deleguje pracę nad skryptami do wbudowanych skilli: `k6`, `k6-perf-test-website`, `k6-browser-test`, `k6-trend-analysis`, `k6-cloud-investigate-test`, `k6-manage`. Skill `qa-ui-playwright` korzysta z `playwright-best-practices` i `playwright-cli`.
+
