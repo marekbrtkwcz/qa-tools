@@ -49,6 +49,7 @@ planner → writer → refactor → code-review
 - Standard walidacji struktur: **zod** (env, odpowiedzi API, payloady); wyjątek: skrypty k6.
 - Konwencja bezpieczeństwa: zawsze najnowsze wersje bibliotek, `package-lock.json` commitujemy, `npm audit` + `ncu -u` regularnie.
 - Wszystkie projekty TS/JS w ESM: `"type": "module"`, `NodeNext` + `verbatimModuleSyntax` (wyjątek: skrypty k6).
+- Wersjonowanie biblioteki: `CHANGELOG.md` w korzeniu (Keep a Changelog + SemVer) — paczka zmian = wpis + bump + tag `vX.Y.Z`, sprawdzane przez walidator (`docs/EXTENDING.md` §6).
 
 ## 🧰 Wbudowane skille (narzędzia)
 

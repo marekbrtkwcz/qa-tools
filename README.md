@@ -18,6 +18,7 @@ Biblioteka wielokrotnego użytku: TypeScript/JavaScript, Playwright (UI / Web AP
 - **Testy bezpieczeństwa — szablony**: `shared/security-payloads.ts` → `src/data/security-payloads.ts` (kanarkowe payloady `CANARIES`, `SECURE_BEHAVIOR`, skaner wycieków `scanForLeaks()` — PESEL, nr karty, JWT, token, pole password — oraz `EXPECTED_SECURITY_HEADERS`); `shared/security-fixtures.ts` → `src/fixtures/auth.fixture.ts` (role `userRequest()` / `adminRequest()` / `anonymousRequest()`, asercje `expectNoIdorLeak()` / `expectUnauthorized()`); `shared/security-plan.template.md` → `docs/scenarios/security/` (plan: rules of engagement, macierz OWASP, rejestr findings). Verification only — nigdy destrukcyjne payloady.
 - **CI**: szablon workflow GitHub Actions `shared/ci/github-actions.yml` → `.github/workflows/ci.yml` — job `quality` (Biome `check` + `npm audit --audit-level=high` + skan sekretów **Gitleaks**) i job `test` (`test:all` + `coverage` jako gate); `.env` w CI tworzony wyłącznie z GitHub Secrets.
 - **Git hooks (opcjonalnie)**: husky + lint-staged — pre-commit `biome check --write` na plikach staged; konfiguracja w `shared/conventions.md` (sekcja „Git hooks”).
+- **Wersjonowanie biblioteki**: `CHANGELOG.md` w korzeniu (Keep a Changelog + SemVer) — każda paczka zmian = nowy wpis + bump wersji + tag `vX.Y.Z` (lokalnie); zasady w `docs/EXTENDING.md` §6.
 
 ## 🚀 Jak zacząć (wybierz typ zadania → setup)
 

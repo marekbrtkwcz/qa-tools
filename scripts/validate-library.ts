@@ -141,6 +141,15 @@ for (const f of ['validate-library.ts', 'new-project.ts']) {
 }
 console.log('  ✅ validate-library.ts, new-project.ts');
 
+// ── 6. CHANGELOG: istnieje i ma sekcje wersji ──
+console.log('📦 CHANGELOG');
+if (!existsSync(join(ROOT, 'CHANGELOG.md'))) {
+  err('CHANGELOG.md: brak pliku wersjonowania biblioteki');
+} else if (!/^## \[/m.test(read('CHANGELOG.md'))) {
+  err('CHANGELOG.md: brak sekcji wersji (## [X.Y.Z])');
+}
+console.log('  ✅ CHANGELOG spójny');
+
 // ── Podsumowanie ──
 console.log('');
 if (errors.length > 0) {

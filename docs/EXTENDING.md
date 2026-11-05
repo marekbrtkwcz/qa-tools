@@ -24,9 +24,17 @@ Edytuj `shared/conventions.md` oraz szablony w `shared/` — kanoniczne pliki: `
 
 Skopiuj `.vibe/skills/qa-*` do `~/.vibe/skills/` — skill będzie dostępny we wszystkich projektach (wg `vibe:skill-creator`).
 
+## 📦 6. Wersjonowanie (przy każdej paczce zmian)
+
+1. **Wpis w `CHANGELOG.md`** — nowa sekcja `## [X.Y.Z] — <data>` na górze pliku; podsekcje `### ➕ Added` / `### 🔄 Changed` / `### 🧹 Removed`. Wpis opisuje paczkę z perspektywy użytkownika biblioteki, nie pojedyncze commity.
+2. **Bump wersji (SemVer)**: nowa domena / skill / setup / szablon = **minor** (`X.Y+1.0`), poprawka istniejącego elementu = **patch**, zmiana łamiąca istniejące wygenerowane projekty = **major**.
+3. **Tag lokalny**: `git tag -a vX.Y.Z -m "X.Y.Z — <krótki opis paczki>"`. Tagi trzymane lokalnie — konnektor GitHub API, którym synchronizujemy repo, nie tworzy tagów; przy tradycyjnym `git push` przenoszone przez `git push --tags`.
+4. Walidator pilnuje obecności `CHANGELOG.md` i sekcji wersji (`## [`) — brak pliku = exit 1.
+
 ## 🌱 Zasady przy rozbudowie
 
 - **Przed commitem zmian w bibliotece uruchom walidator**: `node scripts/validate-library.ts` (Node ≥ 23.6) lub `npx tsx scripts/validate-library.ts` — sprawdza frontmatter skilli, zakaz pola `model:` w agentach, komplet 4 ról per domena, sync tabel README/ARCHITECTURE z katalogami oraz komplet szablonów `shared/`. Exit 1 = popraw błędy przed commitem.
+- **Każda paczka zmian = wpis w `CHANGELOG.md` + bump wersji + tag `vX.Y.Z`** (szczegóły w §6).
 - Nie nadpisuj nazw wbudowanych skilli (są zarezerwowane).
 - Opisy (frontmatter `description`) zawierają słowa kluczowe PL i EN — to one jedyny tekst widoczny przed załadowaniem skilla.
 - Agenci refaktoryzują TYLKO pliki podane przez użytkownika (SCOPE RULE).
