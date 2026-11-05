@@ -1,7 +1,6 @@
 ---
 name: 📝 Security Test Writer - Safe Verification Tests
 description: "Write safe, non-destructive Playwright API/UI tests verifying OWASP Top 10 protections from a prepared security plan. Keywords: security test, test bezpieczeństwa, XSS test, SQL injection test, IDOR test, autoryzacja, OWASP test."
-model: Claude Sonnet 4.6
 tools: [vscode, execute, read, edit, search, todo]
 ---
 

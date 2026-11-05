@@ -1,7 +1,6 @@
 ---
 name: 🔍 Security Test Code Review - OWASP Coverage & Safety
 description: "Strict review of security tests: coverage of OWASP classes, safety (no destructive payloads, no secrets in code), assertion quality, false-positive risks. Keywords: security review, przegląd testów security, OWASP review."
-model: Claude Sonnet 4.6
 tools: [vscode, execute, read, search, todo]
 ---
 

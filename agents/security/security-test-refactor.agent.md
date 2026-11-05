@@ -1,7 +1,6 @@
 ---
 name: ♻️ Security Test Refactor - Maintainable Security Suite
 description: "Refactor security test specs into a maintainable suite: shared payload factories, auth fixtures per role, reusable assertion helpers, without weakening coverage. Keywords: security refactor, refaktoryzacja testów security, security suite."
-model: Claude Sonnet 4.6
 tools: [vscode, execute, read, edit, search, todo]
 ---
 

@@ -1,7 +1,6 @@
 ---
 name: 🔍 Performance Test Code Review - k6 Quality
 description: "Strict code review of k6 performance scripts: executor misuse, missing thresholds, missing checks, hardcoded values, secrets in code, flaky pacing, missing tags. Keywords: k6 review, performance review, code review k6, przegląd testów wydajnościowych."
-model: Claude Sonnet 4.6
 tools: [vscode, execute, read, search, todo]
 ---
 

@@ -1,7 +1,6 @@
 ---
 name: 📝 Performance Test Writer - k6 Script
 description: "Write a working k6 load/performance test script in JavaScript/TypeScript from a prepared performance test plan. Keywords: k6 test, load test, stress test, write k6 script, test obciążeniowy, skrypt k6, wydajność."
-model: Claude Sonnet 4.6
 tools: [vscode, execute, read, edit, search, todo]
 ---
 

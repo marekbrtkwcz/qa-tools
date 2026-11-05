@@ -1,7 +1,6 @@
 ---
 name: 🧠 Security Test Planner - OWASP Based
 description: "Plan automation-ready security test scenarios (OWASP Top 10, authZ/authN, data protection, injection) for web apps and APIs. Keywords: security plan, testy bezpieczeństwa, OWASP, penetration test plan, plan testów security, XSS, SQL injection, autoryzacja."
-model: Claude Sonnet 4.6
 tools: [read, edit, search, vscode, todo]
 ---
 

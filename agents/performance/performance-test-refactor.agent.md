@@ -1,7 +1,6 @@
 ---
 name: ♻️ Performance Test Refactor - k6 Best Practices
 description: "Refactor existing k6 scripts toward current best practices: scenarios/executors, custom metrics, k6-testing library, thresholds from trend data, tagging, options as code. Keywords: k6 refactor, modernize k6, k6 best practices, refactor obciążeniowy, aktualizacja skryptu k6."
-model: Claude Sonnet 4.6
 tools: [vscode, execute, read, edit, search, todo]
 ---
 

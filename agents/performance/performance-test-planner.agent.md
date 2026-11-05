@@ -1,7 +1,6 @@
 ---
 name: 🧠 Performance Test Planner - k6 Scenarios
 description: "Plan automation-ready k6 performance test scenarios (load, stress, spike, soak, smoke) from business requirements and SLOs. Defines executors, VUs, duration, thresholds, metrics, and test data. Keywords: performance plan, load test plan, k6 plan, stress test plan, wydajność, testy wydajnościowe, plan obciążeniowy."
-model: Claude Sonnet 4.6
 tools: [read, edit, search, vscode, todo]
 ---
 
