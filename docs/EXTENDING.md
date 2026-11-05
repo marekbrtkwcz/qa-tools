@@ -14,7 +14,7 @@ Skopiuj dowolnego agenta z tej domeny, zmień frontmatter i zakres. Trzymaj zasa
 
 ## 🎨 3. Nowy typ projektu (setup)
 
-Skopiuj najbliższy `setups/*.instructions.md`, przytnij warstwy (`paths` w tsconfig, katalogi), zostaw: Biome z `shared/`, dotenv, `.env.example`, skrypty npm, najnowsze wersje bibliotek.
+Scaffold czyta setupy z mapy `SETUPS` w `scripts/new-project.ts` — przy dodawaniu nowego pliku `setups/<typ>.instructions.md` dodaj tam wpis (aliases, srcDirs, tests, scenariusze, flagi playwright/vitest), żeby `new-project.ts` umiał go wygenerować. Szkielet setupu skopiuj z najbliższego `setups/*.instructions.md`, przytnij warstwy (`paths` w tsconfig, katalogi), zostaw: Biome z `shared/`, dotenv, `.env.example`, skrypty npm, najnowsze wersje bibliotek.
 
 ## 📐 4. Zmiana konwencji globalnej
 

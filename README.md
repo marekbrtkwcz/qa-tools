@@ -20,6 +20,9 @@ Biblioteka wielokrotnego użytku: TypeScript/JavaScript, Playwright (UI / Web AP
 
 ## 🚀 Jak zacząć (wybierz typ zadania → setup)
 
+**Scaffold (najszybciej)**: `node scripts/new-project.ts` — clack-menu (typ zadania → katalog → nazwa) albo wprost: `node scripts/new-project.ts --setup=playwright-fullstack --dir=<katalog> [--dry-run]`. Tworzy strukturę katalogów, kopiuje szablony z `shared/`, składa `package.json` z dopasowanym blokiem `scripts` i przyciętym `tsconfig`.
+Ręcznie: wybierz typ zadania z tabeli i postępuj wg pliku setupu.
+
 | Zadanie | Setup | Skill (Vibe) |
 |---|---|---|
 | Pełny projekt Playwright (UI + API + E2E) | `setups/playwright-fullstack.instructions.md` | `qa-ui-playwright`, `qa-api-playwright`, `qa-e2e-hybrid` |

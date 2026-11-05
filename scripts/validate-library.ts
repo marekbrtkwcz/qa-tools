@@ -131,6 +131,13 @@ if (gitignore && !/^\.env/m.test(gitignore)) err('shared/gitignore: brak wpisu .
 if (gitignore && /^package-lock\.json/m.test(gitignore)) err('shared/gitignore: package-lock.json NIE może być ignorowany');
 console.log(`  ✅ ${REQUIRED_SHARED.length} wymaganych szablonów`);
 
+// ── 5. Skrypty biblioteki (scripts/) ──
+console.log('📜 Skrypty biblioteki (scripts/)');
+for (const f of ['validate-library.ts', 'new-project.ts']) {
+  if (!existsSync(join(ROOT, 'scripts', f))) err(`scripts/${f}: brak wymaganego skryptu biblioteki`);
+}
+console.log('  ✅ validate-library.ts, new-project.ts');
+
 // ── Podsumowanie ──
 console.log('');
 if (errors.length > 0) {
