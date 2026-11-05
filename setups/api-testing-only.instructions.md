@@ -19,7 +19,7 @@ Minimal variant of `playwright-fullstack.instructions.md` — use when only API 
    tests/api/
    docs/openapi/ docs/scenarios/api/
    ```
-5. Skopiuj `shared/ncurc.json` → `.ncurc.json`, `shared/faker.ts` → `src/utils/faker.ts`, `shared/script.example.ts` → `scripts/example.ts`, `shared/menu.ts` → `scripts/menu.ts` (menu zadań, `npm run menu`), `shared/clean.ts` → `scripts/clean.ts` (porządki, `npm run clean`); stwórz `src/config/env.ts` z szablonu `shared/env.ts` (singleton env: dotenv + zod); `playwright.config.ts`: pojedynczy projekt `api` z `baseURL: env.API_URL`, reporter `html` + `list`. Schematy odpowiedzi API jako zod w `src/api/models/*`
+5. Skopiuj `shared/ncurc.json` → `.ncurc.json`, `shared/faker.ts` → `src/utils/faker.ts`, `shared/script.example.ts` → `scripts/example.ts`, `shared/menu.ts` → `scripts/menu.ts` (menu zadań, `npm run menu`), `shared/clean.ts` → `scripts/clean.ts` (porządki, `npm run clean`); stwórz `src/config/env.ts` z szablonu `shared/env.ts` (singleton env: dotenv + zod); `playwright.config.ts`: pojedynczy projekt `api` z `baseURL: env.API_URL`, reporter `['list', { printSteps: true }]` + `['html', { open: 'never' }]` (jak w `shared/playwright.config.ts`). Schematy odpowiedzi API jako zod w `src/api/models/*`
 6. `.env.example` from `shared/env.example` (z `API_URL=` i `OPENAPI_SPEC=docs/openapi/openapi.json`); skopiuj `shared/gitignore` → `.gitignore`
 7. Place the OpenAPI/Swagger spec in `docs/openapi/` (sourced from the system, never hand-written)
 8. Skrypty npm: scal `shared/package.scripts.json` do `scripts` w `package.json` — w wariancie api-only zostaw `test:api`, `test:report`, skrypty Biome, `audit` / `audit:fix` i `deps:*` (najnowsze wersje = bezpieczeństwo; lockfile commituj)

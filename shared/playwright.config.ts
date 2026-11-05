@@ -8,8 +8,8 @@ export default defineConfig({
   testDir: './tests',
   fullyParallel: true,
   reporter: [
+    ['list', { printSteps: true }],
     ['html', { open: 'never' }],
-    ['list'],
   ],
   use: {
     trace: 'on-first-retry',
