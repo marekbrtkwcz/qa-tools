@@ -21,6 +21,12 @@ Workflow for automated security verification (OWASP-based, non-destructive).
 - Minimum coverage: injection, broken access control (IDOR), auth/session, sensitive data exposure, security headers
 - Lint/format with Biome (`shared/biome.json`)
 
+## 🧰 Szablony (shared/ → projekt)
+
+- `shared/security-payloads.ts` → `src/data/security-payloads.ts` — kanarki (`CANARIES`), `SECURE_BEHAVIOR`, `scanForLeaks()` (PESEL, karta, JWT, token, pole password), `EXPECTED_SECURITY_HEADERS`
+- `shared/security-fixtures.ts` → `src/fixtures/auth.fixture.ts` — role `userRequest()` / `adminRequest()` / `anonymousRequest()` + asercje `expectNoIdorLeak()` / `expectUnauthorized()`
+- `shared/security-plan.template.md` → `docs/scenarios/security/_plan-template.md` — plan (metadane, rules of engagement, macierz OWASP, findings)
+
 ## 🧪 Gdzie mieszkają testy security
 
 Testy bezpieczeństwa runą **wewnątrz tego samego projektu Playwright** jako spec files w `tests/api/security/` i `tests/ui/security/`, uruchamiane przez `request` / `page` — bez osobnego narzędzia. Setup: `setups/security-and-data.instructions.md`.

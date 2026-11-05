@@ -8,11 +8,15 @@ Extends an existing Playwright project (run `playwright-fullstack.instructions.m
 
 ## 🧪 Security tests
 
-1. Add directories: `tests/api/security/`, `tests/ui/security/`, `docs/scenarios/security/`, `src/data/security-payloads.ts`
-2. `npm i -D dotenv dotenv-cli` (najnowsze wersje); `.env.example` additions: `TEST_USER_EMAIL=`, `TEST_USER_PASSWORD=`, `TEST_ADMIN_EMAIL=`, `TEST_ADMIN_PASSWORD=` — test accounts only, never real credentials; `.env` stays git-ignored; w testach pobieraj przez singleton `env.TEST_USER_*` z `src/config/env.ts` (nigdy `process.env` bezpośrednio)
-3. npm scripts: `test:security` → `playwright test tests/api/security tests/ui/security`
-4. Rules of engagement: non-destructive verification only; no production without written authorization (enforced by `agents/security/*`)
-5. Aktualizacje zależności (ncu, npm audit) dziedziczone z projektu Playwright — patrz `shared/conventions.md`
+1. Add directories: `tests/api/security/`, `tests/ui/security/`, `docs/scenarios/security/`
+2. Skopiuj szablony security z qa-tools (lub użyj `scripts/new-project.ts --setup=security-and-data`):
+   - `shared/security-payloads.ts` → `src/data/security-payloads.ts` — kanarkowe payloady (`CANARIES`, `SECURE_BEHAVIOR`), skaner wycieków `scanForLeaks()` (PESEL, karta, JWT, token, pole password), `EXPECTED_SECURITY_HEADERS`
+   - `shared/security-fixtures.ts` → `src/fixtures/auth.fixture.ts` — konteksty ról `userRequest()` / `adminRequest()` / `anonymousRequest()` + asercje `expectNoIdorLeak()` / `expectUnauthorized()`; dostosuj tylko adapter `login()` do realnej aplikacji
+   - `shared/security-plan.template.md` → `docs/scenarios/security/_plan-template.md` — szablon planu (metadane, rules of engagement, macierz OWASP, rejestr findings)
+3. `npm i -D dotenv dotenv-cli` (najnowsze wersje); `.env.example` additions: `TEST_USER_EMAIL=`, `TEST_USER_PASSWORD=`, `TEST_ADMIN_EMAIL=`, `TEST_ADMIN_PASSWORD=` — test accounts only, never real credentials; `.env` stays git-ignored; w testach pobieraj przez singleton `env.TEST_USER_*` z `src/config/env.ts` (nigdy `process.env` bezpośrednio)
+4. npm scripts: `test:security` → `playwright test tests/api/security tests/ui/security`
+5. Rules of engagement: non-destructive verification only; no production without written authorization (enforced by `agents/security/*`)
+6. Aktualizacje zależności (ncu, npm audit) dziedziczone z projektu Playwright — patrz `shared/conventions.md`
 
 ## 🗄️ Data / SQL tasks
 

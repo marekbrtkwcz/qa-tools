@@ -27,6 +27,8 @@ jobs:
       - run: npm ci
       - run: npm run check # Biome: lint + format check (bez zapisu)
       - run: npm audit --audit-level=high
+      - name: Gitleaks (skan sekretów w repo)
+        uses: gitleaks/gitleaks-action@v2 # darmowy dla kont osobistych; org może wymagać licencji
 
   test:
     name: Testy + coverage
