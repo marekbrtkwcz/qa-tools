@@ -156,6 +156,11 @@ function planFiles(setup: Setup): { src: string; dest: string }[] {
   const files = SHARED_COPIES.map(([src, dest]) => ({ src, dest }));
   if (setup.playwright) files.push({ src: 'shared/playwright.config.ts', dest: 'playwright.config.ts' });
   if (setup.vitest) files.push({ src: 'shared/vitest.config.ts', dest: 'vitest.config.ts' });
+  if (setup.tests.some((t) => t.endsWith('/security'))) {
+    files.push({ src: 'shared/security-payloads.ts', dest: 'src/data/security-payloads.ts' });
+    files.push({ src: 'shared/security-fixtures.ts', dest: 'src/fixtures/auth.fixture.ts' });
+    files.push({ src: 'shared/security-plan.template.md', dest: 'docs/scenarios/security/_plan-template.md' });
+  }
   return files;
 }
 

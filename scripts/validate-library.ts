@@ -112,6 +112,9 @@ const REQUIRED_SHARED = [
   'script.example.ts',
   'conventions.md',
   'adr-template.md',
+  'security-payloads.ts',
+  'security-fixtures.ts',
+  'security-plan.template.md',
   'ci/github-actions.yml',
 ];
 for (const f of REQUIRED_SHARED) {

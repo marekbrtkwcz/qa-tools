@@ -40,7 +40,10 @@ planner → writer → refactor → code-review
 - `shared/package.scripts.json` — kanoniczny blok `scripts` do `package.json` (testy per warstwa incl. `test:unit`, coverage `coverage`, Biome, audit, deps:*).
 - `shared/vitest.config.ts` — kanoniczny config Vitest: coverage provider v8, raporty text/html/json-summary/lcov do `coverage/`, progi (thresholds) 80% — coverage obowiązkowe w projektach unit.
 - `shared/gitignore` — szablon `.gitignore` (sekrety lokalnie, lockfile w repo).
-- `shared/ci/github-actions.yml` — szablon workflow GitHub Actions → `.github/workflows/ci.yml` (Biome check + `npm audit` → testy → coverage jako gate; `.env` w CI tylko z GitHub Secrets).
+- `shared/security-payloads.ts` — szablon kanarkowych payloadów (`CANARIES`, `SECURE_BEHAVIOR`) i skanera wycieków `scanForLeaks()` (PESEL, nr karty, JWT, token, pole password) + `EXPECTED_SECURITY_HEADERS`; kopiowany do `src/data/security-payloads.ts` tylko w setupach z warstwą security.
+- `shared/security-fixtures.ts` — szablony kontekstów ról (`userRequest()` / `adminRequest()` / `anonymousRequest()`) i asercji IDOR/auth (`expectNoIdorLeak()`, `expectUnauthorized()`); kopiowany do `src/fixtures/auth.fixture.ts`.
+- `shared/security-plan.template.md` — szablon planu security (rules of engagement, macierz OWASP, rejestr findings) do `docs/scenarios/security/`.
+- `shared/ci/github-actions.yml` — szablon workflow GitHub Actions → `.github/workflows/ci.yml` (Biome check + `npm audit` + Gitleaks → testy → coverage jako gate; `.env` w CI tylko z GitHub Secrets).
 - Każdy projekt testowy ma folder `docs/` (openapi, scenarios per domena, adr, guides, architecture) — konwencja w `shared/conventions.md`.
 - Każdy projekt ma też `scripts/` — skrypty TS na tsx (`npm run script -- ...`), interaktywne CLI na @clack/prompts (szablon `shared/script.example.ts`), menu zadań `shared/menu.ts` (`npm run menu`), porządki `shared/clean.ts` (`npm run clean`); `scripts/sql/` dla SQL.
 - Standard walidacji struktur: **zod** (env, odpowiedzi API, payloady); wyjątek: skrypty k6.
