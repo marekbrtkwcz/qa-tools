@@ -59,4 +59,4 @@ Każdy agent kończy obowiązkowym **Work Summary**.
 
 ## 🌱 Rozbudowa
 
-Zobacz `docs/EXTENDING.md` — nowa domena = `agents/<domena>/` (4 role) + `.vibe/skills/qa-<domena>/SKILL.md` + `setups/<typ>.instructions.md` + aktualizacja tabeli w `docs/ARCHITECTURE.md`. Skille można też skopiować do `~/.vibe/skills/`, aby działały globalnie.
+Zobacz `docs/EXTENDING.md` — nowa domena = `agents/<domena>/` (4 role) + `.vibe/skills/qa-<domena>/SKILL.md` + `setups/<typ>.instructions.md` + aktualizacja tabeli w `docs/ARCHITECTURE.md`. Skille można też skopiować do `~/.vibe/skills/`, aby działały globalnie. Przed commitem zmian w bibliotece uruchom walidator: `node scripts/validate-library.ts` (lub `npx tsx scripts/validate-library.ts`).

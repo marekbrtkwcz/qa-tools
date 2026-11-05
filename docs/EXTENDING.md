@@ -26,6 +26,7 @@ Skopiuj `.vibe/skills/qa-*` do `~/.vibe/skills/` — skill będzie dostępny we 
 
 ## 🌱 Zasady przy rozbudowie
 
+- **Przed commitem zmian w bibliotece uruchom walidator**: `node scripts/validate-library.ts` (Node ≥ 23.6) lub `npx tsx scripts/validate-library.ts` — sprawdza frontmatter skilli, zakaz pola `model:` w agentach, komplet 4 ról per domena, sync tabel README/ARCHITECTURE z katalogami oraz komplet szablonów `shared/`. Exit 1 = popraw błędy przed commitem.
 - Nie nadpisuj nazw wbudowanych skilli (są zarezerwowane).
 - Opisy (frontmatter `description`) zawierają słowa kluczowe PL i EN — to one jedyny tekst widoczny przed załadowaniem skilla.
 - Agenci refaktoryzują TYLKO pliki podane przez użytkownika (SCOPE RULE).
