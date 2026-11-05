@@ -41,7 +41,7 @@ Applies to every project created from `setups/`.
 - Skrypty w ESM (jak cały projekt), env przez singleton `env` (`src/config/env.ts`), dane przez `src/utils/faker.ts`; Biome i tsconfig obejmują `scripts/**` (oba szablony w `shared/`).
 - Skrypty SQL nie tu — patrz `scripts/sql/` (osobna konwencja w `qa-data-sql`).
 - Porządki (usuwanie artefaktów: playwright-report, test-results, coverage, dist, k6-results, logi…): szablon `shared/clean.ts` → `scripts/clean.ts`, uruchomienie `npm run clean` (multiselect z emojami + potwierdzenie). Lista zgodna z `shared/gitignore`.
-- Interaktywne menu do zadań z `package.json`: szablon `shared/menu.ts` → `scripts/menu.ts`, uruchomienie `npm run menu` (skrypt `menu` z `shared/package.scripts.json`) — kategorie i pozycje z emotkami, dwupoziomowy wybór, wykonanie przez `npm run <script>`.
+- Interaktywne menu zadań — szablon `shared/menu.ts` → `scripts/menu.ts`, uruchomienie `npm run menu` (skrypt `menu` z `shared/package.scripts.json`). Zadania czytane **dynamicznie z `package.json`** — brak listy do edycji w szablonie: dodanie skryptu do `package.json` = pojawia się w menu automatycznie (emoji wg nazwy, komenda jako podpowiedź, kategorie po prefiksie: `test*`/`coverage`, `db`/`sql`, `format`/`lint`/`check`, `audit`/`deps`, reszta „Inne”). Tryb bez promptów (CI): `npm run menu -- <zadanie>` — `@clack/prompts` wtedy niewymagany.
 - Interaktywne skrypty CLI (pytają użytkownika): biblioteka **@clack/prompts** — `npm i -D @clack/prompts`, szablon `shared/script.example.ts`. O ile ma zastosowanie: tylko gdy skrypt ma być interaktywny; w CI/trybie nieinteraktywnym używaj argumentów CLI + `env.X`, nie promptów.
 
 ## 📚 Dokumentacja projektu — docs/ (zawsze)
@@ -100,6 +100,20 @@ getByRole > getByLabel > getByPlaceholder > getByText > getByTestId > css (last 
 - Dane dynamiczne tylko przez faker (`src/utils/faker.ts`) z `faker.seed()` w `beforeEach`; env tylko przez singleton `env.X`.
 - Scenariusze/plan per moduł: `docs/scenarios/unit/{module}-unit.scenario.md` (happy path / edge / błędy / mocki).
 - Testy jednostkowe własnych elementów projektu Playwright (factories, utils, steps): domyślnie **jeden runner = Playwright** — projekt `unit-pw` bez przeglądarki (`shared/playwright.config.ts`, katalog `tests/unit-pw/`). Vitest (`tests/unit/` + coverage 80%) tylko w setupie `unit-testing-vitest` (kod poza Playwright) albo gdy ktoś upiera się na Vitest wewnątrz projektu Playwright — wtedy coverage pozostaje bramką; katalogi `tests/unit/` (Vitest) i `tests/unit-pw/` (Playwright) nie mogą się mieszać.
+
+## 🪝 Git hooks — husky + lint-staged (opcjonalnie, „o ile ma zastosowanie”)
+
+Tylko w projektach z repozytorium, gdzie potrzebna jest dyscyplina przed commitem:
+
+- `npm i -D husky lint-staged` + `npm pkg set scripts.prepare="husky"` + `npx husky init`
+- `.husky/pre-commit`: `npx lint-staged`
+- W `package.json`:
+  ```json
+  "lint-staged": {
+    "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": ["biome check --write --no-errors-on-unmatched"]
+  }
+  ```
+- Działa na Windows i Linux (husky ≥ v9). W CI zostawiamy `npm run check` (bez zapisu) — `--write` tylko lokalnie na plikach staged.
 
 ## 🌿 Git
 - `.gitignore`: szablon `shared/gitignore` → kopiuj jako `.gitignore` (node_modules, dist, coverage, playwright-report, test-results, `.env` + warianty, logi, pliki systemowe/IDE, k6-results).

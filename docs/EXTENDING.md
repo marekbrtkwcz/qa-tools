@@ -18,7 +18,7 @@ Skopiuj najbliższy `setups/*.instructions.md`, przytnij warstwy (`paths` w tsco
 
 ## 📐 4. Zmiana konwencji globalnej
 
-Edytuj `shared/conventions.md` + `shared/biome.json` / `shared/tsconfig.base.json` — projekty kopiują te pliki, więc zmiana propaguje się przy kolejnym setupie.
+Edytuj `shared/conventions.md` oraz szablony w `shared/` — kanoniczne pliki: `biome.json`, `tsconfig.base.json`, `playwright.config.ts`, `vitest.config.ts`, `env.ts`, `ci/github-actions.yml`. Projekty kopiują te pliki, więc zmiana propaguje się przy kolejnym setupie.
 
 ## 🖌️ 5. Skill globalny (poza projektem)
 
