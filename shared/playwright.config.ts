@@ -38,10 +38,11 @@ export default defineConfig({
         baseURL: env.BASE_URL,
       },
     },
-    // Opcjonalny projekt BEZ przeglądarki — testy jednostkowe własnych elementów projektu
-    // (factories, utils, schematy zod, logika stepsów). Brak devices[...] = brak browsera;
-    // fixture `page` jest wtedy niedostępny (błąd przy użyciu), `request` działa.
-    // UWAGA: `tests/unit/` należy do Vitest — tu użyj osobnego katalogu `tests/unit-pw/`.
+    // Projekt BEZ przeglądarki — DOMYŚLNY sposób testów jednostkowych własnych elementów
+    // projektu (factories, utils, schematy zod, logika stepsów): jeden runner (Playwright) na projekt.
+    // Brak devices[...] = brak browsera; fixture `page` niedostępny, `request` działa.
+    // UWAGA: `tests/unit/` = zarezerwowane dla Vitest (tylko gdy ktoś upiera się na Vitest
+    // w projekcie Playwright — wtedy coverage 80% obowiązkowe). Odkomentuj przy pierwszym teście:
     // {
     //   name: 'unit-pw',
     //   testDir: './tests/unit-pw',

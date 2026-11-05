@@ -17,6 +17,7 @@ Workflow for unit testing TS/JS code with **Vitest** + **coverage** (mandatory, 
 ## 📌 Setup
 
 - `setups/unit-testing-vitest.instructions.md` — dedicated project for unit-testing your own TS/JS code
+- Note: inside a Playwright project, unit tests of the project's own elements default to **Playwright itself** (browserless `unit-pw` project, `tests/unit-pw/`) — one runner per project. Use Vitest there only if the user insists; coverage stays mandatory either way.
 - Shared: `shared/vitest.config.ts` → `vitest.config.ts`, `shared/biome.json`, `shared/tsconfig.base.json`, `shared/conventions.md`
 
 ## 📏 Rules
