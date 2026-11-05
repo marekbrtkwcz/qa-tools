@@ -51,7 +51,7 @@ Applies to every project created from `setups/`.
   ├── openapi/        ← specyfikacja OpenAPI/Swagger (źródło: system, nigdy ręcznie)
   ├── scenarios/      ← plany scenariuszy od agentów planner, per domena:
   │   ├── ui/  api/  e2e/  performance/  security/  accessibility/
-  ├── adr/            ← Architecture Decision Records
+  ├── adr/            ← Architecture Decision Records — szablon: shared/adr-template.md
   ├── guides/         ← przewodniki i tutoriale projektu
   └── architecture/   ← dokumentacja architektury
   ```

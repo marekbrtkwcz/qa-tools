@@ -111,6 +111,7 @@ const REQUIRED_SHARED = [
   'package.scripts.json',
   'script.example.ts',
   'conventions.md',
+  'adr-template.md',
   'ci/github-actions.yml',
 ];
 for (const f of REQUIRED_SHARED) {
