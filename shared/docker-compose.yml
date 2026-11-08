@@ -1,0 +1,50 @@
+# 🐳 Szablon lokalnego środowiska testowego — kopiuj jako docker-compose.yml w projekcie.
+# Uruchomienie: docker compose up -d
+# Zatrzymanie:  docker compose down  (dane znikają z -v)
+# Konwencja: sekrety lokalnie przez .env (dotenv), w CI przez GitHub Secrets — patrz shared/env.example.
+#
+# Wykomentuj/usuń usługi, których projekt nie potrzebuje.
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-qa}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-qa}
+      POSTGRES_DB: ${POSTGRES_DB:-qa_test}
+    ports:
+      - '${POSTGRES_PORT:-5432}:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U $${POSTGRES_USER:-qa}']
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - '${REDIS_PORT:-6379}:6379'
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    ports:
+      - '${RABBITMQ_PORT:-5672}:5672'   # AMQP
+      - '${RABBITMQ_UI_PORT:-15672}:15672' # panel zarządzania http://localhost:15672
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-qa}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-qa}
+    healthcheck:
+      test: ['CMD', 'rabbitmq-diagnostics', '-q', 'ping']
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  pgdata:

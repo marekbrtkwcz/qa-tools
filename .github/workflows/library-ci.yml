@@ -1,0 +1,46 @@
+# 🔍 CI biblioteki qa-tools — walidacja spójności przy każdym push/PR do main.
+# Uruchamia validate-library.ts (czysty Node, bez npm install — zero zależności),
+# testy jednostkowe własnych skryptów (Vitest) oraz skan sekretów Gitleaks.
+# Projekty generowane przez qa-tools mają własne CI (szablon: shared/ci/github-actions.yml).
+name: Library CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: 🔍 Walidator biblioteki
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.x' # type-stripping od 22.6; walidator używa tylko node:fs/url/path
+      - run: node scripts/validate-library.ts
+
+  test:
+    name: 🧪 Testy biblioteki (Vitest)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm test
+
+  secrets:
+    name: 🛡️ Gitleaks (skan sekretów)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # pełna historia dla dokładnego skanu
+      - uses: gitleaks/gitleaks-action@v2
