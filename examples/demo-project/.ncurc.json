@@ -1,0 +1,6 @@
+{
+  "target": "latest",
+  "format": ["group"],
+  "enginesNode": true,
+  "reject": []
+}
