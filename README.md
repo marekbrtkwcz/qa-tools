@@ -22,6 +22,8 @@ Biblioteka wielokrotnego użytku: TypeScript/JavaScript, Playwright (UI / Web AP
 
 ## 🚀 Jak zacząć (wybierz typ zadania → setup)
 
+**Szybka ścieżka (5 minut): `docs/QUICKSTART.md`** — generacja projektu, install, pierwszy test.
+
 **Scaffold (najszybciej)**: `node scripts/new-project.ts` — clack-menu (typ zadania → katalog → nazwa) albo wprost: `node scripts/new-project.ts --setup=playwright-fullstack --dir=<katalog> [--dry-run]`. Tworzy strukturę katalogów, kopiuje szablony z `shared/`, składa `package.json` z dopasowanym blokiem `scripts` i przyciętym `tsconfig`.
 Ręcznie: wybierz typ zadania z tabeli i postępuj wg pliku setupu.
 
@@ -34,6 +36,7 @@ Ręcznie: wybierz typ zadania z tabeli i postępuj wg pliku setupu.
 | Testy bezpieczeństwa / dane / SQL | `setups/security-and-data.instructions.md` | `qa-security-data`, `qa-data-sql` |
 | Testy dostępności WCAG (axe-core, w projekcie Playwright) | `setups/accessibility-wcag.instructions.md` | `qa-accessibility-wcag` |
 | Testy jednostkowe kodu TS/JS (Vitest + coverage) | `setups/unit-testing-vitest.instructions.md` | `qa-unit-vitest` |
+| Testy mobile (Playwright device emulation) | `setups/mobile-playwright.instructions.md` | `qa-mobile-playwright` |
 
 Testy Web API i bezpieczeństwa wrzucasz **do tego samego projektu Playwright** — mieszkają w `tests/api/`, `tests/api/security/`, `tests/ui/security/` i używają wbudowanych fixture `request` / `page` (bez osobnego frameworku). Testy WCAG dokładasz do tego samego projektu przez `setups/accessibility-wcag.instructions.md`.
 
@@ -42,12 +45,16 @@ Testy Web API i bezpieczeństwa wrzucasz **do tego samego projektu Playwright** 
 ```
 qa-tools/
 ├── agents/            # subagenci .agent.md — 4 role na domenę: planner → writer → refactor → code-review
-│   ├── ui/  api/  e2e/  performance/  security/  accessibility/  unit/  data/
+│   ├── ui/  api/  e2e/  performance/  security/  accessibility/  unit/  data/  mobile/
 ├── setups/            # setup projektu zależny od typu zadania (.instructions.md)
 ├── .vibe/skills/      # skille Vibe: qa-ui-playwright, qa-api-playwright, qa-e2e-hybrid,
-│                      #   qa-performance-k6, qa-security-data, qa-data-sql, qa-accessibility-wcag, qa-unit-vitest
+│                      #   qa-performance-k6, qa-security-data, qa-data-sql, qa-accessibility-wcag, qa-unit-vitest, qa-mobile-playwright
 ├── shared/            # biome.json, tsconfig.base.json, playwright.config.ts, env.ts, env.example, conventions.md
 │                      #   i pozostałe kanoniczne szablony (single source of truth — kopiuj, nie wklejaj inline)
+├── scripts/           # walidator biblioteki + scaffold projektów
+├── tests/library/     # testy jednostkowe (Vitest) własnych skryptów biblioteki — npm test
+├── examples/          # działający przykładowy projekt (demo-project) wygenerowany przez scaffold
+├── .github/workflows/ # CI biblioteki: walidator + Gitleaks przy każdym PR do main
 └── docs/              # ARCHITECTURE.md, EXTENDING.md (jak rozbudowywać), CROSS-PLATFORM.md
 ```
 
