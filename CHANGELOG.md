@@ -2,6 +2,34 @@
 
 Historia zmian biblioteki **qa-tools**. Format: [Keep a Changelog](https://keepachangelog.com/pl/1.1.0/), wersjonowanie: [SemVer](https://semver.org/). Tag `vX.Y.Z` zakładany lokalnie przy każdej paczce zmian (`docs/EXTENDING.md` §6).
 
+## [1.2.0] — 2026-11-07
+
+### ➕ Added
+
+- ⚡ `docs/QUICKSTART.md` — ścieżka „5 minut do pierwszego testu" (scaffold → install → pierwszy test → pipeline agentów); link w README.
+- 🐳 `shared/docker-compose.yml` — szablon lokalnego środowiska (Postgres 16 + Redis 7 + RabbitMQ z healthcheckami, sekrety przez `.env`); wpis w conventions i walidatorze (20 szablonów).
+- 🖼️ Visual regression — sekcje w `qa-ui-playwright` i `conventions.md`: `toHaveScreenshot`, baseline w `tests/ui/__screenshots__/`, `mask` dla dynamicznych treści, `--update-snapshots` przed commitem.
+- 🤝 Contract testing (Pact) — sekcja w `qa-api-playwright`: consumer test z mock providerem, publikacja do Pact Broker, osobny job `test:contract:verify` w CI.
+- 📱 **Domena mobile**: `agents/mobile/` (4 role: planner/writer/refactor/code-review z sekcją „Mobile specifics" — device emulation, touch, viewport), skill `qa-mobile-playwright`, setup `setups/mobile-playwright.instructions.md` (projekt `mobile` z `devices['iPhone 14']` / `devices['Pixel 7']`). Sync README/ARCHITECTURE/walidator — 9 skilli, 36 agentów, 8 setupów.
+- 🧪 CI: nowy job `test` w `library-ci.yml` — `npm ci` + `npm test` (Vitest, testy `tests/library/`) obok walidatora i Gitleaksa; `version` w `package.json` zsynchronizowany do 1.2.0.
+
+## [1.1.1] — 2026-11-07
+
+### ➕ Added
+
+- 🔒 `shared/security-payloads.ts`: nowe kanarki **NoSQLi** (`NOSQLI_CANARY`), **XXE** (`XXE_CANARY`), **deserialization** (`DESERIALIZATION_CANARY`) + wpisy `SECURE_BEHAVIOR` i rozszerzony `CANARIES`.
+- 🔌 Skill `qa-api-playwright`: sekcje **GraphQL** (kontrakt ze schematu, zod dla `data`/`errors`, negatywne: depth/errors) i **WebSocket** (`waitForEvent('websocket')`, `ws` npm, jawne timeouty).
+- 🔍 Walidator: check opisów agentów (słowa kluczowe PL **i** EN, min. 40 znaków) + mapowanie setup → skill (każdy setup ma przypisany skill z tabeli README). Poprawiono 10 opisów agentów (api/e2e/ui) — dodano polskie słowa kluczowe.
+
+## [1.1.0] — 2026-11-07
+
+### ➕ Added
+
+- 🔍 **CI biblioteki** — `.github/workflows/library-ci.yml`: walidator `validate-library.ts` + Gitleaks przy każdym push/PR do `main` (czysty Node 22, bez `npm install`).
+- 🧪 **Testy jednostkowe skryptów biblioteki** — `package.json` (devDeps: vitest, tsx), `vitest.config.ts`, `tests/library/validate-library.spec.ts` + `tests/library/new-project.spec.ts` (8 testów black-box przez `spawnSync`: walidator exit 0, scaffold dry-run, struktura katalogów, package.json/tsconfig per setup, security templates, odrzucanie niepustego katalogu). `npm test` w root biblioteki.
+- 📦 **Przykładowy projekt** — `examples/demo-project/` wygenerowany przez scaffold (`playwright-fullstack`) z przykładowymi plikami: `LoginPage` (POM), `tests/ui/login.spec.ts`, `tests/api/health.spec.ts`, `docs/scenarios/ui/login.ui.scenario.md` + `examples/README.md` jak uruchomić.
+- Walidator rozszerzony o sekcję 5b: wymagane pliki infrastruktury (`package.json`, `vitest.config.ts`, `.github/workflows/library-ci.yml`, `tests/library/*.spec.ts`, `examples/README.md`).
+
 ## [1.0.0] — 2026-11-05
 
 Pierwsza stabilna wersja biblioteki. Bilans: 8 skilli, 32 agentów (8 domen × 4 role, bez pinów `model:`), 7 setupów, 19 szablonów `shared/`, walidator + scaffold projektów.
