@@ -65,6 +65,16 @@ for (const domain of agentDomains) {
       err(`${rel}: frontmatter musi mieć name + description`);
     }
     if (/^model\s*:/m.test(fm)) err(`${rel}: ZAKAZ pola model: w frontmatter (agent dziedziczy model sesji)`);
+    // Opis (description) ma zawierać słowa kluczowe PL + EN — heurystyka: min. 40 znaków,
+    // jedno słowo kluczowe EN z listy i polski znak diakrytyczny lub słowo PL.
+    // Description może być wieloliniowy — zbieramy wszystko aż do zamykającego " lub końca frontmatter.
+    const descMatch = /^description:\s*"([\s\S]*?)"/m.exec(fm);
+    const desc = descMatch?.[1] ?? '';
+    const EN_KEYWORDS = /\b(test|tests|planning|plan|write|writing|refactor|review|api|ui|e2e|security|performance|accessibility|unit|data|k6|playwright|vitest|graphql|websocket)\b/i;
+    const PL_MARK = /[ąćęłńóśźż]|\b(testy|testów|planowanie|napisz|pisanie|refaktoryzacja|przegląd|scenariusz)\b/i;
+    if (desc.length < 40) err(`${rel}: description za krótki (${desc.length} znaków, min. 40)`);
+    if (!EN_KEYWORDS.test(desc)) err(`${rel}: description bez słowa kluczowego EN`);
+    if (!PL_MARK.test(desc)) err(`${rel}: description bez słowa kluczowego PL (znaki diakrytyczne lub słowo)`);
   }
 }
 const agentCount = agentDomains.length * ROLES.length;
@@ -94,6 +104,26 @@ for (const setup of setupFiles) {
 }
 console.log(`  ✅ ${agentDomains.length} domen, ${skillNames.length} skilli, ${setupFiles.length} setupów`);
 
+// ── 3b. Każdy setup ma przypisany skill (mapowanie jak w tabeli README) ──
+console.log('🔗 Setup → skill');
+const SETUP_SKILLS: Record<string, string[]> = {
+  'playwright-fullstack': ['qa-ui-playwright', 'qa-api-playwright', 'qa-e2e-hybrid'],
+  'playwright-ui-only': ['qa-ui-playwright'],
+  'api-testing-only': ['qa-api-playwright'],
+  'performance-k6': ['qa-performance-k6'],
+  'security-and-data': ['qa-security-data', 'qa-data-sql'],
+  'accessibility-wcag': ['qa-accessibility-wcag'],
+  'unit-testing-vitest': ['qa-unit-vitest'],
+  'mobile-playwright': ['qa-mobile-playwright'],
+};
+for (const [setup, skills] of Object.entries(SETUP_SKILLS)) {
+  for (const skill of skills) {
+    if (!skillNames.includes(skill)) err(`setup ${setup}: skill ${skill} nie istnieje w .vibe/skills/`);
+    if (!readme.includes(skill)) err(`setup ${setup}: skill ${skill} nie wymieniony w README`);
+  }
+}
+console.log(`  ✅ ${Object.keys(SETUP_SKILLS).length} setupów zmapowanych na skille`);
+
 // ── 4. Szablony shared/: wymagane pliki istnieją, JSON-y się parsują ──
 console.log('🧰 Szablony (shared/)');
 const REQUIRED_SHARED = [
@@ -116,6 +146,7 @@ const REQUIRED_SHARED = [
   'security-fixtures.ts',
   'security-plan.template.md',
   'ci/github-actions.yml',
+  'docker-compose.yml',
 ];
 for (const f of REQUIRED_SHARED) {
   if (!existsSync(join(ROOT, 'shared', f))) err(`shared/${f}: brak wymaganego szablonu`);
@@ -141,6 +172,30 @@ for (const f of ['validate-library.ts', 'new-project.ts']) {
 }
 console.log('  ✅ validate-library.ts, new-project.ts');
 
+// ── 5b. Infrastruktura biblioteki (CI, testy, przykład) ──
+console.log('🏗️  Infrastruktura biblioteki');
+const REQUIRED_INFRA = [
+  'package.json',
+  '.gitignore',
+  'vitest.config.ts',
+  '.github/workflows/library-ci.yml',
+  'tests/library/validate-library.spec.ts',
+  'tests/library/new-project.spec.ts',
+  'examples/README.md',
+];
+for (const f of REQUIRED_INFRA) {
+  if (!existsSync(join(ROOT, f))) err(`brak wymaganego pliku infrastruktury: ${f}`);
+}
+try {
+  const pkg = JSON.parse(read('package.json'));
+  if (pkg.type !== 'module') err('package.json: biblioteka musi być ESM ("type": "module")');
+  if (!pkg.devDependencies?.vitest) err('package.json: brak devDependency vitest (testy skryptów biblioteki)');
+} catch (e) {
+  if (String(e).includes('ENOENT')) err('package.json: brak pliku');
+  else err(`package.json: nieprawidłowy JSON (${String(e)})`);
+}
+console.log(`  ✅ ${REQUIRED_INFRA.length} plików infrastruktury`);
+
 // ── 6. CHANGELOG: istnieje i ma sekcje wersji ──
 console.log('📦 CHANGELOG');
 if (!existsSync(join(ROOT, 'CHANGELOG.md'))) {
@@ -157,4 +212,4 @@ if (errors.length > 0) {
   for (const e of errors) console.log(`  - ${e}`);
   process.exit(1);
 }
-console.log(`✅ Biblioteka spójna: ${skillDirs.length} skilli, ${agentCount} agentów (bez pinów modelu), ${setupFiles.length} setupów, ${REQUIRED_SHARED.length} szablonów shared/ — można commitować.`);
+console.log(`✅ Biblioteka spójna: ${skillDirs.length} skilli, ${agentCount} agentów (bez pinów modelu), ${setupFiles.length} setupów, ${REQUIRED_SHARED.length} szablonów shared/, ${REQUIRED_INFRA.length} plików infrastruktury — można commitować.`);

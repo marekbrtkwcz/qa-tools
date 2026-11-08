@@ -1,7 +1,6 @@
 ---
 name: 🔍 E2E Test Code Review — Complete UI + API + E2E Review
-description: "Perform a full production-grade review of Playwright E2E tests by combining UI Code Review, API Code Review, and E2E Flow Review. Detect architecture violations, flaky patterns, weak assertions, API testing issues, UI testing issues, OpenAPI contract problems, and E2E anti-patterns."
-
+description: "Perform a full production-grade review of Playwright E2E tests by combining UI Code Review, API Code Review, and E2E Flow Review. Detect architecture violations, flaky patterns, weak assertions, API testing issues, UI testing issues, OpenAPI contract problems, and E2E anti-patterns. Keywords PL: przegląd kodu e2e, code review."
 tools: [vscode, execute, read, agent, edit, search, web, browser, todo]
 
 

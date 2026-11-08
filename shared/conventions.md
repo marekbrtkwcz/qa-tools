@@ -7,6 +7,7 @@ Applies to every project created from `setups/`.
 - npm scripts: kanoniczny blok `scripts` z szablonu `shared/package.scripts.json` (scal do `package.json`, w wariancie projektu zostaw tylko odpowiednie testy: `test:ui` / `test:api` / `test:a11y` / `test:security`); `test:everything` — pełny bieg wszystkich warstw, jakie projekt ma (testy Playwright + `vitest run --coverage`); Biome: `format`, `format:check`, `lint`, `lint:fix`, `check`; bezpieczeństwo: `audit`, `audit:fix`, `deps:check`, `deps:update`, `deps:update:major`, `deps:interactive`.
 - Wersje bibliotek: zawsze najnowsze — sekcja poniżej (bezpieczeństwo).
 - CI: szablon `shared/ci/github-actions.yml` → `.github/workflows/ci.yml` w projekcie TS/JS (quality: `npm run check` + `npm audit`; test: `npm run test:all` + `npm run coverage` jako gate; `.env` w CI tylko z GitHub Secrets, nigdy z repo).
+- **Lokalne środowisko (Docker)**: szablon `shared/docker-compose.yml` → `docker-compose.yml` w projekcie (Postgres + Redis + RabbitMQ z healthcheckami; wykomentuj niepotrzebne). Sekrety lokalnie przez `.env`, w CI przez GitHub Secrets.
 - TypeScript strict mode; `paths` aliases without `baseUrl`.
 
 ## 🔌 ESM (ECMAScript Modules) — standard dla wszystkich projektów TS/JS
@@ -60,6 +61,11 @@ Applies to every project created from `setups/`.
 
 ## 🎯 Locators (UI)
 getByRole > getByLabel > getByPlaceholder > getByText > getByTestId > css (last resort). No XPath, no `nth()`, no `waitForTimeout`. Inspect DOM before choosing locators.
+
+## 🖼️ Visual regression (UI)
+- Screenshoty tylko dla krytycznych ekranów/komponentów — `expect(locator).toHaveScreenshot()` (komponent) lub `expect(page).toHaveScreenshot()` (pełna strona).
+- Baseline w `tests/ui/__screenshots__/<projekt>-chromium/` — commituj do repo; aktualizacja po zamierzonej zmianie: `npx playwright test --update-snapshots` + review diffa przed commitem.
+- Progi per komponent: `maxDiffPixelRatio: 0.01` domyślnie; `animations: 'disabled'`; `mask` dla dynamicznych treści (zegar, data, awatar).
 
 ## 🧪 Test data
 - No hardcoded emails/passwords/URLs in tests — `src/data/` constants or factories (faker for dynamic data, in `beforeEach`/`beforeAll`).
@@ -119,6 +125,7 @@ Tylko w projektach z repozytorium, gdzie potrzebna jest dyscyplina przed commite
 - `.gitignore`: szablon `shared/gitignore` → kopiuj jako `.gitignore` (node_modules, dist, coverage, playwright-report, test-results, `.env` + warianty, logi, pliki systemowe/IDE, k6-results).
 - `package-lock.json` commituj (nigdy nie ignoruj) — patrz sekcja o wersjach bibliotek.
 - Empty dirs kept with `.gitkeep`.
+- **Line endings LF**: ustaw w każdym projekcie testowym `git config core.autocrlf false` (lokalnie per repo) — Biome wymusza LF (`lineEnding: "lf"`), a `autocrlf=true` na Windows zepsuje diffy. Alternatywa globalna: `git config --global core.autocrlf false`.
 
 ## 🌐 Cross-platform
 - Windows + Linux: npm scripts only, no OS-specific paths; env expansion via `dotenv-cli` or `$VAR`/`%VAR%` per OS; line endings LF (Biome `lineEnding: lf`). See `docs/CROSS-PLATFORM.md`.
