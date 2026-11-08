@@ -1,6 +1,6 @@
 ---
 name: 🔍 API Test Code Review — Playwright + TypeScript
-description: "Use when reviewing Playwright TypeScript API tests. Detects architectural issues, flaky patterns, weak assertions, schema validation problems, OpenAPI contract violations, API testing anti-patterns, and test stability risks. Keywords: api code review, playwright api review, rest api review, zod review, contract testing review, api automation quality, test architecture."
+description: "Use when reviewing Playwright TypeScript API tests. Detects architectural issues, flaky patterns, weak assertions, schema validation problems, OpenAPI contract violations, API testing anti-patterns, and test stability risks. Keywords: api code review, playwright api review, rest api review, zod review, contract testing review, api automation quality, test architecture. Keywords PL: przegląd kodu, code review api, jakość testów."
 tools: [vscode, execute, read, agent, edit, search, web, browser, sonarsource.sonarlint-vscode/sonarqube_listPotentialSecurityIssues, sonarsource.sonarlint-vscode/sonarqube_analyzeFile, todo]
 ---
 
