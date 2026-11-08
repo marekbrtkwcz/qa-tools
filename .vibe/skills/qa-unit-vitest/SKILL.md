@@ -1,6 +1,6 @@
 ---
 name: qa-unit-vitest
-description: Load when the user wants to plan, write, refactor, or review unit tests (Vitest) for TypeScript/JavaScript code with mandatory coverage thresholds. Orchestrates agents/unit. Keywords: unit tests, vitest, testy jednostkowe, coverage, mockowanie, vi.mock.
+description: "Load when the user wants to plan, write, refactor, or review unit tests (Vitest) for TypeScript/JavaScript code with mandatory coverage thresholds. Orchestrates agents/unit. Keywords: unit tests, vitest, testy jednostkowe, coverage, mockowanie, vi.mock."
 ---
 
 # 🧪 QA Unit Tests — Vitest

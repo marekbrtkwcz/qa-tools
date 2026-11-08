@@ -1,6 +1,6 @@
 ---
 name: qa-data-sql
-description: Load when the user works with SQL scripts, data conversion, data validation, or database seed/fixture scripts (any RDBMS: PostgreSQL, MySQL, SQL Server, SQLite). Uses shared conventions and data factories; extensible with agents/data later.
+description: "Load when the user works with SQL scripts, data conversion, data validation, or database seed/fixture scripts (any RDBMS: PostgreSQL, MySQL, SQL Server, SQLite). Uses shared conventions and data factories; extensible with agents/data later."
 ---
 
 # 🗄️ QA Data & SQL

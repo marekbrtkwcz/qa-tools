@@ -30,3 +30,12 @@ Load `playwright-best-practices` for locators, flakiness, POM, and CI concerns. 
 - Lint/format with Biome: `npm run check` / `npm run lint:fix`
 - Env vars only via the singleton `env` from `src/config/env.ts` (dotenv + zod) — never `process.env` directly in tests
 - Test data: dynamic data only via **@faker-js/faker** (`src/utils/faker.ts`) in factories / `beforeEach` with `faker.seed()` for reproducibility; constants in `src/data/` — never inline in test steps
+
+## 🖼️ Visual regression (screenshot testing)
+
+- Używaj `await expect(page).toHaveScreenshot('nazwa.png', { maxDiffPixelRatio: 0.01 })` — baseline w `tests/ui/__screenshots__/` (chromium), commituj baseline do repo
+- Selektory do screenshotów: konkretny komponent (`locator.screenshot()`), nie cała strona — mniej flaky
+- Maskowanie dynamicznych treści: `toHaveScreenshot({ mask: [page.getByText(/\d{2}:\d{2}/)] })` (zegary, daty, awatary)
+- Aktualizacja baseline po zamierzonej zmianie UI: `npx playwright test --update-snapshots`, review diffa PNG przed commitem
+- Progi: `maxDiffPixels` / `maxDiffPixelRatio` per komponent (0.01 domyślnie; więcej dla animacji); `animations: 'disabled'` dla deterministyczności
+- Nie rób screenshotów w każdym teście — tylko tam gdzie regresja wizualna boli (krytyczne ekrany, komponenty współdzielone)

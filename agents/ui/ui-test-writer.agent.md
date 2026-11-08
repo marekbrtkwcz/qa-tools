@@ -3,7 +3,7 @@ name: 📝 UI Test Writer - Simple UI Test
 description: "Use when writing simple Playwright TypeScript UI tests
   without architecture. Keywords: write test, simple UI test, test without
   page object, create playwright test, simple ui test, write ui test,
-  playwright test, ui automation, locator, spec file."
+  playwright test, ui automation, locator, spec file. Keywords PL: pisanie testów ui, test ui prosty."
 tools: [vscode, execute, read, agent, edit, search, web/fetch, web/githubRepo, 'playwright/*', todo]
 ---
 

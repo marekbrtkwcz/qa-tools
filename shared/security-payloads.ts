@@ -7,17 +7,23 @@
 
 export const XSS_CANARY = 'qa-canary-xss<script>alert(1)</script>';
 export const SQLI_CANARY = "qa-canary-sqli' OR '1'='1' --";
+export const NOSQLI_CANARY = '{"$ne": null, "qa-canary-nosqli": true}';
 export const PATH_TRAVERSAL_CANARY = 'qa-canary-traversal../../../../etc/passwd';
 export const SSRF_CANARY = 'http://qa-canary-ssrf.localhost';
 export const COMMAND_INJECTION_CANARY = 'qa-canary-cmd; echo pwned';
+export const XXE_CANARY = '<?xml version="1.0"?><!DOCTYPE foo [<!ENTITY qa-canary-xxe SYSTEM "file:///etc/passwd">]><foo>&qa-canary-xxe;</foo>';
+export const DESERIALIZATION_CANARY = 'qa-canary-deser: O:8:"stdClass":0:{}';
 
 /** Wszystkie kanarki w jednym miejscu — do pętli „refleksja payloadu w polu" */
 export const CANARIES: readonly string[] = [
   XSS_CANARY,
   SQLI_CANARY,
+  NOSQLI_CANARY,
   PATH_TRAVERSAL_CANARY,
   SSRF_CANARY,
   COMMAND_INJECTION_CANARY,
+  XXE_CANARY,
+  DESERIALIZATION_CANARY,
 ];
 
 // ── Oczekiwane ZACHOWANIE BEZPIECZNE per klasa (assertuj zawsze to, nie payload) ──
@@ -25,7 +31,11 @@ export const CANARIES: readonly string[] = [
 export const SECURE_BEHAVIOR = {
   XSS_REFLECTION: 'payload nie wraca jako raw HTML — encja / sanitization (np. &lt;script&gt;)',
   SQLI: 'parametr parametryzowany — brak SQL error leak, status 4xx, nie 500',
+  NOSQLI: 'operator MongoDB ($ne, $gt, $regex z kanarką) odrzucony — 4xx lub brak wpływu na wynik',
   PATH_TRAVERSAL: 'odpowiedź nie zawiera treści pliku systemowego (np. root:)',
+  XXE: 'parser XML wyłącza encje zewnętrzne — brak treści /etc/passwd w odpowiedzi',
+  DESERIALIZATION: 'obiekt z kanarką odrzucony (400/415) lub zdeserializowany jako string, nie jako obiekt',
+  SSRF: 'wewnętrzny URL (localhost/169.254.169.254) zablokowany — brak odpowiedzi z metadanych',
   IDOR: 'obcy zasób → 401/403, nigdy 200 z cudzą treścią',
   AUTH_MISSING: 'brak/nieprawidłowy token → 401, nie 200/redirect do treści',
   MASS_ASSIGNMENT: 'pola z poza whitelisty (np. role, isAdmin) ignorowane w odpowiedzi',

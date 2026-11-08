@@ -20,6 +20,7 @@ planner → writer → refactor → code-review
 | SQL / konwersje danych | `agents/data/` | `qa-data-sql` | `setups/security-and-data` |
 | Dostępność (WCAG, axe-core) | `agents/accessibility/` | `qa-accessibility-wcag` | `setups/accessibility-wcag` |
 | Unit (Vitest + coverage) | `agents/unit/` | `qa-unit-vitest` | `setups/unit-testing-vitest` |
+| Mobile (Playwright device emulation) | `agents/mobile/` | `qa-mobile-playwright` | `setups/mobile-playwright` |
 
 ## ⛓️ Przepływ pracy
 
