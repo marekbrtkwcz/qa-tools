@@ -1,0 +1,21 @@
+{
+  "name": "qa-tools",
+  "version": "1.2.0",
+  "private": true,
+  "type": "module",
+  "description": "Biblioteka skills i agentów dla testera automatyzującego — sama nie jest projektem testowym, devDependencies tylko do testów własnych skryptów.",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "coverage": "vitest run --coverage",
+    "validate": "node scripts/validate-library.ts",
+    "script": "tsx"
+  },
+  "devDependencies": {
+    "@types/node": "latest",
+    "tsx": "latest",
+    "typescript": "latest",
+    "vitest": "latest",
+    "@vitest/coverage-v8": "latest"
+  }
+}

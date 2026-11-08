@@ -1,0 +1,8 @@
+# Biblioteka qa-tools — sama nie jest projektem testowym, ale ma własne devDependencies (vitest).
+node_modules/
+coverage/
+
+# Lokalne artefakty
+.env
+*.log
+.DS_Store

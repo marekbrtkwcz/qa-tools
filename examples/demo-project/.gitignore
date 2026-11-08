@@ -1,0 +1,41 @@
+# Kanoniczny .gitignore — kopiuj do katalogu głównego projektu jako .gitignore
+# UWAGA: package-lock.json NIE jest ignorowany (commitujemy — reprodukowalne buildy + audit).
+
+# Zależności / build
+node_modules/
+dist/
+build/
+coverage/
+
+# Playwright
+playwright-report/
+test-results/
+blob-report/
+
+# Środowisko — sekrety tylko lokalnie
+.env
+.env.local
+.env.*.local
+*.local
+
+# Logi
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+
+# Raporty testowe / cache
+.nyc_output/
+.tmp/
+.cache/
+
+# System / IDE
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+*.swp
+
+# k6
+k6-results/
