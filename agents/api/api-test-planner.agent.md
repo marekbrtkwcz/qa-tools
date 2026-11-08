@@ -1,7 +1,6 @@
 ---
 name: 🧠 API Test Planner - OpenAPI Based
-description: "Generate automation-ready API test plans from OpenAPI documentation. Creates 3 separate scenario groups: schema validation, positive scenarios, and negative scenarios with documented validations."
-
+description: "Generate automation-ready API test plans from OpenAPI documentation. Creates 3 separate scenario groups: schema validation, positive scenarios, and negative scenarios with documented validations. Keywords PL: planowanie testów api, scenariusze api, openapi."
 tools: [read, edit, search, vscode, todo]
 
 ---
