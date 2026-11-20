@@ -214,3 +214,9 @@ examples/
 ```
 
 This is the reference point for agents and users: it shows what a scenario plan and a test written according to the conventions look like (naming `should ... when ...`, `getBy*` selectors, `await expect(...)` assertions, secrets from env).
+
+## Community
+
+- Bugs and feature requests: GitHub issues (templates in `.github/ISSUE_TEMPLATE/`, PR checklist in `.github/PULL_REQUEST_TEMPLATE.md`).
+- Security vulnerabilities: see `SECURITY.md` — report privately, never in a public issue.
+- `main` is protected: the `Validate plugin` status check must pass before merging.

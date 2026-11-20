@@ -3,6 +3,12 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.17.3] - 2026-11-20
+
+### Added
+- `SECURITY.md` (private vulnerability reporting, scope, safe-use rules) and `.github/PULL_REQUEST_TEMPLATE.md` (checklist: validator, tests, CHANGELOG/plugin.json bump, no secrets).
+- Repo hardening via API: branch protection on `main` (required `Validate plugin` status check) and 10 topics (playwright, testing, typescript, automation, qa, api-testing, e2e-testing, accessibility, security, load-testing).
+
 ## [1.17.2] - 2026-11-20
 
 ### Added
