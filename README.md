@@ -2,7 +2,7 @@
 
 [![Validate plugin](https://github.com/marekbrtkwcz/qa-tools/actions/workflows/validate-plugin.yml/badge.svg)](https://github.com/marekbrtkwcz/qa-tools/actions/workflows/validate-plugin.yml)
 
-Vibe CLI plugin (Agent Plugins 1.0 format) with a complete AI toolkit for quality engineering: 11 testing pipelines × 4 stages = **48 subagents**, **15 skills**, **5 hooks**, **4 knowledge entries**.
+Vibe CLI plugin (Agent Plugins 1.0 format) with a complete AI toolkit for quality engineering: 11 testing pipelines × 4 stages = **52 subagents**, **15 skills**, **5 hooks**, **4 knowledge entries**.
 
 | Area | Subagents | Purpose |
 |---|---|---|
@@ -18,6 +18,7 @@ Vibe CLI plugin (Agent Plugins 1.0 format) with a complete AI toolkit for qualit
 | security | `qa-tools:security-test-*` | OWASP Top 10, XSS/CSRF, IDOR, secrets 🆕 |
 | chaos | `qa-tools:chaos-test-*` | fault injection, timeouts, dependency degradation 🆕 |
 | i18n | `qa-tools:i18n-test-*` | locales, RTL, date/currency formats, translation fallbacks 🆕 |
+| API versioning | `qa-tools:versioning-test-*` | deprecations, `Accept-Version`, backward compatibility 🆕 |
 
 Each pipeline: `planner → writer → refactor → code-reviewer`.
 
@@ -71,7 +72,7 @@ Repository: `github.com/marekbrtkwcz/qa-tools` (branch `main`). Changes are publ
 │   ├── visual-testing/
 │   └── qa-best-practices/
 └── ai.mistral.vibe/
-    ├── agents/                          # 48 pipeline subagents (12 areas × 4 stages)
+    ├── agents/                          # 52 pipeline subagents (13 areas × 4 stages)
     ├── hooks.toml                       # lint, playwright --list, typecheck, flaky-watch, QA conventions
     └── knowledge/                       # knowledge base (architecture, patterns, QA glossary, reporting)
 ```
@@ -126,6 +127,10 @@ Repository: `github.com/marekbrtkwcz/qa-tools` (branch `main`). Changes are publ
         ├── i18n-test-writer.toml            # writing i18n tests (locales, RTL, formats) 🆕
         ├── i18n-test-refactor.toml          # i18n refactoring (locale helpers) 🆕
         └── i18n-test-code-reviewer.toml     # i18n code review 🆕
+        ├── versioning-test-planner.toml     # API versioning test planning 🆕
+        ├── versioning-test-writer.toml      # writing versioning tests (Accept-Version) 🆕
+        ├── versioning-test-refactor.toml    # versioning refactoring (per-version helpers) 🆕
+        └── versioning-test-code-reviewer.toml # versioning code review 🆕
 ```
 
 ## Testing pipeline
@@ -134,7 +139,7 @@ Repository: `github.com/marekbrtkwcz/qa-tools` (branch `main`). Changes are publ
 Planner → Writer → Refactor → Code Reviewer
 ```
 
-Available for twelve areas: **UI**, **API**, **E2E**, **mobile**, **visual (regression)**, **load (k6)**, **DB (data migration/ETL verification)**, **contract (Pact / OpenAPI)**, **a11y (WCAG accessibility)**, **security (OWASP Top 10)**, **chaos (fault injection / resilience)**, **i18n (locales, RTL, formats)**.
+Available for thirteen areas: **UI**, **API**, **E2E**, **mobile**, **visual (regression)**, **load (k6)**, **DB (data migration/ETL verification)**, **contract (Pact / OpenAPI)**, **a11y (WCAG accessibility)**, **security (OWASP Top 10)**, **chaos (fault injection / resilience)**, **i18n (locales, RTL, formats)**, **API versioning (deprecations, backward compatibility)**.
 
 ## qa-tools conventions (enforced by all 44 agents)
 

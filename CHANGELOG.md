@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.16.0] - 2026-11-20
+
+### Added
+- New `versioning` pipeline (13th area, 4 subagents: `versioning-test-planner`, `versioning-test-writer`, `versioning-test-refactor`, `versioning-test-code-reviewer`) for API versioning: backward compatibility v1/v2, `Deprecation`/`Sunset`/`Link` headers, `Accept-Version` vs path versioning, 410 Gone after sunset, per-version OpenAPI validation. Validator covers the `versioning` area (excluded from the waitForTimeout rule like other API areas).
+
 ## [1.15.0] - 2026-11-20
 
 ### Added
