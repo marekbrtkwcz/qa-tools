@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.27.0] - 2026-11-20
+
+### 📦 Added
+- New skill `testing-agent-skills` (27th), adapted from `jaktestowac/awesome-agents-for-quality`: behavioral testing of skills/prompts/agents/hooks themselves — 7-category case taxonomy (activation ±, collision, contract, behavioral, safety, persistence), 6-case minimum suite, recorded baseline (asset disabled), ≥3 trials, blind weighted scoring, ship gate vs baseline, collision-case protocol for collections, failure modes, and committed eval artifacts re-run before each edit. Complements `plugin-authoring` (static) and `llm-testing` (product features).
+
 ## [1.26.1] - 2026-11-20
 
 ### 🔄 Changed
