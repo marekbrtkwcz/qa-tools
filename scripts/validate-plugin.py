@@ -257,7 +257,7 @@ def check_examples():
             err("examples/api/users.spec.ts: brak asercji expect(res.status()).toBe(...)")
         if "{ request }" not in code:
             err("examples/api/users.spec.ts: brak fixture'a request")
-        if re.search(r"https?://", code):
+        if re.search(r"https?://", raw):  # na raw — strip komentarzy zjada '//' w URL-u
             err("examples/api/users.spec.ts: hardkodowany URL — baseURL tylko z env/config")
     if not errors or all("examples" not in e for e in errors):
         ok("plany scenariuszy i testy UI/API zgodne z konwencjami")
