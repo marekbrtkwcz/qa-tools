@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.41.0] - 2026-11-21
+
+### 📦 Added
+- New project commands in `.vibe/prompts/` (13 → 17), the quality-gate batch from `jaktestowac/awesome-agents-for-quality`: `/scope-change-gate` (file+hunk tagging of a diff, relevant practices vs contract, changed-line coverage, intent check, severity-ranked briefs, read-only), `/record-change-intent` (high-risk surface detection, rationale lookup in trailers/ADR/register, classification covered/undeclared/malformed/restated, drafted `Intent:` trailer for the author to confirm — never committed by the agent), `/derive-quality-contract` (triple detection risk × maturity × surfaces, MUST/SHOULD/COULD resolution, gap matrix with quoted evidence, `.qa/quality-contract.md` artifacts), `/audit-quality-debt` (silent-skip inventory across tests/lint/types/CI/coverage/security/hooks/AI gates, waiver health, intent + comprehension debt, trend; report-only).
+
 ## [1.40.0] - 2026-11-21
 
 ### 📦 Added

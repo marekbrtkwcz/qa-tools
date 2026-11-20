@@ -65,6 +65,10 @@ Project-level prompts in `.vibe/prompts/` (loaded only in this trusted project; 
 | `/test-llm-guardrails` | guardrail + injection-resistance testing with a blocking written authorization gate; adversarial corpus scored on effect, across every content channel |
 | `/a11y-webpage-audit` | single-URL WCAG 2.2 AA audit via Playwright MCP: 6 passes, findings with repro/fix/retest, issue table |
 | `/a11y-audit-deep-dive` | multi-page/journey a11y deep dive: template sampling, exact WCAG criteria, retest checklist, technical + stakeholder output |
+| `/scope-change-gate` | diff gate before merge: file+hunk tagging, relevant practices, changed-line coverage, intent check; BLOCK/warn/nudge/info findings with briefs; read-only |
+| `/record-change-intent` | check high-risk surface for recorded rationale (trailers/ADR/register), classify covered/undeclared/malformed, draft `Intent:` trailer for the author — never commits it |
+| `/derive-quality-contract` | derive MUST/SHOULD/COULD contract from risk × maturity × surfaces → `.qa/quality-contract.md`, gap matrix, remediation plan |
+| `/audit-quality-debt` | governance audit: silent skips inventory (tests/lint/types/CI/coverage), waiver health, intent + comprehension debt, trend; report-only |
 
 ## Publishing
 
