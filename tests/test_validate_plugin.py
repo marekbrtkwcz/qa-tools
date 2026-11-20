@@ -46,6 +46,32 @@ test('should return 200 when token is valid', async ({ request }) => {
 });
 """
 
+GOOD_A11Y_SPEC = """import { test, expect } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
+
+test('should have no critical violations when page is open', async ({ page }) => {
+  await page.goto('/login');
+  const results = await new AxeBuilder({ page }).analyze();
+  expect(results.violations).toEqual([]);
+  await expect(page.getByRole('button', { name: 'Log in' })).toBeFocused();
+});
+"""
+
+GOOD_SEC_SPEC = """import { test, expect } from '@playwright/test';
+
+test('should render payload as text when comment is XSS', async ({ page }) => {
+  await page.getByLabel('Comment').fill('<script>alert(1)</script>');
+  expect(true).toBe(true);
+});
+"""
+
+GOOD_CONFIG = """import { defineConfig, devices } from '@playwright/test';
+export default defineConfig({
+  use: { baseURL: process.env.BASE_URL },
+  projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
+});
+"""
+
 GOOD_PLAN = """# Plan
 Nazwa scenariusza: logowanie
 Warunki wstępne: użytkownik istnieje
@@ -111,6 +137,15 @@ def build_good_plugin(root: Path, version: str = "1.0.0") -> Path:
     (examples / "tests" / "api").mkdir(parents=True)
     (examples / "docs" / "scenarios" / "api" / "users.md").write_text(GOOD_PLAN, encoding="utf-8")
     (examples / "tests" / "api" / "users.spec.ts").write_text(GOOD_API_SPEC, encoding="utf-8")
+    (examples / "docs" / "scenarios" / "a11y").mkdir(parents=True)
+    (examples / "tests" / "a11y").mkdir(parents=True)
+    (examples / "docs" / "scenarios" / "a11y" / "login.md").write_text(GOOD_PLAN, encoding="utf-8")
+    (examples / "tests" / "a11y" / "login.spec.ts").write_text(GOOD_A11Y_SPEC, encoding="utf-8")
+    (examples / "docs" / "scenarios" / "security").mkdir(parents=True)
+    (examples / "tests" / "security").mkdir(parents=True)
+    (examples / "docs" / "scenarios" / "security" / "comment-xss.md").write_text(GOOD_PLAN, encoding="utf-8")
+    (examples / "tests" / "security" / "comment-xss.spec.ts").write_text(GOOD_SEC_SPEC, encoding="utf-8")
+    (examples / "playwright.config.ts").write_text(GOOD_CONFIG, encoding="utf-8")
 
     (root / "CHANGELOG.md").write_text(f"# Changelog\n\n## [{version}] - 2026-11-20\n", encoding="utf-8")
     (root / "README.md").write_text(
@@ -214,6 +249,24 @@ class ValidatorTestCase(unittest.TestCase):
         code = self.run_validator()
         self.assertEqual(code, 1)
         self.assertTrue(any("hardkodowany URL" in e for e in validator.errors))
+
+    def test_security_spec_with_waitForTimeout_fails(self):
+        spec_file = self.root / "examples" / "tests" / "security" / "comment-xss.spec.ts"
+        spec_file.write_text(GOOD_SEC_SPEC.replace(
+            "expect(true).toBe(true);", "await page.waitForTimeout(500);\n  expect(true).toBe(true);"
+        ), encoding="utf-8")
+        code = self.run_validator()
+        self.assertEqual(code, 1)
+        self.assertTrue(any("security" in e and "waitForTimeout" in e for e in validator.errors))
+
+    def test_config_without_env_baseurl_fails(self):
+        (self.root / "examples" / "playwright.config.ts").write_text(
+            GOOD_CONFIG.replace("process.env.BASE_URL", "'http://localhost:3000'"),
+            encoding="utf-8",
+        )
+        code = self.run_validator()
+        self.assertEqual(code, 1)
+        self.assertTrue(any("baseURL" in e for e in validator.errors))
 
     def test_spec_with_waitForTimeout_fails(self):
         spec_file = self.root / "examples" / "tests" / "ui" / "login.spec.ts"

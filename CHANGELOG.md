@@ -3,6 +3,13 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.8.0] - 2026-11-20
+
+### Added
+- Reference examples for `a11y` (`tests/a11y/login.spec.ts` + scenario plan: axe-core scan, keyboard focus) and `security` (`tests/security/comment-xss.spec.ts` + plan: XSS payload rendered as text, no dialog).
+- `examples/playwright.config.ts` template: per-browser/device projects, `baseURL` from env, HTML reporter, trace on first retry.
+- Validator checks the new examples (plan sections, naming, no `waitForTimeout`, AxeBuilder/getBy* for a11y, no hardcoded URLs for security, env-based baseURL in config); 2 new unit tests (10 total).
+
 ## [1.7.0] - 2026-11-20
 
 ### Added

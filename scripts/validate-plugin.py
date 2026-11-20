@@ -259,8 +259,69 @@ def check_examples():
             err("examples/api/users.spec.ts: brak fixture'a request")
         if re.search(r"https?://", raw):  # na raw — strip komentarzy zjada '//' w URL-u
             err("examples/api/users.spec.ts: hardkodowany URL — baseURL tylko z env/config")
+    # --- przykład a11y ---
+    a11y_plan = ROOT / "examples" / "docs" / "scenarios" / "a11y" / "login.md"
+    a11y_test = ROOT / "examples" / "tests" / "a11y" / "login.spec.ts"
+    if not a11y_plan.exists():
+        err("examples: brak docs/scenarios/a11y/login.md")
+    else:
+        text = a11y_plan.read_text(encoding="utf-8")
+        for section in ("Nazwa scenariusza", "Warunki wstępne", "Kroki",
+                        "Punkty walidacji", "Dane testowe", "Poza zakresem"):
+            if section not in text:
+                err(f"examples/a11y/login.md: brak sekcji '{section}'")
+    if not a11y_test.exists():
+        err("examples: brak tests/a11y/login.spec.ts")
+    else:
+        raw = a11y_test.read_text(encoding="utf-8")
+        code = re.sub(r"//[^\n]*", "", raw)
+        if not re.search(r"test\('should .+ when .+'", code):
+            err("examples/a11y/login.spec.ts: nazwa testu niezgodna z konwencją should...when...")
+        if "waitForTimeout" in code:
+            err("examples/a11y/login.spec.ts: użyty waitForTimeout")
+        if "AxeBuilder" not in code:
+            err("examples/a11y/login.spec.ts: brak użycia AxeBuilder (axe-core)")
+        if not re.search(r"getBy(Role|Label|Text|TestId)", code):
+            err("examples/a11y/login.spec.ts: brak selektorów getBy*")
+
+    # --- przykład security ---
+    sec_plan = ROOT / "examples" / "docs" / "scenarios" / "security" / "comment-xss.md"
+    sec_test = ROOT / "examples" / "tests" / "security" / "comment-xss.spec.ts"
+    if not sec_plan.exists():
+        err("examples: brak docs/scenarios/security/comment-xss.md")
+    else:
+        text = sec_plan.read_text(encoding="utf-8")
+        for section in ("Nazwa scenariusza", "Warunki wstępne", "Kroki",
+                        "Punkty walidacji", "Dane testowe", "Poza zakresem"):
+            if section not in text:
+                err(f"examples/security/comment-xss.md: brak sekcji '{section}'")
+    if not sec_test.exists():
+        err("examples: brak tests/security/comment-xss.spec.ts")
+    else:
+        raw = sec_test.read_text(encoding="utf-8")
+        code = re.sub(r"//[^\n]*", "", raw)
+        if not re.search(r"test\('should .+ when .+'", code):
+            err("examples/security/comment-xss.spec.ts: nazwa testu niezgodna z konwencją should...when...")
+        if "waitForTimeout" in code:
+            err("examples/security/comment-xss.spec.ts: użyty waitForTimeout")
+        if not re.search(r"expect\(", code):
+            err("examples/security/comment-xss.spec.ts: brak asercji expect(...)")
+        if re.search(r"https?://", raw):
+            err("examples/security/comment-xss.spec.ts: hardkodowany URL")
+
+    # --- szablon playwright.config.ts ---
+    cfg = ROOT / "examples" / "playwright.config.ts"
+    if not cfg.exists():
+        err("examples: brak playwright.config.ts")
+    else:
+        text = cfg.read_text(encoding="utf-8")
+        if "baseURL: process.env.BASE_URL" not in text:
+            err("examples/playwright.config.ts: baseURL musi być z env (process.env.BASE_URL)")
+        if "projects" not in text or "devices[" not in text:
+            err("examples/playwright.config.ts: brak projektów per przeglądarka/device")
+
     if not errors or all("examples" not in e for e in errors):
-        ok("plany scenariuszy i testy UI/API zgodne z konwencjami")
+        ok("plany scenariuszy i testy UI/API/a11y/security + config zgodne z konwencjami")
 
 
 def main():

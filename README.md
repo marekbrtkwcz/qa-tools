@@ -162,10 +162,15 @@ Skrypt sprawdza: `plugin.json`, wszystkie 32 TOML-e agentów (klucze, konwencje 
 
 ```
 examples/
-├── docs/scenarios/ui/login.md    # plan scenariusza UI w formacie wymaganym przez plannerów
-├── docs/scenarios/api/users.md   # plan scenariusza API
-├── tests/ui/login.spec.ts        # test Playwright UI zgodny z konwencjami qa-tools
-└── tests/api/users.spec.ts       # test API (fixture request) zgodny z konwencjami qa-tools
+├── playwright.config.ts                  # szablon configu: projekty per przeglądarka/device, baseURL z env
+├── docs/scenarios/ui/login.md            # plan scenariusza UI
+├── docs/scenarios/api/users.md           # plan scenariusza API
+├── docs/scenarios/a11y/login.md          # plan scenariusza a11y (axe-core)
+├── docs/scenarios/security/comment-xss.md # plan scenariusza security (XSS)
+├── tests/ui/login.spec.ts                # test Playwright UI
+├── tests/api/users.spec.ts               # test API (fixture request)
+├── tests/a11y/login.spec.ts              # test a11y (axe + klawiatura)
+└── tests/security/comment-xss.spec.ts    # test security (XSS)
 ```
 
 To punkt odniesienia dla agentów i użytkowników: pokazuje, jak wygląda plan scenariusza i test napisany zgodnie z konwencjami (nazewnictwo `should ... when ...`, selektory `getBy*`, asercje `await expect(...)`, sekrety z env).
