@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.4.0] - 2026-11-20
+
+### Added
+- New `a11y` pipeline (4 subagents: `a11y-test-planner`, `a11y-test-writer`, `a11y-test-refactor`, `a11y-test-code-reviewer`) for accessibility testing: axe-core scans (critical/serious = 0), keyboard navigation and focus visibility, ARIA roles/landmarks, form labels and error messages. Complements the existing `accessibility-testing` skill. Validator covers the `a11y` area.
+
 ## [1.3.0] - 2026-11-20
 
 ### Added
