@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.17.1] - 2026-11-20
+
+### Added
+- Auto-release workflow `.github/workflows/release.yml`: on push to `main` it reads the newest `## [x.y.z]` entry in `CHANGELOG.md`, and if tag `v<x.y.z>` does not exist yet, creates the annotated tag and a GitHub Release with notes extracted from that CHANGELOG section (`contents: write`, idempotent, concurrency-guarded).
+
 ## [1.17.0] - 2026-11-20
 
 ### Added

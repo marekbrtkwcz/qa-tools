@@ -50,6 +50,8 @@ Usage: subagents as `qa-tools:<name>` (e.g. `qa-tools:ui-test-planner`), skills 
 
 Repository: `github.com/marekbrtkwcz/qa-tools` (branch `main`). Changes are published as usual: `git push origin main`. Plugin version lives in `.vibe/plugins/qa-tools/plugin.json`, history in `CHANGELOG.md`. License: MIT (`LICENSE`).
 
+Releases are automatic: on every push to `main`, the `.github/workflows/release.yml` action reads the newest `## [x.y.z]` entry in `CHANGELOG.md` and — if no matching tag exists yet — creates annotated tag `v<x.y.z>` plus a GitHub Release with notes taken from that CHANGELOG section. To cut a release, just add the CHANGELOG entry and bump `plugin.json`, then push.
+
 ## Structure
 
 ```
