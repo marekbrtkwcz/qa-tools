@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.28.0] - 2026-11-20
+
+### 📦 Added
+- 5 role subagents (52 → 57 total), adapted from `jaktestowac/awesome-agents-for-quality` agents: `qa-strategist` (risk-sorted scenario matrices, testability review, regression scoping), `rubber-duck` (Socratic debugging, one evidence-anchored question at a time, never hands over the fix), `tech-debt-auditor` (evidence-backed debt register with severity/risk/effort/ROI and Now/Next/Later roadmap, report-only), `change-gate-reviewer` (per-diff review vs quality contract: tag, scope, diff-coverage, change-intent on high-risk surface, severity-ranked findings, read-only), `skill-librarian` (whole-collection audit: inventory, conformance, trigger collisions, reference integrity, source/plugin drift, behavioural-test gaps).
+
 ## [1.27.1] - 2026-11-20
 
 ### 🔄 Changed
