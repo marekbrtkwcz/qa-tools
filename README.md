@@ -56,6 +56,8 @@ Project-level prompts in `.vibe/prompts/` (loaded only in this trusted project; 
 | `/bug-report` | turns rough notes into a developer-ready bug report (severity, repro, confidence, missing evidence) |
 | `/playwright-generate-test` | walks one scenario live with Playwright MCP, then writes and runs a grounded Playwright spec |
 | `/refactor-to-page-objects` | pure structural refactor of specs into page objects, verified against a baseline run |
+| `/stabilize-flaky-tests` | reproduces flaky tests (repeat/parallel runs), classifies root cause, fixes it, proves stability with before/after rates |
+| `/tech-debt-audit` | report-only audit of test code: anti-patterns with `file:line`, severity-ranked, A–F health score, fix plan |
 
 ## Publishing
 

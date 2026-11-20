@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.33.0] - 2026-11-21
+
+### 📦 Added
+- New project commands in `.vibe/prompts/` (4 → 6), adapted from `jaktestowac/awesome-agents-for-quality`: `/stabilize-flaky-tests` (reproduce with `--repeat-each`/parallel runs, classify root cause, fix without retries or timeouts, prove with before/after failure rates, quarantine with owner what cannot be fixed) and `/tech-debt-audit` (report-only test-code audit: anti-patterns with `file:line`, severity-ranked findings, A–F health score, fix plan by release/sprint/backlog).
+
 ## [1.32.0] - 2026-11-21
 
 ### 📦 Added
