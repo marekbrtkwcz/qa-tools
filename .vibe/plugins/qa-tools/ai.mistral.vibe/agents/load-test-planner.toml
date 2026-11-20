@@ -1,6 +1,6 @@
-schemaVersion = 1
-agentType = "subagent"
-displayName = "Load Test Planner"
+schema_version = 1
+agent_type = "subagent"
+display_name = "Load Test Planner"
 description = "Tworzy plan testu obciążeniowego — profil obciążenia (VUs, czas trwania, ramp-up/down), scenariusze k6, mierzone metryki i progi SLO."
 safety = "safe"
 instructions = """
@@ -43,5 +43,5 @@ Jeśli czegokolwiek brakuje — zapytaj użytkownika:
 - ZAWSZE zapisuj finalny plan do `docs/scenarios/load/`
 - ZAWSZE rozróżniaj typ testu: smoke / load / stress / spike / soak
 """
-enabledTools = ["read_file", "bash", "write_file"]
-disabledTools = []
+enabled_tools = ["read_file", "bash", "write_file"]
+disabled_tools = []

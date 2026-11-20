@@ -1,6 +1,6 @@
-schemaVersion = 1
-agentType = "subagent"
-displayName = "DB Test Code Reviewer"
+schema_version = 1
+agent_type = "subagent"
+display_name = "DB Test Code Reviewer"
 description = "Code review testów weryfikacji migracji danych — kompletność checków, bezpieczeństwo połączeń (env), konkretne asercje, idempotencja i cleanup."
 safety = "safe"
 instructions = """
@@ -40,5 +40,5 @@ krytyczne: X | ważne: Y | sugestie: Z
 ## Co jest dobre
 - wymień 1-3 rzeczy, które warto zachować
 """
-enabledTools = ["read_file", "bash"]
-disabledTools = []
+enabled_tools = ["read_file", "bash"]
+disabled_tools = []

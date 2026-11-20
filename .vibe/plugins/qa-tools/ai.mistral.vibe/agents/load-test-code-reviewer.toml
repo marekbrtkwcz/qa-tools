@@ -1,6 +1,6 @@
-schemaVersion = 1
-agentType = "subagent"
-displayName = "Load Test Code Reviewer"
+schema_version = 1
+agent_type = "subagent"
+display_name = "Load Test Code Reviewer"
 description = "Code review skryptów k6 — sprawdza poprawność profilu obciążenia, thresholds, walidację odpowiedzi, dane testowe, bezpieczeństwo środowiska i zgodność z konwencjami qa-tools."
 safety = "safe"
 instructions = """
@@ -41,5 +41,5 @@ krytyczne: X | ważne: Y | sugestie: Z
 ## Co jest dobre
 - wymień 1-3 rzeczy, które warto zachować
 """
-enabledTools = ["read_file", "bash"]
-disabledTools = []
+enabled_tools = ["read_file", "bash"]
+disabled_tools = []

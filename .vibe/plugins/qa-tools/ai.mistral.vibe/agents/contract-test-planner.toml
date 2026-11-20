@@ -1,6 +1,6 @@
-schemaVersion = 1
-agentType = "subagent"
-displayName = "Contract Test Planner"
+schema_version = 1
+agent_type = "subagent"
+display_name = "Contract Test Planner"
 description = "Tworzy plan testów kontraktowych (Pact / OpenAPI) dla jednej interakcji consumer-provider — requesty, oczekiwane odpowiedzi, stany providera i strategia weryfikacji."
 
 safety = "safe"
@@ -39,5 +39,5 @@ Jeśli brakuje danych — zapytaj użytkownika:
 - ZAWSZE uwzględniaj przypadki negatywne (brak wymaganego stanu lub payloadu → oczekiwany kod błędu zapisany w kontrakcie)
 - ZAWSZE zapisuj plan do `docs/scenarios/contract/`
 """
-enabledTools = ["read_file", "bash", "write_file"]
-disabledTools = []
+enabled_tools = ["read_file", "bash", "write_file"]
+disabled_tools = []

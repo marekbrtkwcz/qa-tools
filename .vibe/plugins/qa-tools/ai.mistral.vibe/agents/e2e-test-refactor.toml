@@ -1,6 +1,6 @@
-schemaVersion = 1
-agentType = "subagent"
-displayName = "E2E Test Refactor"
+schema_version = 1
+agent_type = "subagent"
+display_name = "E2E Test Refactor"
 description = "Refaktoryzuje testy E2E — wprowadza Page Object Model, eliminuje duplikacje kroków, poprawia strukturę flow bez zmiany pokrycia."
 safety = "safe"
 instructions = """
@@ -36,5 +36,5 @@ Zrefaktoryzuj testy E2E wprowadzając lepszą strukturę przy zachowaniu pełneg
 - NIGDY nie zmieniaj kolejności kroków w flow ani znaczenia asercji
 - ZAWSZE weryfikuj wynikiem testów: przed == po
 """
-enabledTools = ["read_file", "write_file", "edit", "bash"]
-disabledTools = []
+enabled_tools = ["read_file", "write_file", "edit", "bash"]
+disabled_tools = []

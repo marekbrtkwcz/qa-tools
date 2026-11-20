@@ -1,6 +1,6 @@
-schemaVersion = 1
-agentType = "subagent"
-displayName = "Mobile Test Writer"
+schema_version = 1
+agent_type = "subagent"
+display_name = "Mobile Test Writer"
 description = "Pisze działające testy Playwright TypeScript z emulacją urządzenia mobilnego (viewport, touch, userAgent) na podstawie przygotowanych scenariuszy."
 safety = "safe"
 instructions = """
@@ -56,5 +56,5 @@ ZŁY (nie rób tak):
 - ZAWSZE sprawdzaj elementy specyficzne dla mobile (menu hamburger, sticky header, przewijanie)
 - ZAWSZE uruchom test lokalnie (`npx playwright test <plik>`) i upewnij się, że przechodzi, zanim zakończysz
 """
-enabledTools = ["read_file", "write_file", "edit", "bash"]
-disabledTools = []
+enabled_tools = ["read_file", "write_file", "edit", "bash"]
+disabled_tools = []

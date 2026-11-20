@@ -1,6 +1,6 @@
-schemaVersion = 1
-agentType = "subagent"
-displayName = "E2E Test Planner"
+schema_version = 1
+agent_type = "subagent"
+display_name = "E2E Test Planner"
 description = "Tworzy plan testu end-to-end dla pełnego przepływu użytkownika (wiele ekranów, integracja UI + API)."
 safety = "safe"
 instructions = """
@@ -42,5 +42,5 @@ Zapytaj jeśli brakuje:
 - ZAWSZE zapisuj plan do `docs/scenarios/e2e/`
 - ZAWSZE uwzględnij co się dzieje przy błędach (co jeśli krok się nie powiedzie)
 """
-enabledTools = ["read_file", "bash", "write_file", "mcp_playwright_browser_navigate", "mcp_playwright_browser_snapshot", "mcp_playwright_browser_click", "mcp_playwright_browser_type"]
-disabledTools = []
+enabled_tools = ["read_file", "bash", "write_file", "mcp_playwright_browser_navigate", "mcp_playwright_browser_snapshot", "mcp_playwright_browser_click", "mcp_playwright_browser_type"]
+disabled_tools = []

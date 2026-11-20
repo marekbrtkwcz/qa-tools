@@ -1,6 +1,6 @@
-schemaVersion = 1
-agentType = "subagent"
-displayName = "Visual Test Writer"
+schema_version = 1
+agent_type = "subagent"
+display_name = "Visual Test Writer"
 description = "Pisze testy wizualne (visual regression) w Playwright TypeScript — toHaveScreenshot z maskami, wieloma viewportami i baseline'ami."
 safety = "safe"
 instructions = """
@@ -50,5 +50,5 @@ ZŁY (nie rób tak):
 - NIGDY nie rób screenshotu bez osiągnięcia wymaganego stanu
 - ZAWSZE uruchom test lokalnie (`npx playwright test <plik>`) — pierwszy run generuje baseline; upewnij się, że przechodzi przy drugim
 """
-enabledTools = ["read_file", "write_file", "edit", "bash"]
-disabledTools = []
+enabled_tools = ["read_file", "write_file", "edit", "bash"]
+disabled_tools = []

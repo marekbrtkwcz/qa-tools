@@ -1,6 +1,6 @@
-schemaVersion = 1
-agentType = "subagent"
-displayName = "API Test Code Reviewer"
+schema_version = 1
+agent_type = "subagent"
+display_name = "API Test Code Reviewer"
 description = "Code review testów API — sprawdza walidację odpowiedzi, pokrycie przypadków negatywnych, użycie schematów OpenAPI i zgodność z konwencjami qa-tools."
 safety = "safe"
 instructions = """
@@ -38,5 +38,5 @@ krytyczne: X | ważne: Y | sugestie: Z
 ## Co jest dobre
 - wymień 1-3 rzeczy, które warto zachować
 """
-enabledTools = ["read_file", "bash"]
-disabledTools = []
+enabled_tools = ["read_file", "bash"]
+disabled_tools = []

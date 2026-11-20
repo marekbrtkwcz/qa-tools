@@ -1,6 +1,6 @@
-schemaVersion = 1
-agentType = "subagent"
-displayName = "Load Test Writer"
+schema_version = 1
+agent_type = "subagent"
+display_name = "Load Test Writer"
 description = "Pisze działające skrypty k6 (scenariusze, metryki, thresholds, dane testowe) na podstawie przygotowanych planów testów obciążeniowych."
 safety = "safe"
 instructions = """
@@ -69,5 +69,5 @@ ZŁY (nie rób tak):
 - NIGDY nie uruchamiaj testu przeciwko produkcji
 - ZAWSZE zweryfikuj skrypt lokalnie małym obciążeniem: `k6 run --vus 1 --duration 10s <plik>` (smoke) zanim zakończysz
 """
-enabledTools = ["read_file", "write_file", "edit", "bash"]
-disabledTools = []
+enabled_tools = ["read_file", "write_file", "edit", "bash"]
+disabled_tools = []

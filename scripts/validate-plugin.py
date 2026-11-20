@@ -64,8 +64,8 @@ def check_agents():
     if not files:
         err("agents: brak plików .toml")
         return
-    required = ["schemaVersion", "agentType", "displayName", "description",
-                "safety", "instructions", "enabledTools"]
+    required = ["schema_version", "agent_type", "display_name", "description",
+                "safety", "instructions", "enabled_tools"]
     per_area = {}
     for f in files:
         try:
@@ -82,16 +82,16 @@ def check_agents():
             err(f"{name}: brak kluczy {missing}")
             continue
         instr = d["instructions"]
-        if d["schemaVersion"] != 1:
-            err(f"{name}: schemaVersion != 1")
-        if d["agentType"] != "subagent":
-            err(f"{name}: agentType != subagent")
+        if d["schema_version"] != 1:
+            err(f"{name}: schema_version != 1")
+        if d["agent_type"] != "subagent":
+            err(f"{name}: agent_type != subagent")
         if BS in instr:
             err(f"{name}: backslash w instructions (ryzyko escape TOML)")
         if len(instr) < 200:
             err(f"{name}: instructions za krótkie (<200 znaków)")
-        if not d["enabledTools"]:
-            err(f"{name}: puste enabledTools")
+        if not d["enabled_tools"]:
+            err(f"{name}: puste enabled_tools")
         naming = NAMING_VISUAL if area == "visual" else NAMING
         if area in PLAYWRIGHT_AREAS and naming not in instr:
             err(f"{name}: brak konwencji nazewnictwa '{naming}'")

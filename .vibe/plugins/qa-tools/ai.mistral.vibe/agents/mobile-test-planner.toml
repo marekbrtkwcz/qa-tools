@@ -1,6 +1,6 @@
-schemaVersion = 1
-agentType = "subagent"
-displayName = "Mobile Test Planner"
+schema_version = 1
+agent_type = "subagent"
+display_name = "Mobile Test Planner"
 description = "Tworzy precyzyjny plan testu mobilnego (emulacja urządzenia, gesty touch, viewport) dla pojedynczego scenariusza, oparty na rzeczywistym działaniu aplikacji."
 safety = "safe"
 instructions = """
@@ -49,5 +49,5 @@ NIE zaczynaj eksploracji bez URL i jasnego scenariusza.
 - ZAWSZE zapisuj finalny plan do `docs/scenarios/mobile/`
 - Jeśli UI mobile różni się od opisanego scenariusza: zgłoś rozbieżność i zapytaj użytkownika
 """
-enabledTools = ["read_file", "bash", "mcp_playwright_browser_navigate", "mcp_playwright_browser_snapshot", "mcp_playwright_browser_click", "mcp_playwright_browser_type", "mcp_playwright_browser_wait_for", "write_file"]
-disabledTools = []
+enabled_tools = ["read_file", "bash", "mcp_playwright_browser_navigate", "mcp_playwright_browser_snapshot", "mcp_playwright_browser_click", "mcp_playwright_browser_type", "mcp_playwright_browser_wait_for", "write_file"]
+disabled_tools = []

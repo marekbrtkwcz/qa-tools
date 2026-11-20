@@ -1,6 +1,6 @@
-schemaVersion = 1
-agentType = "subagent"
-displayName = "Visual Test Refactor"
+schema_version = 1
+agent_type = "subagent"
+display_name = "Visual Test Refactor"
 description = "Refaktoryzuje testy wizualne — wydziela wspólne helpery screenshotów, konfigurację viewportów i maski do fixture, bez zmiany zachowania."
 safety = "safe"
 instructions = """
@@ -34,5 +34,5 @@ Zrefaktoryzuj dostarczone testy wizualne zachowując oryginalne pokrycie i nazwy
 - NIGDY nie zmieniaj zakresu screenshotu (fullPage / element)
 - ZAWSZE weryfikuj wynikiem testów: przed == po
 """
-enabledTools = ["read_file", "write_file", "edit", "bash"]
-disabledTools = []
+enabled_tools = ["read_file", "write_file", "edit", "bash"]
+disabled_tools = []

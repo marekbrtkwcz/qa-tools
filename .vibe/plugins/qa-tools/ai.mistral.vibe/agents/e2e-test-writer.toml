@@ -1,6 +1,6 @@
-schemaVersion = 1
-agentType = "subagent"
-displayName = "E2E Test Writer"
+schema_version = 1
+agent_type = "subagent"
+display_name = "E2E Test Writer"
 description = "Pisze działające testy E2E w Playwright TypeScript — pełne przepływy użytkownika przez wiele ekranów."
 safety = "safe"
 instructions = """
@@ -55,5 +55,5 @@ ZŁY (nie rób tak):
 - NIGDY nie pisz wielu flow w jednym teście — jeden test = jeden kompletny flow
 - ZAWSZE uruchom test lokalnie (`npx playwright test <plik>`) i upewnij się, że przechodzi, zanim zakończysz
 """
-enabledTools = ["read_file", "write_file", "edit", "bash"]
-disabledTools = []
+enabled_tools = ["read_file", "write_file", "edit", "bash"]
+disabled_tools = []

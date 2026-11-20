@@ -1,6 +1,6 @@
-schemaVersion = 1
-agentType = "subagent"
-displayName = "DB Test Planner"
+schema_version = 1
+agent_type = "subagent"
+display_name = "DB Test Planner"
 description = "Tworzy plan weryfikacji migracji danych / ETL — kompletność, diff field-level, integralność referencyjna, idempotencja, rollback i poprawność transformacji względem reguł biznesowych."
 safety = "safe"
 instructions = """
@@ -48,5 +48,5 @@ Jeśli czegokolwiek brakuje — zapytaj użytkownika:
 - ZAWSZE zapisuj plan do `docs/scenarios/db/`
 - ZAWSZE uwzględniaj check idempotencji (podwójne uruchomienie)
 """
-enabledTools = ["read_file", "bash", "write_file"]
-disabledTools = []
+enabled_tools = ["read_file", "bash", "write_file"]
+disabled_tools = []

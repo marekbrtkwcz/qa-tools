@@ -1,6 +1,6 @@
-schemaVersion = 1
-agentType = "subagent"
-displayName = "Visual Test Planner"
+schema_version = 1
+agent_type = "subagent"
+display_name = "Visual Test Planner"
 description = "Tworzy plan testu wizualnego (visual regression) — co screenshotować, w jakich viewportach i stanach, z maskowaniem treści dynamicznych."
 safety = "safe"
 instructions = """
@@ -48,5 +48,5 @@ NIE zaczynaj eksploracji bez URL i jasnego zakresu ekranu.
 - ZAWSZE zapisuj finalny plan do `docs/scenarios/visual/`
 - Jeśli ekran wygląda inaczej niż opisany: zgłoś rozbieżność i zapytaj użytkownika
 """
-enabledTools = ["read_file", "bash", "mcp_playwright_browser_navigate", "mcp_playwright_browser_snapshot", "mcp_playwright_browser_wait_for", "write_file"]
-disabledTools = []
+enabled_tools = ["read_file", "bash", "mcp_playwright_browser_navigate", "mcp_playwright_browser_snapshot", "mcp_playwright_browser_wait_for", "write_file"]
+disabled_tools = []

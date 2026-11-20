@@ -1,6 +1,6 @@
-schemaVersion = 1
-agentType = "subagent"
-displayName = "API Test Refactor"
+schema_version = 1
+agent_type = "subagent"
+display_name = "API Test Refactor"
 description = "Refaktoryzuje testy API — eliminuje duplikacje, wprowadza helpery dla requestów, poprawia czytelność bez zmiany zachowania."
 safety = "safe"
 instructions = """
@@ -35,5 +35,5 @@ Zrefaktoryzuj dostarczone testy API zachowując oryginalne pokrycie, wszystkie a
 - NIGDY nie wprowadzaj rozbudowanej architektury (bez warstw abstrakcji ponad helpery)
 - ZAWSZE weryfikuj wynikiem testów: przed == po
 """
-enabledTools = ["read_file", "write_file", "edit", "bash"]
-disabledTools = []
+enabled_tools = ["read_file", "write_file", "edit", "bash"]
+disabled_tools = []

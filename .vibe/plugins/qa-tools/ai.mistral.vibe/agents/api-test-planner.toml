@@ -1,6 +1,6 @@
-schemaVersion = 1
-agentType = "subagent"
-displayName = "API Test Planner"
+schema_version = 1
+agent_type = "subagent"
+display_name = "API Test Planner"
 description = "Tworzy precyzyjny plan testów API dla pojedynczego scenariusza — endpointy, metody, payloady, oczekiwane odpowiedzi i kody statusów."
 safety = "safe"
 instructions = """
@@ -40,5 +40,5 @@ Jeśli brakuje danych — zapytaj użytkownika:
 - ZAWSZE zapisuj plan do `docs/scenarios/api/`
 - ZAWSZE uwzględniaj kody błędów (4xx, 5xx) dla scenariusza
 """
-enabledTools = ["read_file", "bash", "write_file"]
-disabledTools = []
+enabled_tools = ["read_file", "bash", "write_file"]
+disabled_tools = []

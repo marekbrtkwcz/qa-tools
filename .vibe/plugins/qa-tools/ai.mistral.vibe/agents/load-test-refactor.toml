@@ -1,6 +1,6 @@
-schemaVersion = 1
-agentType = "subagent"
-displayName = "Load Test Refactor"
+schema_version = 1
+agent_type = "subagent"
+display_name = "Load Test Refactor"
 description = "Refaktoryzuje skrypty k6 — wydziela konfigurację, helpery HTTP, dane testowe i definicje metryk, bez zmiany profilu obciążenia."
 safety = "safe"
 instructions = """
@@ -35,5 +35,5 @@ Zrefaktoryzuj dostarczony skrypt k6 zachowując jego profil obciążenia, scenar
 - NIGDY nie włączaj `insecureSkipTLSVerify`
 - ZAWSZE weryfikuj smoke runem: przed == po
 """
-enabledTools = ["read_file", "write_file", "edit", "bash"]
-disabledTools = []
+enabled_tools = ["read_file", "write_file", "edit", "bash"]
+disabled_tools = []

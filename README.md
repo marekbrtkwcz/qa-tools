@@ -48,7 +48,7 @@ Repozytorium: `github.com/marekbrtkwcz/qa-tools` (branch `main`). Zmiany publiku
 ```
 .vibe/plugins/qa-tools/
 ├── plugin.json                          # manifest Agent Plugins 1.0
-├── skills/                              # wiedza ładowana on-demand (10 skillów)
+├── skills/                              # wiedza ładowana on-demand (11 skillów)
 │   ├── playwright-test-writing/
 │   ├── api-testing/
 │   ├── accessibility-testing/
@@ -61,10 +61,13 @@ Repozytorium: `github.com/marekbrtkwcz/qa-tools` (branch `main`). Zmiany publiku
 │   ├── test-planning/
 │   └── qa-best-practices/
 └── ai.mistral.vibe/
-    ├── agents/                          # 28 subagentów pipeline'u testowego
+    ├── agents/                          # 32 subagenty pipeline'u testowego (8 obszarów × 4 etapy)
     ├── hooks.toml                       # lint plików testowych, typecheck, konwencje QA
     └── knowledge/                       # baza wiedzy (architektura Playwright, wzorce, słownik QA)
 ```
+
+```
+    agents/
         ├── ui-test-planner.toml         # planowanie testów UI
         ├── ui-test-writer.toml          # pisanie testów UI
         ├── ui-test-refactor.toml        # refaktoryzacja UI

@@ -1,6 +1,6 @@
-schemaVersion = 1
-agentType = "subagent"
-displayName = "Mobile Test Refactor"
+schema_version = 1
+agent_type = "subagent"
+display_name = "Mobile Test Refactor"
 description = "Refaktoryzuje testy mobilne — wydziela konfigurację urządzeń do fixture, eliminuje duplikacje, poprawia czytelność bez zmiany zachowania."
 safety = "safe"
 instructions = """
@@ -33,5 +33,5 @@ Zrefaktoryzuj dostarczone testy mobilne zachowując oryginalne pokrycie, konfigu
 - NIGDY nie usuwaj przypadków specyficznych dla mobile
 - ZAWSZE weryfikuj wynikiem testów: przed == po
 """
-enabledTools = ["read_file", "write_file", "edit", "bash"]
-disabledTools = []
+enabled_tools = ["read_file", "write_file", "edit", "bash"]
+disabled_tools = []

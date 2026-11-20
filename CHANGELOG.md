@@ -3,6 +3,12 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.2.1] - 2026-11-20
+
+### Fixed
+- All 32 agent TOML files now use snake_case keys (`schema_version`, `agent_type`, `display_name`, `enabled_tools`, `disabled_tools`) required by the Vibe runtime's `_PluginAgentDocument` schema (`extra="forbid"`, `strict=True`). Previously the camelCase keys from the plugin-authoring docs caused "Failed to load plugin agent" validation errors on all 32 subagents.
+- `scripts/validate-plugin.py` updated to check the snake_case keys, so local/CI validation matches the runtime schema.
+
 ## [1.2.0] - 2026-11-20
 
 ### Added

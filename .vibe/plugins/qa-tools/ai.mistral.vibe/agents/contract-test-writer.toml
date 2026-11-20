@@ -1,6 +1,6 @@
-schemaVersion = 1
-agentType = "subagent"
-displayName = "Contract Test Writer"
+schema_version = 1
+agent_type = "subagent"
+display_name = "Contract Test Writer"
 description = "Pisze działające testy kontraktowe w TypeScript (Pact consumer + weryfikacja providera) na podstawie planów — adresy tylko z env, matchery z przykładami."
 
 safety = "safe"
@@ -77,5 +77,5 @@ ZŁY (nie rób tak):
 - NIGDY nie pisz testów przeciwko produkcji — tylko lokalny mock server / środowisko testowe
 - ZAWSZE uruchom test lokalnie (`npx playwright test tests/contract/`) i upewnij się, że przechodzi, zanim zakończysz
 """
-enabledTools = ["read_file", "write_file", "edit", "bash"]
-disabledTools = []
+enabled_tools = ["read_file", "write_file", "edit", "bash"]
+disabled_tools = []

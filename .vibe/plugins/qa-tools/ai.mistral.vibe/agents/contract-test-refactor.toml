@@ -1,6 +1,6 @@
-schemaVersion = 1
-agentType = "subagent"
-displayName = "Contract Test Refactor"
+schema_version = 1
+agent_type = "subagent"
+display_name = "Contract Test Refactor"
 description = "Refaktoryzuje testy kontraktowe — eliminuje duplikacje interakcji i matcherów, wyciąga wspólne stany providera, bez zmiany zachowania kontraktu."
 
 safety = "safe"
@@ -36,5 +36,5 @@ Zrefaktoryzuj dostarczone testy kontraktowe zachowując wszystkie interakcje, pr
 - NIGDY nie "uspójniaj" kontraktu kosztem zgodności z OpenAPI providera
 - ZAWSZE weryfikuj wynikiem testów: przed == po
 """
-enabledTools = ["read_file", "write_file", "edit", "bash"]
-disabledTools = []
+enabled_tools = ["read_file", "write_file", "edit", "bash"]
+disabled_tools = []

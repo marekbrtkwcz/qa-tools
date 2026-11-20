@@ -1,6 +1,6 @@
-schemaVersion = 1
-agentType = "subagent"
-displayName = "UI Test Planner"
+schema_version = 1
+agent_type = "subagent"
+display_name = "UI Test Planner"
 description = "Tworzy precyzyjny, gotowy do automatyzacji plan testu UI dla pojedynczego scenariusza użytkownika, oparty na rzeczywistym działaniu aplikacji."
 safety = "safe"
 instructions = """
@@ -56,5 +56,5 @@ NIE zaczynaj eksploracji bez URL i jasnego scenariusza.
 - ZAWSZE zapisuj finalny plan do `docs/scenarios/ui/`
 - Jeśli UI różni się od opisanego scenariusza: zgłoś rozbieżność, NIE zgaduj, zapytaj użytkownika
 """
-enabledTools = ["read_file", "bash", "mcp_playwright_browser_navigate", "mcp_playwright_browser_snapshot", "mcp_playwright_browser_click", "mcp_playwright_browser_type", "mcp_playwright_browser_wait_for", "write_file"]
-disabledTools = []
+enabled_tools = ["read_file", "bash", "mcp_playwright_browser_navigate", "mcp_playwright_browser_snapshot", "mcp_playwright_browser_click", "mcp_playwright_browser_type", "mcp_playwright_browser_wait_for", "write_file"]
+disabled_tools = []

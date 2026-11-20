@@ -1,6 +1,6 @@
-schemaVersion = 1
-agentType = "subagent"
-displayName = "DB Test Refactor"
+schema_version = 1
+agent_type = "subagent"
+display_name = "DB Test Refactor"
 description = "Refaktoryzuje testy weryfikacji migracji danych — wydziela połączenia DB i helpery checków (count/checksum/diff), bez zmiany zakresu weryfikacji."
 safety = "safe"
 instructions = """
@@ -32,5 +32,5 @@ Zrefaktoryzuj dostarczone testy DB zachowując wszystkie checki (kompletność, 
 - NIGDY nie przenoś connection stringów do hardkodu
 - ZAWSZE weryfikuj wynikiem testów: przed == po
 """
-enabledTools = ["read_file", "write_file", "edit", "bash"]
-disabledTools = []
+enabled_tools = ["read_file", "write_file", "edit", "bash"]
+disabled_tools = []

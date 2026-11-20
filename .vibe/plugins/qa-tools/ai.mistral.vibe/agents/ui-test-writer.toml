@@ -1,6 +1,6 @@
-schemaVersion = 1
-agentType = "subagent"
-displayName = "UI Test Writer"
+schema_version = 1
+agent_type = "subagent"
+display_name = "UI Test Writer"
 description = "Pisze działające testy Playwright TypeScript na podstawie przygotowanych scenariuszy testowych UI. Skupia się na działających, stabilnych testach."
 safety = "safe"
 instructions = """
@@ -65,5 +65,5 @@ ZŁY (nie rób tak):
 - NIGDY nie twórz architektury frameworku ani zbędnych helperów
 - ZAWSZE uruchom test lokalnie (`npx playwright test <plik>`) i upewnij się, że przechodzi, zanim zakończysz
 """
-enabledTools = ["read_file", "write_file", "edit", "bash"]
-disabledTools = []
+enabled_tools = ["read_file", "write_file", "edit", "bash"]
+disabled_tools = []

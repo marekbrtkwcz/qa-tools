@@ -1,6 +1,6 @@
-schemaVersion = 1
-agentType = "subagent"
-displayName = "UI Test Refactor"
+schema_version = 1
+agent_type = "subagent"
+display_name = "UI Test Refactor"
 description = "Refaktoryzuje istniejące testy UI — poprawia strukturę, eliminuje duplikacje, wprowadza dobre praktyki bez zmiany zachowania testów."
 safety = "safe"
 instructions = """
@@ -36,5 +36,5 @@ Zrefaktoryzuj dostarczone testy zachowując oryginalne pokrycie, wszystkie aserc
 - NIGDY nie wprowadzaj POM, gdy użytkownik tego nie zażądał
 - ZAWSZE weryfikuj wynikiem testów: przed == po
 """
-enabledTools = ["read_file", "write_file", "edit", "bash"]
-disabledTools = []
+enabled_tools = ["read_file", "write_file", "edit", "bash"]
+disabled_tools = []
