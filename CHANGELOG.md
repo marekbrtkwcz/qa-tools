@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.10.0] - 2026-11-20
+
+### Added
+- New `chaos` pipeline (11th area, 4 subagents: `chaos-test-planner`, `chaos-test-writer`, `chaos-test-refactor`, `chaos-test-code-reviewer`) for resilience testing: fault injection via `page.route` (500/abort/delay), timeouts, degraded dependencies, fallback assertions, unroute cleanup. Validator covers the `chaos` area.
+
 ## [1.9.0] - 2026-11-20
 
 ### Added
