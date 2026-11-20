@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.45.0] - 2026-11-21
+
+### 📦 Added
+- Final 2 project commands in `.vibe/prompts/` (28 → 30), from `jaktestowac/awesome-agents-for-quality`: `/playwright-explore-website` (first look at an unfamiliar app via Playwright MCP — 3–5 core flows with user-facing locators, written to `.qa/website-exploration-summary.md` + `.qa/proposed-test-cases.md` with stable IDs feeding `/test-generator` and `/playwright-generate-test`) and `/playwright-explore-website-requests` (same exploration plus per-action network capture with secrets redacted, first-party vs third-party separated, endpoint table with API-test/`page.route` mock candidates). Read-only by default, max 5 flows.
+
 ## [1.44.0] - 2026-11-21
 
 ### 📦 Added

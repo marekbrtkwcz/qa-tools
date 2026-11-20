@@ -80,6 +80,8 @@ Project-level prompts in `.vibe/prompts/` (loaded only in this trusted project; 
 | `/analyze-test-results` | noisy run → failure clusters, suspected causes, flake suspects, what to investigate first; analysis only |
 | `/explain-test-failure` | diagnose one failing test: root-cause class + confidence + failure chain; never edits |
 | `/explain-code` | read-only explanation of code: purpose, flow, patterns, risks, "what to test first" |
+| `/playwright-explore-website` | first look at an app via Playwright MCP: 3–5 flows with locators → `.qa/website-exploration-summary.md` + proposed test cases |
+| `/playwright-explore-website-requests` | same exploration + network traffic per action (redacted) → endpoint table, candidates for API tests / `page.route` mocks |
 
 ## Publishing
 
