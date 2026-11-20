@@ -1,0 +1,42 @@
+# QA Tools — hooks
+# Run automatically on relevant events in the user's project.
+
+# After writing/editing a test file, run ESLint on it
+[[hooks]]
+name = "lint-test-file"
+type = "post_tool"
+match = "re:file_system\\.(write_file|edit)"
+description = "Lint test files after they are written or edited"
+command = """
+payload=$(cat)
+file_path=$(echo "$payload" | python -c "import sys,json; d=json.load(sys.stdin); ti=d.get('tool_input',{}); print(ti.get('path') or ti.get('file_path') or '')" 2>/dev/null)
+case "$file_path" in
+  *.spec.ts|*.test.ts|*.spec.js|*.test.js)
+    if [ -f package.json ] && grep -q '"lint"' package.json 2>/dev/null; then
+      npx eslint "$file_path" --no-error-on-unmatched-pattern 2>/dev/null || true
+    fi
+    ;;
+esac
+"""
+
+# After the agent finishes a turn, type-check test files if TypeScript is present
+[[hooks]]
+name = "typecheck-after-agent"
+type = "post_agent"
+match = "main"
+description = "Type-check the project after agent turn if tsconfig exists"
+command = """
+if [ -f tsconfig.json ]; then
+  npx tsc --noEmit 2>/dev/null || true
+fi
+"""
+
+# On session start, inject QA conventions context
+[[hooks]]
+name = "qa-conventions"
+type = "session_start"
+match = "startup"
+description = "Add QA testing conventions as context on session start"
+command = """
+echo '{"hook_specific_output": {"additional_context": "QA conventions for this project: tests live in tests/ (e2e/, api/), use Playwright with getByRole/getByLabel selectors, always use expect() for assertions (never waitForTimeout), each test must be independent, clean up created data in afterEach. Run tests with: npx playwright test."}}'
+"""
