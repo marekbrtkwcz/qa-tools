@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.18.0] - 2026-11-20
+
+### Added
+- New skill `llm-testing` (17th skill): testing LLM-powered features — groundedness/hallucination checks with golden eval sets and citations, prompt-injection and jailbreak resistance, guardrails and JSON-schema output validation, PII/secret canaries, determinism at temperature 0 vs schema-only at higher sampling, cost/latency/token budgets, model-version pinning, and anti-"unslop" rules for AI-generated tests and reports (no exact-text assertions, no `waitForTimeout`, findings need file:line, claimed run must reference a real run).
+
 ## [1.17.3] - 2026-11-20
 
 ### Added
