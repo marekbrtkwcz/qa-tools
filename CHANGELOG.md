@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.27.1] - 2026-11-20
+
+### 🔄 Changed
+- Extended skill `plugin-authoring` with the remaining asset types in Vibe: ⚡ prompts/slash commands (NOT a plugin component — `.vibe/prompts/` project vs `~/.vibe/prompts/` global, resolution order, built-ins win), 📜 instructions via `AGENTS.md` (startup + lazy directory-scoped discovery), and a full 🪝 hooks section (load order, types, stdin JSON payload, exit-code/stdout protocol, deny semantics, strict, limits). Inspired by jaktestowac/awesome-agents-for-quality authoring bundle.
+
 ## [1.27.0] - 2026-11-20
 
 ### 📦 Added
