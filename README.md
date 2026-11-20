@@ -25,7 +25,19 @@ Plugin Vibe CLI z kompletnym zestawem narzędzi AI dla inżynierii jakości.
         ├── e2e-test-planner.toml        # planowanie testów E2E
         ├── e2e-test-writer.toml         # pisanie testów E2E
         ├── e2e-test-refactor.toml       # refaktoryzacja E2E
-        └── e2e-test-code-reviewer.toml  # review kodu E2E
+        ├── e2e-test-code-reviewer.toml  # review kodu E2E
+        ├── mobile-test-planner.toml     # planowanie testów mobile 🆕
+        ├── mobile-test-writer.toml      # pisanie testów mobile 🆕
+        ├── mobile-test-refactor.toml    # refaktoryzacja mobile 🆕
+        ├── mobile-test-code-reviewer.toml # review kodu mobile 🆕
+        ├── visual-test-planner.toml     # planowanie testów wizualnych 🆕
+        ├── visual-test-writer.toml      # pisanie testów wizualnych 🆕
+        ├── visual-test-refactor.toml    # refaktoryzacja visual 🆕
+        ├── visual-test-code-reviewer.toml # review kodu visual 🆕
+        ├── load-test-planner.toml       # planowanie testów obciążeniowych (k6) 🆕
+        ├── load-test-writer.toml        # pisanie skryptów k6 🆕
+        ├── load-test-refactor.toml      # refaktoryzacja k6 🆕
+        └── load-test-code-reviewer.toml # review kodu k6 🆕
 ```
 
 ## Pipeline testowy
@@ -34,7 +46,7 @@ Plugin Vibe CLI z kompletnym zestawem narzędzi AI dla inżynierii jakości.
 Planner → Writer → Refactor → Code Reviewer
 ```
 
-Dostępny dla trzech obszarów: **UI**, **API**, **E2E**.
+Dostępny dla sześciu obszarów: **UI**, **API**, **E2E**, **mobile**, **visual (regression)**, **load (k6)**.
 
 ## Użycie
 
