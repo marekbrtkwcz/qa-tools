@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.38.0] - 2026-11-21
+
+### 📦 Added
+- 7 new skills (31 → 38), adapted from `jaktestowac/awesome-agents-for-quality`: `reviewing-ai-output-groundedness` (claim-by-claim human protocol, verdict classes, citation checking, retrieval-vs-generation attribution, responsible-AI pass, attestation with limitations), `prd-generator` (discovery → measurable testable PRD schema → self-review), `tech-debt-analysis` (evidence-first register with severity/risk/effort/ROI and Fix Now/Fix Soon/Accept buckets), `documenting-test-suites` (quickstart validated on a clean clone, conventions, tag glossary, test ADRs, CI reality, honest gaps), `communicating-quality-findings` (9 rules: blocker first, one decision per report, artifact in `.qa/`, cost-ordered findings, precedence with unslop-answers), `code-review-advanced` (7 lenses, severity-ranked findings with file:line, approve/comment/request-changes), `static-code-analysis-typescript` (ESLint flat + typescript-eslint, tsconfig strict, Prettier, Husky/lint-staged, CI quality gate).
+
 ## [1.37.0] - 2026-11-21
 
 ### 📦 Added
