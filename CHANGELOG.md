@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.26.0] - 2026-11-20
+
+### 📦 Added
+- New skill `designing-test-automation-architecture` (26th), adapted from `jaktestowac/awesome-agents-for-quality` and merged with the plugin's `playwright-architecture` knowledge: layer placement (lowest layer that can prove a behavior), reuse patterns (fixtures vs page objects vs helpers), data & auth strategy as the parallelism decision (storageState, per-worker accounts), folder/config/tag layout in qa-tools conventions (`tests/e2e`, `tests/api`, `fixtures/`, `pages/`, `getBy*` selectors, `expect()` only, `should...when` naming), and decision records with reversal conditions.
+
 ## [1.25.0] - 2026-11-20
 
 ### 📦 Added
