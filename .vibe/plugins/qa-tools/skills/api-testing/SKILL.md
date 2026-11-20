@@ -18,6 +18,19 @@ test('GET /users returns 200', async ({ request }) => {
 });
 ```
 
+Outside test fixtures (global setup, helpers, standalone scripts) create the request context from the `Playwright` entry-point object — no browser needed:
+
+```typescript
+import { playwright } from '@playwright/test';
+
+const api = await playwright.request.newContext({
+  baseURL: process.env.API_URL,
+  extraHTTPHeaders: { Authorization: `Bearer ${token}` },
+});
+const res = await api.get('/api/users');
+await api.dispose();
+```
+
 ## Always validate three things
 1. **Status code** — `expect(response.status()).toBe(200)`
 2. **Response body** — structure and key values

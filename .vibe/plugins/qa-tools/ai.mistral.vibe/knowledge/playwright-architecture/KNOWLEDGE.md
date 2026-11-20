@@ -82,6 +82,28 @@ export default defineConfig({
 });
 ```
 
+## Obiekt `Playwright` (punkt wejścia — playwright.dev/docs/api/class-playwright)
+
+W testach `@playwright/test` rzadko dotykasz tego obiektu bezpośrednio (dostajesz `page`/`context` z fixture'ów). Obiekt `Playwright` przydaje się w **global setup, helperach i skryptach standalone**:
+
+- **BrowserType**: `playwright.chromium` / `playwright.firefox` / `playwright.webkit` — wybór przeglądarki; w testach sterujesz tym przez `projects` w configu (`browserName`), nie przez launch ręcznie.
+- **launch/connect**: `browserType.launch({ headless, timeout, slowMo })` lokalnie; `connect({ wsEndpoint })` / `connectOverCDP({ endpointURL })` do zdalnej przeglądarki (BrowserStack, Selenium grid, Docker). `slowMo` tylko lokalnie do debugowania — nigdy w CI. `timeout` ustawiaj jawnie (default 30s), nie podnośaj bez powodu.
+- **Kontekst vs strona**: `browser.newContext()` izoluje sesję (storage, cookies) — w testach używaj wbudowanego fixture `context`/`page`; ręczne konteksty tylko w setupie/teardownie.
+- **API bez przeglądarki**: `playwright.request.newContext({ baseURL, extraHTTPHeaders })` → `APIRequestContext` do czystych testów API (bez browsera) — patrz skill `api-testing`.
+- **Custom selectors**: `playwright.selectors.register('data-testid', ...)` — uwaga: domyślnie `getByTestId` używa `data-testid`; rejestruj własny silnik tylko gdy projekt ma inną konwencję atrybutu.
+- **Inne**: `playwright.devices` (deskryptory urządzeń dla `devices['iPhone 14']`), `playwright.errors` (typy błędów, np. `TimeoutError`).
+
+```typescript
+// global setup / standalone script — NIE w pojedynczym teście
+import { chromium, playwright } from '@playwright/test';
+
+const browser = await chromium.launch({ headless: true, timeout: 30_000 });
+const api = await playwright.request.newContext({ baseURL: process.env.API_URL });
+// ...
+await api.dispose();
+await browser.close();
+```
+
 ## Zasady organizacji
 - Jeden plik spec per feature/flow (nie per strona)
 - POM tylko gdy strona używana w 3+ testach

@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.2.5] - 2026-11-20
+
+### Added
+- `Playwright` entry-point object coverage (playwright.dev/docs/api/class-playwright): new section in `playwright-architecture` knowledge (browserType, launch/connect options, contexts, `playwright.request.newContext` for browser-less API tests, `selectors.register`, devices/errors) and `playwright.request` example in `api-testing` skill.
+
 ## [1.2.4] - 2026-11-20
 
 ### Added
