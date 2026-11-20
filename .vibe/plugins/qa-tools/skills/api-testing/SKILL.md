@@ -6,7 +6,7 @@ user-invocable: true
 
 # API Testing
 
-## Playwright API request
+## 🌐 Playwright API request
 Use `request` fixture from `@playwright/test`:
 
 ```typescript
@@ -31,12 +31,12 @@ const res = await api.get('/api/users');
 await api.dispose();
 ```
 
-## Always validate three things
+## ✅ Always validate three things
 1. **Status code** — `expect(response.status()).toBe(200)`
 2. **Response body** — structure and key values
 3. **Schema** — validate against OpenAPI spec
 
-## Negative test cases
+## 🚫 Negative test cases
 Every endpoint should have negative tests:
 - missing/invalid auth token → 401
 - insufficient permissions → 403
@@ -44,7 +44,7 @@ Every endpoint should have negative tests:
 - invalid payload → 400 with error details
 - rate limiting → 429
 
-## Auth handling
+## 🔐 Auth handling
 ```typescript
 test.describe('Authenticated endpoints', () => {
   let token: string;
@@ -65,14 +65,14 @@ test.describe('Authenticated endpoints', () => {
 });
 ```
 
-## Base URL from environment
+## 🌍 Base URL from environment
 Never hardcode URLs — use env vars:
 ```typescript
 const BASE_URL = process.env.API_URL || 'http://localhost:3000';
 const response = await request.get(`${BASE_URL}/api/users`);
 ```
 
-## Cleanup
+## 🧹 Cleanup
 Tests that create resources must clean up:
 ```typescript
 test.afterEach(async ({ request }) => {

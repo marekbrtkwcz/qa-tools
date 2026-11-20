@@ -8,7 +8,7 @@ user-invocable: true
 
 Playwright has **no built-in WebSocket fixture** — use `page.waitForEvent('websocket')`.
 
-## WebSocket
+## 🔌 WebSocket
 
 ```typescript
 test('should receive order update when event is published', async ({ page }) => {
@@ -37,7 +37,7 @@ Rules:
 - **reconnect**: after `page.reload()` or network drop, a NEW websocket event fires — wait for it again; assert the app resubscribes (e.g. last message re-sent)
 - close: `ws.close()` in `afterEach` if the test opened one manually
 
-## Server-Sent Events (SSE)
+## 📡 Server-Sent Events (SSE)
 
 SSE is plain HTTP — test it via the `request` fixture is NOT possible for streaming; use the `response` event on `page`:
 
@@ -64,7 +64,7 @@ test('should stream events when subscribing to SSE feed', async ({ page }) => {
 - use `expect.poll(...)` for streamed data — it retries without `waitForTimeout`
 - for long-lived streams prefer `page.waitForResponse(url)` + reading chunks, and close the page to end the stream
 
-## Common pitfalls
+## ⚠️ Common pitfalls
 
 | Pitfall | Fix |
 |---|---|

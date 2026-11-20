@@ -8,7 +8,7 @@ user-invocable: true
 
 Unit tests verify **one unit's behavior through its public interface** — fast, deterministic, no I/O. If a test needs a browser, network, DB, or clock, it is not a unit test (see the E2E/API/DB areas).
 
-## Rules of a good unit test
+## 📏 Rules of a good unit test
 
 - **Behavior, not implementation**: assert *what* the output is, not *how* it was computed. A test that breaks on every refactor is testing the implementation.
 - **Deterministic**: no real time, no randomness, no shared state. Inject the clock and the RNG (`vi.useFakeTimers()`, seeded faker).
@@ -36,14 +36,14 @@ describe('totalPrice', () => {
 });
 ```
 
-## Edge & boundary cases (checklist per unit)
+## 🧭 Edge & boundary cases (checklist per unit)
 
 - empty / null / undefined input
 - zero, negative, max values (boundary: `0`, `1`, `max-1`, `max`, `max+1`)
 - unicode, empty string, whitespace
 - error paths: thrown errors asserted with `expect(() => ...).toThrow(...)`
 
-## Test doubles
+## 🎭 Test doubles
 
 | Double | Use for | Example |
 |---|---|---|
@@ -69,7 +69,7 @@ it('should create user when email is unique', async () => {
 });
 ```
 
-## TDD — red, green, refactor
+## 🔴🟢🔧 TDD — red, green, refactor
 
 1. **Red**: write a failing test for the next behavior (smallest possible step).
 2. **Green**: make it pass with the simplest code — no premature abstraction.
@@ -85,7 +85,7 @@ it('should reject negative quantity when adding to cart', () => {
 });
 ```
 
-## What unit tests must NOT do
+## ❌ What unit tests must NOT do
 
 - No `await new Promise(r => setTimeout(r, ...))` — use fake timers.
 - No real DB/network/filesystem — that's integration/E2E territory.
@@ -93,11 +93,11 @@ it('should reject negative quantity when adding to cart', () => {
 - No swallowed errors: `try { ... } catch {}` in a test hides failures.
 - No retries — a unit test must pass deterministically on first run.
 
-## Mutation check (are my tests real?)
+## 🧬 Mutation check (are my tests real?)
 
 Break the code on purpose (flip a `>` to `>=`, return a wrong constant) — the test suite must go red. If nothing fails, the tests prove nothing. Run this for new suites and after major refactors.
 
-## Unit vs integration vs E2E — where does a test belong?
+## 🗺️ Unit vs integration vs E2E — where does a test belong?
 
 | Level | Speed | Use for | In qa-tools |
 |---|---|---|---|
@@ -105,7 +105,7 @@ Break the code on purpose (flip a `>` to `>=`, return a wrong constant) — the 
 | Integration | s | DB/ORM, queues, module boundaries | `database-testing`, `db` area |
 | E2E | min | user flows in the browser | `ui`/`e2e` areas |
 
-## Checklist
+## ✅ Checklist
 
 - [ ] Public interface only — no testing private methods
 - [ ] Deterministic: no real clock/RNG/network, fake timers injected

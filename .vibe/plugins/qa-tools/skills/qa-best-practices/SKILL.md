@@ -6,7 +6,7 @@ user-invocable: true
 
 # QA Best Practices
 
-## Bug report essentials
+## 🐞 Bug report essentials
 Every bug report must include:
 1. **Title** — concise, describes the problem
 2. **Environment** — browser, OS, app version, env (staging/prod)
@@ -16,7 +16,7 @@ Every bug report must include:
 6. **Severity** — blocker / critical / major / minor / trivial
 7. **Reproducibility** — always / sometimes / once
 
-## Flaky test stabilization
+## 🌊 Flaky test stabilization
 Common causes and fixes:
 | Cause | Fix |
 |---|---|
@@ -26,7 +26,7 @@ Common causes and fixes:
 | Network timing | Wait for specific network response |
 | Animation timing | Wait for element to be stable (`toBeVisible`) |
 
-## Test code review checklist
+## 🔍 Test code review checklist
 - [ ] Tests are independent and can run in any order
 - [ ] Names clearly describe what is being tested
 - [ ] No hardcoded waits (`waitForTimeout`)
@@ -36,7 +36,7 @@ Common causes and fixes:
 - [ ] No commented-out code
 - [ ] Cleanup after tests that create data
 
-## Quality gates
+## 🚦 Quality gates
 Before release, verify:
 - All automated tests pass on main branch
 - No open blocker/critical bugs

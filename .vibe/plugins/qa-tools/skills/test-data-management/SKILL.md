@@ -6,7 +6,7 @@ user-invocable: true
 
 # Test Data Management
 
-## Strategies for test data
+## 🧪 Strategies for test data
 
 | Strategy | When to use | Example |
 |---|---|---|
@@ -16,7 +16,7 @@ user-invocable: true
 | **API-created data** | Tests that need fresh, unique data | create via API in `beforeEach` |
 | **Snapshot/mock** | Unit tests, external APIs | MSW, recorded responses |
 
-## Generating realistic data with faker
+## 🎲 Generating realistic data with faker
 ```typescript
 import { faker } from '@faker-js/faker';
 
@@ -27,19 +27,19 @@ const user = {
 };
 ```
 
-## Unique data per test run
+## 🦄 Unique data per test run
 Avoid collisions in shared environments:
 ```typescript
 const uniqueEmail = `test-${Date.now()}-${Math.random().toString(36).slice(2)}@example.com`;
 ```
 
-## PII and sensitive data
+## 🔒 PII and sensitive data
 - **Never use real production data in tests**
 - Use anonymized/synthetic data only
 - Mask sensitive fields in test logs and screenshots
 - GDPR: test data with personal info must be deletable
 
-## Database seeding
+## 🌱 Database seeding
 ```typescript
 // seed.ts — run before E2E suite
 test.beforeAll(async ({ request }) => {
@@ -86,11 +86,11 @@ Rules for DB seeding:
 - never point tests at production DB; assert the env: `if (process.env.DATABASE_URL?.includes('prod')) throw new Error('refusing to run against prod')`
 - seed data is **versioned with code** (`tests/fixtures/seed.sql` or migration-like seed script), not hand-edited in the DB
 
-## API mocking
+## 🎭 API mocking
 
 Network/time mocking (MSW browser+node, `page.route`, fault injection, fake timers) moved to the dedicated **`mocking`** skill — load `/mocking` when you need it.
 
-## Cleanup — always clean up
+## 🧹 Cleanup — always clean up
 ```typescript
 test.afterEach(async ({ request }) => {
   // delete created resources
@@ -98,7 +98,7 @@ test.afterEach(async ({ request }) => {
 });
 ```
 
-## Test data checklist
+## ✅ Test data checklist
 - [ ] Data is unique per test (no collisions)
 - [ ] No real PII in test data
 - [ ] Tests clean up after themselves

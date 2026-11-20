@@ -6,7 +6,7 @@ user-invocable: true
 
 # Security Testing
 
-## OWASP Top 10 — test focus areas
+## 🛡️ OWASP Top 10 — test focus areas
 
 ### 1. Injection (XSS)
 ```typescript
@@ -40,19 +40,19 @@ test('search input is sanitized against XSS', async ({ page }) => {
 - Verify debug mode is off in production
 - Check security headers: `Content-Security-Policy`, `X-Frame-Options`, `Strict-Transport-Security`
 
-## Automated dependency scanning
+## 📦 Automated dependency scanning
 ```bash
 npm audit                    # known vulnerabilities in deps
 npx better-npm-audit audit   # more detailed
 ```
 
-## Secrets scanning
+## 🔑 Secrets scanning
 ```bash
 git secrets --scan          # scan repo for leaked secrets
 trufflehog git file://.     # deep secrets scan
 ```
 
-## Security test checklist
+## 🔒 Security test checklist
 - [ ] XSS: inputs sanitized, CSP header set
 - [ ] Auth: sessions expire, tokens invalidated on logout
 - [ ] AuthZ: users can't access other users' data (IDOR check)

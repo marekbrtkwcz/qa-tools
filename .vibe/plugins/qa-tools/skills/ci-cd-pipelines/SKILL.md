@@ -6,7 +6,7 @@ user-invocable: true
 
 # CI/CD for Test Automation
 
-## GitHub Actions — Playwright example
+## 🤖 GitHub Actions — Playwright example
 ```yaml
 name: E2E Tests
 on: [push, pull_request]
@@ -32,7 +32,7 @@ jobs:
           path: playwright-report/
 ```
 
-## Key CI principles
+## 🧭 Key CI principles
 
 | Principle | Why |
 |---|---|
@@ -43,7 +43,7 @@ jobs:
 | **Cache dependencies** | `npm ci` with cache — faster builds |
 | **Test against production-like env** | Use staging that mirrors prod |
 
-## Playwright config for CI
+## ⚙️ Playwright config for CI
 ```typescript
 // playwright.config.ts
 export default defineConfig({
@@ -58,12 +58,12 @@ export default defineConfig({
 });
 ```
 
-## Pipeline stages
+## 🔄 Pipeline stages
 ```
 lint → unit tests → API tests → E2E tests (sharded) → deploy to staging → smoke tests
 ```
 
-## Flaky test management in CI
+## 🌊 Flaky test management in CI
 - Never ignore flaky tests — quarantine them: `@flaky` tag + ticket to fix
 - Track flaky rate as a metric — goal: < 1%
 - Run flaky tests 10x locally to confirm before quarantining

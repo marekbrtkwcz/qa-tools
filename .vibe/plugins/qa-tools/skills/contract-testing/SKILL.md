@@ -8,7 +8,7 @@ user-invocable: true
 
 Consumer-driven contracts with Pact, plus contract validation against OpenAPI.
 
-## Consumer test (Pact V3 + Playwright runner)
+## 🧪 Consumer test (Pact V3 + Playwright runner)
 
 ```typescript
 import { test, expect } from '@playwright/test';
@@ -39,7 +39,7 @@ test('should return order when order exists', async () => {
 });
 ```
 
-## Matchers — always with examples
+## 🎯 Matchers — always with examples
 
 Use matchers only for dynamic values; every matcher needs an `example` so the contract stays meaningful:
 
@@ -51,11 +51,11 @@ Use matchers only for dynamic values; every matcher needs an `example` so the co
 | array | `MatchersV3.eachLike({ id: 1 }, { min: 1 })` |
 | date-time | `MatchersV3.iso8601DateTime()` |
 
-## Provider states
+## 🎭 Provider states
 
 Every interaction declares the state the provider must be in: `.given('user 123 exists')`. The provider implements states in its verification setup (seed data per state).
 
-## Provider verification
+## 🧪 Provider verification
 
 ```typescript
 // verify provider against published pacts (CI)
@@ -70,20 +70,20 @@ const verifier = new Verifier({
 await verifier.verifyProvider();
 ```
 
-## Publishing pacts
+## 📦 Publishing pacts
 
 - Consumer CI publishes the pact file to the Pact Broker (`PACT_BROKER_URL` from env) or a shared directory.
 - Provider CI runs verification against the latest pact (`--latest` or a tag like `main`).
 
-## Environment only
+## 🌍 Environment only
 
 All URLs come from env: `PROVIDER_BASE_URL`, `PACT_BROKER_URL`, `OPENAPI_SPEC`. Never hardcode hosts or tokens.
 
-## Negative interactions
+## 🚫 Negative interactions
 
 Every contract should include error interactions: missing resource → 404, invalid payload → 400, missing auth → 401, each with the expected error body shape.
 
-## OpenAPI contract validation
+## 📜 OpenAPI contract validation
 
 Validate request/response against the provider's OpenAPI spec:
 

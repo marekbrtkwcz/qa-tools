@@ -6,7 +6,7 @@ user-invocable: true
 
 # Visual Regression Testing with Playwright
 
-## Basics — `toHaveScreenshot`
+## 🖼️ Basics — `toHaveScreenshot`
 
 ```typescript
 test('should match home page screenshot when loaded', async ({ page }) => {
@@ -20,7 +20,7 @@ test('should match home page screenshot when loaded', async ({ page }) => {
 - Update baselines intentionally: `npx playwright test --update-snapshots` (review the diff before committing!)
 - Never commit `*-actual.png` / `*-diff.png` artifacts — only baselines (add to `.gitignore`)
 
-## Stabilize screenshots — always
+## 🧊 Stabilize screenshots — always
 
 ```typescript
 await expect(page).toHaveScreenshot('home.png', {
@@ -37,7 +37,7 @@ await expect(page).toHaveScreenshot('home.png', {
 - wait for the full state before the screenshot: `await expect(page.getByRole('heading')).toBeVisible()` — never screenshot right after `goto`
 - fonts: wait for `document.fonts.ready` before screenshot (`await page.evaluate(() => document.fonts.ready)`)
 
-## Viewports & devices
+## 📐 Viewports & devices
 
 ```typescript
 test.use({ viewport: { width: 1280, height: 720 } });
@@ -53,24 +53,24 @@ test('should match mobile home screenshot when viewport is 390px', async ({ page
 - Test at least: desktop 1280px, mobile 390px (or per plan); `fullPage: true` only when the plan requires
 - Dark mode: `test.use({ colorScheme: 'dark' })` + separate baseline `home-dark.png`
 
-## CI strategy
+## 🤖 CI strategy
 
 - Run visual tests in **one dedicated project** (`{ name: 'visual', use: { ...devices['Desktop Chrome'] } }`) — same browser/font rendering every run; run on CI with `--project=visual`
 - Linux CI renders fonts differently than macOS/Windows → generate baselines on CI (or use Docker image with fixed fonts), never mix local+CI baselines
 - Shard by spec file; keep total visual suite < 10 min
 - On failure, artifacts (`*-actual.png`, `*-diff.png`) must be uploaded (see `examples/ci/e2e.yml` pattern) — review them in the PR
 
-## External tools (optional)
+## 🧰 External tools (optional)
 
 - **Percy / Applitools**: snapshot via their SDK or `page.screenshot()` upload; cross-browser matrix for free. Playwright baselines stay the source of truth for local dev
 - Use them when you need many browsers/OS combos; keep Playwright `toHaveScreenshot` for the main flow
 
-## Naming & structure (qa-tools conventions)
+## 🏷️ Naming & structure (qa-tools conventions)
 
 - test names: `should match <screen> screenshot when <state> on <viewport>`
 - files: `tests/visual/<screen>.spec.ts`; screenshots: `<screen>-<viewport>.png`
 
-## Common pitfalls
+## ⚠️ Common pitfalls
 
 | Pitfall | Fix |
 |---|---|

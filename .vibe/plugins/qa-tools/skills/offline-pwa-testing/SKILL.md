@@ -6,7 +6,7 @@ user-invocable: true
 
 # Testing Offline / PWA with Playwright
 
-## Offline emulation
+## ✈️ Offline emulation
 
 ```typescript
 test.use({ offline: false });
@@ -25,7 +25,7 @@ test('should show offline fallback when network is down', async ({ page, context
 - `page.route('**/*', route => route.abort())` — alternative hard-block for specific URLs
 - CDP network throttling for "slow 3G" instead of full offline: `context.newCDPSession(page)` → `Network.emulateNetworkConditions`
 
-## Service Worker
+## ⚙️ Service Worker
 
 ```typescript
 test('should register service worker on first visit', async ({ page }) => {
@@ -51,7 +51,7 @@ test('should activate updated service worker on next load', async ({ page, conte
 - update flow: new SW goes to `waiting` until old one releases clients (`skipWaiting` + `clients.claim()` or wait for tabs to close) — test the chosen strategy explicitly
 - unregister in `afterEach` for isolation: `page.evaluate(() => navigator.serviceWorker.getRegistrations().then(rs => rs.forEach(r => r.unregister())))`, plus `context.clearCookies()` and clearing caches via CDP `Storage` domain if needed
 
-## Cache API strategies
+## 🗄️ Cache API strategies
 
 Assert the strategy by observing requests while offline:
 
@@ -75,17 +75,17 @@ test('should fall back to network-first cache when offline', async ({ page, cont
 - cache-first: static assets → instant offline; network-first: fresh when online, cache fallback offline; SWR: render cache, update in background
 - verify cache contents: `page.evaluate(async () => (await caches.keys()))` and `caches.open(name).then(c => c.keys())`
 
-## Offline fallback page
+## 📄 Offline fallback page
 
 - `page.goto('/never-visited')` while offline → app's offline.html (or `expect(page).toHaveURL(...)` fallback) — assert visible marker, not just "no crash"
 - navigation preload (`self.addEventListener('fetch')` with `event.preloadResponse`) if used
 
-## Background Sync & IndexedDB
+## 💾 Background Sync & IndexedDB
 
 - Background Sync: go offline, perform action (e.g. submit form) → assert queued (IndexedDB outbox), go online → `sync` event fires → assert server received it (via API check)
 - IndexedDB persistence: write data offline, reload offline → data still there: `page.evaluate(() => new Promise(...))` reading the DB, or simply UI assertion after reload
 
-## Manifest & install prompt
+## 📋 Manifest & install prompt
 
 ```typescript
 test('should have valid web app manifest', async ({ page }) => {
@@ -103,13 +103,13 @@ test('should have valid web app manifest', async ({ page }) => {
 
 - install prompt (`beforeinstallprompt`) is Chrome-only and not reliably triggerable in automation — assert manifest validity + SW instead; do NOT rely on the prompt event in tests
 
-## Push notifications
+## 🔔 Push notifications
 
 - assert registration: `page.evaluate(async () => (await navigator.serviceWorker.ready).pushManager.getSubscription())`
 - permission: `Notification.permission` — grant via `context.grantPermissions(['notifications'])`
 - receiving a push in tests requires a push service — mock at SW level or skip; assert subscription endpoint exists
 
-## Common pitfalls
+## ⚠️ Common pitfalls
 
 | Pitfall | Fix |
 |---|---|

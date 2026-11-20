@@ -8,7 +8,7 @@ user-invocable: true
 
 Mock **at the boundary** to make tests deterministic and fast — but mock only what is external or unstable. The app under test's own backend should be real in E2E.
 
-## 1. MSW (Mock Service Worker) — preferred for HTTP
+## 🎭 1. MSW (Mock Service Worker) — preferred for HTTP
 
 Install `msw` (v2 API: `http` + `HttpResponse`).
 
@@ -60,7 +60,7 @@ afterAll(() => server.close());
 worker.use(http.get('/api/users/:id', () => HttpResponse.json({ id: '1', name: 'Override' })));
 ```
 
-## 2. Playwright page.route — when MSW can't reach it
+## 🛣️ 2. Playwright page.route — when MSW can't reach it
 
 Use for binary files, WebSocket upgrades, or when MSW and route would collide (never both on the same URL in one test):
 
@@ -73,7 +73,7 @@ test('should show fallback banner when API returns 500', async ({ page }) => {
 });
 ```
 
-## 3. Time & randomness
+## ⏰ 3. Time & randomness
 
 - **Fake timers** in unit tests: `vi.useFakeTimers()` / `vi.setSystemTime(...)`; in Playwright use `page.clock` (Playwright ≥1.45) for browser-side time:
 
@@ -85,7 +85,7 @@ await page.clock.runFor(5000); // advance without real waiting
 - Never `waitForTimeout` to "wait for the async thing" — use `expect.poll(..., { timeout })` for real async, fake timers for unit tests.
 - Randomness: seed the RNG or inject it; assert structure/invariants, not random values.
 
-## Rules
+## 📏 Rules
 
 - Mock only **external/unstable** dependencies (payment provider, 3rd-party API, flaky service). Own API stays real in E2E.
 - `onUnhandledRequest: 'warn'` (or `'error'` in strict suites) — a silent pass-through hides missing mocks.
@@ -95,9 +95,9 @@ await page.clock.runFor(5000); // advance without real waiting
 - Secrets in mocks: none — fictitious tokens only (`test-token-123`).
 - Naming: `should <result> when <condition>` (e.g. `should show error toast when API returns 500`).
 
-## Good vs bad
+## ✅❌ Good vs bad
 
-DOBRY:
+✅ DOBRY:
 ```typescript
 test('should show error toast when API returns 500', async ({ page }) => {
   await page.route('**/api/orders', (r) => r.fulfill({ status: 500 }));
@@ -107,7 +107,7 @@ test('should show error toast when API returns 500', async ({ page }) => {
 });
 ```
 
-ZŁY:
+❌ ZŁY:
 ```typescript
 test('mock works', async ({ page }) => {
   let called = false;
@@ -118,7 +118,7 @@ test('mock works', async ({ page }) => {
 });
 ```
 
-## Checklist
+## ✅ Checklist
 
 - [ ] Only external/unstable deps mocked; own API real in E2E
 - [ ] MSW worker/server started in beforeAll, reset in afterEach, stopped in afterAll

@@ -6,7 +6,7 @@ user-invocable: true
 
 # Mobile Testing with Playwright
 
-## Device emulation — config projects
+## 📱 Device emulation — config projects
 
 Use Playwright's built-in device descriptors in `playwright.config.ts`:
 
@@ -26,7 +26,7 @@ Run only mobile: `npx playwright test --project=mobile-chrome --project=mobile-s
 
 Key descriptor fields: `viewport` (e.g. `{ width: 390, height: 844 }`), `deviceScaleFactor`, `isMobile`, `hasTouch`, `userAgent`. Override per test with `test.use({ viewport: { width: 320, height: 568 } })`.
 
-## Touch gestures
+## 👆 Touch gestures
 
 With `hasTouch: true` the `page.touchscreen` API is available:
 
@@ -46,7 +46,7 @@ await page.locator('.carousel').evaluate(el => {
 
 Prefer high-level actions first: `tap()`, `click()` (works with touch), and `expect` auto-retry. Use raw pointer events only for gestures Playwright has no API for (swipe, pinch, long-press).
 
-## Mobile-specific rules
+## 📱 Mobile-specific rules
 
 - **No hover**: `:hover` styles and hover menus don't exist on touch — test the tap behavior instead. Never assert hover state on mobile projects.
 - **Tap targets**: assert buttons are large enough (`await expect(btn).toBeVisible()` + optionally bounding box ≥ 44px via `boundingBox()`).
@@ -57,7 +57,7 @@ Prefer high-level actions first: `tap()`, `click()` (works with touch), and `exp
 - **userAgent / UA sniffing**: if the app serves different markup per UA, test both projects (mobile + desktop) for the same flow.
 - **Never `waitForTimeout`** for animations/transitions on mobile — assert the end state with `expect`.
 
-## Common pitfalls
+## ⚠️ Common pitfalls
 
 | Pitfall | Fix |
 |---|---|

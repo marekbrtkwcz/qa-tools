@@ -8,7 +8,7 @@ user-invocable: true
 
 An LLM feature is not "working" because it returns a fluent answer. It is working when the answer is **grounded, safe, and repeatable enough** for the use case. Test the model's behavior, not its vibes.
 
-## What to test
+## 🎯 What to test
 
 ### 1. Groundedness / hallucination
 
@@ -71,7 +71,7 @@ test('should not leak system prompt when user input contains injection', async (
 - Pin the model version in tests (`model: 'gpt-x-test'` or a stub); when the version is bumped, re-run the golden eval and diff the outputs.
 - Keep prompts versioned in code; a prompt change is a code change — review it like code.
 
-## Anti-"unslop" rules for AI-generated artifacts
+## 🧹 Anti-"unslop" rules for AI-generated artifacts
 
 The same discipline applies to tests, reports, and bug titles produced with AI:
 
@@ -81,14 +81,14 @@ The same discipline applies to tests, reports, and bug titles produced with AI:
 - **No hardcoded waits** — LLM tests especially love `waitForTimeout`; use `expect.poll` with a deadline for async model calls.
 
 ```typescript
-// DOBRY: polls with deadline instead of a fixed sleep
+// ✅ DOBRY: polls with deadline instead of a fixed sleep
 await expect.poll(() => getJobStatus(id), { timeout: 10_000 }).toBe('done');
 
-// ZŁY: LLM-owe "poczekaj sekundę i będzie"
+// ❌ ZŁY: LLM-owe "poczekaj sekundę i będzie"
 await page.waitForTimeout(1000);
 ```
 
-## Rules
+## 📏 Rules
 
 - Test against a **stub/mock model** for pipeline logic (fast, deterministic, free) and against the **real model** only for evals/groundedness — never in unit tests.
 - API keys only from env (`LLM_API_KEY`), never hardcoded; never point tests at a production model endpoint without approval.
@@ -96,7 +96,7 @@ await page.waitForTimeout(1000);
 - Every LLM test must be re-runnable and independent: unique input IDs per run, cleanup of created resources in `afterEach`.
 - Flaky-by-nature assertions (exact text) are forbidden; if a test fails intermittently, fix the assertion, don't add a retry.
 
-## Checklist
+## ✅ Checklist
 
 - [ ] Golden eval set exists and runs in CI with a threshold
 - [ ] Groundedness: citations/exact facts asserted, invented entities rejected

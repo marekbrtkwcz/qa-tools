@@ -6,14 +6,14 @@ user-invocable: true
 
 # Performance Testing
 
-## Core Web Vitals
+## ⚡ Core Web Vitals
 | Metric | Good | Needs Improvement | Poor |
 |---|---|---|---|
 | **LCP** (Largest Contentful Paint) | ≤ 2.5s | 2.5s – 4s | > 4s |
 | **INP** (Interaction to Next Paint) | ≤ 200ms | 200ms – 500ms | > 500ms |
 | **CLS** (Cumulative Layout Shift) | ≤ 0.1 | 0.1 – 0.25 | > 0.25 |
 
-## Measuring Web Vitals in Playwright
+## 📏 Measuring Web Vitals in Playwright
 ```typescript
 import { test, expect } from '@playwright/test';
 
@@ -30,7 +30,7 @@ test('homepage meets Core Web Vitals', async ({ page }) => {
 });
 ```
 
-## Performance budget in test
+## 🎯 Performance budget in test
 ```typescript
 test('homepage loads within budget', async ({ page }) => {
   const start = Date.now();
@@ -41,7 +41,7 @@ test('homepage loads within budget', async ({ page }) => {
 });
 ```
 
-## Load testing with k6
+## 🚀 Load testing with k6
 ```javascript
 // load-test.js
 import http from 'k6/http';
@@ -65,7 +65,7 @@ export default function () {
 }
 ```
 
-## Performance testing checklist
+## ⚡ Performance testing checklist
 - [ ] Define budgets for key pages (load time, LCP, bundle size)
 - [ ] Test on realistic network conditions (throttle to 3G)
 - [ ] Measure on mobile viewport too

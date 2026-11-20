@@ -100,7 +100,7 @@ jobs:
       - run: python scripts/check-flaky.py --max-rate 0.02  # from JUnit XML
 ```
 
-## Rules
+## 📏 Rules
 
 - A gate that never fails is not a gate — test the gate itself (break a test on purpose in a sandbox branch, confirm the check goes red).
 - Thresholds are **numbers with owners**, not aspirations: `p95 < 800ms (owner: @perf-team)`.
@@ -108,7 +108,7 @@ jobs:
 - Naming for gate-related tests/scripts: `should <result> when <condition>`.
 - No secrets in gate configs; tokens via env/secrets only.
 
-## Checklist
+## ✅ Checklist
 
 - [ ] 4 gate levels defined and wired as required checks
 - [ ] Diff coverage gate on PRs (not just total coverage)

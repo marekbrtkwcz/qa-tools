@@ -8,7 +8,7 @@ user-invocable: true
 
 Testing the database layer itself (not just data migrations — see `data-migration-testing`). A feature is not done until its **persistence** is verified: what the API/UI writes to the DB is exactly what was promised.
 
-## Layers of DB tests
+## 🗄️ Layers of DB tests
 
 | Layer | What it covers | Tool |
 |---|---|---|
@@ -16,7 +16,7 @@ Testing the database layer itself (not just data migrations — see `data-migrat
 | **Integration** | schema, constraints, triggers, FK cascade | testcontainers / dedicated test DB |
 | **E2E verification** | DB side effects after a UI/API action | Playwright + DB client in `afterEach`/assertion step |
 
-## Direct DB access from Playwright tests
+## 🔌 Direct DB access from Playwright tests
 
 Connect **only in setup/teardown or a fixture — never open connections inside the test body**, and always close them:
 
@@ -50,7 +50,7 @@ Rules:
 - use a **dedicated test database** (or testcontainers), wiped per run in `globalSetup` / per test in `afterEach` — pick one strategy and document it
 - prefer an ORM (`prisma`, `drizzle`, `typeorm`) when the app uses one — tests then match the real query layer
 
-## Verifying DB side effects after UI/API actions
+## 👀 Verifying DB side effects after UI/API actions
 
 The strongest E2E assertion is on persisted state, not just the HTTP 200:
 
@@ -78,7 +78,7 @@ test('should persist order in database when checkout is completed', async ({ pag
 });
 ```
 
-## What to test in the schema
+## 🧱 What to test in the schema
 
 - **Constraints**: `NOT NULL` rejection, `UNIQUE` violation (duplicate email → 409/23505), `CHECK` (negative price rejected), `DEFAULT` values applied
 - **Foreign keys**: insert with missing parent fails; `ON DELETE CASCADE` removes children; `ON DELETE RESTRICT` blocks
@@ -100,7 +100,7 @@ test('should reject duplicate email at database level when user already exists',
 });
 ```
 
-## Transactions, rollback and isolation
+## 🔁 Transactions, rollback and isolation
 
 - each test should run in a transaction that is **rolled back** at the end (fast, zero cleanup):
 
@@ -125,7 +125,7 @@ test('should not leak data when test fails mid-transaction', async () => {
 - tests must be **independent** — no test may depend on data created by another test
 - beware of implicit commits inside ORMs/stored procedures — verify rollback actually rolls back
 
-## Concurrency
+## 🏁 Concurrency
 
 - parallel writes to the same row: last-write-wins vs optimistic locking (`version` column / `SELECT ... FOR UPDATE`)
 - unique constraint under race: two concurrent inserts of the same email → exactly one succeeds
@@ -148,12 +148,12 @@ test('should allow exactly one winner when two concurrent signups use the same e
 });
 ```
 
-## Performance of queries (lightweight)
+## ⚡ Performance of queries (lightweight)
 
 - `EXPLAIN ANALYZE` on hot queries — no sequential scan on large tables where an index is expected
 - N+1 detection: count queries per request (ORM logging / `pg_stat_statements`) stays constant as the list grows
 
-## Rules
+## 📏 Rules
 
 - assertions must be **concrete**: exact row content, exact counts, exact error codes — never `rows.length > 0` or "query executed"
 - naming: `should <result> when <condition>` (e.g. `should reject duplicate email when unique index exists`)
@@ -161,9 +161,9 @@ test('should allow exactly one winner when two concurrent signups use the same e
 - cleanup in `afterEach`/`afterAll` and always close pools (`db.end()` in `finally`)
 - never test against production; masked/synthetic data only (see `test-data-management`)
 
-## Good vs bad
+## ✅❌ Good vs bad
 
-DOBRY:
+✅ DOBRY:
 ```typescript
 test('should cascade delete order items when order is deleted', async () => {
   const db = createDbPool();
@@ -177,7 +177,7 @@ test('should cascade delete order items when order is deleted', async () => {
 });
 ```
 
-ZŁY:
+❌ ZŁY:
 ```typescript
 test('delete works', async () => {
   const db = createDbPool();
@@ -187,7 +187,7 @@ test('delete works', async () => {
 });
 ```
 
-## Checklist
+## ✅ Checklist
 
 - [ ] Dedicated test DB (or testcontainers), guarded against prod URLs
 - [ ] Connections opened in fixtures/setup, closed in `finally`

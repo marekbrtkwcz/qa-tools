@@ -78,7 +78,7 @@ For each AC, record evidence — not impressions:
 - Renumbering REQ IDs — breaks every link; use stable external IDs.
 - 100% AC coverage claimed while negative paths are untested — ACs imply negatives (see checklist above).
 
-## Checklist
+## ✅ Checklist
 
 - [ ] Stable ID scheme: REQ → AC → test tag → code location
 - [ ] Coverage matrix in repo, updated in the same PR as requirement changes
