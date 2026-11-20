@@ -3,6 +3,15 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.17.2] - 2026-11-20
+
+### Added
+- Issue templates `.github/ISSUE_TEMPLATE/bug_report.md` and `feature_request.md` (environment, validator output, logs).
+- Validator unit tests 10 → 15: skill frontmatter without `user-invocable`, missing `hooks.toml`, hook with unknown type, scenario plan missing the `Kroki` section, UI spec with a test name violating the `should…when…` convention.
+
+### Fixed
+- CONTRIBUTING.md: release process now describes the automatic `release.yml` workflow (tag + GitHub Release from the CHANGELOG section); manual `gh release create` recipe kept for old tags. GitHub Release published for the existing `v1.5.0` tag.
+
 ## [1.17.1] - 2026-11-20
 
 ### Added

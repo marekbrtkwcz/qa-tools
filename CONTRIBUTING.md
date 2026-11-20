@@ -13,7 +13,7 @@ Każdy obszar = **4 subagenty** (`planner → writer → refactor → code-revie
 3. **README.md**: wiersz w tabeli obszarów, 4 linie w drzewku `agents/`, aktualne liczby w intro (`**NN subagentów**`) i komentarzu struktury — walidator to sprawdza.
 4. **CHANGELOG.md** + **`.vibe/plugins/qa-tools/plugin.json`**: bump wersji (minor = nowy obszar/skill) i wpis — walidator wymaga zgodności wersji.
 5. **Testy**: `python -m unittest discover -s tests -v` i `py scripts/validate-plugin.py` — oba muszą przejść (CI też to robi).
-6. Commit + push. Tag `vX.Y.Z` i release robimy osobno (patrz niżej).
+6. Commit + push. Tag `vX.Y.Z` i release powstają automatycznie (patrz niżej).
 
 ## Jak dodać skill
 
@@ -29,8 +29,14 @@ Każdy obszar = **4 subagenty** (`planner → writer → refactor → code-revie
 
 ## Release
 
+Release są **automatyczne**: workflow `.github/workflows/release.yml` przy każdym pushu do `main` czyta najnowszy wpis `## [x.y.z]` z `CHANGELOG.md` i jeśli tag `vx.y.z` jeszcze nie istnieje — tworzy tag oraz GitHub Release z notatkami z tej sekcji CHANGELOG. Wystarczy więc: wpis w CHANGELOG + bump `plugin.json` + push.
+
+Ręcznie (awaryjnie, np. release dla starego taga):
+
 ```bash
-git tag -a vX.Y.Z -m "qa-tools vX.Y.Z"
-git push origin vX.Y.Z
-# release na GitHubie: z CHANGELOG.md (GitHub → Releases → Draft new release)
+sed -n '/^## \[1.5.0\]/,/^## \[1.4.0\]/p' CHANGELOG.md | sed '1d;$d' | gh release create v1.5.0 --title "qa-tools v1.5.0" --notes-file -
 ```
+
+## Issues
+
+Bugi i propozycje ficzerów zgłaszamy przez issue templates: `.github/ISSUE_TEMPLATE/bug_report.md` i `.github/ISSUE_TEMPLATE/feature_request.md`.

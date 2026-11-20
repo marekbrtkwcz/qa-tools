@@ -332,6 +332,45 @@ class ValidatorTestCase(unittest.TestCase):
         self.assertEqual(code, 1)
         self.assertTrue(any("waitForTimeout" in e for e in validator.errors))
 
+    def test_skill_without_user_invocable_fails(self):
+        skill = self.plugin / "skills" / "example-skill" / "SKILL.md"
+        skill.write_text(GOOD_SKILL.replace("user-invocable: true\n", ""), encoding="utf-8")
+        code = self.run_validator()
+        self.assertEqual(code, 1)
+        self.assertTrue(any("user-invocable" in e for e in validator.errors))
+
+    def test_missing_hooks_file_fails(self):
+        (self.plugin / "ai.mistral.vibe" / "hooks.toml").unlink()
+        code = self.run_validator()
+        self.assertEqual(code, 1)
+        self.assertTrue(any("hooks.toml: brak pliku" in e for e in validator.errors))
+
+    def test_hook_with_unknown_type_fails(self):
+        (self.plugin / "ai.mistral.vibe" / "hooks.toml").write_text(
+            '[[hooks]]\nname = "bad"\ntype = "bogus"\ncommand = "echo ok"\n',
+            encoding="utf-8",
+        )
+        code = self.run_validator()
+        self.assertEqual(code, 1)
+        self.assertTrue(any("nieznany typ" in e for e in validator.errors))
+
+    def test_plan_missing_kroki_section_fails(self):
+        plan = self.root / "examples" / "docs" / "scenarios" / "ui" / "login.md"
+        plan.write_text(GOOD_PLAN.replace("Kroki: 1. otwórz /login\n", ""), encoding="utf-8")
+        code = self.run_validator()
+        self.assertEqual(code, 1)
+        self.assertTrue(any("Kroki" in e for e in validator.errors))
+
+    def test_ui_spec_with_bad_test_name_fails(self):
+        spec_file = self.root / "examples" / "tests" / "ui" / "login.spec.ts"
+        spec_file.write_text(GOOD_SPEC.replace(
+            "test('should show dashboard when user logs in'",
+            "test('logs in user'",
+        ), encoding="utf-8")
+        code = self.run_validator()
+        self.assertEqual(code, 1)
+        self.assertTrue(any("nazwa testu" in e for e in validator.errors))
+
 
 if __name__ == "__main__":
     unittest.main()
