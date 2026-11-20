@@ -1,5 +1,7 @@
 # QA Tools
 
+[![Validate plugin](https://github.com/marekbrtkwcz/qa-tools/actions/workflows/validate-plugin.yml/badge.svg)](https://github.com/marekbrtkwcz/qa-tools/actions/workflows/validate-plugin.yml)
+
 Plugin Vibe CLI (format Agent Plugins 1.0) z kompletnym zestawem narzędzi AI dla inżynierii jakości: 8 pipeline'ów testowych × 4 etapy = **32 subagentów**, **11 skillów**, **3 hooki**, **3 wpisy wiedzy**.
 
 | Obszar | Subagenty | Cel |
@@ -124,6 +126,15 @@ Każdy subagent zna i stosuje te same konwencje:
 ## Użycie
 
 Plugin ładuje się automatycznie w zaufanym projekcie. Subagenty są dostępne jako `qa-tools:<nazwa>` (np. `qa-tools:ui-test-planner`). Skille można wywołać przez `/playwright-test-writing` lub model załaduje je automatycznie.
+
+## Development
+
+Lokalna walidacja przed commitem (to samo robi CI na każdym pushu/PR):
+
+```bash
+py scripts/validate-plugin.py                  # struktura pluginu, exit 0/1
+python -m unittest discover -s tests -v       # testy jednostkowe walidatora
+```
 
 ## Walidacja pluginu
 

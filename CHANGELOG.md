@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.2.6] - 2026-11-20
+
+### Added
+- `homepage` and `repository` in `plugin.json` (allowed by the Agent Plugins 1.0.0 schema); CI badge and Development section in README.
+
 ## [1.2.5] - 2026-11-20
 
 ### Added
