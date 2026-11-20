@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.37.0] - 2026-11-21
+
+### 📦 Added
+- 3 role subagents (57 → 60), adapted from `jaktestowac/awesome-agents-for-quality` agents: `llm-feature-test-engineer` (three suites for LLM features — evals / guardrails / red team — with written authorization gate before adversarial work, pinned model, noise-band measurement, effect-scored red team, CI regression gate), `ai-architect` (two-stage Beyond Codegen: reviewed BDD scenario set first, then Playwright tests from approved scenarios via Playwright MCP), `quality-contract-architect` (derives the MUST/SHOULD/COULD quality contract from risk profile × maturity × surface, gap matrix PRESENT/PARTIAL/MISSING/WAIVED with quoted evidence, remediation plan; never derives manual-attestation states from tooling).
+
 ## [1.36.0] - 2026-11-21
 
 ### 📦 Added

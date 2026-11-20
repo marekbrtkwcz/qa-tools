@@ -2,7 +2,7 @@
 
 [![Validate plugin](https://github.com/marekbrtkwcz/qa-tools/actions/workflows/validate-plugin.yml/badge.svg)](https://github.com/marekbrtkwcz/qa-tools/actions/workflows/validate-plugin.yml)
 
-Vibe CLI plugin (Agent Plugins 1.0 format) with a complete AI toolkit for quality engineering: 11 testing pipelines × 4 stages = **57 subagents**, **31 skills**, **5 hooks**, **8 knowledge entries**.
+Vibe CLI plugin (Agent Plugins 1.0 format) with a complete AI toolkit for quality engineering: 11 testing pipelines × 4 stages = **60 subagents**, **31 skills**, **5 hooks**, **8 knowledge entries**.
 
 | Area | Subagents | Purpose |
 |---|---|---|
@@ -106,7 +106,7 @@ Releases are automatic: on every push to `main`, the `.github/workflows/release.
 │   ├── migrating-tests-to-playwright/
 │   └── attesting-manual-verification/
 └── ai.mistral.vibe/
-    ├── agents/                          # 57 subagents: 52 pipeline (13 areas × 4 stages) + 5 role agents
+    ├── agents/                          # 60 subagents: 52 pipeline (13 areas × 4 stages) + 8 role agents
     ├── hooks.toml                       # lint, playwright --list, typecheck, flaky-watch, QA conventions
 ├── mcp.json                         # Playwright MCP server (npx @playwright/mcp)
     └── knowledge/                       # knowledge base (architecture, patterns, QA glossary, reporting, quality governance, AI product QA, beyond codegen, playwright conventions)
@@ -176,7 +176,7 @@ Planner → Writer → Refactor → Code Reviewer
 
 Available for thirteen areas: **UI**, **API**, **E2E**, **mobile**, **visual (regression)**, **load (k6)**, **DB (data migration/ETL verification)**, **contract (Pact / OpenAPI)**, **a11y (WCAG accessibility)**, **security (OWASP Top 10)**, **chaos (fault injection / resilience)**, **i18n (locales, RTL, formats)**, **API versioning (deprecations, backward compatibility)**.
 
-## qa-tools conventions (enforced by all 57 agents)
+## qa-tools conventions (enforced by all 60 agents)
 
 Every subagent knows and applies the same conventions:
 
@@ -218,7 +218,7 @@ py scripts/validate-plugin.py                    # Python 3.11+, stdlib only
 python -m unittest discover -s tests -v          # validator unit tests (stdlib)
 ```
 
-The script checks: `plugin.json`, all 57 agent TOML files (keys, naming conventions, `waitForTimeout` ban, `__ENV`/`thresholds` rules for k6), 31 skill frontmatters, `hooks.toml`, `knowledge/` entries, reference example compliance, and version/count consistency (`plugin.json` ↔ `CHANGELOG.md` ↔ README). Exit code 0 = OK, 1 = errors. Useful locally and in CI — on every push/PR to `main` it is run by the `.github/workflows/validate-plugin.yml` workflow.
+The script checks: `plugin.json`, all 60 agent TOML files (keys, naming conventions, `waitForTimeout` ban, `__ENV`/`thresholds` rules for k6), 31 skill frontmatters, `hooks.toml`, `knowledge/` entries, reference example compliance, and version/count consistency (`plugin.json` ↔ `CHANGELOG.md` ↔ README). Exit code 0 = OK, 1 = errors. Useful locally and in CI — on every push/PR to `main` it is run by the `.github/workflows/validate-plugin.yml` workflow.
 
 ## Reference examples
 
