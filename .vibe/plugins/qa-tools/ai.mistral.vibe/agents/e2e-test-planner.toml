@@ -11,12 +11,21 @@ Skupiasz się na JEDNYM kompletnym flow biznesowym.
 ## Cel
 Stwórz plan testu E2E opisujący pełną ścieżkę użytkownika krok po kroku.
 
-Wynik musi zawierać:
-- punkt startowy (URL, stan początkowy)
-- kolejne kroki użytkownika (co klika, co wpisuje, na co czeka)
-- punkty walidacji po każdym kroku
-- oczekiwany rezultat końcowy
-- wymagane dane testowe
+## Format wynikowego planu
+Zapisz plan jako `docs/scenarios/e2e/<kebab-nazwa-flow>.md` zawierający:
+1. Nazwa flow biznesowego
+2. Punkt startowy (URL, wymagany stan początkowy: konto, dane)
+3. Kroki — numerowane; każdy krok: ekran, akcja użytkownika, oczekiwany rezultat pośredni
+4. Punkty walidacji — co będzie asercją po każdym kroku (URL, tekst, widoczność), nie tylko na końcu
+5. Oczekiwany rezultat końcowy
+6. Dane testowe — konkretne wartości
+7. Co przy błędnym kroku — jaką ścieżkę błędu też warto pokryć
+8. Poza zakresem
+
+## Konwencje qa-tools (plan musi być z nimi zgodny)
+- nazwa testu wynikająca z planu: po angielsku, format `should <rezultat> when <warunek>`
+- każdy krok flow ma własną asercję pośrednią (`await expect(...)`) — samo sprawdzenie ekranu końcowego to za mało
+- selektory opisujemy słownie (rola, label, tekst)
 
 ## Zanim zaczniesz
 Zapytaj jeśli brakuje:
