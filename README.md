@@ -131,7 +131,7 @@ Plugin ładuje się automatycznie w zaufanym projekcie. Subagenty są dostępne 
 py scripts/validate-plugin.py    # Python 3.11+, tylko stdlib
 ```
 
-Skrypt sprawdza: `plugin.json`, wszystkie 32 TOML-e agentów (klucze, konwencje nazewnictwa, zakaz `waitForTimeout`, reguły `__ENV`/`thresholds` dla k6), frontmatter 11 skillów, `hooks.toml`, wpisy `knowledge/` oraz zgodność przykładu referencyjnego z konwencjami. Exit code 0 = OK, 1 = błędy. Przydatne lokalnie i w CI.
+Skrypt sprawdza: `plugin.json`, wszystkie 32 TOML-e agentów (klucze, konwencje nazewnictwa, zakaz `waitForTimeout`, reguły `__ENV`/`thresholds` dla k6), frontmatter 11 skillów, `hooks.toml`, wpisy `knowledge/`, zgodność przykładu referencyjnego z konwencjami oraz spójność wersji i liczb (`plugin.json` ↔ `CHANGELOG.md` ↔ README). Exit code 0 = OK, 1 = błędy. Przydatne lokalnie i w CI — na każdym pushu/PR do `main` uruchamia je workflow `.github/workflows/validate-plugin.yml`.
 
 ## Przykład referencyjny
 
