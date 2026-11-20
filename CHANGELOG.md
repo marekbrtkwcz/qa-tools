@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.23.0] - 2026-11-20
+
+### Added
+- New skill `plugin-authoring` (22nd skill): how to build an Agent Plugins 1.0 plugin — structure, snake_case agent TOML schema (camelCase fails at runtime), skill frontmatter, hooks, structure validator + unit tests + CI, SemVer/CHANGELOG consistency, auto-release workflow, branch protection, plugin smoke-test checklist. Documents this repo as the reference implementation.
+
 ## [1.22.0] - 2026-11-20
 
 ### Added
