@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.31.0] - 2026-11-21
+
+### 📦 Added
+- 2 new skills (27 → 29), adapted from `jaktestowac/awesome-agents-for-quality`: `unslop-answers` (every claim in an answer about your own work is evidenced, quantified, or marked unverified — evidence ladder rungs 0–5, severity tiers, 50 patterns, report format, red flags) and `unslop-tests` (the same discipline for test code — 40 tells from tautological assertions and mock-only tests to retries-as-fixes, Tier 1 findings proven by mutation: break the behavior, watch the test stay green, paste the output).
+
 ## [1.30.0] - 2026-11-21
 
 ### 📦 Added
