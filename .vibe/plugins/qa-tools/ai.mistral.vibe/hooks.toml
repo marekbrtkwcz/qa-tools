@@ -66,6 +66,40 @@ fi
 exit 0
 """
 
+# After a 'playwright test' run, report tests that only passed after a retry (flaky) from JUnit XML
+[[hooks]]
+name = "flaky-watch"
+type = "post_tool"
+match = "re:file_system\\\\.bash"
+description = "After 'npx playwright test ...', parse JUnit XML and list flaky tests (passed only on retry)"
+
+command = """
+payload=$(cat)
+cmd=$(echo "$payload" | python -c "import sys,json; d=json.load(sys.stdin); ti=d.get('tool_input',{}); print(ti.get('command') or '')" 2>/dev/null)
+
+case "$cmd" in
+  *"playwright test"*)
+    for xml in results.xml test-results/junit.xml junit.xml; do
+      [ -f "$xml" ] || continue
+      python - "$xml" <<'PYEOF' 2>/dev/null || true
+import sys, xml.etree.ElementTree as ET
+tree = ET.parse(sys.argv[1])
+flaky = []
+for tc in tree.iter('testcase'):
+    if tc.find('failure') is not None or tc.find('error') is not None:
+        flaky.append(f"{tc.get('classname','')}::{tc.get('name','')}")
+if flaky:
+    print(f"flaky-watch: {len(flaky)} test(s) needed a retry:")
+    for f in sorted(set(flaky)):
+        print(" -", f)
+PYEOF
+      break
+    done
+    ;;
+esac
+exit 0
+"""
+
 # On session start, inject QA conventions context
 [[hooks]]
 name = "qa-conventions"

@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.14.0] - 2026-11-20
+
+### Added
+- New hook `flaky-watch` (5th hook): after a `playwright test` command, parses the JUnit XML (`results.xml` / `test-results/junit.xml`) and reports tests that passed only after a retry — the flaky list to fix, not hide behind retries.
+
 ## [1.13.0] - 2026-11-20
 
 ### Added
