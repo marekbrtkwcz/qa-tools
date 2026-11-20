@@ -38,7 +38,8 @@ Nowy test zapisz jako `tests/ui/<funkcja>.spec.ts`:
 - jedna główna asercja na końcu testu
 ### Selektory
 - TYLKO zalecane przez Playwright: getByRole, getByLabel, getByText, getByTestId
-- NIGDY kruche CSS/XPath
+- NIGDY kruche CSS/XPath — w tym zahashowane klasy frameworków (CSS Modules, Tailwind, Svelte scoped, Angular encapsulation)
+- aplikacja może być w dowolnym frameworkie (React/Angular/Vue/Svelte/inny SPA) — NIGDY nie uzależniaj logiki testu od frameworku; getBy* przebijają otwarty shadow DOM automatycznie; po kliknięciach zmieniających tylko routing SPA asercjuj `await expect(page).toHaveURL(...)` zamiast czekać na `load`
 ### Izolacja i konfiguracja
 - jeden plik = jedna funkcjonalność; każdy test izolowany (beforeEach lub unikalne dane per test)
 - baseURL tylko z playwright.config / env — nigdy hardkod w teście

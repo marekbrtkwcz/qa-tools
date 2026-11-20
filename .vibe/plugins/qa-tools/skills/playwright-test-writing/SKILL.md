@@ -43,6 +43,25 @@ test.describe('Login flow', () => {
 });
 ```
 
+## Framework-aware testing (React / Angular / Vue / Svelte / Next.js / ...)
+
+The app under test may be built with any framework — **never branch test logic on the framework**. Selectors stay user-facing (`getByRole`/`getByLabel`/`getByText`/`getByTestId`) regardless of framework. Framework knowledge is used only for *waiting strategy and debugging*, never for selectors:
+
+- **SPA routing**: after clicks that only change client-side route, assert `await expect(page).toHaveURL(/.../)` — do NOT wait for `load` event. Consider `page.goto(url, { waitUntil: 'domcontentloaded' })` for heavy SPAs.
+- **Re-renders / change detection (React, Angular, Vue, Svelte)**: state can be reset by a re-render right after an action. Rely on `expect` auto-retry; if an element must be re-queried, re-locate it (never cache locators across awaits that may trigger re-render).
+- **Hashed/generated CSS classes** (CSS Modules, Tailwind, Angular emulated encapsulation, Svelte scoped styles): class names like `.btn_x7f3a` are unstable — never use them as selectors.
+- **Shadow DOM / Web Components**: Playwright's `getBy*` and CSS selectors pierce **open** shadow roots by default — no special syntax needed. Closed shadow roots are not pierceable; in that case use `getByTestId` placed on the host or light-DOM text.
+- **Hydration (Next.js, Nuxt, SvelteKit)**: after `goto`, wait for interactivity via an `expect` on an interactive element (`toBeVisible`/`toBeEnabled`), never via `waitForTimeout`.
+- **Angular**: avoid `ng-reflect-*` attributes as selectors; change detection is handled by `expect` polling.
+- **data-testid**: agree with the team on a stable `data-testid` convention — it is the framework-agnostic escape hatch when roles/labels are not available (e.g. icon-only buttons).
+
+```typescript
+// ✅ framework-agnostic — works the same in React, Angular, Vue, Svelte
+await page.getByRole('button', { name: 'Save' }).click();
+await expect(page.getByRole('status')).toHaveText('Saved');
+await expect(page).toHaveURL(/\/items\/\d+/);
+```
+
 ## Anti-patterns to avoid
 - ❌ `page.waitForTimeout(3000)` — use `expect` instead
 - ❌ CSS selectors like `.btn-primary` — use roles/labels

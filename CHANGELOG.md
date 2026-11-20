@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.2.2] - 2026-11-20
+
+### Added
+- Framework-aware UI testing guidance: new section in `playwright-test-writing` skill (SPA routing via `toHaveURL`, re-render-safe locators, hashed CSS classes, open shadow DOM piercing, hydration waits, `data-testid` convention) plus matching rules in `ui-test-writer` (selectors must stay framework-agnostic) and `ui-test-code-reviewer` (review checklist).
+
 ## [1.2.1] - 2026-11-20
 
 ### Fixed
