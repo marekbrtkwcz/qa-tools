@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.43.0] - 2026-11-21
+
+### 📦 Added
+- New project commands in `.vibe/prompts/` (21 → 25), the generation batch from `jaktestowac/awesome-agents-for-quality`: `/test-generator` (automate plan cases with case IDs in test titles, per-case run status, never weaken assertions for green), `/edge-case-scenario-generator` (BDD edge scenarios to `spec/edge-cases.md`, stage 1 of beyond-codegen — stops for human review), `/generate-test-data` (synthetic data catalog: valid/boundary/invalid/role-state, fixture-ready flags, no fixture files unless asked), `/derive-test-cases-from-code` (white-box cases from branches/boundaries/error paths, covered/partial/missing vs existing tests, analysis only).
+
 ## [1.42.0] - 2026-11-21
 
 ### 📦 Added

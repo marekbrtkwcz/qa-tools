@@ -73,6 +73,10 @@ Project-level prompts in `.vibe/prompts/` (loaded only in this trusted project; 
 | `/map-requirements-coverage` | RTM: requirements vs existing tests → covered/partial/not covered with evidence, saved to `.qa/requirements-coverage.md` |
 | `/review-requirements` | testability review of story/PRD/ACs: 7 passes, clarifying questions, rewritten testable criteria |
 | `/manual-test-cases` | executable manual test cases table (ID/priority/type/steps/expected/automation candidate) from story, ACs, or plan |
+| `/test-generator` | automate plan cases (default `.qa/test-plan.md`) in project conventions, run, per-case status table; case IDs in test titles |
+| `/edge-case-scenario-generator` | BDD edge scenarios (boundaries, invalid transitions, concurrency) → `spec/edge-cases.md` for human review before any code |
+| `/generate-test-data` | reusable synthetic test data catalog (valid/boundary/invalid/role-state) with fixture-ready flags |
+| `/derive-test-cases-from-code` | white-box cases from branches/boundaries/error paths, marked covered/partial/missing vs existing tests |
 
 ## Publishing
 
