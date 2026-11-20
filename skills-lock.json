@@ -1,0 +1,61 @@
+{
+  "version": 2,
+  "skills": {
+    "k6": {
+      "source": "grafana/skills",
+      "commit": "8fb72a527961f05e708f53d2a0500709e12d7970",
+      "sourceType": "github",
+      "skillPath": "skills/grafana-k6/k6/SKILL.md",
+      "computedHash": "64134d01f65a7eac154b8cab18a0cbb761ba5c1fb1b275ba7f9590ca4cfdb35a"
+    },
+    "k6-browser-test": {
+      "source": "grafana/skills",
+      "commit": "8fb72a527961f05e708f53d2a0500709e12d7970",
+      "sourceType": "github",
+      "skillPath": "skills/grafana-k6/k6-browser-test/SKILL.md",
+      "computedHash": "d7120515ca350af41a71b2a69f6ae6015e612aa52a1ae97bc3e4f0dda228350b"
+    },
+    "k6-cloud-investigate-test": {
+      "source": "grafana/skills",
+      "commit": "8fb72a527961f05e708f53d2a0500709e12d7970",
+      "sourceType": "github",
+      "skillPath": "skills/grafana-k6/k6-cloud-investigate-test/SKILL.md",
+      "computedHash": "54b56c758134b4f87d1ed3c5234e546a84f77970c5c5c87cf35155e8a7bc3028"
+    },
+    "k6-docs": {
+      "source": "grafana/skills",
+      "commit": "8fb72a527961f05e708f53d2a0500709e12d7970",
+      "sourceType": "github",
+      "skillPath": "skills/grafana-k6/k6-docs/SKILL.md",
+      "computedHash": "56d9c96fea1af411df6ece08a32e3111e7303b44f9d221e6db0e469babb73eed"
+    },
+    "k6-manage": {
+      "source": "grafana/skills",
+      "commit": "8fb72a527961f05e708f53d2a0500709e12d7970",
+      "sourceType": "github",
+      "skillPath": "skills/grafana-k6/k6-manage/SKILL.md",
+      "computedHash": "2efc856cfec1b232e4d3c24316d15ae8cb0fe86596f995d8950e4c847fd65cd6"
+    },
+    "k6-perf-test-website": {
+      "source": "grafana/skills",
+      "commit": "8fb72a527961f05e708f53d2a0500709e12d7970",
+      "sourceType": "github",
+      "skillPath": "skills/grafana-k6/k6-perf-test-website/SKILL.md",
+      "computedHash": "63494b063d0db3762e68122afde4f8f4728cac486c4d3d81af94c8f02fb55c27"
+    },
+    "k6-test-maintenance": {
+      "source": "grafana/skills",
+      "commit": "8fb72a527961f05e708f53d2a0500709e12d7970",
+      "sourceType": "github",
+      "skillPath": "skills/grafana-k6/k6-test-maintenance/SKILL.md",
+      "computedHash": "e877c9057b6ef2240fb4dccbfd71393137805235d861af4c3de6371bbeab6ca8"
+    },
+    "k6-trend-analysis": {
+      "source": "grafana/skills",
+      "commit": "8fb72a527961f05e708f53d2a0500709e12d7970",
+      "sourceType": "github",
+      "skillPath": "skills/grafana-k6/k6-trend-analysis/SKILL.md",
+      "computedHash": "fc8dd75b1c7803fd3a83538d78607d304d702ae1d3c253ac7c1014828f2823f5"
+    }
+  }
+}
