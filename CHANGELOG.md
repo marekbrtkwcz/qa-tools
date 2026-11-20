@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.2.8] - 2026-11-20
+
+### Changed
+- `typecheck-after-agent` hook: runs `tsc --noEmit` only when the agent turn touched `tests/` or `.ts` files (previously every turn in any project with tsconfig), and reports the TS error count instead of swallowing output with `|| true`.
+
 ## [1.2.7] - 2026-11-20
 
 ### Added

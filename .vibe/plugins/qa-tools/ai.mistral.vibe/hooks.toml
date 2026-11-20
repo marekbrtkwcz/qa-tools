@@ -24,11 +24,21 @@ esac
 name = "typecheck-after-agent"
 type = "post_agent"
 match = "main"
-description = "Type-check the project after agent turn if tsconfig exists"
+description = "Type-check after agent turn only when tests/*.ts files were touched; report error count"
 command = """
-if [ -f tsconfig.json ]; then
-  npx tsc --noEmit 2>/dev/null || true
+payload=$(cat)
+# run only when this turn wrote/edited a test or TS file (avoid running tsc on every turn)
+if echo "$payload" | grep -qE '(tests/|\\.spec\\.ts|\\.test\\.ts|src/.*\\.ts)'; then
+  if [ -f tsconfig.json ]; then
+    out=$(npx tsc --noEmit 2>&1) || true
+    n=$(echo "$out" | grep -c 'error TS' || true)
+    if [ "$n" -gt 0 ]; then
+      echo "typecheck-after-agent: $n błędów TS:"
+      echo "$out" | grep 'error TS' | head -20
+    fi
+  fi
 fi
+exit 0
 """
 
 # On session start, inject QA conventions context
