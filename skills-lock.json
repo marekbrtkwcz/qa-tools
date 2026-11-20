@@ -56,6 +56,13 @@
       "sourceType": "github",
       "skillPath": "skills/grafana-k6/k6-trend-analysis/SKILL.md",
       "computedHash": "fc8dd75b1c7803fd3a83538d78607d304d702ae1d3c253ac7c1014828f2823f5"
+    },
+    "playwright-best-practices": {
+      "source": "currents-dev/playwright-best-practices-skill",
+      "commit": "0b75b5835a87de1fdd202ba965f3bc5a27738fdf",
+      "sourceType": "github",
+      "skillPath": "playwright-best-practices/SKILL.md",
+      "computedHash": "111e9d3e9d63dea34814120fb6583c0b28ee45371662801d8e8d8bdf4b05dcb0"
     }
   }
 }
