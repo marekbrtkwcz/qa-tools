@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.2.4] - 2026-11-20
+
+### Added
+- Browser-side JavaScript guidance (`page.evaluate`) in `playwright-test-writing` skill and `ui-test-writer` conventions: evaluate only when the Playwright API is insufficient, assertions always via `expect`, no `waitForTimeout` in evaluate, `locator.evaluate()` preferred, `addInitScript` for storage seeding.
+
 ## [1.2.3] - 2026-11-20
 
 ### Added

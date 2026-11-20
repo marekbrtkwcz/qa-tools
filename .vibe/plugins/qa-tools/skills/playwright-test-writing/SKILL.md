@@ -73,6 +73,37 @@ ExtJS does NOT map cleanly to ARIA roles — `getByRole` often fails. Use these 
 6. **iframes**: some ExtJS apps render parts in iframes — use `page.frameLocator('iframe[name=...]')`.
 7. **Forms**: fields render as `<input>` inside `.x-field` — `getByLabel` works only if label is properly associated; otherwise `page.locator('.x-field', { hasText: 'Email' }).locator('input').fill(...)`.
 
+## Browser-side JavaScript (`page.evaluate`)
+
+Use JS in the browser **only when the Playwright API can't do it** — prefer locators + `expect` first. Legitimate uses:
+
+- reading JS-only state: `const user = await page.evaluate(() => (window as any).app.user)`
+- extracting values for later assertions: `const text = await page.locator('.x').evaluate(el => el.textContent)`
+- computed styles / visibility not exposed via expect: `evaluate(el => getComputedStyle(el).display)`
+- scrolling into view, removing overlays, focusing: `evaluate(el => el.scrollIntoView())`
+- `localStorage`/`sessionStorage` seeding in `beforeEach`: `page.addInitScript(() => localStorage.setItem(...))`
+- callbacks from the page into the test: `page.exposeFunction('onEvent', ...)`
+
+Rules:
+
+- **assertions stay in `expect`** — never do `evaluate(() => ...)` just to check a value; use `await expect(locator)...`
+- **no `waitForTimeout` inside evaluate** — if you need to wait, wait via `expect` on a condition
+- keep evaluate functions **read-only by default**; DOM mutation via evaluate is a last resort (e.g. clicking a hidden element) and should be commented why
+- never `eval` remote/untrusted code in tests; no `page.evaluate` with user data concatenated into a string — pass args: `page.evaluate(([sel, val]) => {...}, [sel, val])`
+- prefer `locator.evaluate()` over `page.evaluate(() => document.querySelector(...))` — it re-queries and auto-waits
+
+```typescript
+// ✅ read JS state, assert via expect
+const count = await page.evaluate(() => (window as any).store.items.length);
+expect(count).toBe(3);
+
+// ✅ seed storage before app boots
+await page.addInitScript(() => localStorage.setItem('token', 'abc'));
+
+// ❌ assertion inside evaluate
+await page.evaluate(() => document.querySelector('.ok') !== null); // use expect instead
+```
+
 ## Anti-patterns to avoid
 - ❌ `page.waitForTimeout(3000)` — use `expect` instead
 - ❌ CSS selectors like `.btn-primary` — use roles/labels
