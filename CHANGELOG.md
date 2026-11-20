@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.15.0] - 2026-11-20
+
+### Added
+- New `i18n` pipeline (12th area, 4 subagents: `i18n-test-planner`, `i18n-test-writer`, `i18n-test-refactor`, `i18n-test-code-reviewer`) for localization testing: language switching, `document.lang`, RTL layout, date/currency/number formats per locale, translation-key fallbacks, long-text overflow, locale isolation per test. Validator covers the `i18n` area.
+
 ## [1.14.1] - 2026-11-20
 
 ### Added
