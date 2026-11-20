@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.3.0] - 2026-11-20
+
+### Added
+- New skill `mobile-testing` (12th skill): device emulation projects (`devices[...]`), touch gestures (`touchscreen.tap`, pointer events for swipe/pinch), mobile pitfalls (no hover, meta viewport, 320px layout, keyboard covering viewport), same getBy* selectors on mobile.
+
 ## [1.2.8] - 2026-11-20
 
 ### Changed

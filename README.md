@@ -2,7 +2,7 @@
 
 [![Validate plugin](https://github.com/marekbrtkwcz/qa-tools/actions/workflows/validate-plugin.yml/badge.svg)](https://github.com/marekbrtkwcz/qa-tools/actions/workflows/validate-plugin.yml)
 
-Plugin Vibe CLI (format Agent Plugins 1.0) z kompletnym zestawem narzędzi AI dla inżynierii jakości: 8 pipeline'ów testowych × 4 etapy = **32 subagentów**, **11 skillów**, **3 hooki**, **3 wpisy wiedzy**.
+Plugin Vibe CLI (format Agent Plugins 1.0) z kompletnym zestawem narzędzi AI dla inżynierii jakości: 8 pipeline'ów testowych × 4 etapy = **32 subagentów**, **12 skillów**, **3 hooki**, **3 wpisy wiedzy**.
 
 | Obszar | Subagenty | Cel |
 |---|---|---|
@@ -50,7 +50,7 @@ Repozytorium: `github.com/marekbrtkwcz/qa-tools` (branch `main`). Zmiany publiku
 ```
 .vibe/plugins/qa-tools/
 ├── plugin.json                          # manifest Agent Plugins 1.0
-├── skills/                              # wiedza ładowana on-demand (11 skillów)
+├── skills/                              # wiedza ładowana on-demand (12 skillów)
 │   ├── playwright-test-writing/
 │   ├── api-testing/
 │   ├── accessibility-testing/
@@ -61,6 +61,7 @@ Repozytorium: `github.com/marekbrtkwcz/qa-tools` (branch `main`). Zmiany publiku
 │   ├── data-migration-testing/
 │   ├── contract-testing/
 │   ├── test-planning/
+│   ├── mobile-testing/
 │   └── qa-best-practices/
 └── ai.mistral.vibe/
     ├── agents/                          # 32 subagenty pipeline'u testowego (8 obszarów × 4 etapy)
