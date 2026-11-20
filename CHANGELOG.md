@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.21.0] - 2026-11-20
+
+### Added
+- New skill `requirements-traceability` (20th skill): stable ID chain `REQ → AC → test tag → code location`, coverage matrix kept in the repo and updated in the same PR (CI-checkable), per-AC test derivation (happy/boundary/negative/state), AC verification table with met/partial/missing verdicts and evidence links, removed-REQ audit trail.
+
 ## [1.20.0] - 2026-11-20
 
 ### Added
