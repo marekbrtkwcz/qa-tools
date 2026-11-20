@@ -46,6 +46,15 @@ py scripts/validate-plugin.py
 
 Usage: subagents as `qa-tools:<name>` (e.g. `qa-tools:ui-test-planner`), skills via `/<skill-name>` or auto-load.
 
+## ⚡ Project commands (slash prompts)
+
+Project-level prompts in `.vibe/prompts/` (loaded only in this trusted project; a same-named `~/.vibe/prompts/` file is shadowed):
+
+| Command | What it does |
+|---|---|
+| `/fix-tests` | runs failing tests in a scope, diagnoses and fixes root causes without weakening assertions |
+| `/bug-report` | turns rough notes into a developer-ready bug report (severity, repro, confidence, missing evidence) |
+
 ## Publishing
 
 Repository: `github.com/marekbrtkwcz/qa-tools` (branch `main`). Changes are published as usual: `git push origin main`. Plugin version lives in `.vibe/plugins/qa-tools/plugin.json`, history in `CHANGELOG.md`. License: MIT (`LICENSE`).
