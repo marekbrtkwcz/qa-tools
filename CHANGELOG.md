@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.19.0] - 2026-11-20
+
+### Added
+- New skill `quality-gates` (18th skill): four gate levels (smoke PR / full merge / nightly / release) as required status checks, evidence-based go/no-go release readiness table with residual risk, diff coverage gate vs whole-repo coverage, regression scoping from the diff with recorded change intent, and quality waivers with owner + expiry + ticket (expired waiver = gate fails). Includes CI wiring example and a checklist.
+
 ## [1.18.0] - 2026-11-20
 
 ### Added
