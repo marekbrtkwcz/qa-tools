@@ -3,6 +3,13 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.9.0] - 2026-11-20
+
+### Added
+- New knowledge entry `reporting-and-metrics` (4th): Playwright reporters (HTML/JSON/JUnit/Allure), CI artifacts, flaky rate / pass rate / duration metrics, quality gates.
+- New hook `playwright-list-spec`: after editing a `*.spec.*` file, runs `npx playwright test <file> --list` (syntax/collection check) when a playwright config exists.
+- `examples/.env.example` template: `BASE_URL`, `API_TOKEN`, `TEST_USER_PASSWORD`, `OPENAPI_SPEC`.
+
 ## [1.8.0] - 2026-11-20
 
 ### Added

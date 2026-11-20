@@ -19,6 +19,31 @@ case "$file_path" in
 esac
 """
 
+# After writing/editing a spec file, verify it collects without running (syntax/structure check)
+[[hooks]]
+name = "playwright-list-spec"
+type = "post_tool"
+match = "re:file_system\\\\.(write_file|edit)"
+description = "Run 'playwright test --list' on an edited spec file if playwright config exists"
+
+command = """
+payload=$(cat)
+file_path=$(echo "$payload" | python -c "import sys,json; d=json.load(sys.stdin); ti=d.get('tool_input',{}); print(ti.get('path') or ti.get('file_path') or '')" 2>/dev/null)
+
+case "$file_path" in
+  *.spec.ts|*.test.ts|*.spec.js|*.test.js)
+    if [ -f playwright.config.ts ] || [ -f playwright.config.js ] || [ -f playwright.config.mjs ]; then
+      out=$(npx playwright test "$file_path" --list 2>&1) || true
+      if echo "$out" | grep -qi 'error'; then
+        echo "playwright-list-spec: błąd kolekcji $file_path:"
+        echo "$out" | grep -i 'error' | head -10
+      fi
+    fi
+    ;;
+esac
+exit 0
+"""
+
 # After the agent finishes a turn, type-check test files if TypeScript is present
 [[hooks]]
 name = "typecheck-after-agent"
