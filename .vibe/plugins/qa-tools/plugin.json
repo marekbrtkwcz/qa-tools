@@ -2,12 +2,12 @@
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "qa-tools",
   "version": "1.0.0",
-  "description": "Kompletny zestaw narzędzi AI dla inżynierii jakości: pipeline testów UI/API/E2E/mobile/visual/load (planowanie, pisanie, refaktoryzacja, code review) oraz skille wiedzy o testowaniu automatycznym, API, dostępności i jakości AI.",
+  "description": "Kompletny zestaw narzędzi AI dla inżynierii jakości: pipeline testów UI/API/E2E/mobile/visual/load/db (planowanie, pisanie, refaktoryzacja, code review) oraz skille wiedzy o testowaniu automatycznym, API, migracjach danych, dostępności i jakości AI.",
   "author": {
     "name": "QA Tools"
   },
   "license": "MIT",
-  "keywords": ["qa", "testing", "playwright", "test-automation", "api-testing", "e2e", "mobile-testing", "visual-regression", "load-testing", "k6", "quality-assurance", "code-review"],
+  "keywords": ["qa", "testing", "playwright", "test-automation", "api-testing", "e2e", "mobile-testing", "visual-regression", "load-testing", "k6", "data-migration", "database-testing", "etl", "quality-assurance", "code-review"],
   "extensions": {
     "ai.mistral.vibe": {
       "schemaVersion": 1,

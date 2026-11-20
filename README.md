@@ -7,7 +7,7 @@ Plugin Vibe CLI z kompletnym zestawem narzędzi AI dla inżynierii jakości.
 ```
 .vibe/plugins/qa-tools/
 ├── plugin.json                          # manifest Agent Plugins 1.0
-├── skills/                              # wiedza ładowana on-demand (9 skillów)
+├── skills/                              # wiedza ładowana on-demand (10 skillów)
 │   ├── playwright-test-writing/
 │   ├── api-testing/
 │   ├── accessibility-testing/
@@ -15,10 +15,11 @@ Plugin Vibe CLI z kompletnym zestawem narzędzi AI dla inżynierii jakości.
 │   ├── security-testing/
 │   ├── ci-cd-pipelines/
 │   ├── test-data-management/
+│   ├── data-migration-testing/
 │   ├── test-planning/
 │   └── qa-best-practices/
 └── ai.mistral.vibe/
-    ├── agents/                          # 24 subagenty pipeline'u testowego
+    ├── agents/                          # 28 subagentów pipeline'u testowego
     ├── hooks.toml                       # lint plików testowych, typecheck, konwencje QA
     └── knowledge/                       # baza wiedzy (architektura Playwright, wzorce, słownik QA)
 ```
@@ -45,7 +46,11 @@ Plugin Vibe CLI z kompletnym zestawem narzędzi AI dla inżynierii jakości.
         ├── load-test-planner.toml       # planowanie testów obciążeniowych (k6) 🆕
         ├── load-test-writer.toml        # pisanie skryptów k6 🆕
         ├── load-test-refactor.toml      # refaktoryzacja k6 🆕
-        └── load-test-code-reviewer.toml # review kodu k6 🆕
+        ├── load-test-code-reviewer.toml # review kodu k6 🆕
+        ├── db-test-planner.toml         # planowanie weryfikacji migracji danych 🆕
+        ├── db-test-writer.toml          # pisanie testów weryfikacji migracji 🆕
+        ├── db-test-refactor.toml        # refaktoryzacja testów DB 🆕
+        └── db-test-code-reviewer.toml   # review kodu testów DB 🆕
 ```
 
 ## Pipeline testowy
@@ -54,7 +59,7 @@ Plugin Vibe CLI z kompletnym zestawem narzędzi AI dla inżynierii jakości.
 Planner → Writer → Refactor → Code Reviewer
 ```
 
-Dostępny dla sześciu obszarów: **UI**, **API**, **E2E**, **mobile**, **visual (regression)**, **load (k6)**.
+Dostępny dla siedmiu obszarów: **UI**, **API**, **E2E**, **mobile**, **visual (regression)**, **load (k6)**, **DB (weryfikacja migracji danych/ETL)**.
 
 ## Konwencje qa-tools (wymuszane przez wszystkich 24 agentów)
 
