@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.34.0] - 2026-11-21
+
+### 📦 Added
+- New skill `attesting-manual-verification` (30 → 31), adapted from `jaktestowac/awesome-agents-for-quality`: dated, attributed attestations in a register (`.qa/attestations.md`) or `Comprehension-Attested-by:` commit trailers for human-only practices (code review, exploratory, UAT, manual a11y, UX, observability); gap-matrix states ATTESTED / UNATTESTED / STALE — never PRESENT/PASSED; never derived from tooling; findings capped below blocking; inline register template with worked entries.
+
 ## [1.33.0] - 2026-11-21
 
 ### 📦 Added
