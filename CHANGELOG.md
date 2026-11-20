@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.6.0] - 2026-11-20
+
+### Added
+- New skill `websocket-sse-testing` (13th skill): WebSocket via `page.waitForEvent('websocket')` + `framereceived`/`framesent` with payload assertions, reconnect handling, SSE via response streaming with `expect.poll`, common pitfalls table.
+
 ## [1.5.0] - 2026-11-20
 
 ### Added
