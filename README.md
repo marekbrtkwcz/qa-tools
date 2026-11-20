@@ -63,6 +63,8 @@ Project-level prompts in `.vibe/prompts/` (loaded only in this trusted project; 
 | `/verify-acceptance-criteria` | checks evidence (diff, running app via Playwright MCP, screenshots) against ACs: Met/Partial/Not Met/Untestable + sign-off summary |
 | `/design-llm-eval-suite` | builds an offline eval suite for an LLM feature: golden/edge/negative cases, cheapest-falsifiable scoring, pinned determinism, regression gate in CI |
 | `/test-llm-guardrails` | guardrail + injection-resistance testing with a blocking written authorization gate; adversarial corpus scored on effect, across every content channel |
+| `/a11y-webpage-audit` | single-URL WCAG 2.2 AA audit via Playwright MCP: 6 passes, findings with repro/fix/retest, issue table |
+| `/a11y-audit-deep-dive` | multi-page/journey a11y deep dive: template sampling, exact WCAG criteria, retest checklist, technical + stakeholder output |
 
 ## Publishing
 

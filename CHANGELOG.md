@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.40.0] - 2026-11-21
+
+### 📦 Added
+- New project commands in `.vibe/prompts/` (11 → 13), adapted from `jaktestowac/awesome-agents-for-quality`: `/a11y-webpage-audit` (single-URL WCAG 2.1/2.2 AA audit via Playwright MCP — six ordered passes from semantics to ARIA states, axe-vocabulary findings with repro/fix/retest, "not checked" section so the report is not read as complete coverage) and `/a11y-audit-deep-dive` (multi-page/journey audit with template sampling, exact WCAG 2.2 criterion names, SC 4.1.1 excluded, quick wins vs structural fixes, manual retest checklist, technical and/or stakeholder output).
+
 ## [1.39.0] - 2026-11-21
 
 ### 📦 Added
