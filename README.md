@@ -58,6 +58,9 @@ Project-level prompts in `.vibe/prompts/` (loaded only in this trusted project; 
 | `/refactor-to-page-objects` | pure structural refactor of specs into page objects, verified against a baseline run |
 | `/stabilize-flaky-tests` | reproduces flaky tests (repeat/parallel runs), classifies root cause, fixes it, proves stability with before/after rates |
 | `/tech-debt-audit` | report-only audit of test code: anti-patterns with `file:line`, severity-ranked, A–F health score, fix plan |
+| `/qa-strategy` | six-lens scenario matrix (happy/boundary/negative/OWASP/adversarial/data integrity) with OWASP coverage table, before any test code |
+| `/regression-scope` | turns a diff/PR into a prioritized retest pack (must/should/sample/defer) + minimal confidence suite; analysis only |
+| `/verify-acceptance-criteria` | checks evidence (diff, running app via Playwright MCP, screenshots) against ACs: Met/Partial/Not Met/Untestable + sign-off summary |
 
 ## Publishing
 

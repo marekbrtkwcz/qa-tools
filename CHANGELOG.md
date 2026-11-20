@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.36.0] - 2026-11-21
+
+### 📦 Added
+- New project commands in `.vibe/prompts/` (6 → 9), adapted from `jaktestowac/awesome-agents-for-quality`: `/qa-strategy` (six-lens scenario matrix with OWASP A01–A10 coverage table), `/regression-scope` (diff → prioritized retest pack must/should/sample/defer + minimal confidence suite, analysis-only), `/verify-acceptance-criteria` (AC verification against diff/running app/screenshots with Met/Partial/Not Met/Untestable statuses and sign-off summary; uses the Playwright MCP from `mcp.json` for live checks).
+
 ## [1.35.0] - 2026-11-21
 
 ### 📦 Added
