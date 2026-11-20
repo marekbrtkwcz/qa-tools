@@ -2,58 +2,58 @@
 
 [![Validate plugin](https://github.com/marekbrtkwcz/qa-tools/actions/workflows/validate-plugin.yml/badge.svg)](https://github.com/marekbrtkwcz/qa-tools/actions/workflows/validate-plugin.yml)
 
-Plugin Vibe CLI (format Agent Plugins 1.0) z kompletnym zestawem narzędzi AI dla inżynierii jakości: 8 pipeline'ów testowych × 4 etapy = **44 subagentów**, **14 skillów**, **4 hooki**, **4 wpisy wiedzy**.
+Vibe CLI plugin (Agent Plugins 1.0 format) with a complete AI toolkit for quality engineering: 11 testing pipelines × 4 stages = **44 subagents**, **14 skills**, **4 hooks**, **4 knowledge entries**.
 
-| Obszar | Subagenty | Cel |
+| Area | Subagents | Purpose |
 |---|---|---|
-| UI | `qa-tools:ui-test-*` | testy Playwright UI |
-| API | `qa-tools:api-test-*` | testy API (Playwright request, OpenAPI) |
-| E2E | `qa-tools:e2e-test-*` | pełne flow użytkownika |
-| mobile | `qa-tools:mobile-test-*` | emulacja urządzeń, gesty touch |
+| UI | `qa-tools:ui-test-*` | Playwright UI tests |
+| API | `qa-tools:api-test-*` | API tests (Playwright request, OpenAPI) |
+| E2E | `qa-tools:e2e-test-*` | full user flows |
+| mobile | `qa-tools:mobile-test-*` | device emulation, touch gestures |
 | visual | `qa-tools:visual-test-*` | visual regression (`toHaveScreenshot`) |
-| load | `qa-tools:load-test-*` | testy obciążeniowe k6 |
-| DB | `qa-tools:db-test-*` | weryfikacja migracji danych / ETL |
-| contract | `qa-tools:contract-test-*` | testy kontraktowe (Pact / OpenAPI) |
-| a11y | `qa-tools:a11y-test-*` | dostępność WCAG (axe-core, klawiatura, czytnik ekranu) 🆕 |
-| security | `qa-tools:security-test-*` | OWASP Top 10, XSS/CSRF, IDOR, sekrety 🆕 |
-| chaos | `qa-tools:chaos-test-*` | fault injection, timeouty, degradacja zależności 🆕 |
+| load | `qa-tools:load-test-*` | k6 load tests |
+| DB | `qa-tools:db-test-*` | data migration / ETL verification |
+| contract | `qa-tools:contract-test-*` | contract tests (Pact / OpenAPI) |
+| a11y | `qa-tools:a11y-test-*` | WCAG accessibility (axe-core, keyboard, screen reader) 🆕 |
+| security | `qa-tools:security-test-*` | OWASP Top 10, XSS/CSRF, IDOR, secrets 🆕 |
+| chaos | `qa-tools:chaos-test-*` | fault injection, timeouts, dependency degradation 🆕 |
 
-Każdy pipeline: `planner → writer → refactor → code-reviewer`.
+Each pipeline: `planner → writer → refactor → code-reviewer`.
 
-## Instalacja w innym projekcie
+## Installation in another project
 
-Plugin ładuje się automatycznie, gdy katalog `.vibe/plugins/qa-tools/` znajdzie się w **zaufanym folderze** projektu:
+The plugin loads automatically when the `.vibe/plugins/qa-tools/` directory is inside a **trusted folder** of the project:
 
 ```bash
-# 1. Skopiuj plugin do projektu (z tego repo lub submodule)
+# 1. Copy the plugin into the project (from this repo or as a submodule)
 git clone https://github.com/marekbrtkwcz/qa-tools.git /tmp/qa-tools
 mkdir -p .vibe/plugins
 cp -r /tmp/qa-tools/.vibe/plugins/qa-tools .vibe/plugins/
 
-# 2. Zaufaj folderowi projektu (jednorazowo, w TUI Vibe lub przez ~/.vibe/trusted_folders.toml)
+# 2. Trust the project folder (once, in the Vibe TUI or via ~/.vibe/trusted_folders.toml)
 #    ~/.vibe/trusted_folders.toml:
-#    folders = ["C:\\ścieżka\\do\\projektu"]
+#    folders = ["C:\\path\\to\\project"]
 
-# 3. W projekcie: /reload-plugins (lub restart Vibe), potem sprawdź:
+# 3. In the project: /reload-plugins (or restart Vibe), then check:
 #    /plugins  → qa-tools
-#    /skills   → 11 skillów z tagiem plugin:qa-tools
+#    /skills   → 14 skills tagged plugin:qa-tools
 
-# 4. (opcjonalnie) walidacja struktury pluginu
+# 4. (optional) validate the plugin structure
 py scripts/validate-plugin.py
 ```
 
-Użycie: subagenty jako `qa-tools:<nazwa>` (np. `qa-tools:ui-test-planner`), skille przez `/<nazwa-skilla>` lub auto-load.
+Usage: subagents as `qa-tools:<name>` (e.g. `qa-tools:ui-test-planner`), skills via `/<skill-name>` or auto-load.
 
-## Publikacja
+## Publishing
 
-Repozytorium: `github.com/marekbrtkwcz/qa-tools` (branch `main`). Zmiany publikuje się standardowo: `git push origin main`. Wersja pluginu w `.vibe/plugins/qa-tools/plugin.json`, historia w `CHANGELOG.md`. Licencja: MIT (`LICENSE`).
+Repository: `github.com/marekbrtkwcz/qa-tools` (branch `main`). Changes are published as usual: `git push origin main`. Plugin version lives in `.vibe/plugins/qa-tools/plugin.json`, history in `CHANGELOG.md`. License: MIT (`LICENSE`).
 
-## Struktura
+## Structure
 
 ```
 .vibe/plugins/qa-tools/
-├── plugin.json                          # manifest Agent Plugins 1.0
-├── skills/                              # wiedza ładowana on-demand (14 skillów)
+├── plugin.json                          # Agent Plugins 1.0 manifest
+├── skills/                              # on-demand knowledge (14 skills)
 │   ├── playwright-test-writing/
 │   ├── api-testing/
 │   ├── accessibility-testing/
@@ -69,115 +69,115 @@ Repozytorium: `github.com/marekbrtkwcz/qa-tools` (branch `main`). Zmiany publiku
 │   ├── offline-pwa-testing/
 │   └── qa-best-practices/
 └── ai.mistral.vibe/
-    ├── agents/                          # 44 subagentów pipeline'u testowego (11 obszarów × 4 etapy)
-    ├── hooks.toml                       # lint, playwright --list, typecheck, konwencje QA
-    └── knowledge/                       # baza wiedzy (architektura, wzorce, słownik QA, raportowanie)
+    ├── agents/                          # 44 pipeline subagents (11 areas × 4 stages)
+    ├── hooks.toml                       # lint, playwright --list, typecheck, QA conventions
+    └── knowledge/                       # knowledge base (architecture, patterns, QA glossary, reporting)
 ```
 
 ```
     agents/
-        ├── ui-test-planner.toml         # planowanie testów UI
-        ├── ui-test-writer.toml          # pisanie testów UI
-        ├── ui-test-refactor.toml        # refaktoryzacja UI
-        ├── ui-test-code-reviewer.toml   # review kodu UI
-        ├── api-test-planner.toml        # planowanie testów API
-        ├── api-test-writer.toml         # pisanie testów API
-        ├── api-test-refactor.toml       # refaktoryzacja API
-        ├── api-test-code-reviewer.toml  # review kodu API
-        ├── e2e-test-planner.toml        # planowanie testów E2E
-        ├── e2e-test-writer.toml         # pisanie testów E2E
-        ├── e2e-test-refactor.toml       # refaktoryzacja E2E
-        ├── e2e-test-code-reviewer.toml  # review kodu E2E
-        ├── mobile-test-planner.toml     # planowanie testów mobile 🆕
-        ├── mobile-test-writer.toml      # pisanie testów mobile 🆕
-        ├── mobile-test-refactor.toml    # refaktoryzacja mobile 🆕
-        ├── mobile-test-code-reviewer.toml # review kodu mobile 🆕
-        ├── visual-test-planner.toml     # planowanie testów wizualnych 🆕
-        ├── visual-test-writer.toml      # pisanie testów wizualnych 🆕
-        ├── visual-test-refactor.toml    # refaktoryzacja visual 🆕
-        ├── visual-test-code-reviewer.toml # review kodu visual 🆕
-        ├── load-test-planner.toml       # planowanie testów obciążeniowych (k6) 🆕
-        ├── load-test-writer.toml        # pisanie skryptów k6 🆕
-        ├── load-test-refactor.toml      # refaktoryzacja k6 🆕
-        ├── load-test-code-reviewer.toml # review kodu k6 🆕
-        ├── db-test-planner.toml         # planowanie weryfikacji migracji danych 🆕
-        ├── db-test-writer.toml          # pisanie testów weryfikacji migracji 🆕
-        ├── db-test-refactor.toml        # refaktoryzacja testów DB 🆕
-        ├── db-test-code-reviewer.toml   # review kodu testów DB 🆕
-        ├── contract-test-planner.toml   # planowanie testów kontraktowych 🆕
-        ├── contract-test-writer.toml    # pisanie testów kontraktowych (Pact) 🆕
-        ├── contract-test-refactor.toml  # refaktoryzacja kontraktów 🆕
-        └── contract-test-code-reviewer.toml # review kodu kontraktów 🆕
-        ├── a11y-test-planner.toml           # planowanie testów dostępności (a11y) 🆕
-        ├── a11y-test-writer.toml            # pisanie testów a11y (axe-core, klawiatura) 🆕
-        ├── a11y-test-refactor.toml          # refaktoryzacja testów a11y 🆕
-        └── a11y-test-code-reviewer.toml     # review kodu testów a11y 🆕
-        ├── security-test-planner.toml       # planowanie testów bezpieczeństwa 🆕
-        ├── security-test-writer.toml        # pisanie testów security (XSS/CSRF/IDOR) 🆕
-        ├── security-test-refactor.toml      # refaktoryzacja testów security 🆕
-        └── security-test-code-reviewer.toml # review kodu testów security 🆕
-        ├── chaos-test-planner.toml          # planowanie testów chaos 🆕
-        ├── chaos-test-writer.toml           # fault injection przez page.route 🆕
-        ├── chaos-test-refactor.toml         # helpery faultów (500/abort/delay) 🆕
-        └── chaos-test-code-reviewer.toml    # review kodu testów chaos 🆕
+        ├── ui-test-planner.toml         # UI test planning
+        ├── ui-test-writer.toml          # writing UI tests
+        ├── ui-test-refactor.toml        # UI refactoring
+        ├── ui-test-code-reviewer.toml   # UI code review
+        ├── api-test-planner.toml        # API test planning
+        ├── api-test-writer.toml         # writing API tests
+        ├── api-test-refactor.toml       # API refactoring
+        ├── api-test-code-reviewer.toml  # API code review
+        ├── e2e-test-planner.toml        # E2E test planning
+        ├── e2e-test-writer.toml         # writing E2E tests
+        ├── e2e-test-refactor.toml       # E2E refactoring
+        ├── e2e-test-code-reviewer.toml  # E2E code review
+        ├── mobile-test-planner.toml     # mobile test planning 🆕
+        ├── mobile-test-writer.toml      # writing mobile tests 🆕
+        ├── mobile-test-refactor.toml    # mobile refactoring 🆕
+        ├── mobile-test-code-reviewer.toml # mobile code review 🆕
+        ├── visual-test-planner.toml     # visual test planning 🆕
+        ├── visual-test-writer.toml      # writing visual tests 🆕
+        ├── visual-test-refactor.toml    # visual refactoring 🆕
+        ├── visual-test-code-reviewer.toml # visual code review 🆕
+        ├── load-test-planner.toml       # load test planning (k6) 🆕
+        ├── load-test-writer.toml        # writing k6 scripts 🆕
+        ├── load-test-refactor.toml      # k6 refactoring 🆕
+        ├── load-test-code-reviewer.toml # k6 code review 🆕
+        ├── db-test-planner.toml         # data migration verification planning 🆕
+        ├── db-test-writer.toml          # writing migration verification tests 🆕
+        ├── db-test-refactor.toml        # DB test refactoring 🆕
+        ├── db-test-code-reviewer.toml   # DB test code review 🆕
+        ├── contract-test-planner.toml   # contract test planning 🆕
+        ├── contract-test-writer.toml    # writing contract tests (Pact) 🆕
+        ├── contract-test-refactor.toml  # contract refactoring 🆕
+        ├── contract-test-code-reviewer.toml # contract code review 🆕
+        ├── a11y-test-planner.toml       # accessibility test planning 🆕
+        ├── a11y-test-writer.toml        # writing a11y tests (axe-core, keyboard) 🆕
+        ├── a11y-test-refactor.toml      # a11y refactoring 🆕
+        ├── a11y-test-code-reviewer.toml # a11y code review 🆕
+        ├── security-test-planner.toml   # security test planning 🆕
+        ├── security-test-writer.toml    # writing security tests (XSS/CSRF/IDOR) 🆕
+        ├── security-test-refactor.toml  # security test refactoring 🆕
+        ├── security-test-code-reviewer.toml # security code review 🆕
+        ├── chaos-test-planner.toml      # chaos test planning 🆕
+        ├── chaos-test-writer.toml       # fault injection via page.route 🆕
+        ├── chaos-test-refactor.toml     # fault helpers (500/abort/delay) 🆕
+        └── chaos-test-code-reviewer.toml # chaos code review 🆕
 ```
 
-## Pipeline testowy
+## Testing pipeline
 
 ```
 Planner → Writer → Refactor → Code Reviewer
 ```
 
-Dostępny dla jedenastu obszarów: **UI**, **API**, **E2E**, **mobile**, **visual (regression)**, **load (k6)**, **DB (weryfikacja migracji danych/ETL)**, **contract (Pact / OpenAPI)**, **a11y (dostępność WCAG)**, **security (OWASP Top 10)**, **chaos (fault injection / odporność)**.
+Available for eleven areas: **UI**, **API**, **E2E**, **mobile**, **visual (regression)**, **load (k6)**, **DB (data migration/ETL verification)**, **contract (Pact / OpenAPI)**, **a11y (WCAG accessibility)**, **security (OWASP Top 10)**, **chaos (fault injection / resilience)**.
 
-## Konwencje qa-tools (wymuszane przez wszystkich 32 agentów)
+## qa-tools conventions (enforced by all 44 agents)
 
-Każdy subagent zna i stosuje te same konwencje:
+Every subagent knows and applies the same conventions:
 
-- **Nazewnictwo testów**: po angielsku, format `should <rezultat> when <warunek>`; pliki kebab-case `.spec.ts`; `describe` = nazwa funkcjonalności, bez słowa "test"
-- **Asercje**: tylko `await expect(...)` z auto-retry — nigdy `waitForTimeout`; asercje konkretne (dokładny tekst/URL/status), nigdy samo "element istnieje"
-- **Selektory** (Playwright): tylko `getByRole` / `getByLabel` / `getByText` / `getByTestId` — żadnych kruchych CSS/XPath
-- **Struktura**: testy w `tests/<area>/`, plany w `docs/scenarios/<area>/`, skrypty k6 w `load/`; baseURL/sekrety tylko z env
-- **Page Object Model**: tylko na etapie refaktoryzacji i na wyraźne żądanie — `tests/pages/BasePage.ts` + jedna klasa na ekran
-- **Plany** mają wspólny format (warunki wstępne → kroki → punkty walidacji → dane → poza zakresem); **review** ma wspólny format raportu z skalą ważności (krytyczny / ważny / sugestia)
+- **Test naming**: English, `should <result> when <condition>` format; kebab-case `.spec.ts` files; `describe` = feature name, without the word "test"
+- **Assertions**: only `await expect(...)` with auto-retry — never `waitForTimeout`; concrete assertions (exact text/URL/status), never just "element exists"
+- **Selectors** (Playwright): only `getByRole` / `getByLabel` / `getByText` / `getByTestId` — no brittle CSS/XPath
+- **Structure**: tests in `tests/<area>/`, plans in `docs/scenarios/<area>/`, k6 scripts in `load/`; baseURL/secrets only from env
+- **Page Object Model**: only at the refactor stage and on explicit request — `tests/pages/BasePage.ts` + one class per screen
+- **Plans** share a format (preconditions → steps → validation points → data → out of scope); **reviews** share a report format with severity scale (critical / important / suggestion)
 
-## Użycie
+## Usage
 
-Plugin ładuje się automatycznie w zaufanym projekcie. Subagenty są dostępne jako `qa-tools:<nazwa>` (np. `qa-tools:ui-test-planner`). Skille można wywołać przez `/playwright-test-writing` lub model załaduje je automatycznie.
+The plugin loads automatically in a trusted project. Subagents are available as `qa-tools:<name>` (e.g. `qa-tools:ui-test-planner`). Skills can be invoked via `/playwright-test-writing` or are auto-loaded by the model.
 
 ## Development
 
-Lokalna walidacja przed commitem (to samo robi CI na każdym pushu/PR):
+Local validation before committing (CI does the same on every push/PR):
 
 ```bash
-py scripts/validate-plugin.py                  # struktura pluginu, exit 0/1
-python -m unittest discover -s tests -v       # testy jednostkowe walidatora
+py scripts/validate-plugin.py                  # plugin structure, exit 0/1
+python -m unittest discover -s tests -v        # validator unit tests
 ```
 
-## Walidacja pluginu
+## Plugin validation
 
 ```
-py scripts/validate-plugin.py                    # Python 3.11+, tylko stdlib
-python -m unittest discover -s tests -v         # testy jednostkowe walidatora (stdlib)
+py scripts/validate-plugin.py                    # Python 3.11+, stdlib only
+python -m unittest discover -s tests -v          # validator unit tests (stdlib)
 ```
 
-Skrypt sprawdza: `plugin.json`, wszystkie 32 TOML-e agentów (klucze, konwencje nazewnictwa, zakaz `waitForTimeout`, reguły `__ENV`/`thresholds` dla k6), frontmatter 11 skillów, `hooks.toml`, wpisy `knowledge/`, zgodność przykładu referencyjnego z konwencjami oraz spójność wersji i liczb (`plugin.json` ↔ `CHANGELOG.md` ↔ README). Exit code 0 = OK, 1 = błędy. Przydatne lokalnie i w CI — na każdym pushu/PR do `main` uruchamia je workflow `.github/workflows/validate-plugin.yml`.
+The script checks: `plugin.json`, all 44 agent TOML files (keys, naming conventions, `waitForTimeout` ban, `__ENV`/`thresholds` rules for k6), 14 skill frontmatters, `hooks.toml`, `knowledge/` entries, reference example compliance, and version/count consistency (`plugin.json` ↔ `CHANGELOG.md` ↔ README). Exit code 0 = OK, 1 = errors. Useful locally and in CI — on every push/PR to `main` it is run by the `.github/workflows/validate-plugin.yml` workflow.
 
-## Przykład referencyjny
+## Reference examples
 
 ```
 examples/
-├── playwright.config.ts                  # szablon configu: projekty per przeglądarka/device, baseURL z env
-├── .env.example                          # zmienne środowiskowe (BASE_URL, API_TOKEN, ...)
-├── ci/e2e.yml                            # szablon GitHub Actions: playwright + artefakty (report/trace)
-├── docs/scenarios/ui/login.md            # plan scenariusza UI
-├── docs/scenarios/api/users.md           # plan scenariusza API
-├── docs/scenarios/a11y/login.md          # plan scenariusza a11y (axe-core)
-├── docs/scenarios/security/comment-xss.md # plan scenariusza security (XSS)
-├── tests/ui/login.spec.ts                # test Playwright UI
-├── tests/api/users.spec.ts               # test API (fixture request)
-├── tests/a11y/login.spec.ts              # test a11y (axe + klawiatura)
-└── tests/security/comment-xss.spec.ts    # test security (XSS)
+├── playwright.config.ts                  # config template: per-browser/device projects, baseURL from env
+├── .env.example                          # env variables (BASE_URL, API_TOKEN, ...)
+├── ci/e2e.yml                            # GitHub Actions template: playwright + artifacts (report/trace)
+├── docs/scenarios/ui/login.md            # UI scenario plan
+├── docs/scenarios/api/users.md           # API scenario plan
+├── docs/scenarios/a11y/login.md          # a11y scenario plan (axe-core)
+├── docs/scenarios/security/comment-xss.md # security scenario plan (XSS)
+├── tests/ui/login.spec.ts                # Playwright UI test
+├── tests/api/users.spec.ts               # API test (request fixture)
+├── tests/a11y/login.spec.ts              # a11y test (axe + keyboard)
+└── tests/security/comment-xss.spec.ts    # security test (XSS)
 ```
 
-To punkt odniesienia dla agentów i użytkowników: pokazuje, jak wygląda plan scenariusza i test napisany zgodnie z konwencjami (nazewnictwo `should ... when ...`, selektory `getBy*`, asercje `await expect(...)`, sekrety z env).
+This is the reference point for agents and users: it shows what a scenario plan and a test written according to the conventions look like (naming `should ... when ...`, `getBy*` selectors, `await expect(...)` assertions, secrets from env).

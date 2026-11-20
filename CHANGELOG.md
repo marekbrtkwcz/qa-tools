@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.11.2] - 2026-11-20
+
+### Changed
+- README translated to English (public plugin on GitHub); stale counts fixed (44 agents, 14 skills).
+
 ## [1.11.1] - 2026-11-20
 
 ### Changed
