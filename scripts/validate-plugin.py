@@ -313,6 +313,8 @@ def check_examples():
     for area, spec_name, must_have in (
         ("chaos", "orders-500.spec.ts", "page.route"),
         ("mobile", "checkout.spec.ts", "getBy"),
+        ("i18n", "locale.spec.ts", "getBy"),
+        ("versioning", "users.spec.ts", "Accept-Version"),
     ):
         plan_f = ROOT / "examples" / "docs" / "scenarios" / area
         spec_f = ROOT / "examples" / "tests" / area / spec_name

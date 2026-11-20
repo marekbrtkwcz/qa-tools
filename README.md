@@ -198,12 +198,16 @@ examples/
 ├── docs/scenarios/security/comment-xss.md # security scenario plan (XSS)
 ├── docs/scenarios/chaos/orders-500.md    # chaos scenario plan (API 500)
 ├── docs/scenarios/mobile/checkout-swipe.md # mobile scenario plan (touch)
+├── docs/scenarios/i18n/locale-pl.md      # i18n scenario plan (pl-PL)
+├── docs/scenarios/versioning/users-v1-v2.md # versioning scenario plan (v1 vs v2)
 ├── tests/ui/login.spec.ts                # Playwright UI test
 ├── tests/api/users.spec.ts               # API test (request fixture)
 ├── tests/a11y/login.spec.ts              # a11y test (axe + keyboard)
 ├── tests/security/comment-xss.spec.ts    # security test (XSS)
 ├── tests/chaos/orders-500.spec.ts        # chaos test (page.route fault)
-└── tests/mobile/checkout.spec.ts         # mobile test (viewport + tap)
+├── tests/mobile/checkout.spec.ts         # mobile test (viewport + tap)
+├── tests/i18n/locale.spec.ts             # i18n test (pl-PL, date format)
+└── tests/versioning/users.spec.ts        # versioning test (Accept-Version, v1 vs v2)
 ```
 
 This is the reference point for agents and users: it shows what a scenario plan and a test written according to the conventions look like (naming `should ... when ...`, `getBy*` selectors, `await expect(...)` assertions, secrets from env).

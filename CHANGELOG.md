@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.16.1] - 2026-11-20
+
+### Added
+- Reference examples for `i18n` (`tests/i18n/locale.spec.ts`: pl-PL heading, dd.mm.yyyy date, `document.lang`) and `versioning` (`tests/versioning/users.spec.ts`: Accept-Version v1/v2, same core fields, Deprecation/Sunset headers) plus scenario plans. Validator checks both areas; test fixture updated.
+
 ## [1.16.0] - 2026-11-20
 
 ### Added

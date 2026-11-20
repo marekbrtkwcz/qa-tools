@@ -90,6 +90,22 @@ test('should confirm order when paying on mobile', async ({ page }) => {
 });
 """
 
+GOOD_I18N_SPEC = """import { test, expect } from '@playwright/test';
+
+test('should format date when locale is pl-PL', async ({ page }) => {
+  await page.goto('/pl/orders/1');
+  await expect(page.getByRole('heading', { name: 'Zamówienie' })).toBeVisible();
+});
+"""
+
+GOOD_VERSIONING_SPEC = """import { test, expect } from '@playwright/test';
+
+test('should return same fields when requesting v1 and v2', async ({ request }) => {
+  const res = await request.get('/api/users/1', { headers: { 'Accept-Version': 'v1' } });
+  expect(res.status()).toBe(200);
+});
+"""
+
 GOOD_CI = """name: E2E
 on: [push]
 jobs:
@@ -178,7 +194,9 @@ def build_good_plugin(root: Path, version: str = "1.0.0") -> Path:
     (examples / "ci").mkdir(parents=True)
     (examples / "ci" / "e2e.yml").write_text(GOOD_CI, encoding="utf-8")
     for area, spec, body in (("chaos", "orders-500.spec.ts", GOOD_CHAOS_SPEC),
-                             ("mobile", "checkout.spec.ts", GOOD_MOBILE_SPEC)):
+                             ("mobile", "checkout.spec.ts", GOOD_MOBILE_SPEC),
+                             ("i18n", "locale.spec.ts", GOOD_I18N_SPEC),
+                             ("versioning", "users.spec.ts", GOOD_VERSIONING_SPEC)):
         (examples / "docs" / "scenarios" / area).mkdir(parents=True, exist_ok=True)
         (examples / "tests" / area).mkdir(parents=True, exist_ok=True)
         (examples / "docs" / "scenarios" / area / "x.md").write_text(GOOD_PLAN, encoding="utf-8")
