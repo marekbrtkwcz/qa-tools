@@ -173,6 +173,42 @@ def check_knowledge():
     ok(f"{len(dirs)} wpisów wiedzy")
 
 
+def check_version_consistency():
+    print("spójność wersji i liczb (plugin.json / CHANGELOG / README)")
+    pj = json.loads((PLUGIN / "plugin.json").read_text(encoding="utf-8"))
+    version = pj.get("version", "")
+
+    changelog = ROOT / "CHANGELOG.md"
+    if not changelog.exists():
+        err("CHANGELOG.md: brak pliku")
+    else:
+        m = re.search(r"^## \[(\d+\.\d+\.\d+)\]", changelog.read_text(encoding="utf-8"), re.M)
+        if not m:
+            err("CHANGELOG.md: brak wpisu '## [x.y.z]'")
+        elif m.group(1) != version:
+            err(f"CHANGELOG.md: najnowszy wpis [{m.group(1)}] != version w plugin.json [{version}]")
+        else:
+            ok(f"wersja {version} zgodna w plugin.json i CHANGELOG.md")
+
+    n_agents = len(list((PLUGIN / "ai.mistral.vibe" / "agents").glob("*.toml")))
+    n_skills = len([d for d in (PLUGIN / "skills").iterdir() if d.is_dir()])
+    readme = ROOT / "README.md"
+    if not readme.exists():
+        err("README.md: brak pliku")
+    else:
+        text = readme.read_text(encoding="utf-8")
+        ma = re.search(r"\*\*(\d+) subagent", text)
+        ms = re.search(r"\*\*(\d+) skill", text)
+        if not ma or int(ma.group(1)) != n_agents:
+            err(f"README.md: liczba subagentów ({ma.group(1) if ma else 'brak'}) != faktyczna ({n_agents})")
+        else:
+            ok(f"README.md: liczba subagentów zgodna ({n_agents})")
+        if not ms or int(ms.group(1)) != n_skills:
+            err(f"README.md: liczba skillów ({ms.group(1) if ms else 'brak'}) != faktyczna ({n_skills})")
+        else:
+            ok(f"README.md: liczba skillów zgodna ({n_skills})")
+
+
 def check_examples():
     print("examples (przykład referencyjny)")
     plan = ROOT / "examples" / "docs" / "scenarios" / "ui" / "login.md"
@@ -213,6 +249,7 @@ def main():
     check_skills()
     check_hooks()
     check_knowledge()
+    check_version_consistency()
     check_examples()
     print(chr(10) + f"Sprawdzeń OK: {oks} | Błędów: {len(errors)}")
     if errors:
