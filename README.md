@@ -2,7 +2,7 @@
 
 [![Validate plugin](https://github.com/marekbrtkwcz/qa-tools/actions/workflows/validate-plugin.yml/badge.svg)](https://github.com/marekbrtkwcz/qa-tools/actions/workflows/validate-plugin.yml)
 
-Plugin Vibe CLI (format Agent Plugins 1.0) z kompletnym zestawem narzędzi AI dla inżynierii jakości: 8 pipeline'ów testowych × 4 etapy = **36 subagentów**, **12 skillów**, **3 hooki**, **3 wpisy wiedzy**.
+Plugin Vibe CLI (format Agent Plugins 1.0) z kompletnym zestawem narzędzi AI dla inżynierii jakości: 8 pipeline'ów testowych × 4 etapy = **40 subagentów**, **12 skillów**, **3 hooki**, **3 wpisy wiedzy**.
 
 | Obszar | Subagenty | Cel |
 |---|---|---|
@@ -15,6 +15,7 @@ Plugin Vibe CLI (format Agent Plugins 1.0) z kompletnym zestawem narzędzi AI dl
 | DB | `qa-tools:db-test-*` | weryfikacja migracji danych / ETL |
 | contract | `qa-tools:contract-test-*` | testy kontraktowe (Pact / OpenAPI) |
 | a11y | `qa-tools:a11y-test-*` | dostępność WCAG (axe-core, klawiatura, czytnik ekranu) 🆕 |
+| security | `qa-tools:security-test-*` | OWASP Top 10, XSS/CSRF, IDOR, sekrety 🆕 |
 
 Każdy pipeline: `planner → writer → refactor → code-reviewer`.
 
@@ -65,7 +66,7 @@ Repozytorium: `github.com/marekbrtkwcz/qa-tools` (branch `main`). Zmiany publiku
 │   ├── mobile-testing/
 │   └── qa-best-practices/
 └── ai.mistral.vibe/
-    ├── agents/                          # 36 subagentów pipeline'u testowego (9 obszarów × 4 etapy)
+    ├── agents/                          # 40 subagentów pipeline'u testowego (10 obszarów × 4 etapy)
     ├── hooks.toml                       # lint plików testowych, typecheck, konwencje QA
     └── knowledge/                       # baza wiedzy (architektura Playwright, wzorce, słownik QA)
 ```
@@ -108,6 +109,10 @@ Repozytorium: `github.com/marekbrtkwcz/qa-tools` (branch `main`). Zmiany publiku
         ├── a11y-test-writer.toml            # pisanie testów a11y (axe-core, klawiatura) 🆕
         ├── a11y-test-refactor.toml          # refaktoryzacja testów a11y 🆕
         └── a11y-test-code-reviewer.toml     # review kodu testów a11y 🆕
+        ├── security-test-planner.toml       # planowanie testów bezpieczeństwa 🆕
+        ├── security-test-writer.toml        # pisanie testów security (XSS/CSRF/IDOR) 🆕
+        ├── security-test-refactor.toml      # refaktoryzacja testów security 🆕
+        └── security-test-code-reviewer.toml # review kodu testów security 🆕
 ```
 
 ## Pipeline testowy
@@ -116,7 +121,7 @@ Repozytorium: `github.com/marekbrtkwcz/qa-tools` (branch `main`). Zmiany publiku
 Planner → Writer → Refactor → Code Reviewer
 ```
 
-Dostępny dla dziewięciu obszarów: **UI**, **API**, **E2E**, **mobile**, **visual (regression)**, **load (k6)**, **DB (weryfikacja migracji danych/ETL)**, **contract (Pact / OpenAPI)**, **a11y (dostępność WCAG)**.
+Dostępny dla dziesięciu obszarów: **UI**, **API**, **E2E**, **mobile**, **visual (regression)**, **load (k6)**, **DB (weryfikacja migracji danych/ETL)**, **contract (Pact / OpenAPI)**, **a11y (dostępność WCAG)**, **security (OWASP Top 10)**.
 
 ## Konwencje qa-tools (wymuszane przez wszystkich 32 agentów)
 

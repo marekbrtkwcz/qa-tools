@@ -15,7 +15,7 @@ ROOT = Path(__file__).resolve().parent.parent
 PLUGIN = ROOT / ".vibe" / "plugins" / "qa-tools"
 BS = chr(92)
 
-PLAYWRIGHT_AREAS = {"ui", "api", "e2e", "mobile", "visual", "db", "contract", "a11y"}  # db i contract też używają konwencji nazewnictwa (bez waitForTimeout — to nie UI)
+PLAYWRIGHT_AREAS = {"ui", "api", "e2e", "mobile", "visual", "db", "contract", "a11y", "security"}  # db i contract też używają konwencji nazewnictwa (bez waitForTimeout — to nie UI)
 CODE_STAGES = {"writer", "refactor", "code-reviewer"}
 HOOK_TYPES = {"session_start", "session_end", "pre_tool", "post_tool",
               "pre_agent", "post_agent", "user_prompt", "stop"}

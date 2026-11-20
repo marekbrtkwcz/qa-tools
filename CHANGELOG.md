@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.5.0] - 2026-11-20
+
+### Added
+- New `security` pipeline (4 subagents: `security-test-planner`, `security-test-writer`, `security-test-refactor`, `security-test-code-reviewer`) for OWASP Top 10: IDOR/broken access control, XSS, CSRF, security headers, secrets in responses, dependency scanning. Fictitious payloads only, secrets from env. Complements the existing `security-testing` skill. Validator covers the `security` area.
+
 ## [1.4.0] - 2026-11-20
 
 ### Added
