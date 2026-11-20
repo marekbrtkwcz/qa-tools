@@ -3,6 +3,12 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.14.1] - 2026-11-20
+
+### Added
+- README `Troubleshooting` section (plugin not loading, trusted folders, snake_case schema errors, flaky-watch JUnit, CI failures).
+- `examples/playwright.config.ts` now includes the JUnit reporter (`results.xml`) so the `flaky-watch` hook has data.
+
 ## [1.14.0] - 2026-11-20
 
 ### Added

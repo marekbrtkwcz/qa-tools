@@ -146,6 +146,17 @@ Every subagent knows and applies the same conventions:
 
 The plugin loads automatically in a trusted project. Subagents are available as `qa-tools:<name>` (e.g. `qa-tools:ui-test-planner`). Skills can be invoked via `/playwright-test-writing` or are auto-loaded by the model.
 
+## Troubleshooting
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| `Failed to load plugin agent` on startup | agent TOML keys must be snake_case (`schema_version`, `agent_type`, ...) — the runtime schema forbids extras | run `py scripts/validate-plugin.py`; fixed in v1.2.1 |
+| Plugin/skills not visible after copying | project folder not trusted | add the project to `~/.vibe/trusted_folders.toml`, then `/reload-plugins` (or restart Vibe) |
+| `/skills` shows no qa-tools skills | plugin dir must be exactly `.vibe/plugins/qa-tools/` | check the path; then `/reload-plugins` |
+| Agents produce camelCase TOML when creating new agents | outdated docs/examples | qa-tools agents use snake_case keys; validate with `scripts/validate-plugin.py` |
+| `flaky-watch` hook reports nothing | no JUnit reporter configured | add `['junit', { outputFile: 'results.xml' }]` to `reporter` in playwright.config (see `examples/playwright.config.ts`) |
+| CI workflow red on a docs-only change | validator failed | run `py scripts/validate-plugin.py` locally — most often a version/count mismatch (`plugin.json` ↔ `CHANGELOG.md` ↔ README) |
+
 ## Development
 
 Local validation before committing (CI does the same on every push/PR):
