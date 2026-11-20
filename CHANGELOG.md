@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.42.0] - 2026-11-21
+
+### 📦 Added
+- New project commands in `.vibe/prompts/` (17 → 21), the planning/requirements batch from `jaktestowac/awesome-agents-for-quality`: `/create-test-plan` (Playwright MCP exploration → risk-prioritized `.qa/test-plan.md` with stable scenario IDs P1–P3), `/map-requirements-coverage` (RTM to `.qa/requirements-coverage.md`, "touches the feature" ≠ coverage), `/review-requirements` (7 testability passes on story/PRD/ACs + clarifying questions + rewritten criteria), `/manual-test-cases` (executable case table with automation-candidate flags).
+
 ## [1.41.0] - 2026-11-21
 
 ### 📦 Added

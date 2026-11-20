@@ -69,6 +69,10 @@ Project-level prompts in `.vibe/prompts/` (loaded only in this trusted project; 
 | `/record-change-intent` | check high-risk surface for recorded rationale (trailers/ADR/register), classify covered/undeclared/malformed, draft `Intent:` trailer for the author — never commits it |
 | `/derive-quality-contract` | derive MUST/SHOULD/COULD contract from risk × maturity × surfaces → `.qa/quality-contract.md`, gap matrix, remediation plan |
 | `/audit-quality-debt` | governance audit: silent skips inventory (tests/lint/types/CI/coverage), waiver health, intent + comprehension debt, trend; report-only |
+| `/create-test-plan` | explore app via Playwright MCP → risk-prioritized plan saved to `.qa/test-plan.md` with stable scenario IDs |
+| `/map-requirements-coverage` | RTM: requirements vs existing tests → covered/partial/not covered with evidence, saved to `.qa/requirements-coverage.md` |
+| `/review-requirements` | testability review of story/PRD/ACs: 7 passes, clarifying questions, rewritten testable criteria |
+| `/manual-test-cases` | executable manual test cases table (ID/priority/type/steps/expected/automation candidate) from story, ACs, or plan |
 
 ## Publishing
 
