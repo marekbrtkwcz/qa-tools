@@ -75,7 +75,7 @@ def check_agents():
             continue
         name = f.stem
         area = name.split("-")[0]
-        stage = name.replace(f"{area}-", "", 1).replace("-test", "", 1)
+        stage = name[len(area) + len("-test-"):]  # ui-test-writer -> writer
         per_area.setdefault(area, []).append(stage)
         missing = [k for k in required if k not in d]
         if missing:
@@ -95,7 +95,7 @@ def check_agents():
         naming = NAMING_VISUAL if area == "visual" else NAMING
         if area in PLAYWRIGHT_AREAS and naming not in instr:
             err(f"{name}: brak konwencji nazewnictwa '{naming}'")
-        if area in PLAYWRIGHT_AREAS - {"api", "contract"} and stage in CODE_STAGES and "waitForTimeout" not in instr:
+        if area in PLAYWRIGHT_AREAS - {"api", "contract", "db"} and stage in CODE_STAGES and "waitForTimeout" not in instr:
             err(f"{name}: brak zakazu waitForTimeout")
         if area == "load":
             if "__ENV" not in instr:

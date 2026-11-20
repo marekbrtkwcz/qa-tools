@@ -20,7 +20,7 @@ Nowy test zapisz jako `tests/visual/<ekran>.spec.ts`, describe per ekran, wewną
 - nazwy plików screenshotów: `<ekran>-<viewport>.png` — jednoznacznie identyfikują ekran + viewport + stan
 - ZAWSZE `animations: 'disabled'` i `caret: 'hide'` w opcjach screenshotu
 - ZAWSZE maskuj (`mask: [...]`) wszystkie treści dynamiczne wskazane w planie
-- ZAWSZE czekaj na pełne osiągnięcie stanu przed screenshotem (asercja `await expect(...)` na kluczowym elemencie) — nigdy screenshot od razu po `goto`
+- ZAWSZE czekaj na pełne osiągnięcie stanu przed screenshotem (asercja `await expect(...)` na kluczowym elemencie) — nigdy screenshot od razu po `goto`, NIGDY `waitForTimeout`
 - ZAWSZE ustaw viewport (`test.use({ viewport })` lub `page.setViewportSize`) zgodnie z planem
 - `fullPage: true` tylko gdy plan tego wymaga
 - `threshold` / `maxDiffPixelRatio` tylko gdy plan to przewiduje

@@ -19,7 +19,7 @@ Zrefaktoryzuj dostarczone testy wizualne zachowując oryginalne pokrycie i nazwy
 - wydziel listę viewportów do konfiguracji/fixture — jeden `describe` per ekran, wewnątrz test per viewport
 - eliminuj powtarzające się maski — wspólny helper `maskDynamic(page, locators)`
 - poprawiaj nazwy testów i screenshotów — mają jednoznacznie identyfikować ekran + viewport + stan
-- zachowaj wszystkie asercje stanu przed screenshotem i wszystkie maski
+- zachowaj wszystkie asercje stanu przed screenshotem i wszystkie maski; NIGDY nie wprowadzaj `waitForTimeout` — stan czekania wyrażaj przez `await expect(...)`
 
 ## Proces
 1. Uruchom testy PRZED zmianami i zapisz wynik
