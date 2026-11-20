@@ -1,0 +1,50 @@
+# Szablon CI dla aplikacji testowanej przez qa-tools.
+# Skopiuj do <projekt>/.github/workflows/e2e.yml i dostosuj ścieżki/wersję Node.
+name: E2E tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions: {}
+
+jobs:
+  playwright:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run E2E tests
+        run: npx playwright test
+        env:
+          BASE_URL: ${{ vars.BASE_URL_STAGING }}
+          API_TOKEN: ${{ secrets.API_TOKEN }}
+          TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
+
+      # Artefakty zawsze — także przy failu (trace/video/screenshot + raport HTML)
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 14
+
+      - name: Validate qa-tools plugin structure
+        run: python scripts/validate-plugin.py
+        if: always()

@@ -72,6 +72,17 @@ export default defineConfig({
 });
 """
 
+GOOD_CI = """name: E2E
+on: [push]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - run: npx playwright test
+      - uses: actions/upload-artifact@v4
+        if: always()
+"""
+
 GOOD_PLAN = """# Plan
 Nazwa scenariusza: logowanie
 Warunki wstępne: użytkownik istnieje
@@ -146,6 +157,8 @@ def build_good_plugin(root: Path, version: str = "1.0.0") -> Path:
     (examples / "docs" / "scenarios" / "security" / "comment-xss.md").write_text(GOOD_PLAN, encoding="utf-8")
     (examples / "tests" / "security" / "comment-xss.spec.ts").write_text(GOOD_SEC_SPEC, encoding="utf-8")
     (examples / "playwright.config.ts").write_text(GOOD_CONFIG, encoding="utf-8")
+    (examples / "ci").mkdir(parents=True)
+    (examples / "ci" / "e2e.yml").write_text(GOOD_CI, encoding="utf-8")
 
     (root / "CHANGELOG.md").write_text(f"# Changelog\n\n## [{version}] - 2026-11-20\n", encoding="utf-8")
     (root / "README.md").write_text(

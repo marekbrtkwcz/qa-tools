@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.11.0] - 2026-11-20
+
+### Added
+- `examples/ci/e2e.yml` — GitHub Actions template for the tested app: `npm ci`, `playwright install --with-deps`, `npx playwright test` with secrets from env, and `upload-artifact` with `if: always()` (HTML report + traces also on failure). Validator checks the snippet; fixture updated.
+
 ## [1.10.0] - 2026-11-20
 
 ### Added

@@ -168,6 +168,8 @@ Skrypt sprawdza: `plugin.json`, wszystkie 32 TOML-e agentów (klucze, konwencje 
 ```
 examples/
 ├── playwright.config.ts                  # szablon configu: projekty per przeglądarka/device, baseURL z env
+├── .env.example                          # zmienne środowiskowe (BASE_URL, API_TOKEN, ...)
+├── ci/e2e.yml                            # szablon GitHub Actions: playwright + artefakty (report/trace)
 ├── docs/scenarios/ui/login.md            # plan scenariusza UI
 ├── docs/scenarios/api/users.md           # plan scenariusza API
 ├── docs/scenarios/a11y/login.md          # plan scenariusza a11y (axe-core)

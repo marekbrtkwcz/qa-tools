@@ -309,6 +309,17 @@ def check_examples():
         if re.search(r"https?://", raw):
             err("examples/security/comment-xss.spec.ts: hardkodowany URL")
 
+    # --- szablon CI (e2e.yml) ---
+    ci = ROOT / "examples" / "ci" / "e2e.yml"
+    if not ci.exists():
+        err("examples: brak ci/e2e.yml")
+    else:
+        text = ci.read_text(encoding="utf-8")
+        if "npx playwright test" not in text:
+            err("examples/ci/e2e.yml: brak kroku 'npx playwright test'")
+        if "upload-artifact" not in text or "if: always()" not in text:
+            err("examples/ci/e2e.yml: brak upload-artifact z if: always() (raport także przy failu)")
+
     # --- szablon playwright.config.ts ---
     cfg = ROOT / "examples" / "playwright.config.ts"
     if not cfg.exists():
