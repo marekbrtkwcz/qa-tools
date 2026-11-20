@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.24.0] - 2026-11-20
+
+### Added
+- New skill `test-driven-development` (23rd skill): red-green-refactor loop as a design technique — choosing the seam (public interface), inner vs double (outside-in) loop, minimal-implementation strategies (fake it / obvious / triangulation), refactor only under green, bug reproduction with a failing regression test staged before the fix, when to step out with a named substitute check, red flags. Complements `unit-testing` (quality bar per test, used when tests are added to existing code). Adapted from the `test-driven-development` / `test-driven-development-quick` skills in `jaktestowac/awesome-agents-for-quality`.
+
 ## [1.23.0] - 2026-11-20
 
 ### Added
