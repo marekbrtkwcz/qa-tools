@@ -70,3 +70,21 @@ Każdy subagent zna i stosuje te same konwencje:
 ## Użycie
 
 Plugin ładuje się automatycznie w zaufanym projekcie. Subagenty są dostępne jako `qa-tools:<nazwa>` (np. `qa-tools:ui-test-planner`). Skille można wywołać przez `/playwright-test-writing` lub model załaduje je automatycznie.
+
+## Walidacja pluginu
+
+```
+py scripts/validate-plugin.py    # Python 3.11+, tylko stdlib
+```
+
+Skrypt sprawdza: `plugin.json`, wszystkie 24 TOML-e agentów (klucze, konwencje nazewnictwa, zakaz `waitForTimeout`, reguły `__ENV`/`thresholds` dla k6), frontmatter 9 skillów, `hooks.toml`, wpisy `knowledge/` oraz zgodność przykładu referencyjnego z konwencjami. Exit code 0 = OK, 1 = błędy. Przydatne lokalnie i w CI.
+
+## Przykład referencyjny
+
+```
+examples/
+├── docs/scenarios/ui/login.md    # plan scenariusza w formacie wymaganym przez plannerów
+└── tests/ui/login.spec.ts        # test Playwright zgodny z konwencjami qa-tools
+```
+
+To punkt odniesienia dla agentów i użytkowników: pokazuje, jak wygląda plan scenariusza i test napisany zgodnie z konwencjami (nazewnictwo `should ... when ...`, selektory `getBy*`, asercje `await expect(...)`, sekrety z env).
