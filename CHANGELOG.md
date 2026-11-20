@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.11.1] - 2026-11-20
+
+### Changed
+- `test-data-management` skill extended: MSW (Mock Service Worker) section — browser (`setupWorker`) and Node (`setupServer`) handlers, per-test overrides, `onUnhandledRequest`, interplay with `page.route`; DB seeding section — idempotent direct seeding via ORM in global setup, env-only credentials, prod-DB guard, teardown strategies.
+
 ## [1.11.0] - 2026-11-20
 
 ### Added
