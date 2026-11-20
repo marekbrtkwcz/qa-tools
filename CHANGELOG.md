@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.17.0] - 2026-11-20
+
+### Added
+- New skill `database-testing` (16th skill): direct DB testing from Playwright — schema/constraints/indexes/triggers verification, transactions and rollback isolation, concurrency (unique races, optimistic locking, deadlocks), DB side-effect assertions after UI/API actions, test DB safety guards (env-only credentials, prod refusal), concrete assertions and good/bad examples.
+
 ## [1.16.1] - 2026-11-20
 
 ### Added
