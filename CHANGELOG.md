@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.25.0] - 2026-11-20
+
+### 📦 Added
+- New skills `stabilizing-flaky-tests` (24th) and `diagnosing-test-failures` (25th), adapted from `jaktestowac/awesome-agents-for-quality`. Flaky: reproduce with retries off under the breaking configuration, classify root cause (timing / shared state / data collision / order / environment / external dependency / product race), fix by cause, prove on the same workers/shard, quarantine with owner+expiry. Diagnosing: preserve redacted evidence, classify (app defect / test bug / env / test data / flaky), tight red-capable loop, falsifiable hypotheses one variable at a time, resolve by class without weakening assertions.
+
 ## [1.24.0] - 2026-11-20
 
 ### 📦 Added
