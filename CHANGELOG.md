@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.7.0] - 2026-11-20
+
+### Added
+- New skill `offline-pwa-testing` (14th skill): offline emulation (`context.setOffline`), Service Worker registration/lifecycle/update flow, Cache API strategy tests, offline fallback page, Background Sync, IndexedDB persistence, Web App Manifest validation, push subscription, pitfalls table.
+
 ## [1.6.0] - 2026-11-20
 
 ### Added
