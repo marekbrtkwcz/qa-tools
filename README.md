@@ -2,7 +2,7 @@
 
 [![Validate plugin](https://github.com/marekbrtkwcz/qa-tools/actions/workflows/validate-plugin.yml/badge.svg)](https://github.com/marekbrtkwcz/qa-tools/actions/workflows/validate-plugin.yml)
 
-Vibe CLI plugin (Agent Plugins 1.0 format) with a complete AI toolkit for quality engineering: 11 testing pipelines × 4 stages = **57 subagents**, **29 skills**, **5 hooks**, **7 knowledge entries**.
+Vibe CLI plugin (Agent Plugins 1.0 format) with a complete AI toolkit for quality engineering: 11 testing pipelines × 4 stages = **57 subagents**, **30 skills**, **5 hooks**, **7 knowledge entries**.
 
 | Area | Subagents | Purpose |
 |---|---|---|
@@ -38,7 +38,7 @@ cp -r /tmp/qa-tools/.vibe/plugins/qa-tools .vibe/plugins/
 
 # 3. In the project: /reload-plugins (or restart Vibe), then check:
 #    /plugins  → qa-tools
-#    /skills   → 29 skills tagged plugin:qa-tools
+#    /skills   → 30 skills tagged plugin:qa-tools
 
 # 4. (optional) validate the plugin structure
 py scripts/validate-plugin.py
@@ -68,7 +68,7 @@ Releases are automatic: on every push to `main`, the `.github/workflows/release.
 ```
 .vibe/plugins/qa-tools/
 ├── plugin.json                          # Agent Plugins 1.0 manifest
-├── skills/                              # on-demand knowledge (29 skills)
+├── skills/                              # on-demand knowledge (30 skills)
 │   ├── playwright-test-writing/
 │   ├── api-testing/
 │   ├── accessibility-testing/
@@ -97,7 +97,8 @@ Releases are automatic: on every push to `main`, the `.github/workflows/release.
 │   ├── visual-testing/
 │   ├── qa-best-practices/
 │   ├── unslop-answers/
-│   └── unslop-tests/
+│   ├── unslop-tests/
+│   └── migrating-tests-to-playwright/
 └── ai.mistral.vibe/
     ├── agents/                          # 57 subagents: 52 pipeline (13 areas × 4 stages) + 5 role agents
     ├── hooks.toml                       # lint, playwright --list, typecheck, flaky-watch, QA conventions
@@ -211,7 +212,7 @@ py scripts/validate-plugin.py                    # Python 3.11+, stdlib only
 python -m unittest discover -s tests -v          # validator unit tests (stdlib)
 ```
 
-The script checks: `plugin.json`, all 57 agent TOML files (keys, naming conventions, `waitForTimeout` ban, `__ENV`/`thresholds` rules for k6), 29 skill frontmatters, `hooks.toml`, `knowledge/` entries, reference example compliance, and version/count consistency (`plugin.json` ↔ `CHANGELOG.md` ↔ README). Exit code 0 = OK, 1 = errors. Useful locally and in CI — on every push/PR to `main` it is run by the `.github/workflows/validate-plugin.yml` workflow.
+The script checks: `plugin.json`, all 57 agent TOML files (keys, naming conventions, `waitForTimeout` ban, `__ENV`/`thresholds` rules for k6), 30 skill frontmatters, `hooks.toml`, `knowledge/` entries, reference example compliance, and version/count consistency (`plugin.json` ↔ `CHANGELOG.md` ↔ README). Exit code 0 = OK, 1 = errors. Useful locally and in CI — on every push/PR to `main` it is run by the `.github/workflows/validate-plugin.yml` workflow.
 
 ## Reference examples
 

@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.32.0] - 2026-11-21
+
+### 📦 Added
+- New skill `migrating-tests-to-playwright` (29 → 30), adapted from `jaktestowac/awesome-agents-for-quality`: staged migration of Cypress/Selenium/WebdriverIO/Protractor suites in vertical slices with a parity gate per slice (3× green + deliberate-break check) and a deletion of the source tests in the same PR; triage classes (port/rewrite/merge/drop/defer), inline Cypress and Selenium construct-mapping tables, waits deleted in favor of web-first assertions.
+
 ## [1.31.0] - 2026-11-21
 
 ### 📦 Added
