@@ -2,7 +2,7 @@
 
 [![Validate plugin](https://github.com/marekbrtkwcz/qa-tools/actions/workflows/validate-plugin.yml/badge.svg)](https://github.com/marekbrtkwcz/qa-tools/actions/workflows/validate-plugin.yml)
 
-Vibe CLI plugin (Agent Plugins 1.0 format) with a complete AI toolkit for quality engineering: 11 testing pipelines × 4 stages = **57 subagents**, **27 skills**, **5 hooks**, **4 knowledge entries**.
+Vibe CLI plugin (Agent Plugins 1.0 format) with a complete AI toolkit for quality engineering: 11 testing pipelines × 4 stages = **57 subagents**, **27 skills**, **5 hooks**, **5 knowledge entries**.
 
 | Area | Subagents | Purpose |
 |---|---|---|
@@ -97,7 +97,8 @@ Releases are automatic: on every push to `main`, the `.github/workflows/release.
 └── ai.mistral.vibe/
     ├── agents/                          # 57 subagents: 52 pipeline (13 areas × 4 stages) + 5 role agents
     ├── hooks.toml                       # lint, playwright --list, typecheck, flaky-watch, QA conventions
-    └── knowledge/                       # knowledge base (architecture, patterns, QA glossary, reporting)
+├── mcp.json                         # Playwright MCP server (npx @playwright/mcp)
+    └── knowledge/                       # knowledge base (architecture, patterns, QA glossary, reporting, quality governance)
 ```
 
 ```

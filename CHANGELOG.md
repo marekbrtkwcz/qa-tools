@@ -3,6 +3,13 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.29.0] - 2026-11-20
+
+### 📦 Added
+- `mcp.json` in the plugin root: Playwright MCP server (`npx -y @playwright/mcp@latest`), so plugin agents can drive a real browser.
+- New knowledge entry `quality-governance` (5th): the three debts (technical / intent / comprehension) with three enforcement ceilings, quality contract, layered gates, waivers, change intent, trend-based metrics. Adapted from `jaktestowac/awesome-agents-for-quality` guides.
+- Root `AGENTS.md` with repo conventions (test conventions, plugin structure, commit/version rules) as the Vibe instructions asset.
+
 ## [1.28.0] - 2026-11-20
 
 ### 📦 Added
