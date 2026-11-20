@@ -3,6 +3,12 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.2.7] - 2026-11-20
+
+### Added
+- API reference example: `examples/docs/scenarios/api/users.md` + `examples/tests/api/users.spec.ts` (request fixture, status/body assertions, negative case, env-only secrets).
+- Validator now checks the API example too (naming, `expect(res.status())`, request fixture, no hardcoded URLs); new unit test for the hardcoded-URL case.
+
 ## [1.2.6] - 2026-11-20
 
 ### Added

@@ -210,9 +210,11 @@ def check_version_consistency():
 
 
 def check_examples():
-    print("examples (przykład referencyjny)")
+    print("examples (przykłady referencyjne)")
     plan = ROOT / "examples" / "docs" / "scenarios" / "ui" / "login.md"
     test = ROOT / "examples" / "tests" / "ui" / "login.spec.ts"
+    api_plan = ROOT / "examples" / "docs" / "scenarios" / "api" / "users.md"
+    api_test = ROOT / "examples" / "tests" / "api" / "users.spec.ts"
     if not plan.exists():
         err("examples: brak docs/scenarios/ui/login.md")
     else:
@@ -234,8 +236,31 @@ def check_examples():
             err("examples/login.spec.ts: brak await expect(...)")
         if not re.search(r"getBy(Role|Label|Text|TestId)", code):
             err("examples/login.spec.ts: brak selektorów getBy*")
+    if not api_plan.exists():
+        err("examples: brak docs/scenarios/api/users.md")
+    else:
+        text = api_plan.read_text(encoding="utf-8")
+        for section in ("Nazwa scenariusza", "Warunki wstępne", "Kroki",
+                        "Punkty walidacji", "Dane testowe", "Poza zakresem"):
+            if section not in text:
+                err(f"examples/api/users.md: brak sekcji '{section}'")
+    if not api_test.exists():
+        err("examples: brak tests/api/users.spec.ts")
+    else:
+        raw = api_test.read_text(encoding="utf-8")
+        code = re.sub(r"//[^\n]*", "", raw)
+        if not re.search(r"test\('should .+ when .+'", code):
+            err("examples/api/users.spec.ts: nazwa testu niezgodna z konwencją should...when...")
+        if "waitForTimeout" in code:
+            err("examples/api/users.spec.ts: użyty waitForTimeout")
+        if "expect(res.status()).toBe(" not in code:
+            err("examples/api/users.spec.ts: brak asercji expect(res.status()).toBe(...)")
+        if "{ request }" not in code:
+            err("examples/api/users.spec.ts: brak fixture'a request")
+        if re.search(r"https?://", code):
+            err("examples/api/users.spec.ts: hardkodowany URL — baseURL tylko z env/config")
     if not errors or all("examples" not in e for e in errors):
-        ok("plan scenariusza i test zgodne z konwencjami")
+        ok("plany scenariuszy i testy UI/API zgodne z konwencjami")
 
 
 def main():

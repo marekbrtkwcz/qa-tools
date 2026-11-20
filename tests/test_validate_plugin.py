@@ -38,6 +38,14 @@ test('should show dashboard when user logs in', async ({ page }) => {
 });
 """
 
+GOOD_API_SPEC = """import { test, expect } from '@playwright/test';
+
+test('should return 200 when token is valid', async ({ request }) => {
+  const res = await request.get('/api/users');
+  expect(res.status()).toBe(200);
+});
+"""
+
 GOOD_PLAN = """# Plan
 Nazwa scenariusza: logowanie
 Warunki wstępne: użytkownik istnieje
@@ -99,6 +107,10 @@ def build_good_plugin(root: Path, version: str = "1.0.0") -> Path:
     (examples / "tests" / "ui").mkdir(parents=True)
     (examples / "docs" / "scenarios" / "ui" / "login.md").write_text(GOOD_PLAN, encoding="utf-8")
     (examples / "tests" / "ui" / "login.spec.ts").write_text(GOOD_SPEC, encoding="utf-8")
+    (examples / "docs" / "scenarios" / "api").mkdir(parents=True)
+    (examples / "tests" / "api").mkdir(parents=True)
+    (examples / "docs" / "scenarios" / "api" / "users.md").write_text(GOOD_PLAN, encoding="utf-8")
+    (examples / "tests" / "api" / "users.spec.ts").write_text(GOOD_API_SPEC, encoding="utf-8")
 
     (root / "CHANGELOG.md").write_text(f"# Changelog\n\n## [{version}] - 2026-11-20\n", encoding="utf-8")
     (root / "README.md").write_text(
@@ -193,6 +205,15 @@ class ValidatorTestCase(unittest.TestCase):
         code = self.run_validator()
         self.assertEqual(code, 1)
         self.assertTrue(any("docs/scenarios/" in e for e in validator.errors))
+
+    def test_api_spec_with_hardcoded_url_fails(self):
+        spec_file = self.root / "examples" / "tests" / "api" / "users.spec.ts"
+        spec_file.write_text(GOOD_API_SPEC.replace(
+            "request.get('/api/users')", "request.get('https://example.com/api/users')"
+        ), encoding="utf-8")
+        code = self.run_validator()
+        self.assertEqual(code, 1)
+        self.assertTrue(any("hardkodowany URL" in e for e in validator.errors))
 
     def test_spec_with_waitForTimeout_fails(self):
         spec_file = self.root / "examples" / "tests" / "ui" / "login.spec.ts"
