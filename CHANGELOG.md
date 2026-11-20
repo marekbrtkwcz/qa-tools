@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.13.0] - 2026-11-20
+
+### Added
+- New skill `visual-testing` (15th skill): `toHaveScreenshot` baselines, `animations:'disabled'`/`caret:'hide'`/masks, thresholds, viewport matrix and dark mode, CI strategy (dedicated visual project, CI-generated baselines, artifact upload), Percy/Applitools comparison, pitfalls table.
+
 ## [1.12.0] - 2026-11-20
 
 ### Added
