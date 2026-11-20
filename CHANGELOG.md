@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.20.0] - 2026-11-20
+
+### Added
+- New skill `unit-testing` (19th skill): behavior-through-public-interface assertions, determinism (fake timers, injected clock/RNG), AAA and `should…when…` naming, edge/boundary checklist, test doubles (stub/mock/fake — fakes preferred at the boundary), TDD red-green-refactor including bug-fix-first, mutation check (break the code, suite must go red), unit vs integration vs E2E placement table, and anti-patterns (no real I/O, no tautologies, no swallowed errors, no retries).
+
 ## [1.19.0] - 2026-11-20
 
 ### Added
