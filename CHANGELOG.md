@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.35.0] - 2026-11-21
+
+### 📦 Added
+- New knowledge entry `playwright-conventions` (7 → 8): the 8 repo rules from `jaktestowac/awesome-agents-for-quality` (e2e-playwright, page-objects, playwright-typescript, api-playwright-tests, typescript-style, commit-trailers, llm-evals, quality-gate-workflows) consolidated into one Vibe-readable guide — Vibe has no per-CLI rules directories, so knowledge replaces them.
+
 ## [1.34.0] - 2026-11-21
 
 ### 📦 Added
