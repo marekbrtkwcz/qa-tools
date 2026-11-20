@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.39.0] - 2026-11-21
+
+### 📦 Added
+- New project commands in `.vibe/prompts/` (9 → 11), adapted from `jaktestowac/awesome-agents-for-quality`: `/design-llm-eval-suite` (offline eval suite: 15–25 cases per prompt template, cheapest-falsifiable scoring ladder, pinned model/`temperature: 0`/`retry: 0`, noise-band measurement, regression gate vs committed baseline in CI) and `/test-llm-guardrails` (blocking written authorization gate, trust-boundary map, deterministic guardrail tests incl. fail-closed, adversarial corpus + indirect injection through every content channel, results scored on effect not wording).
+
 ## [1.38.0] - 2026-11-21
 
 ### 📦 Added

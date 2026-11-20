@@ -61,6 +61,8 @@ Project-level prompts in `.vibe/prompts/` (loaded only in this trusted project; 
 | `/qa-strategy` | six-lens scenario matrix (happy/boundary/negative/OWASP/adversarial/data integrity) with OWASP coverage table, before any test code |
 | `/regression-scope` | turns a diff/PR into a prioritized retest pack (must/should/sample/defer) + minimal confidence suite; analysis only |
 | `/verify-acceptance-criteria` | checks evidence (diff, running app via Playwright MCP, screenshots) against ACs: Met/Partial/Not Met/Untestable + sign-off summary |
+| `/design-llm-eval-suite` | builds an offline eval suite for an LLM feature: golden/edge/negative cases, cheapest-falsifiable scoring, pinned determinism, regression gate in CI |
+| `/test-llm-guardrails` | guardrail + injection-resistance testing with a blocking written authorization gate; adversarial corpus scored on effect, across every content channel |
 
 ## Publishing
 
