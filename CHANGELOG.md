@@ -3,6 +3,13 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.2.0] - 2026-11-20
+
+### Added
+- New `contract` pipeline (4 subagents: `contract-test-planner`, `contract-test-writer`, `contract-test-refactor`, `contract-test-code-reviewer`) for consumer-driven contract testing with Pact (matchers with examples, provider states, negative interactions, Pact Broker publishing) and OpenAPI contract validation.
+- New skill `contract-testing` (11th skill).
+- Validator updated: `contract` area covered by shared naming convention (no `waitForTimeout` rule — not a UI pipeline).
+
 ## [1.1.0] - 2026-11-20
 
 ### Added

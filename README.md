@@ -1,6 +1,6 @@
 # QA Tools
 
-Plugin Vibe CLI (format Agent Plugins 1.0) z kompletnym zestawem narzędzi AI dla inżynierii jakości: 7 pipeline'ów testowych × 4 etapy = **28 subagentów**, **10 skillów**, **3 hooki**, **3 wpisy wiedzy**.
+Plugin Vibe CLI (format Agent Plugins 1.0) z kompletnym zestawem narzędzi AI dla inżynierii jakości: 8 pipeline'ów testowych × 4 etapy = **32 subagentów**, **11 skillów**, **3 hooki**, **3 wpisy wiedzy**.
 
 | Obszar | Subagenty | Cel |
 |---|---|---|
@@ -11,6 +11,7 @@ Plugin Vibe CLI (format Agent Plugins 1.0) z kompletnym zestawem narzędzi AI dl
 | visual | `qa-tools:visual-test-*` | visual regression (`toHaveScreenshot`) |
 | load | `qa-tools:load-test-*` | testy obciążeniowe k6 |
 | DB | `qa-tools:db-test-*` | weryfikacja migracji danych / ETL |
+| contract | `qa-tools:contract-test-*` | testy kontraktowe (Pact / OpenAPI) |
 
 Każdy pipeline: `planner → writer → refactor → code-reviewer`.
 
@@ -30,7 +31,7 @@ cp -r /tmp/qa-tools/.vibe/plugins/qa-tools .vibe/plugins/
 
 # 3. W projekcie: /reload-plugins (lub restart Vibe), potem sprawdź:
 #    /plugins  → qa-tools
-#    /skills   → 10 skillów z tagiem plugin:qa-tools
+#    /skills   → 11 skillów z tagiem plugin:qa-tools
 
 # 4. (opcjonalnie) walidacja struktury pluginu
 py scripts/validate-plugin.py
@@ -56,6 +57,7 @@ Repozytorium: `github.com/marekbrtkwcz/qa-tools` (branch `main`). Zmiany publiku
 │   ├── ci-cd-pipelines/
 │   ├── test-data-management/
 │   ├── data-migration-testing/
+│   ├── contract-testing/
 │   ├── test-planning/
 │   └── qa-best-practices/
 └── ai.mistral.vibe/
@@ -90,7 +92,11 @@ Repozytorium: `github.com/marekbrtkwcz/qa-tools` (branch `main`). Zmiany publiku
         ├── db-test-planner.toml         # planowanie weryfikacji migracji danych 🆕
         ├── db-test-writer.toml          # pisanie testów weryfikacji migracji 🆕
         ├── db-test-refactor.toml        # refaktoryzacja testów DB 🆕
-        └── db-test-code-reviewer.toml   # review kodu testów DB 🆕
+        ├── db-test-code-reviewer.toml   # review kodu testów DB 🆕
+        ├── contract-test-planner.toml   # planowanie testów kontraktowych 🆕
+        ├── contract-test-writer.toml    # pisanie testów kontraktowych (Pact) 🆕
+        ├── contract-test-refactor.toml  # refaktoryzacja kontraktów 🆕
+        └── contract-test-code-reviewer.toml # review kodu kontraktów 🆕
 ```
 
 ## Pipeline testowy
@@ -99,9 +105,9 @@ Repozytorium: `github.com/marekbrtkwcz/qa-tools` (branch `main`). Zmiany publiku
 Planner → Writer → Refactor → Code Reviewer
 ```
 
-Dostępny dla siedmiu obszarów: **UI**, **API**, **E2E**, **mobile**, **visual (regression)**, **load (k6)**, **DB (weryfikacja migracji danych/ETL)**.
+Dostępny dla ośmiu obszarów: **UI**, **API**, **E2E**, **mobile**, **visual (regression)**, **load (k6)**, **DB (weryfikacja migracji danych/ETL)**, **contract (Pact / OpenAPI)**.
 
-## Konwencje qa-tools (wymuszane przez wszystkich 24 agentów)
+## Konwencje qa-tools (wymuszane przez wszystkich 32 agentów)
 
 Każdy subagent zna i stosuje te same konwencje:
 
@@ -122,7 +128,7 @@ Plugin ładuje się automatycznie w zaufanym projekcie. Subagenty są dostępne 
 py scripts/validate-plugin.py    # Python 3.11+, tylko stdlib
 ```
 
-Skrypt sprawdza: `plugin.json`, wszystkie 24 TOML-e agentów (klucze, konwencje nazewnictwa, zakaz `waitForTimeout`, reguły `__ENV`/`thresholds` dla k6), frontmatter 9 skillów, `hooks.toml`, wpisy `knowledge/` oraz zgodność przykładu referencyjnego z konwencjami. Exit code 0 = OK, 1 = błędy. Przydatne lokalnie i w CI.
+Skrypt sprawdza: `plugin.json`, wszystkie 32 TOML-e agentów (klucze, konwencje nazewnictwa, zakaz `waitForTimeout`, reguły `__ENV`/`thresholds` dla k6), frontmatter 11 skillów, `hooks.toml`, wpisy `knowledge/` oraz zgodność przykładu referencyjnego z konwencjami. Exit code 0 = OK, 1 = błędy. Przydatne lokalnie i w CI.
 
 ## Przykład referencyjny
 
