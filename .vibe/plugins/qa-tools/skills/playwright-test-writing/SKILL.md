@@ -62,6 +62,17 @@ await expect(page.getByRole('status')).toHaveText('Saved');
 await expect(page).toHaveURL(/\/items\/\d+/);
 ```
 
+### ExtJS (Sencha) specifics
+ExtJS does NOT map cleanly to ARIA roles — `getByRole` often fails. Use these stable hooks instead:
+
+1. **`data-ref` / `data-testid`**: ask the team to set Ext component `reference: 'saveBtn'` (renders as `data-ref="saveBtn"`) or a custom `data-testid` — then `page.getByTestId('saveBtn')` or `page.locator('[data-ref="saveBtn"]')`. This is the most stable option.
+2. **Text within component class**: `page.locator('.x-btn', { hasText: 'Save' }).click()` — ExtJS class names (`x-btn`, `x-grid-cell`, `x-window`, `x-mask`, `x-panel`) are stable across versions; generated IDs (`button-1045`, `ext-element-12`) are NOT — never use them.
+3. **Grids**: assert cell content via `page.locator('.x-grid-cell', { hasText: 'Invoice' })`, row via `.x-grid-row`.
+4. **Dialogs/windows**: `.x-window` with `hasText` (title) or `getByText` on the message; in modern toolkit `getByRole('dialog')` may work — try it first, fall back to `.x-window`.
+5. **Waiting**: never `waitForTimeout` — wait for the load mask to disappear: `await expect(page.locator('.x-mask')).toBeHidden()` / `toHaveCount(0)`, or `expect` on the expected cell/text. Ext operations are async; `expect` polling covers it.
+6. **iframes**: some ExtJS apps render parts in iframes — use `page.frameLocator('iframe[name=...]')`.
+7. **Forms**: fields render as `<input>` inside `.x-field` — `getByLabel` works only if label is properly associated; otherwise `page.locator('.x-field', { hasText: 'Email' }).locator('input').fill(...)`.
+
 ## Anti-patterns to avoid
 - ❌ `page.waitForTimeout(3000)` — use `expect` instead
 - ❌ CSS selectors like `.btn-primary` — use roles/labels

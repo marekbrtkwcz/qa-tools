@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.2.3] - 2026-11-20
+
+### Added
+- ExtJS (Sencha) guidance in `playwright-test-writing` skill and `ui-test-writer` conventions: stable hooks (`data-ref`/`data-testid`, Ext component classes with `hasText`), never generated IDs, wait for `.x-mask` to hide via `expect` instead of `waitForTimeout`, iframe handling.
+
 ## [1.2.2] - 2026-11-20
 
 ### Added
