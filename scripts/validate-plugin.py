@@ -29,12 +29,12 @@ oks = 0
 def ok(msg):
     global oks
     oks += 1
-    print(f"  OK  {msg}")
+    print(f"  ✅ OK  {msg}")
 
 
 def err(msg):
     errors.append(msg)
-    print(f"  ERR {msg}")
+    print(f"  ❌ ERR {msg}")
 
 
 def check_plugin_json():

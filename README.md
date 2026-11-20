@@ -6,19 +6,19 @@ Vibe CLI plugin (Agent Plugins 1.0 format) with a complete AI toolkit for qualit
 
 | Area | Subagents | Purpose |
 |---|---|---|
-| UI | `qa-tools:ui-test-*` | Playwright UI tests |
-| API | `qa-tools:api-test-*` | API tests (Playwright request, OpenAPI) |
-| E2E | `qa-tools:e2e-test-*` | full user flows |
-| mobile | `qa-tools:mobile-test-*` | device emulation, touch gestures |
-| visual | `qa-tools:visual-test-*` | visual regression (`toHaveScreenshot`) |
-| load | `qa-tools:load-test-*` | k6 load tests |
-| DB | `qa-tools:db-test-*` | data migration / ETL verification |
-| contract | `qa-tools:contract-test-*` | contract tests (Pact / OpenAPI) |
-| a11y | `qa-tools:a11y-test-*` | WCAG accessibility (axe-core, keyboard, screen reader) 🆕 |
-| security | `qa-tools:security-test-*` | OWASP Top 10, XSS/CSRF, IDOR, secrets 🆕 |
-| chaos | `qa-tools:chaos-test-*` | fault injection, timeouts, dependency degradation 🆕 |
-| i18n | `qa-tools:i18n-test-*` | locales, RTL, date/currency formats, translation fallbacks 🆕 |
-| API versioning | `qa-tools:versioning-test-*` | deprecations, `Accept-Version`, backward compatibility 🆕 |
+| 🖥️ UI | `qa-tools:ui-test-*` | Playwright UI tests |
+| 🔌 API | `qa-tools:api-test-*` | API tests (Playwright request, OpenAPI) |
+| 🌐 E2E | `qa-tools:e2e-test-*` | full user flows |
+| 📱 mobile | `qa-tools:mobile-test-*` | device emulation, touch gestures |
+| 🖼️ visual | `qa-tools:visual-test-*` | visual regression (`toHaveScreenshot`) |
+| 🚀 load | `qa-tools:load-test-*` | k6 load tests |
+| 🗄️ DB | `qa-tools:db-test-*` | data migration / ETL verification |
+| 📜 contract | `qa-tools:contract-test-*` | contract tests (Pact / OpenAPI) |
+| ♿ a11y | `qa-tools:a11y-test-*` | WCAG accessibility (axe-core, keyboard, screen reader) 🆕 |
+| 🛡️ security | `qa-tools:security-test-*` | OWASP Top 10, XSS/CSRF, IDOR, secrets 🆕 |
+| 🌪️ chaos | `qa-tools:chaos-test-*` | fault injection, timeouts, dependency degradation 🆕 |
+| 🌍 i18n | `qa-tools:i18n-test-*` | locales, RTL, date/currency formats, translation fallbacks 🆕 |
+| 🔖 API versioning | `qa-tools:versioning-test-*` | deprecations, `Accept-Version`, backward compatibility 🆕 |
 
 Each pipeline: `planner → writer → refactor → code-reviewer`.
 
