@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.26.1] - 2026-11-20
+
+### 🔄 Changed
+- Deepened skill `quality-gates` (from `jaktestowac/awesome-agents-for-quality`): waivers now require what/why/who/until, MUST gates are non-waivable, expired waiver = finding, renewal needs fresh justification, plus a silent-skip inventory (test.skip, eslint-disable, ts-expect-error, continue-on-error, lowered thresholds); release readiness gains the `unverified` status, risk-based coverage, recoverability, and recommend-don't-decide; change intent must be durable+linked (Intent trailer/ADR/register, human-confirmed) on high-risk changes; new quality-metrics section (definitions, trend over snapshot, counterweights, metric names its decision).
+
 ## [1.26.0] - 2026-11-20
 
 ### 📦 Added
