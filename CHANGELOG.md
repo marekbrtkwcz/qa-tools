@@ -3,6 +3,12 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.30.0] - 2026-11-21
+
+### 📦 Added
+- New knowledge entries (5 → 7), adapted from `jaktestowac/awesome-agents-for-quality` guides, Vibe-native: `ai-product-qa` (testing products that ship an LLM — three suites: evals / guardrails / red team, authorization gate before adversarial work, groundedness attestation with limitations) and `beyond-codegen` (two-stage AI test generation: risk-based scenarios reviewed by a human first, only then turned into test code).
+- New project commands in `.vibe/prompts/`: `/playwright-generate-test` (walks one scenario live via the Playwright MCP shipped in `mcp.json`, then writes and runs a grounded spec) and `/refactor-to-page-objects` (pure structural refactor into page objects, verified against a baseline run).
+
 ## [1.29.0] - 2026-11-20
 
 ### 📦 Added

@@ -2,7 +2,7 @@
 
 [![Validate plugin](https://github.com/marekbrtkwcz/qa-tools/actions/workflows/validate-plugin.yml/badge.svg)](https://github.com/marekbrtkwcz/qa-tools/actions/workflows/validate-plugin.yml)
 
-Vibe CLI plugin (Agent Plugins 1.0 format) with a complete AI toolkit for quality engineering: 11 testing pipelines × 4 stages = **57 subagents**, **27 skills**, **5 hooks**, **5 knowledge entries**.
+Vibe CLI plugin (Agent Plugins 1.0 format) with a complete AI toolkit for quality engineering: 11 testing pipelines × 4 stages = **57 subagents**, **27 skills**, **5 hooks**, **7 knowledge entries**.
 
 | Area | Subagents | Purpose |
 |---|---|---|
@@ -54,6 +54,8 @@ Project-level prompts in `.vibe/prompts/` (loaded only in this trusted project; 
 |---|---|
 | `/fix-tests` | runs failing tests in a scope, diagnoses and fixes root causes without weakening assertions |
 | `/bug-report` | turns rough notes into a developer-ready bug report (severity, repro, confidence, missing evidence) |
+| `/playwright-generate-test` | walks one scenario live with Playwright MCP, then writes and runs a grounded Playwright spec |
+| `/refactor-to-page-objects` | pure structural refactor of specs into page objects, verified against a baseline run |
 
 ## Publishing
 
@@ -98,7 +100,7 @@ Releases are automatic: on every push to `main`, the `.github/workflows/release.
     ├── agents/                          # 57 subagents: 52 pipeline (13 areas × 4 stages) + 5 role agents
     ├── hooks.toml                       # lint, playwright --list, typecheck, flaky-watch, QA conventions
 ├── mcp.json                         # Playwright MCP server (npx @playwright/mcp)
-    └── knowledge/                       # knowledge base (architecture, patterns, QA glossary, reporting, quality governance)
+    └── knowledge/                       # knowledge base (architecture, patterns, QA glossary, reporting, quality governance, AI product QA, beyond codegen)
 ```
 
 ```
