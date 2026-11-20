@@ -77,6 +77,9 @@ Project-level prompts in `.vibe/prompts/` (loaded only in this trusted project; 
 | `/edge-case-scenario-generator` | BDD edge scenarios (boundaries, invalid transitions, concurrency) → `spec/edge-cases.md` for human review before any code |
 | `/generate-test-data` | reusable synthetic test data catalog (valid/boundary/invalid/role-state) with fixture-ready flags |
 | `/derive-test-cases-from-code` | white-box cases from branches/boundaries/error paths, marked covered/partial/missing vs existing tests |
+| `/analyze-test-results` | noisy run → failure clusters, suspected causes, flake suspects, what to investigate first; analysis only |
+| `/explain-test-failure` | diagnose one failing test: root-cause class + confidence + failure chain; never edits |
+| `/explain-code` | read-only explanation of code: purpose, flow, patterns, risks, "what to test first" |
 
 ## Publishing
 

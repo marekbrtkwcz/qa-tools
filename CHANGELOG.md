@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.44.0] - 2026-11-21
+
+### 📦 Added
+- New project commands in `.vibe/prompts/` (25 → 28), the analysis batch from `jaktestowac/awesome-agents-for-quality`: `/analyze-test-results` (run → failure clusters with suspected root-cause groups, flake suspects with evidence, prioritized next actions mapped to other commands), `/explain-test-failure` (single-failure diagnosis: root-cause class, failure chain, ranked falsifiable hypotheses, confidence; diagnosis only, never edits), `/explain-code` (read-only code explanation with testing perspective and "what to test first"; audience-adaptive).
+
 ## [1.43.0] - 2026-11-21
 
 ### 📦 Added
