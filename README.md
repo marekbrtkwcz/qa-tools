@@ -1,6 +1,46 @@
 # QA Tools
 
-Plugin Vibe CLI z kompletnym zestawem narzędzi AI dla inżynierii jakości.
+Plugin Vibe CLI (format Agent Plugins 1.0) z kompletnym zestawem narzędzi AI dla inżynierii jakości: 7 pipeline'ów testowych × 4 etapy = **28 subagentów**, **10 skillów**, **3 hooki**, **3 wpisy wiedzy**.
+
+| Obszar | Subagenty | Cel |
+|---|---|---|
+| UI | `qa-tools:ui-test-*` | testy Playwright UI |
+| API | `qa-tools:api-test-*` | testy API (Playwright request, OpenAPI) |
+| E2E | `qa-tools:e2e-test-*` | pełne flow użytkownika |
+| mobile | `qa-tools:mobile-test-*` | emulacja urządzeń, gesty touch |
+| visual | `qa-tools:visual-test-*` | visual regression (`toHaveScreenshot`) |
+| load | `qa-tools:load-test-*` | testy obciążeniowe k6 |
+| DB | `qa-tools:db-test-*` | weryfikacja migracji danych / ETL |
+
+Każdy pipeline: `planner → writer → refactor → code-reviewer`.
+
+## Instalacja w innym projekcie
+
+Plugin ładuje się automatycznie, gdy katalog `.vibe/plugins/qa-tools/` znajdzie się w **zaufanym folderze** projektu:
+
+```bash
+# 1. Skopiuj plugin do projektu (z tego repo lub submodule)
+git clone https://github.com/marekbrtkwcz/qa-tools.git /tmp/qa-tools
+mkdir -p .vibe/plugins
+cp -r /tmp/qa-tools/.vibe/plugins/qa-tools .vibe/plugins/
+
+# 2. Zaufaj folderowi projektu (jednorazowo, w TUI Vibe lub przez ~/.vibe/trusted_folders.toml)
+#    ~/.vibe/trusted_folders.toml:
+#    folders = ["C:\\ścieżka\\do\\projektu"]
+
+# 3. W projekcie: /reload-plugins (lub restart Vibe), potem sprawdź:
+#    /plugins  → qa-tools
+#    /skills   → 10 skillów z tagiem plugin:qa-tools
+
+# 4. (opcjonalnie) walidacja struktury pluginu
+py scripts/validate-plugin.py
+```
+
+Użycie: subagenty jako `qa-tools:<nazwa>` (np. `qa-tools:ui-test-planner`), skille przez `/<nazwa-skilla>` lub auto-load.
+
+## Publikacja
+
+Repozytorium: `github.com/marekbrtkwcz/qa-tools` (branch `main`). Zmiany publikuje się standardowo: `git push origin main`. Wersja pluginu w `.vibe/plugins/qa-tools/plugin.json`, historia w `CHANGELOG.md`. Licencja: MIT (`LICENSE`).
 
 ## Struktura
 
