@@ -309,6 +309,34 @@ def check_examples():
         if re.search(r"https?://", raw):
             err("examples/security/comment-xss.spec.ts: hardkodowany URL")
 
+    # --- przykłady chaos i mobile ---
+    for area, spec_name, must_have in (
+        ("chaos", "orders-500.spec.ts", "page.route"),
+        ("mobile", "checkout.spec.ts", "getBy"),
+    ):
+        plan_f = ROOT / "examples" / "docs" / "scenarios" / area
+        spec_f = ROOT / "examples" / "tests" / area / spec_name
+        plan_file = next(plan_f.glob("*.md"), None) if plan_f.exists() else None
+        if not plan_file:
+            err(f"examples: brak planu docs/scenarios/{area}/*.md")
+        else:
+            text = plan_file.read_text(encoding="utf-8")
+            for section in ("Nazwa scenariusza", "Warunki wstępne", "Kroki",
+                            "Punkty walidacji", "Dane testowe", "Poza zakresem"):
+                if section not in text:
+                    err(f"examples/{area}: brak sekcji '{section}'")
+        if not spec_f.exists():
+            err(f"examples: brak tests/{area}/{spec_name}")
+        else:
+            raw = spec_f.read_text(encoding="utf-8")
+            code = re.sub(r"//[^\n]*", "", raw)
+            if not re.search(r"test\('should .+ when .+'", code):
+                err(f"examples/{area}/{spec_name}: nazwa testu niezgodna z konwencją should...when...")
+            if "waitForTimeout" in code:
+                err(f"examples/{area}/{spec_name}: użyty waitForTimeout")
+            if must_have not in code:
+                err(f"examples/{area}/{spec_name}: brak '{must_have}'")
+
     # --- szablon CI (e2e.yml) ---
     ci = ROOT / "examples" / "ci" / "e2e.yml"
     if not ci.exists():

@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.12.0] - 2026-11-20
+
+### Added
+- Reference examples for `chaos` (`tests/chaos/orders-500.spec.ts`: page.route 500 fault, fallback banner assertion, unroute cleanup) and `mobile` (`tests/mobile/checkout.spec.ts`: device viewport, tap, SPA routing, no horizontal scroll at 320px) plus scenario plans. Validator checks both; test fixture updated.
+
 ## [1.11.2] - 2026-11-20
 
 ### Changed

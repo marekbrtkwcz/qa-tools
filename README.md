@@ -174,10 +174,14 @@ examples/
 ├── docs/scenarios/api/users.md           # API scenario plan
 ├── docs/scenarios/a11y/login.md          # a11y scenario plan (axe-core)
 ├── docs/scenarios/security/comment-xss.md # security scenario plan (XSS)
+├── docs/scenarios/chaos/orders-500.md    # chaos scenario plan (API 500)
+├── docs/scenarios/mobile/checkout-swipe.md # mobile scenario plan (touch)
 ├── tests/ui/login.spec.ts                # Playwright UI test
 ├── tests/api/users.spec.ts               # API test (request fixture)
 ├── tests/a11y/login.spec.ts              # a11y test (axe + keyboard)
-└── tests/security/comment-xss.spec.ts    # security test (XSS)
+├── tests/security/comment-xss.spec.ts    # security test (XSS)
+├── tests/chaos/orders-500.spec.ts        # chaos test (page.route fault)
+└── tests/mobile/checkout.spec.ts         # mobile test (viewport + tap)
 ```
 
 This is the reference point for agents and users: it shows what a scenario plan and a test written according to the conventions look like (naming `should ... when ...`, `getBy*` selectors, `await expect(...)` assertions, secrets from env).

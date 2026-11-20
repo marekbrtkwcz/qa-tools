@@ -72,6 +72,24 @@ export default defineConfig({
 });
 """
 
+GOOD_CHAOS_SPEC = """import { test, expect } from '@playwright/test';
+
+test('should show banner when API returns 500', async ({ page }) => {
+  await page.route('**/api/orders', (route) => route.fulfill({ status: 500 }));
+  await page.goto('/orders');
+  await expect(page.getByRole('alert')).toBeVisible();
+});
+"""
+
+GOOD_MOBILE_SPEC = """import { test, expect } from '@playwright/test';
+
+test('should confirm order when paying on mobile', async ({ page }) => {
+  await page.goto('/checkout');
+  await page.getByRole('button', { name: 'Pay' }).click();
+  await expect(page).toHaveURL(/\\/order-confirmation/);
+});
+"""
+
 GOOD_CI = """name: E2E
 on: [push]
 jobs:
@@ -159,6 +177,12 @@ def build_good_plugin(root: Path, version: str = "1.0.0") -> Path:
     (examples / "playwright.config.ts").write_text(GOOD_CONFIG, encoding="utf-8")
     (examples / "ci").mkdir(parents=True)
     (examples / "ci" / "e2e.yml").write_text(GOOD_CI, encoding="utf-8")
+    for area, spec, body in (("chaos", "orders-500.spec.ts", GOOD_CHAOS_SPEC),
+                             ("mobile", "checkout.spec.ts", GOOD_MOBILE_SPEC)):
+        (examples / "docs" / "scenarios" / area).mkdir(parents=True, exist_ok=True)
+        (examples / "tests" / area).mkdir(parents=True, exist_ok=True)
+        (examples / "docs" / "scenarios" / area / "x.md").write_text(GOOD_PLAN, encoding="utf-8")
+        (examples / "tests" / area / spec).write_text(body, encoding="utf-8")
 
     (root / "CHANGELOG.md").write_text(f"# Changelog\n\n## [{version}] - 2026-11-20\n", encoding="utf-8")
     (root / "README.md").write_text(
