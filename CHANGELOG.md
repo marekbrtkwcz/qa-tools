@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.22.0] - 2026-11-20
+
+### Added
+- New skill `mocking` (21st skill): MSW (browser worker + node setupServer), Playwright `page.route` for what MSW can't reach, fault injection (500/timeout/network error), time mocking (`page.clock`, fake timers, `expect.poll` instead of `waitForTimeout`), deterministic payloads, and rules for what to mock (external/unstable only) with cleanup. The MSW section in `test-data-management` now points to `/mocking`.
+
 ## [1.21.0] - 2026-11-20
 
 ### Added

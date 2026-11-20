@@ -86,56 +86,9 @@ Rules for DB seeding:
 - never point tests at production DB; assert the env: `if (process.env.DATABASE_URL?.includes('prod')) throw new Error('refusing to run against prod')`
 - seed data is **versioned with code** (`tests/fixtures/seed.sql` or migration-like seed script), not hand-edited in the DB
 
-## API mocking with MSW (Mock Service Worker)
+## API mocking
 
-Use [MSW](https://mswjs.io) (`msw` package) to intercept requests in the **browser** (Service Worker based) or in **Node** (`@mswjs/interceptors` / `setupServer` from `msw/node`) for API tests:
-
-```typescript
-// tests/mocks/handlers.ts
-import { http, HttpResponse } from 'msw';
-
-export const handlers = [
-  http.get('/api/users/:id', ({ params }) => {
-    return HttpResponse.json({ id: params.id, name: 'Mocked User' });
-  }),
-  // fault injection for chaos tests — see chaos pipeline
-  http.get('/api/orders', () => HttpResponse.error()), // network error
-  http.get('/api/slow', async () => {
-    await new Promise((r) => setTimeout(r, 3000));
-    return HttpResponse.json({ ok: true });
-  }),
-];
-```
-
-```typescript
-// browser (E2E/UI) — setup in beforeEach/beforeAll
-import { setupWorker } from 'msw/browser';
-
-const worker = setupWorker(...handlers);
-
-test.beforeAll(async () => { await worker.start({ onUnhandledRequest: 'warn' }); });
-test.afterEach(() => worker.resetHandlers());
-test.afterAll(async () => { await worker.stop(); });
-```
-
-```typescript
-// Node (API tests with playwright request) — setupServer
-import { setupServer } from 'msw/node';
-
-const server = setupServer(...handlers);
-
-beforeAll(() => server.listen({ onUnhandledRequest: 'warn' }));
-afterEach(() => server.resetHandlers());
-afterAll(() => server.close());
-```
-
-Rules for MSW:
-
-- mock only the **external/unstable** dependencies — the app under test's own API should hit the real backend in E2E
-- `onUnhandledRequest: 'warn'` (or `'error'` in strict suites) — a silent pass-through hides missing mocks
-- per-test overrides: `worker.use(http.get('/api/users/:id', () => HttpResponse.json({ name: 'Override' })))` — reset in `afterEach`
-- combine with `page.route` for non-MSW cases (binary files, WebSocket upgrade) — don't mix both on the same URL in one test
-- MSW + `expect` — assert the UI reacted to the mocked payload, not that the mock was called
+Network/time mocking (MSW browser+node, `page.route`, fault injection, fake timers) moved to the dedicated **`mocking`** skill — load `/mocking` when you need it.
 
 ## Cleanup — always clean up
 ```typescript
