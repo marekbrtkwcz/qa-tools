@@ -23,7 +23,7 @@ esac
 [[hooks]]
 name = "playwright-list-spec"
 type = "post_tool"
-match = "re:file_system\\\\.(write_file|edit)"
+match = "re:file_system\\.(write_file|edit)"
 description = "Run 'playwright test --list' on an edited spec file if playwright config exists"
 
 command = """
@@ -70,7 +70,7 @@ exit 0
 [[hooks]]
 name = "flaky-watch"
 type = "post_tool"
-match = "re:file_system\\\\.bash"
+match = "re:file_system\\.bash"
 description = "After 'npx playwright test ...', parse JUnit XML and list flaky tests (passed only on retry)"
 
 command = """

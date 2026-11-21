@@ -3,6 +3,13 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.47.2] - 2026-11-21
+
+### 🐞 Fixed
+- Hooks `playwright-list-spec` and `flaky-watch` never fired: their `match` patterns were over-escaped (`re:file_system\\\\.` in raw TOML → regex `\\.` matches a literal backslash, not a dot). Fixed to `re:file_system\\.`. Verified all `re:` matches now compile and match the intended tool events.
+- `scripts/validate-plugin.py` now validates hook `match` patterns: invalid regex is an error, and the over-escaped `\\.` sequence (compiles but never matches tool names) is flagged. Added unit tests for both cases.
+- README: fixed stale "11 testing pipelines × 4 stages = 60 subagents" → "13 testing pipelines × 4 stages + 8 role agents = 60 subagents" (13×4+8=60, consistent with the area table).
+
 ## [1.47.1] - 2026-11-21
 
 ### 🐞 Fixed

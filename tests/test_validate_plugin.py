@@ -354,6 +354,28 @@ class ValidatorTestCase(unittest.TestCase):
         self.assertEqual(code, 1)
         self.assertTrue(any("nieznany typ" in e for e in validator.errors))
 
+    def test_hook_with_invalid_regex_fails(self):
+        (self.plugin / "ai.mistral.vibe" / "hooks.toml").write_text(
+            '[[hooks]]\nname = "bad-regex"\ntype = "post_tool"\n'
+            'match = "re:file_system\\\\\\\\.("\ncommand = "echo ok"\n',
+            encoding="utf-8",
+        )
+        code = self.run_validator()
+        self.assertEqual(code, 1)
+        self.assertTrue(any("nieprawidłowy regex" in e for e in validator.errors))
+
+    def test_hook_with_overescaped_regex_fails(self):
+        # raw TOML '\\\\.' parses to regex source '\\.' which compiles but
+        # matches a literal backslash + any char, never 'file_system.bash'
+        (self.plugin / "ai.mistral.vibe" / "hooks.toml").write_text(
+            '[[hooks]]\nname = "overescaped"\ntype = "post_tool"\n'
+            'match = "re:file_system\\\\\\\\.bash"\ncommand = "echo ok"\n',
+            encoding="utf-8",
+        )
+        code = self.run_validator()
+        self.assertEqual(code, 1)
+        self.assertTrue(any("over-escaped" in e for e in validator.errors))
+
     def test_plan_missing_kroki_section_fails(self):
         plan = self.root / "examples" / "docs" / "scenarios" / "ui" / "login.md"
         plan.write_text(GOOD_PLAN.replace("Kroki: 1. otwórz /login\n", ""), encoding="utf-8")

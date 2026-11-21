@@ -156,6 +156,15 @@ def check_hooks():
                 err(f"hook '{name}': brak '{key}'")
         if h.get("type") not in HOOK_TYPES:
             err(f"hook '{name}': nieznany typ '{h.get('type')}'")
+        match = h.get("match", "")
+        if match.startswith("re:"):
+            pattern = match[3:]
+            try:
+                re.compile(pattern)
+            except re.error as e:
+                err(f"hook '{name}': nieprawidłowy regex w match: {e}")
+            if BS + BS + "." in pattern:
+                err(f"hook '{name}': match wygląda na over-escaped ('{BS}{BS}.' = literalny backslash + dowolny znak, nie kropka) — wzorce typu 'file_system.bash' nigdy nie zawierają backslasha")
     ok(f"{len(hooks)} hooków: " + ", ".join(f"{h.get('name')}({h.get('type')})" for h in hooks))
 
 
