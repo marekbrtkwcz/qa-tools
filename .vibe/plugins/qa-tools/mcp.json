@@ -4,7 +4,21 @@
     "playwright-mcp": {
       "type": "stdio",
       "command": "npx",
-      "args": ["-y", "@playwright/mcp@latest"],
+      "args": ["-y", "@playwright/mcp@latest",
+      "--caps",
+      "vision,pdf,devtools,network,storage,testing",
+      "--ignore-https-errors",
+      "--timeout-action",
+      "30000",
+      "--timeout-navigation",
+      "180000",
+      "--timeout-settle",
+      "2000",
+      "--image-responses",
+      "allow",
+      "--snapshot-boxes",
+      "--snapshot-mode",
+      "full",               ],
       "env": {}
     }
   }

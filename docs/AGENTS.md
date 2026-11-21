@@ -1,10 +1,10 @@
 # 🤖 Agent Reference — kiedy użyć którego agenta
 
-Wszystkie 76 subagentów qa-tools w jednym miejscu. Wywołujesz jako `qa-tools:<nazwa>`.
+Wszystkie 80 subagentów qa-tools w jednym miejscu. Wywołujesz jako `qa-tools:<nazwa>`.
 
 ---
 
-## 📋 Pipeline agents (17 obszarów × 4 etapy = 68)
+## 📋 Pipeline agents (18 obszarów × 4 etapy = 72)
 
 Każdy obszar ma ten sam łańcuch: **planner → writer → refactor → code-reviewer**.
 
@@ -162,6 +162,15 @@ Każdy obszar ma ten sam łańcuch: **planner → writer → refactor → code-r
 | `qa-tools:observability-test-writer` | Piszesz testy obserwowalności (Loki/Tempo/Prometheus API, expect.poll) | „Napisz test obserwowalności z planu `checkout.md`” |
 | `qa-tools:observability-test-refactor` | Refaktoryzacja (helpery pollForSpan / pollForLogLine / readCounter) | „Wydziel helper `pollForSpans(request, tags)`” |
 | `qa-tools:observability-test-code-reviewer` | Review (asercje na atrybuty/status spanu, error path, brak PII w logach) | „Zrecenzuj `tests/observability/orders.spec.ts`” |
+
+### 🐳 Testcontainers — `testcontainers-test-*`
+
+| Agent | Kiedy użyć | Przykład |
+|---|---|---|
+| `qa-tools:testcontainers-test-planner` | Planujesz realne zależności per run (Postgres/Redis/Kafka, healthchecki, izolacja) | „Zaplanuj środowisko: Postgres 16 + Redis dla testów integracyjnych” |
+| `qa-tools:testcontainers-test-writer` | Piszesz testy integracyjne z kontenerami w globalSetup (mapped ports, env) | „Napisz testy z planu `postgres-orders.md`” |
+| `qa-tools:testcontainers-test-refactor` | Refaktoryzacja (helpery startu kontenerów i resetu stanu) | „Wydziel helper `resetDatabase()` do beforeEach” |
+| `qa-tools:testcontainers-test-code-reviewer` | Review (brak waitForTimeout na gotowość, porty mapowane, teardown, izolacja) | „Zrecenzuj `tests/testcontainers/orders.spec.ts`” |
 
 ---
 

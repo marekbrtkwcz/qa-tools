@@ -2,7 +2,7 @@
 
 [![Validate plugin](https://github.com/marekbrtkwcz/qa-tools/actions/workflows/validate-plugin.yml/badge.svg)](https://github.com/marekbrtkwcz/qa-tools/actions/workflows/validate-plugin.yml)
 
-Vibe CLI plugin (Agent Plugins 1.0 format) with a complete AI toolkit for quality engineering: 17 testing pipelines × 4 stages + 8 role agents = **76 subagents**, **48 skills**, **6 hooks**, **8 knowledge entries**.
+Vibe CLI plugin (Agent Plugins 1.0 format) with a complete AI toolkit for quality engineering: 18 testing pipelines × 4 stages + 8 role agents = **80 subagents**, **49 skills**, **6 hooks**, **8 knowledge entries**.
 
 ## ⚡ Quick Start
 
@@ -27,7 +27,7 @@ After installing the plugin (see [Installation](#installation-in-another-project
 
 Each command is read-only or writes to `.qa/` / `tests/` — safe to run on any project. Subagents (`qa-tools:ui-test-planner`, etc.) and skills (`/playwright-test-writing`, etc.) are available throughout.
 
-> 📖 **Not sure which agent to use?** See [docs/AGENTS.md](docs/AGENTS.md) — a table of all 76 subagents with "when to use" and examples.
+> 📖 **Not sure which agent to use?** See [docs/AGENTS.md](docs/AGENTS.md) — a table of all 80 subagents with "when to use" and examples.
 
 | Area | Subagents | Purpose |
 |---|---|---|
@@ -48,6 +48,7 @@ Each command is read-only or writes to `.qa/` / `tests/` — safe to run on any 
 | 📨 webhook | `qa-tools:webhook-test-*` | HMAC signature, idempotency/replay, side-effect polling 🆕 |
 | ✉️ email | `qa-tools:email-test-*` | Mailpit/Mailosaur, `expect.poll`, links/tokens from mails 🆕 |
 | 🔭 observability | `qa-tools:observability-test-*` | log/span/metric assertions via Loki/Tempo/Prometheus, `expect.poll` 🆕 |
+| 🐳 testcontainers | `qa-tools:testcontainers-test-*` | real deps (Postgres/Redis/Kafka) per run, healthchecks, mapped ports 🆕 |
 
 Each pipeline: `planner → writer → refactor → code-reviewer`.
 
@@ -126,7 +127,7 @@ Releases are automatic: on every push to `main`, the `.github/workflows/release.
 ```
 .vibe/plugins/qa-tools/
 ├── plugin.json                          # Agent Plugins 1.0 manifest
-├── skills/                              # on-demand knowledge (48 skills)
+├── skills/                              # on-demand knowledge (49 skills)
 │   ├── playwright-test-writing/
 │   ├── api-testing/
 │   ├── accessibility-testing/
@@ -174,9 +175,10 @@ Releases are automatic: on every push to `main`, the `.github/workflows/release.
 │   ├── graphql-testing/
 │   ├── webhook-testing/
 │   ├── email-testing/
-│   └── observability-testing/
+│   ├── observability-testing/
+│   └── testcontainers-testing/
 └── ai.mistral.vibe/
-    ├── agents/                          # 76 subagents: 68 pipeline (17 areas × 4 stages) + 8 role agents
+    ├── agents/                          # 80 subagents: 72 pipeline (18 areas × 4 stages) + 8 role agents
     ├── hooks.toml                       # lint, playwright --list, typecheck, flaky-watch, convention-guard, QA conventions
 ├── mcp.json                         # Playwright MCP server (npx @playwright/mcp)
     └── knowledge/                       # knowledge base (architecture, patterns, QA glossary, reporting, quality governance, AI product QA, beyond codegen, playwright conventions)
@@ -251,7 +253,11 @@ Releases are automatic: on every push to `main`, the `.github/workflows/release.
         ├── observability-test-planner.toml  # observability test planning 🆕
         ├── observability-test-writer.toml   # span/log/metric assertions 🆕
         ├── observability-test-refactor.toml # observability refactoring (poll helpers) 🆕
-        └── observability-test-code-reviewer.toml # observability code review 🆕
+        ├── observability-test-code-reviewer.toml # observability code review 🆕
+        ├── testcontainers-test-planner.toml # local deps planning (Testcontainers/compose) 🆕
+        ├── testcontainers-test-writer.toml  # integration tests with real deps 🆕
+        ├── testcontainers-test-refactor.toml # env helpers (start/reset) 🆕
+        └── testcontainers-test-code-reviewer.toml # env code review 🆕
 ```
 
 ## Testing pipeline
@@ -260,7 +266,7 @@ Releases are automatic: on every push to `main`, the `.github/workflows/release.
 Planner → Writer → Refactor → Code Reviewer
 ```
 
-Available for seventeen areas: **UI**, **API**, **E2E**, **mobile**, **visual (regression)**, **load (k6)**, **DB (data migration/ETL verification)**, **contract (Pact / OpenAPI)**, **a11y (WCAG accessibility)**, **security (OWASP Top 10)**, **chaos (fault injection / resilience)**, **i18n (locales, RTL, formats)**, **API versioning (deprecations, backward compatibility)**, **GraphQL (data + errors assertions)**, **webhook (HMAC signature, idempotency)**, **email (Mailpit/Mailosaur, expect.poll)**, **observability (log/span/metric assertions)**.
+Available for eighteen areas: **UI**, **API**, **E2E**, **mobile**, **visual (regression)**, **load (k6)**, **DB (data migration/ETL verification)**, **contract (Pact / OpenAPI)**, **a11y (WCAG accessibility)**, **security (OWASP Top 10)**, **chaos (fault injection / resilience)**, **i18n (locales, RTL, formats)**, **API versioning (deprecations, backward compatibility)**, **GraphQL (data + errors assertions)**, **webhook (HMAC signature, idempotency)**, **email (Mailpit/Mailosaur, expect.poll)**, **observability (log/span/metric assertions)**, **testcontainers (real local dependencies per CI run)**.
 
 ## qa-tools conventions (enforced by all 60 agents)
 

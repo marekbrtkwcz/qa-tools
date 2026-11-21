@@ -3,6 +3,18 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.55.0] - 2026-11-21
+
+### 📦 Added
+- Nowy obszar pipeline'u **🐳 testcontainers** (17 → 18 obszarów, 76 → 80 subagentów, 48 → 49 skillów): `testcontainers-test-*` + skill `testcontainers-testing` — realne zależności (Postgres/Redis/Kafka/WireMock) per run CI:
+  - start w `globalSetup` (Testcontainers `start()` z wait strategy lub `docker compose -f docker-compose.test.yml up -d --wait`), teardown w `globalTeardown` (`down -v`, także przy failu)
+  - gotowość tylko przez healthcheck / `expect.poll` — zakaz `waitForTimeout` i sleepów „aż wstanie”
+  - porty tylko mapowane (`getMappedPort`) — zakaz hardkodowanych portów; connection stringi tylko z env do `playwright.config.ts`
+  - izolacja per test (flush/reset w `beforeEach`/`afterEach`), kontenery raz per run (nie per test)
+  - CI: GitHub Actions `services` z healthcheckiem albo compose w jobie
+- `scripts/validate-plugin.py`: `testcontainers` w `PLAYWRIGHT_AREAS` i w wyłączeniach zakazu `waitForTimeout`.
+- README + `docs/AGENTS.md`: nowy obszar w tabelach i drzewkach, liczby (80 subagentów, 49 skillów).
+
 ## [1.54.0] - 2026-11-21
 
 ### 📦 Added
