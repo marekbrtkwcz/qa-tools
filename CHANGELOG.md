@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.47.1] - 2026-11-21
+
+### 🐞 Fixed
+- Renamed the plugin's MCP server `playwright` → `playwright-mcp` in `.vibe/plugins/qa-tools/mcp.json`: the name collided with the user-configured `playwright` server (`playwright-mcp` in `~/.vibe/config.toml`), so Vibe disabled the plugin's server. No other plugin file referenced the old name.
+
 ## [1.47.0] - 2026-11-21
 
 ### 📦 Added

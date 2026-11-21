@@ -1,7 +1,8 @@
 {
-  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",
   "mcpServers": {
-    "playwright": {
+    "playwright-mcp": {
+      "type": "stdio",
       "command": "npx",
       "args": ["-y", "@playwright/mcp@latest"],
       "env": {}
