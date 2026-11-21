@@ -27,6 +27,8 @@ After installing the plugin (see [Installation](#installation-in-another-project
 
 Each command is read-only or writes to `.qa/` / `tests/` — safe to run on any project. Subagents (`qa-tools:ui-test-planner`, etc.) and skills (`/playwright-test-writing`, etc.) are available throughout.
 
+> 📖 **Not sure which agent to use?** See [docs/AGENTS.md](docs/AGENTS.md) — a table of all 60 subagents with "when to use" and examples.
+
 | Area | Subagents | Purpose |
 |---|---|---|
 | 🖥️ UI | `qa-tools:ui-test-*` | Playwright UI tests |

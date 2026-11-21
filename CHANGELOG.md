@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.49.0] - 2026-11-21
+
+### 📦 Added
+- New `docs/AGENTS.md` — reference table of all **60 subagents** grouped by area (13 pipelines × 4 stages) and role (8 agents), each with "when to use" and a concrete example invocation. Linked from README Quick Start section.
+
 ## [1.48.0] - 2026-11-21
 
 ### 📦 Added
