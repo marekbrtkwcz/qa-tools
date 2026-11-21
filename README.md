@@ -68,7 +68,7 @@ cp -r /tmp/qa-tools/.vibe/plugins/qa-tools .vibe/plugins/
 
 # 3. In the project: /reload-plugins (or restart Vibe), then check:
 #    /plugins  → qa-tools
-#    /skills   → 44 skills tagged plugin:qa-tools
+#    /skills   → 60 skills tagged plugin:qa-tools
 
 # 4. (optional) validate the plugin structure
 py scripts/validate-plugin.py
@@ -321,7 +321,7 @@ py scripts/validate-plugin.py                    # Python 3.11+, stdlib only
 python -m unittest discover -s tests -v          # validator unit tests (stdlib)
 ```
 
-The script checks: `plugin.json`, all 60 agent TOML files (keys, naming conventions, `waitForTimeout` ban, `__ENV`/`thresholds` rules for k6), 44 skill frontmatters, `hooks.toml`, `knowledge/` entries, reference example compliance, and version/count consistency (`plugin.json` ↔ `CHANGELOG.md` ↔ README). Exit code 0 = OK, 1 = errors. Useful locally and in CI — on every push/PR to `main` it is run by the `.github/workflows/validate-plugin.yml` workflow.
+The script checks: `plugin.json`, `mcp.json` (valid JSON, `--caps` limited to supported values), all 80 agent TOML files (keys, naming conventions, `waitForTimeout` ban, `__ENV`/`thresholds` rules for k6), all 60 skill frontmatters, `hooks.toml`, `knowledge/` entries, reference example compliance, and version/count consistency (`plugin.json` ↔ `package.json` ↔ `CHANGELOG.md` ↔ README). Exit code 0 = OK, 1 = errors. Useful locally and in CI — on every push/PR to `main` it is run by the `.github/workflows/validate-plugin.yml` workflow.
 
 ## Reference examples
 

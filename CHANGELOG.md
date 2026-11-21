@@ -3,6 +3,17 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.66.1] - 2026-11-21
+
+### 🐞 Fixed
+- **mcp.json**: usunięto nieistniejące wartości `--caps network,storage,testing` (dozwolone tylko `vision,pdf,devtools` — weryfikacja przez `npx @playwright/mcp@latest --help`); poprzedni fix (v1.55.1) usunął tylko przecinek.
+- **README.md**: zaktualizowano przestarzałe liczby w prozie (44 → 60 skillów, 60 → 80 agentów).
+- **package.json**: zsynchronizowano `version` z `plugin.json` (było 1.47.2, jest 1.66.1).
+- **.vibe/config.toml**: usunięto mylący komentarz „currently disabled” przy pustym `disabled_skills`.
+
+### 🔄 Changed
+- **Walidator** (`scripts/validate-plugin.py`): nowy check `mcp.json` (poprawny JSON, obecność `mcpServers`, `--caps` tylko z dozwolonych wartości) oraz kontrola zgodności `package.json` ↔ `plugin.json`; 3 nowe testy jednostkowe (invalid caps, trailing comma, package version mismatch) — 17 → 20 testów.
+
 ## [1.66.0] - 2026-11-21
 
 ### 📦 Added

@@ -6,7 +6,7 @@
       "command": "npx",
       "args": ["-y", "@playwright/mcp@latest",
       "--caps",
-      "vision,pdf,devtools,network,storage,testing",
+      "vision,pdf,devtools",
       "--ignore-https-errors",
       "--timeout-action",
       "30000",

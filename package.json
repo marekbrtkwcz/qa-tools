@@ -1,6 +1,6 @@
 {
   "name": "qa-tools",
-  "version": "1.47.2",
+  "version": "1.66.1",
   "private": true,
   "type": "module",
   "description": "QA tools plugin for Mistral Vibe — skills, agents, hooks. Playwright runner at the root validates the reference test conventions (tests/e2e, tests/api).",

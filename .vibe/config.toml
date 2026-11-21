@@ -1,6 +1,6 @@
 # Project-level Vibe configuration (qa-tools)
 
 # k6 skills are installed at project level (.agents/skills/, pinned in
-# skills-lock.json) but currently disabled. Enable by removing this entry
-# or toggling the skills on with /skills in a session.
+# skills-lock.json). Add a skill name here to disable it, or toggle
+# skills on/off with /skills in a session.
 disabled_skills = []

@@ -182,10 +182,55 @@ def check_knowledge():
     ok(f"{len(dirs)} wpisów wiedzy")
 
 
+MCP_VALID_CAPS = {"vision", "pdf", "devtools"}  # per `npx @playwright/mcp@latest --help`
+
+
+def check_mcp():
+    print("mcp.json")
+    p = PLUGIN / "mcp.json"
+    if not p.exists():
+        err("mcp.json: brak pliku")
+        return
+    try:
+        data = json.loads(p.read_text(encoding="utf-8"))
+    except Exception as e:
+        err(f"mcp.json: błąd JSON (np. przecinek przed ] lub \\r\\n): {e}")
+        return
+    servers = data.get("mcpServers", {})
+    if not servers:
+        err("mcp.json: puste mcpServers")
+        return
+    for name, srv in servers.items():
+        if "command" not in srv:
+            err(f"mcp.json: serwer '{name}' bez klucza 'command'")
+        args = srv.get("args", [])
+        for i, a in enumerate(args):
+            if a == "--caps":
+                caps = set()
+                if i + 1 < len(args):
+                    caps = {c.strip() for c in args[i + 1].split(",") if c.strip()}
+                invalid = caps - MCP_VALID_CAPS
+                if invalid:
+                    err(f"mcp.json: serwer '{name}' ma nieistniejące --caps {sorted(invalid)} (dozwolone: {sorted(MCP_VALID_CAPS)})")
+    if not errors or all("mcp.json" not in e for e in errors):
+        ok(f"{len(servers)} serwer(ów) MCP, --caps zgodne z dozwolonymi {sorted(MCP_VALID_CAPS)}")
+
+
 def check_version_consistency():
-    print("spójność wersji i liczb (plugin.json / CHANGELOG / README)")
+    print("spójność wersji i liczb (plugin.json / package.json / CHANGELOG / README)")
     pj = json.loads((PLUGIN / "plugin.json").read_text(encoding="utf-8"))
     version = pj.get("version", "")
+
+    pkg = ROOT / "package.json"
+    if pkg.exists():
+        try:
+            pkg_version = json.loads(pkg.read_text(encoding="utf-8")).get("version", "")
+            if pkg_version != version:
+                err(f"package.json: version [{pkg_version}] != version w plugin.json [{version}]")
+            else:
+                ok(f"wersja {version} zgodna w plugin.json i package.json")
+        except Exception as e:
+            err(f"package.json: błąd JSON: {e}")
 
     changelog = ROOT / "CHANGELOG.md"
     if not changelog.exists():
@@ -381,6 +426,7 @@ def main():
         print("ERR za stary Python — tomllib wymaga 3.11+")
         return 1
     check_plugin_json()
+    check_mcp()
     check_agents()
     check_skills()
     check_hooks()

@@ -156,6 +156,23 @@ def build_good_plugin(root: Path, version: str = "1.0.0") -> Path:
         "extensions": {"ai.mistral.vibe": {"toolNamespace": "qaTools"}},
     }), encoding="utf-8")
 
+    (plugin / "mcp.json").write_text(json.dumps({
+        "mcpServers": {
+            "playwright-mcp": {
+                "type": "stdio",
+                "command": "npx",
+                "args": ["-y", "@playwright/mcp@latest", "--caps", "vision,pdf,devtools"],
+                "env": {},
+            }
+        }
+    }), encoding="utf-8")
+
+    (root / "package.json").write_text(json.dumps({
+        "name": "qa-tools",
+        "version": version,
+        "private": True,
+    }), encoding="utf-8")
+
     (agents / "ui-test-writer.toml").write_text(
         'schema_version = 1\n'
         'agent_type = "subagent"\n'
@@ -259,6 +276,35 @@ class ValidatorTestCase(unittest.TestCase):
         code = self.run_validator()
         self.assertEqual(code, 1)
         self.assertTrue(any("CHANGELOG" in e and "9.9.9" in e for e in validator.errors))
+
+    def test_mcp_invalid_caps_exit_1(self):
+        mcp = json.loads((self.plugin / "mcp.json").read_text(encoding="utf-8"))
+        mcp["mcpServers"]["playwright-mcp"]["args"] += ["network", "storage", "testing"]
+        # --caps is followed by the caps value; put invalid values there instead
+        mcp["mcpServers"]["playwright-mcp"]["args"] = [
+            "-y", "@playwright/mcp@latest", "--caps", "vision,network,testing",
+        ]
+        (self.plugin / "mcp.json").write_text(json.dumps(mcp), encoding="utf-8")
+        code = self.run_validator()
+        self.assertEqual(code, 1)
+        self.assertTrue(any("--caps" in e for e in validator.errors))
+
+    def test_mcp_trailing_comma_exit_1(self):
+        (self.plugin / "mcp.json").write_text(
+            '{"mcpServers": {"s": {"command": "npx", "args": ["a",],}}}',
+            encoding="utf-8",
+        )
+        code = self.run_validator()
+        self.assertEqual(code, 1)
+        self.assertTrue(any("mcp.json" in e and "JSON" in e for e in validator.errors))
+
+    def test_package_version_mismatch_exit_1(self):
+        pkg = json.loads((self.root / "package.json").read_text(encoding="utf-8"))
+        pkg["version"] = "9.9.9"
+        (self.root / "package.json").write_text(json.dumps(pkg), encoding="utf-8")
+        code = self.run_validator()
+        self.assertEqual(code, 1)
+        self.assertTrue(any("package.json" in e for e in validator.errors))
 
     def test_readme_counts_mismatch_exit_1(self):
         (self.root / "README.md").write_text(
