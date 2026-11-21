@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.60.0] - 2026-11-21
+
+### 📦 Added
+- Nowy skill **🧪 ab-experimentation-testing** (53 → 54 skillów) — walidacja randomizacji (stabilność bucketa, balans, brak leakage), kompletność instrumentacji metryk + guardraile, analiza statystyczna (SRM, peeking, wielokrotne porównania, MDE, segmenty), decyzja ship/kill/iterate z raportowaniem w jednostkach liczbowych.
+
 ## [1.59.0] - 2026-11-21
 
 ### 📦 Added
