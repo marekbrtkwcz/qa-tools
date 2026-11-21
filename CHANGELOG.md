@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.65.0] - 2026-11-21
+
+### 📦 Added
+- Nowy skill **💳 payment-checkout-testing** (58 → 59 skillów) — testowe karty providera (nigdy realnych obciążeń w CI), happy path, 3DS/SCA, stany błędów (decline/timeout/insufficient funds), idempotency (double-click = jedno obciążenie), webhooki providera z weryfikacją podpisu i out-of-order, refundy/capture, waluty (minor units, zero-decimal), PCI (żadnych PAN w logach, tylko tokeny).
+
 ## [1.64.0] - 2026-11-21
 
 ### 📦 Added
