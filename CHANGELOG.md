@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.47.0] - 2026-11-21
+
+### 📦 Added
+- New skill `tracking-quality-trends` (39 → 40 skills), from `jaktestowac/awesome-agents-for-quality`: turns quality snapshots into trends — 6–8 metrics with limit/current/goal, owner and action at the limit; per-run archive under `.qa/history/<date>/` with method/scope recorded; structural diff (practices gained/lost, thresholds changed, gates made non-blocking); noise band + three-period-drift rule; report to `.qa/trends.md` closing with what it cannot see. Includes the metric catalog (code/test, governance, AI/LLM, metrics-not-to-trend) folded into the SKILL.md.
+
 ## [1.46.0] - 2026-11-21
 
 ### 📦 Added
