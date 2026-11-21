@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.55.1] - 2026-11-21
+
+### 🐞 Fixed
+- `mcp.json`: usunięto trailing comma w tablicy `args` (psuło parsowanie JSON) oraz zawężono `--caps` do prawidłowych wartości `vision,pdf,devtools` (usunięto nieistniejące `network,storage,testing`).
+
 ## [1.55.0] - 2026-11-21
 
 ### 📦 Added

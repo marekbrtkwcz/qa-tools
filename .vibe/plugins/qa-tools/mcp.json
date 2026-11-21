@@ -18,7 +18,8 @@
       "allow",
       "--snapshot-boxes",
       "--snapshot-mode",
-      "full",               ],
+      "full"
+      ],
       "env": {}
     }
   }
