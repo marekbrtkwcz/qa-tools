@@ -3,6 +3,17 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.54.0] - 2026-11-21
+
+### 📦 Added
+- Nowy obszar pipeline'u **🔭 observability** (16 → 17 obszarów, 72 → 76 subagentów, 47 → 48 skillów): `observability-test-*` + skill `observability-testing` — asercje na sygnały obserwowalności po akcji użytkownika/API:
+  - **trace'y OTel**: nazwa spanu, atrybuty (`order.id`, `http.status_code`), status OK/ERROR, współdzielony `traceId` z parentem
+  - **logi strukturalne** (Loki / endpoint logów): poziom, `msg`, pola JSON (`correlationId`), korelacja z akcją, negatywna asercja braku PII/sekretów
+  - **metryki Prometheus**: wzrost licznika po akcji (`readCounter` + `expect.poll`)
+  - odpytywanie backendów tylko przez `expect.poll` (backendy są eventually consistent — zakaz `waitForTimeout`), adresy tylko z env (`LOKI_URL`, `TRACES_URL`, `PROM_URL`)
+- `scripts/validate-plugin.py`: `observability` w `PLAYWRIGHT_AREAS` i w wyłączeniach zakazu `waitForTimeout` (obszar nie-UI).
+- README + `docs/AGENTS.md`: nowy wiersz/tabela, drzewka, liczby (76 subagentów, 48 skillów).
+
 ## [1.53.0] - 2026-11-21
 
 ### 📦 Added

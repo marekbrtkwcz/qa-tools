@@ -1,10 +1,10 @@
 # 🤖 Agent Reference — kiedy użyć którego agenta
 
-Wszystkie 72 subagentów qa-tools w jednym miejscu. Wywołujesz jako `qa-tools:<nazwa>`.
+Wszystkie 76 subagentów qa-tools w jednym miejscu. Wywołujesz jako `qa-tools:<nazwa>`.
 
 ---
 
-## 📋 Pipeline agents (16 obszarów × 4 etapy = 64)
+## 📋 Pipeline agents (17 obszarów × 4 etapy = 68)
 
 Każdy obszar ma ten sam łańcuch: **planner → writer → refactor → code-reviewer**.
 
@@ -153,6 +153,15 @@ Każdy obszar ma ten sam łańcuch: **planner → writer → refactor → code-r
 | `qa-tools:email-test-writer` | Piszesz testy e-mail (expect.poll na skrzynkę, asercje temat/odbiorca/treść) | „Napisz test e-mail z planu `welcome-verification.md`” |
 | `qa-tools:email-test-refactor` | Refaktoryzacja (helper findEmail, extractLink, cleanup skrzynki) | „Wydziel helper `findEmail(request, to, subject)`” |
 | `qa-tools:email-test-code-reviewer` | Review e-mail (expect.poll zamiast waitForTimeout, cleanup, przypadek negatywny) | „Zrecenzuj `tests/email/signup.spec.ts`” |
+
+### 🔭 Observability — `observability-test-*`
+
+| Agent | Kiedy użyć | Przykład |
+|---|---|---|
+| `qa-tools:observability-test-planner` | Planujesz testy sygnałów: span OTel, log, metryka po akcji | „Zaplanuj test: złożenie zamówienia daje span z order.id i logiem info” |
+| `qa-tools:observability-test-writer` | Piszesz testy obserwowalności (Loki/Tempo/Prometheus API, expect.poll) | „Napisz test obserwowalności z planu `checkout.md`” |
+| `qa-tools:observability-test-refactor` | Refaktoryzacja (helpery pollForSpan / pollForLogLine / readCounter) | „Wydziel helper `pollForSpans(request, tags)`” |
+| `qa-tools:observability-test-code-reviewer` | Review (asercje na atrybuty/status spanu, error path, brak PII w logach) | „Zrecenzuj `tests/observability/orders.spec.ts`” |
 
 ---
 
