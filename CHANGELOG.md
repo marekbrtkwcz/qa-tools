@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.46.0] - 2026-11-21
+
+### 📦 Added
+- New skill `assessing-comprehension-debt` (38 → 39 skills), from `jaktestowac/awesome-agents-for-quality`: measures the risk that code shipped without anyone understanding it — risk band per change/module from complexity + size + explanation present, teach-back attestation on high-risk surface (`Comprehension-Attested-by:`), optional AI-provenance via `Assisted-by:` trailers, concentration per module, trend over snapshot. Advisory by design, never blocks; includes the full risk-band rubric and the four-question teach-back protocol folded into the SKILL.md.
+
 ## [1.45.0] - 2026-11-21
 
 ### 📦 Added
