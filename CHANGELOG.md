@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.57.0] - 2026-11-21
+
+### 📦 Added
+- Nowy skill **⚖️ risk-based-testing** (50 → 51 skillów) — identyfikacja ryzyk (wymagania, historia defektów, zmiany, brainstorm), macierz probability × impact, mapa głębokości testów wg poziomu ryzyka, risk register, residual risk i go/no-go. Łączy się z `test-planning`, `quality-gates`, `requirements-traceability`.
+
 ## [1.56.0] - 2026-11-21
 
 ### 📦 Added
