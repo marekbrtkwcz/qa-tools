@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.66.0] - 2026-11-21
+
+### 📦 Added
+- Nowy skill **🌐 cross-browser-device-testing** (59 → **60 skillów**) — macierz wsparcia tiered (Tier 1 pełny suite per PR, Tier 2 nightly, Tier 3 smoke) oparta na danych z analytics, projekty Playwright per kombinacja, pułapki per przeglądarka (Safari 100vh/ITP, Firefox privacy, mobile tap/keyboard), macierz viewportów, aktualizacja tierów kwartalnie.
+
 ## [1.65.0] - 2026-11-21
 
 ### 📦 Added
