@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.63.0] - 2026-11-21
+
+### 📦 Added
+- Nowy skill **🌱 quality-coaching** (56 → 57 skillów) — shift-left jako kultura: pairowanie przy testach, Three Amigos, przegląd kodu testowego jak produkcyjnego, bezwinne postmortemy, umowy jakościowe zespołu, rotacja roli quality buddy, pomiar praktyk (MTTR, flake rate, escaped defects) zamiast osoby. Kolejność shift-left: projekt → review → CI → pre-prod → produkcja.
+
 ## [1.62.0] - 2026-11-21
 
 ### 📦 Added

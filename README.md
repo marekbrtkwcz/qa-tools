@@ -2,7 +2,7 @@
 
 [![Validate plugin](https://github.com/marekbrtkwcz/qa-tools/actions/workflows/validate-plugin.yml/badge.svg)](https://github.com/marekbrtkwcz/qa-tools/actions/workflows/validate-plugin.yml)
 
-Vibe CLI plugin (Agent Plugins 1.0 format) with a complete AI toolkit for quality engineering: 18 testing pipelines × 4 stages + 8 role agents = **80 subagents**, **56 skills**, **6 hooks**, **8 knowledge entries**.
+Vibe CLI plugin (Agent Plugins 1.0 format) with a complete AI toolkit for quality engineering: 18 testing pipelines × 4 stages + 8 role agents = **80 subagents**, **57 skills**, **6 hooks**, **8 knowledge entries**.
 
 ## ⚡ Quick Start
 
@@ -127,7 +127,7 @@ Releases are automatic: on every push to `main`, the `.github/workflows/release.
 ```
 .vibe/plugins/qa-tools/
 ├── plugin.json                          # Agent Plugins 1.0 manifest
-├── skills/                              # on-demand knowledge (56 skills)
+├── skills/                              # on-demand knowledge (57 skills)
 │   ├── playwright-test-writing/
 │   ├── api-testing/
 │   ├── accessibility-testing/
@@ -157,6 +157,7 @@ Releases are automatic: on every push to `main`, the `.github/workflows/release.
 │   ├── ab-experimentation-testing/
 │   ├── usability-ux-testing/
 │   ├── test-reporting/
+│   ├── quality-coaching/
 │   ├── mobile-testing/
 │   ├── websocket-sse-testing/
 │   ├── offline-pwa-testing/
