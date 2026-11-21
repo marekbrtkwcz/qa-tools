@@ -3,6 +3,16 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.52.0] - 2026-11-21
+
+### 📦 Added
+- 3 nowe obszary pipeline'u testowego (13 → 16 obszarów, 60 → 72 subagentów, 44 → 47 skillów):
+  - **🔮 GraphQL** (`graphql-test-*` + skill `graphql-testing`): testy query/mutacji przez `request`, asercje na `data` i `errors`, zmienne tylko przez `variables` (zakaz interpolacji), przypadki negatywne.
+  - **📨 webhook** (`webhook-test-*` + skill `webhook-testing`): weryfikacja podpisu HMAC-SHA256, przypadki negatywne (zły podpis 401/403, zły JSON 400), idempotency on replay, asercja efektu ubocznego przez `expect.poll`.
+  - **✉️ email** (`email-test-*` + skill `email-testing`): Mailpit/Mailosaur, oczekiwanie na maila przez `expect.poll` (zakaz `waitForTimeout`), asercje odbiorcy/tematu/treści, ekstrakcja i użycie linku aktywacyjnego, cleanup skrzynki w `afterEach`.
+- `scripts/validate-plugin.py`: nowe obszary dodane do `PLAYWRIGHT_AREAS` (konwencja nazewnictwa) i do wyłączeń zakazu `waitForTimeout` (obszary nie-UI, jak `api`).
+- README + `docs/AGENTS.md`: nowe wiersze w tabelach obszarów, drzewka agentów/skillów, aktualne liczby (72 subagentów, 47 skillów).
+
 ## [1.51.0] - 2026-11-21
 
 ### 📦 Added

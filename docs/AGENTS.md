@@ -1,10 +1,10 @@
 # 🤖 Agent Reference — kiedy użyć którego agenta
 
-Wszystkie 60 subagentów qa-tools w jednym miejscu. Wywołujesz jako `qa-tools:<nazwa>`.
+Wszystkie 72 subagentów qa-tools w jednym miejscu. Wywołujesz jako `qa-tools:<nazwa>`.
 
 ---
 
-## 📋 Pipeline agents (13 obszarów × 4 etapy = 52)
+## 📋 Pipeline agents (16 obszarów × 4 etapy = 64)
 
 Każdy obszar ma ten sam łańcuch: **planner → writer → refactor → code-reviewer**.
 
@@ -126,6 +126,33 @@ Każdy obszar ma ten sam łańcuch: **planner → writer → refactor → code-r
 | `qa-tools:versioning-test-writer` | Piszesz testy versioning (deprecation headers, backward compat) | „Napisz test: deprecated endpoint zwraca warning header” |
 | `qa-tools:versioning-test-refactor` | Refaktoryzacja (per-version helpery) | „Wydziel helper `requestAsVersion('v1')`” |
 | `qa-tools:versioning-test-code-reviewer` | Review versioning (czy breaking changes są wykryte) | „Zrecenzuj testy versioning” |
+
+### 🔮 GraphQL — `graphql-test-*`
+
+| Agent | Kiedy użyć | Przykład |
+|---|---|---|
+| `qa-tools:graphql-test-planner` | Planujesz testy GraphQL (query/mutation, variables, data + errors) | „Zaplanuj test: mutation createOrder zwraca data i brak errors” |
+| `qa-tools:graphql-test-writer` | Piszesz testy GraphQL (Playwright `request`, POST /graphql) | „Napisz test GraphQL z planu `create-order.md`” |
+| `qa-tools:graphql-test-refactor` | Refaktoryzacja (helper `gqlRequest`, fragmenty) | „Wydziel wspólny helper gqlRequest z auth headerem” |
+| `qa-tools:graphql-test-code-reviewer` | Review GraphQL (czy errors są asercjowane, brak interpolacji zmiennych) | „Zrecenzuj `tests/graphql/orders.spec.ts`” |
+
+### 📨 Webhook — `webhook-test-*`
+
+| Agent | Kiedy użyć | Przykład |
+|---|---|---|
+| `qa-tools:webhook-test-planner` | Planujesz testy incoming webhook (podpis HMAC, replay, efekt uboczny) | „Zaplanuj test: webhook payment.succeeded tworzy rekord płatności” |
+| `qa-tools:webhook-test-writer` | Piszesz testy webhooków (sign payload, POST, expect.poll na efekt) | „Napisz test webhooka z planu `payment-succeeded.md`” |
+| `qa-tools:webhook-test-refactor` | Refaktoryzacja (helper podpisu, buildery payloadów) | „Wydziel helper `sign()` i `postWebhook()`” |
+| `qa-tools:webhook-test-code-reviewer` | Review webhooków (zły podpis = 401, replay idempotentny, cleanup) | „Zrecenzuj `tests/webhook/stripe.spec.ts`” |
+
+### ✉️ Email — `email-test-*`
+
+| Agent | Kiedy użyć | Przykład |
+|---|---|---|
+| `qa-tools:email-test-planner` | Planujesz testy maili transakcyjnych (Mailpit/Mailosaur) | „Zaplanuj test: rejestracja wysyła maila weryfikacyjnego z linkiem” |
+| `qa-tools:email-test-writer` | Piszesz testy e-mail (expect.poll na skrzynkę, asercje temat/odbiorca/treść) | „Napisz test e-mail z planu `welcome-verification.md`” |
+| `qa-tools:email-test-refactor` | Refaktoryzacja (helper findEmail, extractLink, cleanup skrzynki) | „Wydziel helper `findEmail(request, to, subject)`” |
+| `qa-tools:email-test-code-reviewer` | Review e-mail (expect.poll zamiast waitForTimeout, cleanup, przypadek negatywny) | „Zrecenzuj `tests/email/signup.spec.ts`” |
 
 ---
 
