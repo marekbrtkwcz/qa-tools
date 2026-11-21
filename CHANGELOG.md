@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.56.0] - 2026-11-21
+
+### 📦 Added
+- Nowy skill **🧭 exploratory-testing** (49 → 50 skillów) — session-based test management (chartery, timeboxy, session notes), heurystyki (SFDPOT, FEW HICCUPPS), granice i przerwania, konwersja odkryć z sesji na testy regresyjne, raportowanie pokrycia. Komplementarny do `test-planning` (testy skryptowane).
+
 ## [1.55.1] - 2026-11-21
 
 ### 🐞 Fixed
