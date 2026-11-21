@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.61.0] - 2026-11-21
+
+### 📦 Added
+- Nowy skill **👤 usability-ux-testing** (54 → 55 skillów) — heurystyczna ewaluacja (10 heurystyk Nielsena), cognitive walkthrough, testy zadaniowe z prawdziwymi użytkownikami (5 użytkowników, cele zamiast kroków), skale severity, raportowanie z priorytetami. Odróżniony od `accessibility-testing` (WCAG) i testów funkcjonalnych.
+
 ## [1.60.0] - 2026-11-21
 
 ### 📦 Added
