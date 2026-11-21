@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.62.0] - 2026-11-21
+
+### 📦 Added
+- Nowy skill **📊 test-reporting** (55 → 56 skillów) — jedna źródło danych (JSON/HTML Playwright, artefakty CI) i trzy widoki: dev (co się zepsuło), release manager (go/no-go + residual risk), leadership (trend limit/current/goal). Struktura raportu: wynik + blocker w pierwszych dwóch liniach, jedna decyzja na raport, każda liczba z mianownikiem. Anty-wzorce: vanity metrics, ukryte retry, zielony check bez kontekstu.
+
 ## [1.61.0] - 2026-11-21
 
 ### 📦 Added
