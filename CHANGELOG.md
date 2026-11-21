@@ -3,6 +3,13 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.51.0] - 2026-11-21
+
+### 📦 Added
+- 4 nowe skille (40 → 44): `analyzing-quality-metrics` (usuwa dangling reference — skill był przywoływany przez `tracking-quality-trends` i `assessing-comprehension-debt`, ale nie istniał) oraz `chaos-testing`, `i18n-testing`, `versioning-testing` — te trzy domeny miały już agentów (`chaos-*`, `i18n-*`, `versioning-*`), brakowało im skilli.
+- Nowy hook `convention-guard` (5 → 6 hooków): po zapisaniu/edycji pliku `*.spec.ts` / `*.test.ts` zgłasza zakazane wzorce — `waitForTimeout` oraz selektory CSS (`page.$(`, `page.$$(`, `page.locator(`) — i przypomina konwencję: asercje tylko `await expect(...)`, selektory tylko `getBy*`. Egzekwuje reguły z AGENTS.md na poziomie hooka.
+- README: poprawione nieaktualne liczby skillów (38 → 44) w sekcji install i opisie walidatora.
+
 ## [1.50.1] - 2026-11-21
 
 ### 📦 Added

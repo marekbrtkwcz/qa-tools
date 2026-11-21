@@ -109,3 +109,28 @@ description = "Add QA testing conventions as context on session start"
 command = """
 echo '{"hook_specific_output": {"additional_context": "QA conventions for this project: tests live in tests/ (e2e/, api/), use Playwright with getByRole/getByLabel selectors, always use expect() for assertions (never waitForTimeout), each test must be independent, clean up created data in afterEach. Run tests with: npx playwright test."}}'
 """
+
+# After writing/editing a test file, guard QA conventions: no waitForTimeout, no CSS/XPath selectors
+[[hooks]]
+name = "convention-guard"
+type = "post_tool"
+match = "re:file_system\\.(write_file|edit)"
+description = "Warn when an edited spec file uses waitForTimeout or CSS selectors (page.$ / page.$$ / page.locator) — conventions allow only await expect(...) assertions and getBy* selectors"
+
+command = """
+payload=$(cat)
+file_path=$(echo "$payload" | python -c "import sys,json; d=json.load(sys.stdin); ti=d.get('tool_input',{}); print(ti.get('path') or ti.get('file_path') or '')" 2>/dev/null)
+case "$file_path" in
+  *.spec.ts|*.test.ts|*.spec.js|*.test.js)
+    if [ -f "$file_path" ]; then
+      hits=$(grep -n -F -e 'waitForTimeout' -e 'page.$(' -e 'page.$$(' -e 'page.locator(' "$file_path" 2>/dev/null || true)
+      if [ -n "$hits" ]; then
+        echo "convention-guard: $file_path contains forbidden patterns (waitForTimeout / CSS selectors):"
+        echo "$hits" | head -10
+        echo "qa-tools convention: assertions only via await expect(...), selectors only getByRole/getByLabel/getByText/getByTestId."
+      fi
+    fi
+    ;;
+esac
+exit 0
+"""
