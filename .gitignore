@@ -4,3 +4,9 @@ __pycache__/
 # Local skill installs — restored from skills-lock.json via `npx skills install`
 .agents/
 .vibe/skills/
+
+# Node / Playwright
+node_modules/
+playwright-report/
+test-results/
+.env

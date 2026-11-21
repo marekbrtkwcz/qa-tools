@@ -1,0 +1,32 @@
+{
+  "name": "qa-tools",
+  "version": "1.47.2",
+  "private": true,
+  "type": "module",
+  "description": "QA tools plugin for Mistral Vibe — skills, agents, hooks. Playwright runner at the root validates the reference test conventions (tests/e2e, tests/api).",
+  "scripts": {
+    "test": "playwright test",
+    "test:e2e": "playwright test tests/e2e",
+    "test:api": "playwright test tests/api",
+    "test:smoke": "playwright test --grep @smoke",
+    "test:regression": "playwright test --grep @regression",
+    "test:list": "playwright test --list",
+    "typecheck": "tsc --noEmit",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "format": "biome format .",
+    "format:write": "biome format --write .",
+    "deps:check": "ncu",
+    "init": "node scripts/init.mjs"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "latest",
+    "@clack/prompts": "latest",
+    "@faker-js/faker": "latest",
+    "@playwright/test": "latest",
+    "@types/node": "latest",
+    "dotenv": "latest",
+    "npm-check-updates": "latest",
+    "zod": "latest"
+  }
+}

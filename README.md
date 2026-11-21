@@ -4,6 +4,29 @@
 
 Vibe CLI plugin (Agent Plugins 1.0 format) with a complete AI toolkit for quality engineering: 13 testing pipelines × 4 stages + 8 role agents = **60 subagents**, **40 skills**, **5 hooks**, **8 knowledge entries**.
 
+## ⚡ Quick Start
+
+After installing the plugin (see [Installation](#installation-in-another-project) below), try these commands in your project to see qa-tools in action:
+
+```bash
+# 1. Explore your app and get a test plan (writes .qa/test-plan.md)
+/create-test-plan
+
+# 2. Generate tests from the plan (writes tests/, runs them)
+/test-generator
+
+# 3. Or jump straight into a single grounded test via Playwright MCP
+/playwright-generate-test
+
+# 4. Audit your existing test suite for anti-patterns
+/tech-debt-audit
+
+# 5. Check what to retest after a diff/PR
+/regression-scope
+```
+
+Each command is read-only or writes to `.qa/` / `tests/` — safe to run on any project. Subagents (`qa-tools:ui-test-planner`, etc.) and skills (`/playwright-test-writing`, etc.) are available throughout.
+
 | Area | Subagents | Purpose |
 |---|---|---|
 | 🖥️ UI | `qa-tools:ui-test-*` | Playwright UI tests |

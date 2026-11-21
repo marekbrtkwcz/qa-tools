@@ -1,6 +1,6 @@
 ---
 name: quality-governance
-description: Przewodnik po warstwie ponad pisaniem testów — jak decydować, które praktyki jakości projekt faktycznie egzekwuje, wykrywać czy są wymuszane, uczciwie rejestrować wyjątki i pokazywać kierunek w czasie. Trzy długi (techniczny, intencji, zrozumienia) z trzema różnymi pułapami egzekwowania. Adaptacja przewodnika z jaktestowac/awesome-agents-for-quality.
+description: Jak egzekwować praktyki jakości: wykrywanie czy są wymuszane, uczciwe wyjątki, trendy w czasie. Trzy długi — techniczny, intencji, zrozumienia. Adaptacja z jaktestowac/awesome-agents-for-quality.
 display_name: Quality Governance
 icon: scale
 ---

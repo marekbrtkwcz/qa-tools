@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 
 // Przykład referencyjny testu security (XSS):
 // - nazwa: should <rezultat> when <warunek>
@@ -6,7 +6,6 @@ import { test, expect } from '@playwright/test';
 // - asercja: treść enkodowana (nie wykonana) + brak dialogu alert
 
 test.describe('Comments — XSS', () => {
-
   test.beforeEach(async ({ page }) => {
     await page.goto('/comments');
   });

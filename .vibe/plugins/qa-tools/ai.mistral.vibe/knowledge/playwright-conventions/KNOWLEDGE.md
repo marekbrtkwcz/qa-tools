@@ -1,6 +1,6 @@
 ---
 name: playwright-conventions
-description: Skonsolidowane konwencje repozytorium dla pracy z Playwright + TypeScript, testów API, page objects, jakości CI (quality gates), commit trailerów, evalów LLM i stylu TypeScript. W Vibe nie ma katalogów rules innych CLI — to wiedza zastępuje pliki rules z jaktestowac/awesome-agents-for-quality (e2e-playwright, page-objects, playwright-typescript, api-playwright-tests, typescript-style, commit-trailers, llm-evals, quality-gate-workflows).
+description: Skonsolidowane konwencje repo: Playwright + TypeScript, testy API, page objects, quality gates w CI, trailery commitów, evalsy LLM. Zastępuje reguły z jaktestowac/awesome-agents-for-quality.
 display_name: Playwright & Repo Conventions
 icon: scroll
 ---

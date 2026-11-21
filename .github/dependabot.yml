@@ -1,0 +1,14 @@
+version: 2
+updates:
+  # Biblioteki npm — zawsze najnowsze: cotygodniowy PR z aktualizacją lockfile.
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 10
+  # Wersje GitHub Actions w workflowach — też aktualne.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5

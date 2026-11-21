@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.48.0] - 2026-11-21
+
+### 📦 Added
+- README: new **⚡ Quick Start** section right after the intro — 5 copy-paste commands (`/create-test-plan`, `/test-generator`, `/playwright-generate-test`, `/tech-debt-audit`, `/regression-scope`) so a new user sees value in the first 3 minutes after installing the plugin.
+
 ## [1.47.2] - 2026-11-21
 
 ### 🐞 Fixed

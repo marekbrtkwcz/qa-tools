@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 
 // Przykład referencyjny testu wersjonowania API:
 // - nazwa: should <rezultat> when <warunek>
@@ -6,7 +6,6 @@ import { test, expect } from '@playwright/test';
 // - trzy asercje: status, pola core zgodne między wersjami, nagłówki deprecation
 
 test.describe('Users API — v1 vs v2', () => {
-
   const auth = { Authorization: `Bearer ${process.env.API_TOKEN ?? ''}` };
 
   test('should return same core fields when requesting v1 and v2', async ({ request }) => {

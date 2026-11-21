@@ -3,4 +3,4 @@
 # k6 skills are installed at project level (.agents/skills/, pinned in
 # skills-lock.json) but currently disabled. Enable by removing this entry
 # or toggling the skills on with /skills in a session.
-disabled_skills = ["k6*"]
+disabled_skills = []

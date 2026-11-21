@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 
 // Reference example of a mobile test:
 // - run in a device project (devices['Pixel 7']) — see examples/playwright.config.ts
@@ -8,7 +8,6 @@ import { test, expect } from '@playwright/test';
 test.use({ viewport: { width: 390, height: 844 } });
 
 test.describe('Checkout — mobile', () => {
-
   test('should confirm order when paying with tap on mobile viewport', async ({ page }) => {
     await page.goto('/checkout');
 

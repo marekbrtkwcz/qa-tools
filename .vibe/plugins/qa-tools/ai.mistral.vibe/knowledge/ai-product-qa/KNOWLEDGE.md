@@ -1,6 +1,6 @@
 ---
 name: ai-product-qa
-description: Przewodnik po testowaniu produktów, które wypuszczają LLM (prompty, agenci, RAG, tool-calling) — gdy to produkt korzysta z AI, a nie AI pisze testy. Trzy komplementarne suity: evals dla normalnego inputu, guardrails dla złego outputu, red team dla wrogiego inputu. Adaptacja przewodnika z jaktestowac/awesome-agents-for-quality.
+description: Testowanie produktów opartych na LLM: evals dla normalnego inputu, guardrails dla błędnego outputu, red team dla wrogiego inputu. Adaptacja z jaktestowac/awesome-agents-for-quality.
 display_name: AI Product QA
 icon: robot
 ---

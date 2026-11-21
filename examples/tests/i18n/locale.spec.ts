@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 
 // Przykład referencyjny testu i18n:
 // - nazwa: should <rezultat> when <warunek>
@@ -6,7 +6,6 @@ import { test, expect } from '@playwright/test';
 // - formaty per locale; nigdy waitForTimeout; locale izolowane per test
 
 test.describe('i18n — pl-PL', () => {
-
   test.afterEach(async ({ page }) => {
     await page.context().clearCookies();
   });

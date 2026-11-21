@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 
 // Przykład referencyjny konwencji qa-tools:
 // - nazwa testu: should <rezultat> when <warunek>

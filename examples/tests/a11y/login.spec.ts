@@ -1,5 +1,5 @@
-import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+import { expect, test } from '@playwright/test';
 
 // Przykład referencyjny testu a11y:
 // - skan axe-core: zero naruszeń critical/serious
@@ -7,16 +7,13 @@ import AxeBuilder from '@axe-core/playwright';
 // - selektory getBy* (rola i label to podstawa a11y)
 
 test.describe('Login page accessibility', () => {
-
   test.beforeEach(async ({ page }) => {
     await page.goto('/login');
   });
 
   test('should have no critical or serious a11y violations when login page is open', async ({ page }) => {
     const results = await new AxeBuilder({ page }).analyze();
-    const blocking = results.violations.filter(
-      (v) => v.impact === 'critical' || v.impact === 'serious'
-    );
+    const blocking = results.violations.filter((v) => v.impact === 'critical' || v.impact === 'serious');
     expect(blocking).toEqual([]);
   });
 

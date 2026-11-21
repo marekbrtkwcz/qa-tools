@@ -1,0 +1,81 @@
+name: E2E (Playwright)
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions: {}
+
+jobs:
+  playwright-smoke:
+    # Szybka bramka na każdym PR i pushu — tylko tagi @smoke (offline-safe).
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 26
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint and format check (Biome)
+        run: npx biome check .
+
+      - name: Type-check tests (tsc --noEmit)
+        run: npm run typecheck
+
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+
+      - name: Run smoke tests
+        run: npx playwright test --grep @smoke
+
+      - name: Upload Playwright report and results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-smoke
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 14
+
+  playwright-regression:
+    # Pełna regresja — tylko na push do main; bez --grep, czyli wszystkie testy
+    # (poza @flaky, które są w kwarantannie: --grep-invert @flaky).
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 26
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+
+      - name: List collected tests (suite sanity check)
+        run: npx playwright test --list
+
+      - name: Run regression tests
+        run: npx playwright test --grep-invert @flaky
+
+      - name: Upload Playwright report and results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-regression
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 30

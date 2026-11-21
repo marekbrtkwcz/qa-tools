@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 
 // Przykład referencyjny konwencji qa-tools dla testów API:
 // - nazwa testu: should <rezultat> when <warunek>
@@ -7,7 +7,6 @@ import { test, expect } from '@playwright/test';
 // - przypadki negatywne w tym samym pliku; sprzątanie zasobów w afterEach
 
 test.describe('Users API', () => {
-
   test('should return user list when token is valid', async ({ request }) => {
     const res = await request.get('/api/users', {
       headers: { Authorization: `Bearer ${process.env.API_TOKEN ?? ''}` },
