@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.50.0] - 2026-11-21
+
+### 📦 Added
+- New project command `/generate-quality-report` (30 → 31 commands): auto-detects Playwright report / JUnit XML / coverage JSON / tsc / lint output, computes pass rate, flake rate, coverage, TS/lint errors with denominators, compares against the previous `.qa/quality-report-*.md` for trend (Δ + goal status), and writes a single `.qa/quality-report-<date>.md`. Read-only.
+
 ## [1.49.0] - 2026-11-21
 
 ### 📦 Added
