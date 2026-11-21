@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.50.1] - 2026-11-21
+
+### 📦 Added
+- 7 nowych testów E2E walidatora pluginu w `tests/e2e/validator.spec.ts`: pełny flow (kopia repo do tmp → modyfikacja → uruchomienie `validate-plugin.py` jako proces → asercja exit code + komunikatu). Pokrywają: valid plugin (exit 0), brak `plugin.json`, mismatch wersji, brak agenta TOML, zły frontmatter skilla, invalid regex w hooks.toml, niezgodność liczby subagentów w README.
+
 ## [1.50.0] - 2026-11-21
 
 ### 📦 Added
