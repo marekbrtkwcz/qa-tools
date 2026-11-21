@@ -3,6 +3,13 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.53.0] - 2026-11-21
+
+### 📦 Added
+- New project command `/review-pr` (31 → 33 commands): quality-focused PR review from a PR number/URL or diff — maps tests to the change, checks conventions (getBy* selectors, expect()-only, no waitForTimeout, afterEach cleanup), flaky risk, API/contract and CI impact; outputs severity-ranked findings with `file:line` and an approve/comment/request-changes verdict. Read-only.
+- New project command `/triage-ci` (→ 33 commands): triage of a red CI run from a run ID/URL or job log — classifies each failure (application defect / test bug / environment-config / test data / flaky), clusters by shared symptom, confidence per cluster, and maps next actions to `/explain-test-failure`, `/analyze-test-results`, `/fix-tests`, `/stabilize-flaky-tests`, `/bug-report`. Analysis only.
+- README: both commands added to the commands table.
+
 ## [1.52.0] - 2026-11-21
 
 ### 📦 Added

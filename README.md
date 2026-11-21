@@ -111,6 +111,8 @@ Project-level prompts in `.vibe/prompts/` (loaded only in this trusted project; 
 | `/playwright-explore-website` | first look at an app via Playwright MCP: 3–5 flows with locators → `.qa/website-exploration-summary.md` + proposed test cases |
 | `/playwright-explore-website-requests` | same exploration + network traffic per action (redacted) → endpoint table, candidates for API tests / `page.route` mocks |
 | `/generate-quality-report` | aggregate test results, coverage, lint/typecheck, flake rate → `.qa/quality-report-<date>.md` with trend vs previous report 🆕 |
+| `/review-pr` | quality-focused PR review: tests mapped to the diff, convention compliance, flaky risk, severity-ranked findings + approve/comment/request-changes verdict; read-only 🆕 |
+| `/triage-ci` | red CI run → failure classification (app defect / test bug / env / data / flaky), clusters, first step per cluster; analysis only 🆕 |
 
 ## Publishing
 
