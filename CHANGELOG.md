@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.58.0] - 2026-11-21
+
+### 📦 Added
+- Nowy skill **🔐 privacy-compliance-testing** (51 → 52 skillów) — testowanie zgodności RODO/GDPR: zgody i cookies (ePrivacy), prawa podmiotu danych (eksport, usunięcie z logów/backupów), minimalizacja danych, retencja, PII w logach i raportach błędów, dostawcy third-party, dowody audytowe, release gate. Nie jest poradą prawną — współpraca z IOD/DPO.
+
 ## [1.57.0] - 2026-11-21
 
 ### 📦 Added
