@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.64.0] - 2026-11-21
+
+### 📦 Added
+- Nowy skill **🐤 canary-production-testing** (57 → 58 skillów) — strategie rollout (canary/ring/blue-green/dark launch) i co weryfikować w każdej, analiza canary vs baseline (guardraile, metryki biznesowe z lagiem, segmenty), automatyczny rollback z testowanymi triggerami, bezpieczne TiP (synthetic checks, read-only probes, shadow traffic, kill switch drill), rollout record jako dowód.
+
 ## [1.63.0] - 2026-11-21
 
 ### 📦 Added
