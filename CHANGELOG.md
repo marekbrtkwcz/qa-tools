@@ -3,6 +3,11 @@
 All notable changes to the qa-tools plugin are documented here.
 Format: `MAJOR.MINOR.PATCH` (SemVer). Plugin versions are tracked in `.vibe/plugins/qa-tools/plugin.json`.
 
+## [1.59.0] - 2026-11-21
+
+### 📦 Added
+- Nowy skill **🚩 feature-flags-testing** (52 → 53 skillów) — macierz stanów flag (on/off × kombinacje), testy reguł targetowania i rolloutów procentowych, kill switch z czasem propagacji, deterministyczne overriding flag w CI, fail-open vs fail-closed przy niedostępności serwisu flag, higiena flag (owner, expiry, usuwanie martwego kodu).
+
 ## [1.58.0] - 2026-11-21
 
 ### 📦 Added
