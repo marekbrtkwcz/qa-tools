@@ -384,12 +384,12 @@ test('checkMembership: missing agent and knowledge sources are reported', () => 
 
 /* ---------- validateFrontmatter ---------- */
 
-test('validateFrontmatter: the real collection has no frontmatter errors; warnings only name agents/knowledge', () => {
+test('validateFrontmatter: the real collection has no frontmatter errors; warnings only name skills/agents/knowledge', () => {
   const real = parseBundles(path.join(__dirname, '..', 'bundles.yaml'));
   const { errors, warnings } = validateFrontmatter(real);
   assert.deepEqual(errors, [], 'the real collection must have no frontmatter errors');
   assert.ok(Array.isArray(warnings));
-  assert.ok(warnings.every((w) => w.startsWith('agent ') || w.startsWith('knowledge ')));
+  assert.ok(warnings.length === 0 || warnings.every((test_w) => test_w.startsWith('agent ') || test_w.startsWith('knowledge ') || test_w.startsWith('skill ')), 'real-collection warnings must follow the declared policy classes');
 });
 
 test('validateFrontmatter: name mismatch, missing description and over-limit skill description are errors', () => {
@@ -420,6 +420,19 @@ test('validateFrontmatter: agent descriptions over 300 warn (build truncates), n
   assert.deepEqual(errors, []);
   assert.equal(warnings.length, 1);
   assert.ok(warnings[0].includes('agent mine') && warnings[0].includes('320'));
+});
+
+test('validateFrontmatter: skill descriptions over 700 warn (routing signal), never error', () => {
+  const srcRoot = tmpDir();
+  const long = 'd'.repeat(750);
+  writeTree(path.join(srcRoot, 'skills'), {
+    'mine/SKILL.md': '---\nname: mine\ndescription: ' + long + '\n---\n\nBody.\n',
+  });
+  const bundles = { b: { skills: ['mine'], agents: [], knowledge: [] } };
+  const { errors, warnings } = validateFrontmatter(bundles, srcRoot);
+  assert.deepEqual(errors, []);
+  assert.equal(warnings.length, 1);
+  assert.ok(warnings[0].includes('skill mine') && warnings[0].includes('750'));
 });
 
 /* ---------- orphanPluginDirs (drift gate whole-bundle blind spot) ---------- */

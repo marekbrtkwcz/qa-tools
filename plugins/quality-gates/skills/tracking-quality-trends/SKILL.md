@@ -1,6 +1,6 @@
 ---
 name: tracking-quality-trends
-description: 'Turns point-in-time quality readings into a trend: archives each run, compares it with the previous one, and reports per metric whether it is getting better or worse - practices newly present or regressed, coverage, flake rate, expiring waivers, eval scores - using limit/current/goal framing. Use when quality reporting is a series of disconnected snapshots, when a team needs to show whether a number went up or down over a quarter, between runs, or since the last release, when a number such as coverage is quoted with no baseline to compare against, or when a regression in the quality system itself should be visible. For what each metric means and how it misleads, use analyzing-quality-metrics.'
+description: 'Turns point-in-time quality readings into a trend: archives each run, compares it with the previous one, and reports per metric whether it is getting better or worse - practices newly present or regressed, coverage, flake rate, expiring waivers, eval scores - using limit/current/goal framing. Use when quality reporting is a series of disconnected snapshots, when a team needs to show whether a number moved over a quarter or between releases, or when a number such as coverage is quoted with no baseline. For what each metric means and how it misleads, use analyzing-quality-metrics.'
 argument-hint: 'Where previous run artifacts live, which metrics are tracked, the reporting cadence, and the limit and goal for each metric'
 user-invocable: true
 ---

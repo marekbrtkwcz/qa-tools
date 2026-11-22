@@ -1,6 +1,6 @@
 ---
 name: automating-ci-test-pipelines
-description: 'Builds and tunes the CI jobs (GitHub Actions, GitLab CI, or similar) that run automated test suites: which suite runs on which trigger (PR smoke, full on merge, nightly matrix), sharding with merged reports, dependency and browser caching, trace and report artifacts with retention, a CI-only retry policy whose flakes are reported, running old and new suites side by side during a migration, separate performance and visual jobs, and a runtime budget that keeps feedback fast. Use when adding a test suite to CI, when the pipeline is too slow, when a failure in CI cannot be debugged because no trace or report was kept, when shards produce separate reports, or when suites need splitting by trigger. For merge-blocking gates, use generating-quality-gate-workflows.'
+description: 'Builds and tunes the CI jobs that run test suites: suite per trigger (PR smoke, full on merge, nightly), sharding with merged reports, dependency and browser caching, trace and report artifacts with retention, a CI-only retry policy with flakes reported, old and new suites side by side during a migration, and a runtime budget. Use when adding a suite to CI, when the pipeline is too slow, when CI failures cannot be debugged for lack of traces, or when shards produce separate reports. For merge-blocking gates use generating-quality-gate-workflows.'
 argument-hint: 'The suites and runners, the CI provider, current pipeline duration and pain points, and the triggers available (PR, merge, schedule, release)'
 user-invocable: true
 ---

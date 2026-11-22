@@ -1,6 +1,6 @@
 ---
 name: property-based-testing
-description: 'Generates inputs instead of hand-picking them: property identification (invariants, round-trips, oracles, idempotence), fast-check generators and shrinking in Vitest/Jest, seed control for reproducible failures, and the discipline that keeps runtime bounded and failure cases pinned as regression examples. Use when a parser, serializer, calculator, state machine, or data transform is tested with five happy-path examples, when edge cases keep being found in production that nobody thought to test, or when one function has more input combinations than any example list can honor. For cataloging edge cases by hand where properties cannot be found, use edge-case-scenario-generator; for test doubles at module boundaries, use writing-unit-tests.'
+description: 'Generates inputs instead of hand-picking them: property identification (invariants, round-trips, oracles, idempotence), fast-check generators and shrinking in Vitest or Jest, seed control for reproducible failures, bounded runtime, and shrunk failure cases pinned as regression examples. Use when a parser, serializer, calculator, state machine or data transform is tested with only happy-path examples, or when one function has more input combinations than any example list can honor. For cataloging edge cases by hand use edge-case-scenario-generator.'
 argument-hint: 'The function or system under test, its input domain, invariants or oracles you can name, and the runner it plugs into'
 user-invocable: true
 ---

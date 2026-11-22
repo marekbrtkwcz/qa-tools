@@ -1,6 +1,6 @@
 ---
 name: scope-change-gate
-description: Tags a diff by file and hunk, resolves which quality practices the change makes relevant, verifies coverage of changed lines and the recorded intent, and returns severity-ranked findings with remediation briefs - the one-command form of the scoping-change-relevance, verifying-change-coverage, and recording-change-intent skills run together. Use when a pull request is about to merge, when deciding what a change needs tested, or when a diff touches auth, schemas, migrations, or removes tests or guards. For only drafting the missing rationale, use the record-change-intent command; for only mapping which change tags apply, use the scoping-change-relevance skill; for a manual retest pack, use the regression-scope command.
+description: Tags a diff by file and hunk, resolves which quality practices the change makes relevant, verifies coverage of changed lines and the recorded intent, and returns severity-ranked findings with remediation briefs - the one-command form of scoping-change-relevance, verifying-change-coverage and recording-change-intent run together. Use when a pull request is about to merge, when what a change needs tested must be decided, or when the diff touches auth, schemas, migrations, or removes tests or guards. For a manual retest pack use the regression-scope command.
 argument-hint: "[baseRef]"
 disable-model-invocation: true
 ---

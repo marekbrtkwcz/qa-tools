@@ -1,6 +1,6 @@
 ---
 name: stabilizing-flaky-tests
-description: 'Diagnoses and fixes tests that fail intermittently, by root cause (timing, shared state, data collision, environment, order dependence, external dependency, or a real race in the application), proves the fix under the conditions that broke it, and contains what cannot be fixed yet with an owned, expiring quarantine. Use when a test fails randomly or passes on retry, when it passes locally but fails in CI, when a pipeline goes green after a re-run, when a suite needs retries to pass, when a flake list or quarantine keeps growing, or when someone proposes raising a timeout to make a failure go away. Applies even when the request never says flaky. For a test that fails on every run, use diagnosing-test-failures.'
+description: 'Diagnoses and fixes tests that fail intermittently, by root cause - timing, shared state, data collision, environment, order dependence, external dependency, or a real race in the application - proves the fix under the conditions that broke it, and contains what cannot be fixed yet with an owned, expiring quarantine. Use when a test fails randomly or passes on retry, passes locally but fails in CI, when a pipeline goes green after a re-run, or when raising a timeout is proposed as a fix. A test that fails on every run goes to diagnosing-test-failures.'
 argument-hint: 'The flaky test(s) or suite, CI evidence (failure history, retry logs, traces), the runner, and how often it fails'
 user-invocable: true
 ---

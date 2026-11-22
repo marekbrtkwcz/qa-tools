@@ -1,6 +1,6 @@
 ---
 name: test-driven-development
-description: 'Drives implementation test-first through red-green-refactor cycles, including multi-unit features built outside-in, legacy code without tests, and sessions that keep a written cycle log. Use when building a new behavior, when asked to fix a bug, or when changing what existing code does, and applies even when the code is pasted inline and the request does not mention tests. Also use whenever the request mentions TDD, test-first, red-green-refactor, or reproducing a bug with a failing test before fixing it, and when implementation keeps landing before anyone knows how it will be verified. For one small behavior or bug fix, test-driven-development-quick is enough; for tests added after the code exists, use writing-unit-tests.'
+description: 'Drives implementation test-first through red-green-refactor cycles, including multi-unit features built outside-in, legacy code without tests, and sessions with a written cycle log. Use when building a new behavior, fixing a bug, or changing what existing code does, even when the code is pasted inline and tests are never mentioned; also when the request mentions TDD, test-first, red-green-refactor, or reproducing a bug with a failing test before the fix. For one small behavior or bug fix use test-driven-development-quick; for tests added after the code exists use writing-unit-tests.'
 argument-hint: 'Behavior to build or bug to fix, the public interface it lives behind, and the existing test runner (if any)'
 user-invocable: true
 ---

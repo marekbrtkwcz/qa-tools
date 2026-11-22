@@ -1,6 +1,6 @@
 ---
 name: writing-unit-tests
-description: 'Writes and reviews focused, deterministic unit tests that verify behavior through public interfaces instead of implementation details. Use whenever tests are added to code that already exists, including backfilling tests on legacy code, and applies even when a function is pasted inline with a request to make sure it handles bad or unexpected input and tests are never mentioned. Also use when the request mentions unit tests, test coverage, edge cases, mocks or test doubles, or "this test breaks every refactor", and when reviewing an existing suite for brittleness, weak assertions, or missing boundary cases. For a few routine tests on one function, writing-unit-tests-quick is enough; when the tests should come before the code, use test-driven-development.'
+description: 'Writes and reviews focused, deterministic unit tests that verify behavior through public interfaces instead of implementation details. Use when tests are added to code that already exists, backfilling legacy code included, even when a function is pasted inline and tests are never mentioned, and when the request mentions unit tests, coverage, edge cases, mocks or test doubles, or a suite with brittle, weak or boundary-blind tests. For a few routine tests on one function use writing-unit-tests-quick; when the tests should come before the code use test-driven-development.'
 argument-hint: 'Unit under test, its public interface, known edge cases, and the existing test runner (if any)'
 user-invocable: true
 ---

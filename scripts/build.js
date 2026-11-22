@@ -374,6 +374,8 @@ function validateFrontmatter(bundles, srcRoot = SRC) {
       if (!descValue) errors.push(`[${bundleName}] skill ${skill}: missing frontmatter description`);
       else if (descValue.length > 1024)
         errors.push(`[${bundleName}] skill ${skill}: description is ${descValue.length} chars (max 1024)`);
+      else if (descValue.length > 700)
+        warnings.push(`skill ${skill}: description is ${descValue.length} chars — the hard limit is 1024, but routing signal blurs past ~600`);
     }
     for (const agent of bundle.agents || []) {
       const md = path.join(srcRoot, 'agents', `${agent}.md`);

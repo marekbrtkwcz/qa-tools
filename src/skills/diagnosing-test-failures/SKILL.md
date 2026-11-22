@@ -1,6 +1,6 @@
 ---
 name: diagnosing-test-failures
-description: 'Diagnoses a failing test or a reported defect to its root cause: classifies the failure (application defect, test bug, environment or config, flaky, or test data), builds a tight reproduction loop that goes red on the exact symptom, tests ranked falsifiable hypotheses one variable at a time, and resolves it by class without weakening assertions. Use when a test fails on every run or since a merge, a CI job is red, someone asks "why is this failing", a bug is reported and needs a root cause, or a stack trace, error log, or trace file is pasted, even if the word debug is never used. When the failure is intermittent, hand over to stabilizing-flaky-tests; when the cause is an application defect, write it up with reporting-bugs.'
+description: 'Diagnoses a failing test or reported defect to root cause: classifies the failure (app defect, test bug, environment, flaky, test data), builds a reproduction loop red on the exact symptom, tests falsifiable hypotheses one variable at a time, and resolves by class without weakening assertions. Use when a test fails on every run or since a merge, a CI job is red, someone asks why is this failing, or a stack trace, error log or trace file is pasted, even without the word debug. Intermittent failures go to stabilizing-flaky-tests; confirmed app defects are written up with reporting-bugs.'
 argument-hint: 'The failing test or reported symptom, the error output or CI log (secrets redacted), where it fails (local, CI, both), and the test runner'
 user-invocable: true
 ---

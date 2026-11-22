@@ -1,6 +1,6 @@
 ---
 name: designing-test-automation-architecture
-description: 'Decides the target shape of an automated test suite before it grows: which behaviour is tested at which layer, folder and project structure, fixtures versus page objects versus helpers versus screenplay, test data and auth strategy, configuration across environments, tag taxonomy, and ownership, with each significant choice recorded as a decision record. Use when starting a new suite, before a migration translates its first file, when an existing suite has grown inconsistent conventions, when E2E tests are doing the job of unit or API tests, or when a team argues about page objects, folder layout, or shared test accounts. For writing up a suite that already has a settled shape, use documenting-test-suites.'
+description: 'Decides the target shape of an automated suite before it grows: which behaviour is tested at which layer, folder structure, fixtures versus page objects versus helpers versus screenplay, test data and auth strategy, cross-environment configuration, tag taxonomy and ownership, each significant choice recorded as a decision record. Use when starting a new suite, before a migration begins, when conventions have grown inconsistent, when E2E tests do the job of unit or API tests, or when the team argues over page objects or layout. For a settled suite use documenting-test-suites.'
 argument-hint: 'The application and its architecture, existing tests and runners, team size and ownership, environments available, and the decision that is open'
 user-invocable: true
 ---
