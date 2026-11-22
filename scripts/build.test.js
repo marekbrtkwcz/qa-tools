@@ -94,6 +94,29 @@ test('buildBundle: Codex trigger folder (agents/openai.yaml) is not shipped in t
   );
 });
 
+test('buildBundle: no dead mcp.json for bundles without mcp; qa-mcp ships a pinned server', () => {
+  // A bundle that does not declare mcp: must not ship an placeholder
+  // mcpServers:{} manifest; the one that does must pin an exact version.
+  const out = tmpDir();
+  const noErrors = buildBundle('authoring', { skills: ['create-skill'] }, out);
+  assert.deepEqual(noErrors, []);
+  assert.ok(
+    !fs.existsSync(path.join(out, 'authoring', 'mcp.json')),
+    'bundle without mcp: must not ship an empty mcp.json'
+  );
+
+  const mcpErrors = buildBundle('qa-mcp', { mcp: ['playwright'] }, out);
+  assert.deepEqual(mcpErrors, []);
+  const manifest = JSON.parse(fs.readFileSync(path.join(out, 'qa-mcp', 'mcp.json'), 'utf8'));
+  assert.deepEqual(Object.keys(manifest.mcpServers), ['playwright']);
+  const args = manifest.mcpServers.playwright.args;
+  assert.equal(args.length, 1, 'one fully pinned npx arg, never @latest');
+  assert.ok(
+    /^@playwright\/mcp@\d+\.\d+\.\d+$/.test(args[0]),
+    `expected an exact @playwright/mcp@x.y.z pin, got ${args[0]}`
+  );
+});
+
 /* ---------- parseBundles (minimal YAML subset) ---------- */
 
 test('parseBundles: structure, lists, quoted values, booleans, comments', () => {

@@ -395,16 +395,20 @@ function buildBundle(name, bundle, outDir, checkOnly) {
   }
 
   // 5. mcp.json (Vibe requires $schema and type fields)
-  const mcp = { $schema: 'https://agent-plugins.org/schemas/1.0.0/mcp.schema.json', mcpServers: {} };
-  for (const server of bundle.mcp || []) {
-    // Pinned, not @latest: the committed plugins/ artifact must be reproducible
-    // and the drift gate would flag server updates as artifact drift.
-    mcp.mcpServers[server] =
-      server === 'playwright'
-        ? { type: 'stdio', command: 'npx', args: ['@playwright/mcp@0.0.86'] }
-        : { type: 'stdio', command: server };
+  // Only in bundles that declare mcp: — no empty mcpServers:{} manifests
+  // in the other bundles (the same rule hooks follow below).
+  if ((bundle.mcp || []).length) {
+    const mcp = { $schema: 'https://agent-plugins.org/schemas/1.0.0/mcp.schema.json', mcpServers: {} };
+    for (const server of bundle.mcp) {
+      // Pinned, not @latest: the committed plugins/ artifact must be reproducible
+      // and the drift gate would flag server updates as artifact drift.
+      mcp.mcpServers[server] =
+        server === 'playwright'
+          ? { type: 'stdio', command: 'npx', args: ['@playwright/mcp@0.0.86'] }
+          : { type: 'stdio', command: server };
+    }
+    fs.writeFileSync(path.join(pluginDir, 'mcp.json'), JSON.stringify(mcp, null, 2) + '\n');
   }
-  fs.writeFileSync(path.join(pluginDir, 'mcp.json'), JSON.stringify(mcp, null, 2) + '\n');
 
   // 6. hooks: quality gate (blocks .only()/fit() in test files via
   // structured deny on stdout; warns on waits/tautologies). strict = false:

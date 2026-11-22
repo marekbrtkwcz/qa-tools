@@ -4,6 +4,9 @@ Wszystkie istotne zmiany tego projektu są dokumentowane tutaj. Format zbliżony
 
 ## [Unreleased]
 
+### Naprawione
+- 11 martwych manifestów `mcp.json` (puste `mcpServers: {}`) usuniętych z artefaktu — build emituje `mcp.json` tylko w bundlach deklarujących `mcp:` (dziś wyłącznie `qa-mcp`), tak samo jak robi to dla `hooks.toml`.
+
 ### Zmienione
 - Serwer Playwright MCP w `qa-mcp` przypięty z `@playwright/mcp@0.0.83` na `@0.0.86` (aktualny latest wg rejestru npm).
 

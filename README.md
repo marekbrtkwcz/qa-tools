@@ -63,10 +63,10 @@ qa-tools/
 │   ├── build.test.js                  # testy jednostkowe builda (node:test)
 │   ├── validate-manifests.js          # walidacja JSON manifestów w plugins/
 │   └── assets/test-file-guard.js     # skrypt hooka
-└── plugins/<bundle>/              # artefakt buildu — do skopiowania (7 pluginów)
+└── plugins/<bundle>/              # artefakt buildu — do skopiowania (12 pluginów)
     ├── plugin.json                    # manifest Agent Plugins 1.0 + rozszerzenie ai.mistral.vibe
     ├── skills/                        # 1:1 ze src
-    ├── mcp.json                       # z $schema + type (wymagane przez Vibe)
+    ├── mcp.json                       # tylko w pluginach deklarujących mcp: (dziś: qa-mcp)
     ├── vibe-hooks/                    # skrypty hooków
     └── ai.mistral.vibe/               # rozszerzenia Vibe
         ├── agents/<name>.toml         # schema_version / agent_type / display_name / enabled_tools…
