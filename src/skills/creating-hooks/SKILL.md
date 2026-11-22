@@ -9,6 +9,16 @@ user-invocable: true
 
 A hook is code the host runs at a lifecycle point, outside the model's control. That is its value and its risk: it holds even when the model would not comply, and a buggy hook blocks everyone. All three hosts have hooks, but the event names, payloads, output channels and install locations differ, so a hook has **one implementation per host**, sharing only its policy.
 
+## When to Use
+
+- a rule must hold even when the model would not comply: block a dangerous command, check a file after every edit, inject context at session start
+- a hook is being ported between hosts, or is slow, noisy, or blocks the wrong things
+
+Route elsewhere:
+
+- guidance the agent may weigh rather than enforcement: use `creating-instructions`
+
+
 ## Where you are writing
 
 | Writing for | Source | Check |

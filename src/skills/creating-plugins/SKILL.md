@@ -9,6 +9,17 @@ user-invocable: true
 
 A plugin is a folder of agent assets with a manifest; a marketplace is a file that lists plugins so users can add the source once and install by name. All three hosts have both, with different manifest locations and fields. A skill folder is the part that ports unchanged; agents, commands, hooks and MCP config need host-specific files.
 
+## When to Use
+
+- a group of skills, agents, commands, hooks or MCP servers should install as one unit across hosts
+- publishing a plugin from your own repository, or CI reports generated plugin files out of date
+- reshaping what a bundle in this collection installs
+
+Route elsewhere:
+
+- authoring the skill being packaged: use `creating-skills` first
+
+
 ## Where you are writing
 
 **This collection.** Plugins are generated; never edit `plugins/`, the three marketplace files or the README tables by hand.

@@ -11,6 +11,18 @@ Instructions are standing rules the agent reads without being asked. Every alway
 
 All three hosts have repository-wide instructions. Copilot and Claude Code also scope rules to file patterns natively; Codex does not (it scopes by folder with nested `AGENTS.md` files), so a glob-scoped rule needs a workaround there.
 
+## When to Use
+
+- encoding conventions the agent should apply automatically, repository-wide or scoped to file patterns
+- an instructions file has grown too broad and needs splitting or narrowing
+- porting rules between hosts
+
+Route elsewhere:
+
+- a fixed step-by-step workflow: use `creating-skills`
+- something that must hold regardless of what the model decides: use `creating-hooks`
+
+
 ## Where you are writing
 
 | Writing for | Source | Scope | Check |

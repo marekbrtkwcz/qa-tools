@@ -9,6 +9,17 @@ user-invocable: true
 
 A fast, bounded review of a small change. It reads the diff against its goal, runs a short checklist, and returns a few findings and a verdict. It does not try to assess architecture, long-term design, or debt; those need `code-review-advanced`.
 
+## When to Use
+
+- someone asks to review, look over, or sanity-check a small change: one file, a function, a pasted snippet, a short diff
+- the change is low-risk and the question is only whether anything is wrong before it merges or is pushed
+
+Route elsewhere:
+
+- multi-file pull requests, refactors, or high-risk areas (auth, payments, persistence, CI, shared fixtures): use `code-review-advanced`
+- the code is test code: use `unslop-tests`
+
+
 ## Scope check (do this first)
 
 Stay in this skill only if all of these hold:

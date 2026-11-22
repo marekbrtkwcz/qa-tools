@@ -9,6 +9,17 @@ user-invocable: true
 
 A pack splits one large job into roles: an orchestrator that delegates and synthesises, and subagents that each do one part and return a structured **handoff packet**. The value is the same as in a human team: a narrow scope with a clear output contract produces better work than one agent asked to do everything. The cost is coordination; a pack that costs more coordination than it saves is worse than one good agent.
 
+## When to Use
+
+- one agent's role has grown too broad, or phases need different tools or a fresh context
+- review must be independent of implementation, or handoffs need one shared packet contract
+- a pack fails validation because a handoff target does not resolve
+
+Route elsewhere:
+
+- a single focused role: use `creating-custom-agents`
+
+
 ## How the hosts run a pack
 
 The hosts differ in one way that shapes every pack: **who may start a subagent.**

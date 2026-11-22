@@ -9,6 +9,19 @@ user-invocable: true
 
 A custom agent is a named role the main agent (or the user) hands work to. It runs with its own instructions and, where the host allows, its own tool limits, and returns a result. Agents exist in all three hosts; the file format and tool vocabulary differ, the design does not.
 
+## When to Use
+
+- a recurring job needs its own role with explicit boundaries, a stop condition, and an output contract
+- an existing agent has grown too broad, or one of its roles needs the tools narrowed
+- a review step should run separately from the work it reviews
+
+Route elsewhere:
+
+- reusable procedure without a role: use `creating-skills`
+- several cooperating agents with an orchestrator: use `creating-orchestration-packs`
+- a workflow the user starts on purpose: use `creating-prompts`
+
+
 ## Where you are writing
 
 | Writing for | Source | Tools are declared as | Check |

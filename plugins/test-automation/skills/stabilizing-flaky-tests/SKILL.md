@@ -11,6 +11,14 @@ Use this skill when a test produces both a pass and a fail on the same commit. T
 
 A flake is a defect in the feedback system. Once a suite is known to lie occasionally, every red build becomes a judgement call and the first response to a real failure becomes "re-run it". Retries and raised timeouts make the symptom quieter and leave the cause in place, and sometimes the cause is a race in the product that users will hit.
 
+## When to Use
+
+- a test passes and fails on the same commit, locally or in CI, or passes only on retry
+- a pipeline goes green after a re-run, retries mask failures, or someone proposes raising a timeout to make a failure go away
+- a flake list or quarantine keeps growing and needs root causes, owners and expiry dates
+- a flakiness fix must be proven under the conditions that broke it
+
+
 ## When NOT to Use
 
 - the test fails every run: it is broken, not flaky. Use the `fix-tests` command.

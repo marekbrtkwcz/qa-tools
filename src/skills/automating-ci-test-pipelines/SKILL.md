@@ -11,6 +11,13 @@ Use this skill to make test suites run in CI quickly, predictably, and in a way 
 
 Two pipelines are common and both fail their users. One runs the whole end-to-end suite on every push, takes forty minutes, and gets bypassed. The other is fast because it keeps nothing: a red job with no trace, no report, and a log that ends at "1 failed". The target is a pipeline where the fast job answers "did I break the obvious things" in minutes, the full job answers "is main healthy" before the next merge, and every failure ships its own evidence.
 
+## When to Use
+
+- a suite is about to be added to CI, or an existing pipeline is too slow, gets bypassed, or keeps no failure evidence
+- shards produce separate reports, a migration needs old and new suites running side by side, or trace and report artifacts are missing
+- PR-smoke vs full-on-merge trigger design, or a runtime budget, is needed so feedback stays fast
+
+
 ## Boundary with generating-quality-gate-workflows
 
 - **This skill**: how tests *run* in CI. Trigger layering, sharding, caching, artifacts, retries reporting, overlapping suites during migration, performance and visual job setup, runtime.

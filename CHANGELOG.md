@@ -4,6 +4,9 @@ Wszystkie istotne zmiany tego projektu są dokumentowane tutaj. Format zbliżony
 
 ## [Unreleased]
 
+### Dodane
+- **Sekcje `## When to Use` w 11 skillach model-invocable**, które ich nie miały — model dostaje jawne triggery aktywacji i „Route elsewhere" zanim zacznie pracę: `automating-ci-test-pipelines`, `code-review`, `creating-skills`, `creating-custom-agents`, `creating-hooks`, `creating-instructions`, `creating-orchestration-packs`, `creating-plugins`, `designing-test-automation-architecture`, `stabilizing-flaky-tests`, `unslop-tests`. Tam gdzie plik ma już `## When NOT to Use`/`Boundary`, nowa sekcja dublowania unika.
+
 ### Zmienione
 - **Opisy 18 agentów skrócone do limitu 300 znaków** (668→299 w najdłuższym przypadku): build truncuje `description` w emitowanym TOML na 300 znaków, więc host widział urwane opisy (`qa-strategist`, `ai-architect`, `test-automation-expert`, obaj `playwright-automation-engineer-ts*`, `test-code-reviewer`, `quality-debt-auditor`, `tech-debt-auditor`, `skill-librarian` i 9 dalszych). Każdy skrócony opis zachowuje sygnał routingu (rola + kiedy użyć + najważniejszy cross-ref); `npm run check` z tej listy wychodzi teraz bez żadnego WARN.
 

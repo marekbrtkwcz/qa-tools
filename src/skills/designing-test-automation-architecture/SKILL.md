@@ -11,6 +11,13 @@ Use this skill to decide what an automated suite should look like before its fir
 
 Suites rarely fail because of one bad test. They fail because nobody decided where a test belongs, so every behaviour is tested through the browser; because shared accounts make parallelism impossible; because page objects grew into a second application; because a tag means three things. These are architecture decisions, and they are cheap to make on day one and expensive to change at test five hundred.
 
+## When to Use
+
+- a new suite is being started and its shape should be decided before the first ten files decide by accident
+- a suite has grown with no recorded conventions: fixture vs page object, folder layout, tag meanings, auth and test-data strategy
+- the team argues about page objects, folder layout, or shared accounts and parallelism
+
+
 ## When NOT to Use
 
 - the shape is settled and the need is to write it down for new readers: use `documenting-test-suites`

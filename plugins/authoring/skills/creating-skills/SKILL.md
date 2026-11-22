@@ -9,6 +9,18 @@ user-invocable: true
 
 A skill is a folder with a `SKILL.md` and optional supporting files. All three hosts use the same open format ([agentskills.io](https://agentskills.io)) and the same loading model: the agent sees only `name` and `description` until a request matches, then reads the body, then opens supporting files only when the body points to them. Everything below follows from that.
 
+## When to Use
+
+- packaging repeatable know-how the agent should pick up on its own
+- a skill fires on the wrong requests or never fires, or a SKILL.md needs splitting
+- adding a skill to this collection from scratch
+
+Route elsewhere:
+
+- a command the user starts on purpose: use `creating-prompts`
+- a named role with its own tools and boundaries: use `creating-custom-agents`
+- testing how an existing skill behaves: use `testing-agent-skills`
+
 ## Where you are writing
 
 Decide this first, because it changes the folder, the allowed frontmatter and the final check.

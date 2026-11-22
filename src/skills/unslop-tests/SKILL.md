@@ -11,6 +11,13 @@ Cut AI tells from test code.
 
 A generated test suite reads well, runs green, and often proves nothing. That combination is the whole problem: the suite looks like coverage, gets reviewed like coverage, and fails to notice the bug it was written for. This skill names the tells so they can be caught by sight, then proves the important ones by running code.
 
+## When to Use
+
+- any test code is written, changed, or reviewed - including tests produced as a side effect of a feature task
+- someone asks whether tests are any good, says a test always passes, or asks to clean up test code
+- a generated suite looks like coverage: green, readable, proving nothing
+
+
 ## Process
 
 1. Read the test code in scope.
