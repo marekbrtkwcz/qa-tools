@@ -296,7 +296,6 @@ function buildBundle(name, bundle, outDir, checkOnly) {
   fs.rmSync(pluginDir, { recursive: true, force: true });
   fs.mkdirSync(path.join(pluginDir, 'ai.mistral.vibe/agents'), { recursive: true });
   fs.mkdirSync(path.join(pluginDir, 'ai.mistral.vibe/knowledge'), { recursive: true });
-  fs.mkdirSync(path.join(pluginDir, 'vibe-hooks'), { recursive: true });
 
   // 1. plugin.json (Agent Plugins 1.0 + ai.mistral.vibe extension)
   const manifest = {
@@ -385,31 +384,36 @@ function buildBundle(name, bundle, outDir, checkOnly) {
   fs.writeFileSync(path.join(pluginDir, 'mcp.json'), JSON.stringify(mcp, null, 2) + '\n');
 
   // 6. hooks: demo quality gate (log-only, non-strict)
-  fs.writeFileSync(
-    path.join(pluginDir, 'vibe-hooks/test-file-guard.js'),
-    fs.readFileSync(path.join(ROOT, 'scripts/assets/test-file-guard.js'), 'utf8')
-  );
-  const hookEntries = (bundle.hooks || [])
-    .map((h) =>
-      [
-        '[[hooks]]',
-        `name = ${tomlString(h)}`,
-        'type = "pre_tool"',
-        'match = "file_system.write_file"',
-        'command = "node vibe-hooks/test-file-guard.js"',
-        'strict = false',
-        '',
-        '[[hooks]]',
-        `name = ${tomlString(h + '-edit')}`,
-        'type = "pre_tool"',
-        'match = "file_system.edit"',
-        'command = "node vibe-hooks/test-file-guard.js"',
-        'strict = false',
-        '',
-      ].join('\n')
-    )
-    .join('\n');
-  fs.writeFileSync(path.join(pluginDir, 'ai.mistral.vibe/hooks.toml'), hookEntries);
+  // Only in bundles that declare hooks — no empty hooks.toml or stray guard
+  // scripts in bundles without a gate.
+  if ((bundle.hooks || []).length) {
+    fs.mkdirSync(path.join(pluginDir, 'vibe-hooks'), { recursive: true });
+    fs.writeFileSync(
+      path.join(pluginDir, 'vibe-hooks/test-file-guard.js'),
+      fs.readFileSync(path.join(ROOT, 'scripts/assets/test-file-guard.js'), 'utf8')
+    );
+    const hookEntries = (bundle.hooks || [])
+      .map((h) =>
+        [
+          '[[hooks]]',
+          `name = ${tomlString(h)}`,
+          'type = "pre_tool"',
+          'match = "file_system.write_file"',
+          'command = "node vibe-hooks/test-file-guard.js"',
+          'strict = false',
+          '',
+          '[[hooks]]',
+          `name = ${tomlString(h + '-edit')}`,
+          'type = "pre_tool"',
+          'match = "file_system.edit"',
+          'command = "node vibe-hooks/test-file-guard.js"',
+          'strict = false',
+          '',
+        ].join('\n')
+      )
+      .join('\n');
+    fs.writeFileSync(path.join(pluginDir, 'ai.mistral.vibe/hooks.toml'), hookEntries);
+  }
 
   return errors;
 }
