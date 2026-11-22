@@ -1,6 +1,6 @@
 ---
 name: governing-quality-waivers
-description: 'Turns "we will skip this check for now" into a dated, attributed, expiring waiver with a stated reason and owner, inventories the silent skips already hiding in a repo - skipped tests, disabled lint rules, ts-expect-error, continue-on-error, lowered thresholds, coverage ignores - and reports expired waivers as findings. Use when a team wants to bypass a quality gate, when skip lists and quarantined tests accumulate without owners, when an audit asks why a check is off, or when a repo needs to know what it has quietly stopped enforcing.'
+description: 'Turns "we will skip this check for now" into a dated, attributed, expiring waiver with a stated reason and owner, inventories the silent skips already hiding in a repo - skipped tests, disabled lint rules, ts-expect-error, continue-on-error, lowered thresholds, coverage ignores - and reports expired waivers as findings. Use when a team wants to bypass a quality gate, when skip lists and quarantined tests accumulate without owners, when an audit asks why a check is off, or when a repo needs to know what it has quietly stopped enforcing. For a full debt audit (technical, intent, and comprehension debt together), use the audit-quality-debt command.'
 argument-hint: 'The check being skipped and why, or a repo path to inventory for silent skips'
 user-invocable: true
 ---

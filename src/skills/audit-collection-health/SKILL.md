@@ -1,6 +1,6 @@
 ---
 name: audit-collection-health
-description: "Audits a collection of skills, agents, commands, and rules as one system: inventory, conformance to the house conventions, description trigger quality, overlap between near neighbours, broken cross-references, orphaned resources, drift between sources and generated copies, and which assets have no behavioural test. Use when preparing a release of the collection, after a batch of new assets, or when assets start colliding or triggering on the wrong requests. Read-only: it reports and never fixes."
+description: "Audits a collection of skills, agents, commands, and rules as one system: inventory, conformance to the house conventions, description trigger quality, overlap between near neighbours, broken cross-references, orphaned resources, drift between sources and generated copies, and which assets have no behavioural test. Use when preparing a release of the collection, after a batch of new assets, or when assets start colliding or triggering on the wrong requests. Read-only: it reports and never fixes. For behaviour testing of individual skills (activation, collision, before/after gates), use the testing-agent-skills skill."
 argument-hint: "[collectionRoot] [scope]"
 disable-model-invocation: true
 ---
@@ -23,6 +23,8 @@ Hand this task to the `skill-librarian` agent (`skill_librarian` in Codex). If t
 Audit the customization collection at `<collectionRoot>` as one system and return severity-ranked findings I can act on without asking a follow-up question.
 
 Read the conventions from the collection itself before finding anything. Do not fix anything.
+
+Behaviour cases for a single asset (activation, output contract, before/after gate) belong to the `testing-agent-skills` skill if it is installed; this audit stays structural and points to it instead of expanding into it.
 
 ## Inputs
 

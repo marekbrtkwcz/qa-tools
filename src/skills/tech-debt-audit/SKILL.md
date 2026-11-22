@@ -1,6 +1,6 @@
 ---
 name: tech-debt-audit
-description: Audits automated test code for anti-patterns (fragile selectors, hardcoded waits, missing or swallowed assertions, test interdependence, CI misconfiguration, credential leaks) and produces a severity-ranked debt report with line citations, fixes, and an A-F health score. Use when reviewing a test suite or test PR, or when a suite has become slow, flaky, or hard to maintain. For repository-level debt such as skipped tests, disabled lint rules, and weakened CI gates, use the audit-quality-debt command.
+description: Audits automated test code for anti-patterns (fragile selectors, hardcoded waits, missing or swallowed assertions, test interdependence, CI misconfiguration, credential leaks) and produces a severity-ranked debt report with line citations, fixes, and an A-F health score. Use when reviewing a test suite or test PR, or when a suite has become slow, flaky, or hard to maintain. For repository-level debt such as skipped tests, disabled lint rules, and weakened CI gates, use the audit-quality-debt command; for debt beyond test code (full codebase, architecture, dependencies), use the tech-debt-analysis skill.
 argument-hint: "[targetPath]"
 disable-model-invocation: true
 ---
@@ -47,4 +47,4 @@ End with the findings grouped by when to fix them:
 - Report only; do not edit files. Fixes are snippets in the report.
 - Cite a file and line for every finding, and only for code you opened.
 - Mark findings that depend on context you don't have (for example `ignoreHTTPSErrors` for a self-signed test environment) as "check" rather than as defects.
-- If the scope is a whole repository and the user wants a debt register with effort and ROI, stop and suggest the tech-debt-auditor agent instead.
+- If the scope is a whole repository and the user wants a debt register with effort and ROI, stop and load the `tech-debt-analysis` skill instead (or suggest the tech-debt-auditor agent if that is preferred).

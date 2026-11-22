@@ -27,6 +27,7 @@ Use the Playwright MCP tools to load and interact with the page.
 - Recommend native HTML semantics first; recommend ARIA only where native semantics cannot do the job.
 - Name common violations with axe-core rule vocabulary.
 - If tool output is available (axe, Pa11y, Lighthouse), normalize it into the report, and confirm each item on the page rather than copying it.
+- The full manual protocol behind each pass (screen reader interaction, cognitive walkthrough) lives in the `auditing-accessibility` skill if installed; this command stays a quick single-page pass.
 
 ## Steps
 

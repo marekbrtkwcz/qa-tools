@@ -9,6 +9,7 @@ Wszystkie istotne zmiany tego projektu są dokumentowane tutaj. Format zbliżony
 
 ### Zmienione
 - Serwer Playwright MCP w `qa-mcp` przypięty z `@playwright/mcp@0.0.83` na `@0.0.86` (aktualny latest wg rejestru npm).
+- Cross-referencje antykolizyjne i domknięcia delegacji (audyt treści 98 skilli): `tech-debt-audit` → `tech-debt-analysis` (description + guardrail dla audytu całego repo z effort/ROI), `a11y-webpage-audit` → `auditing-accessibility` (pełny protokół manualny; quick-path pozostaje samodzielny), `governing-quality-waivers` → `audit-quality-debt` (pełny audyt długu), `testing-agent-skills` ↔ `audit-collection-health` (wzajemne rozgraniczenie: behawioralne vs strukturalne), `scope-change-gate` — description nazywa agregowane skille (`scoping-change-relevance` + `verifying-change-coverage` + `recording-change-intent`) i odsyła do każdego osobno.
 
 ## [0.2.0] - 2026-11-22
 
