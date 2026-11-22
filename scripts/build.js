@@ -169,22 +169,38 @@ function titleFromDescription(text) {
 
 /* ---------- per-bundle build ---------- */
 
-function buildBundle(name, bundle, outDir, checkOnly) {
+/** Global membership check: every src/skills folder belongs to exactly one bundle. */
+function checkMembership(bundles) {
   const errors = [];
-
-  // membership check: every src/skills folder must belong to exactly one bundle (single caller here)
-  const skillDirs = fs
+  const owner = new Map();
+  for (const [name, bundle] of Object.entries(bundles)) {
+    for (const skill of bundle.skills || []) {
+      const from = path.join(SRC, 'skills', skill);
+      if (!fs.existsSync(path.join(from, 'SKILL.md'))) {
+        errors.push(`[${name}] bundles.yaml skill "${skill}" has no src/skills folder`);
+        continue;
+      }
+      if (owner.has(skill)) {
+        errors.push(`Skill "${skill}" declared in both "${owner.get(skill)}" and "${name}"`);
+      } else {
+        owner.set(skill, name);
+      }
+    }
+  }
+  const dirs = fs
     .readdirSync(path.join(SRC, 'skills'), { withFileTypes: true })
     .filter((d) => d.isDirectory())
     .map((d) => d.name)
     .sort();
-  const declared = [...(bundle.skills || [])].sort();
-  for (const s of skillDirs) if (!declared.includes(s)) errors.push(`src/skills/${s} not declared in bundles.yaml`);
-  for (const s of declared) if (!skillDirs.includes(s)) errors.push(`bundles.yaml skill "${s}" has no src/skills folder`);
+  for (const dir of dirs) {
+    if (!owner.has(dir)) errors.push(`src/skills/${dir} not declared in any bundle`);
+  }
+  return errors;
+}
 
-  if (errors.length) return errors;
-
-  if (checkOnly) return errors;
+function buildBundle(name, bundle, outDir, checkOnly) {
+  if (checkOnly) return [];
+  const errors = [];
 
   const pluginDir = path.join(outDir, name);
   fs.rmSync(pluginDir, { recursive: true, force: true });
@@ -239,7 +255,11 @@ function buildBundle(name, bundle, outDir, checkOnly) {
       errors.push(`Agent ${agent}: no src/agents/${agent}.md`);
       continue;
     }
-    fs.writeFileSync(path.join(pluginDir, 'ai.mistral.vibe/agents', `${agent}.toml`), agentToToml(md));
+    try {
+      fs.writeFileSync(path.join(pluginDir, 'ai.mistral.vibe/agents', `${agent}.toml`), agentToToml(md));
+    } catch (e) {
+      errors.push(`Agent ${agent}: conversion failed — ${e.message}`);
+    }
   }
 
   // 4. knowledge
@@ -313,7 +333,7 @@ function main() {
   const bundles = parseBundles(path.join(ROOT, 'bundles.yaml'));
   const selected = bundleFlag >= 0 ? [args[bundleFlag + 1]] : Object.keys(bundles);
 
-  let allErrors = [];
+  let allErrors = checkMembership(bundles);
   for (const name of selected) {
     const bundle = bundles[name];
     if (!bundle) {
@@ -323,8 +343,8 @@ function main() {
     const errors = buildBundle(name, bundle, outDir, checkOnly);
     if (errors.length) {
       allErrors = allErrors.concat(errors.map((e) => `[${name}] ${e}`));
-    } else {
-      console.log(`${checkOnly ? 'checked' : 'built'}: ${name}`);
+    } else if (!checkOnly) {
+      console.log(`built: ${name}`);
     }
   }
   if (allErrors.length) {

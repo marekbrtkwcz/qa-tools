@@ -1,23 +1,30 @@
 # qa-tools
 
-Narzędzia dla testera automatyzującego — **natywny plugin dla [Mistral Vibe CLI](https://mistral.ai)**: skille, subagenty, baza wiedzy i hooki quality-gate w formacie Agent Plugins 1.0.
+Narzędzia dla testera automatyzującego — **natywne pluginy dla [Mistral Vibe CLI](https://mistral.ai)**: skille, subagenty, baza wiedzy i hooki quality-gate w formacie Agent Plugins 1.0.
 
 Repozytorium inspirowane ideą i strukturą projektu **[awesome-agents-for-quality](https://github.com/jaktestowac/awesome-agents-for-quality)** (MIT, jaktestowac.pl). Wszystkie treści `src/` pochodzą z tego projektu (adaptacja na format natywny Vibe).
 
-## ✨ Co dostajesz
+## ✨ Kolekcja — 7 pluginów
 
-| Komponent | Status PoC | Przykład |
-|---|---|---|
-| 25 skilli QA (planowanie testów, testy eksploracyjne, bug reporty, RTM, kryteria akceptacji…) | ✅ zwalidowane | `qa-core:reporting-bugs` |
-| 4 subagentów TOML z personami i uprawnieniami narzędzi | ✅ zwalidowane | `qa-core:rubber-duck` |
-| Baza wiedzy ładowana na żądanie | ✅ zwalidowana | `qa-core:beyond-codegen` |
-| Hook quality-gate (pre_tool, log-only) na anty-wzorce w testach | ✅ zwalidowany | `test-file-guard` |
-| Serwer MCP (Playwright) w deklaracji pluginu | ✅ schemat-poprawny | `mcp.json` |
+| Plugin | Skille | Agenci | Knowledge | Hook | Zakres |
+|---|---|---|---|---|---|
+| `qa-core` 🧭 | 26 | 4 | 1 | — | planowanie testów, eksploracja, bug reporty, RTM, kryteria akceptacji |
+| `test-automation` 🤖 | 26 | 5 | — | ✅ test-file-guard | unit testy, TDD, Playwright, mocki, flakiness, review |
+| `api-testing` 🔌 | 3 | 2 | — | — | automatyzacja API (Playwright) i contract testing |
+| `non-functional-testing` ⚡ | 6 | 1 | — | — | accessibility, performance/load, security |
+| `ai-quality` 🧠 | 7 | 1 | 1 | — | testowanie funkcji LLM, guardrails, groundedness |
+| `quality-gates` 🚦 | 17 | 4 | 1 | — | quality contracts, change gates, release readiness |
+| `authoring` 🛠️ | 9 | 1 | — | — | tworzenie skilli/agentów/pluginów/hooków |
+
+Razem: **94 skille** (61 widocznych dla modelu + 33 user-invocable, pochodzące z komend), **18 subagentów**, **3 knowledge**, **1 quality-gate hook**.
 
 ## 🚀 Instalacja
 
 ```bash
-# projekt globalny dla użytkownika:
+# wszystkie pluginy (globalnie dla użytkownika):
+cp -r plugins/* ~/.vibe/plugins/
+
+# albo wybrane:
 cp -r plugins/qa-core ~/.vibe/plugins/qa-core
 
 # albo projektowo (wymaga trusted folder):
@@ -44,7 +51,7 @@ qa-tools/
 ├── scripts/
 │   ├── build.js                       # build → plugins/ (natywny Vibe)
 │   └── assets/test-file-guard.js     # skrypt hooka
-└── plugins/qa-core/                   # artefakt buildu — do skopiowania
+└── plugins/<bundle>/              # artefakt buildu — do skopiowania (7 pluginów)
     ├── plugin.json                    # manifest Agent Plugins 1.0 + rozszerzenie ai.mistral.vibe
     ├── skills/                        # 1:1 ze src
     ├── mcp.json                       # z $schema + type (wymagane przez Vibe)
@@ -78,10 +85,18 @@ node scripts/build.js --check    # walidacja: członkostwo w bundles.yaml, name 
 
 Konwencje potwierdzone testami (patrz historia commitów): klucze TOML **snake_case**, `description` ≤300 znaków, hooki nieblokujące z `strict = false` na start.
 
+## ✅ Co zostało zwalidowane (Vibe headless)
+
+- wszystkie 7 pluginów ładuje się bez błędów walidacji (`plugin.*.invalid`)
+- 61 skilli widocznych dla modelu; 33 user-invocable dostępnych na wywołanie
+- spawn subagentów z personami z instrukcji: `qa-core:rubber-duck` 🦆, `quality-gates:change-gate-reviewer`, `test-automation:test-code-reviewer`
+- 3 knowledge folders (`qa-core:beyond-codegen`, `ai-quality:ai-product-qa`, `quality-gates:quality-governance`)
+- hook `pre_tool` test-file-guard (w `test-automation`): wykrywa `waitForTimeout` w zapisie `.spec.ts`, loguje w `$PLUGIN_DATA`
+
 ## 🧭 Roadmapa
 
-- [ ] pozostałe bundle ze źródła: test-automation, api-testing, non-functional-testing, ai-quality, quality-gates
-- [ ] `connectors.json` (GitHub, k6) i deklaratywne MCP (Playwright) dla bundle'i automatyzujących
+- [ ] orkiestracje ze źródła (`orchestration-basics`, `plan-explore-review-commit`, `ui-api-automation`) → subagenty Wibe
+- [ ] `connectors.json` (GitHub, k6) dla bundle'i automatyzujących
 - [ ] GitHub Actions CI: `build.js --check` + weryfikacja ładowania pluginu w Vibe headless
 - [ ] hook strict (blokujący) po zdefiniowaniu polityki jakości
 

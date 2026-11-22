@@ -1,0 +1,25 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "quality-gates",
+  "version": "0.1.0",
+  "description": "Quality contracts, change gates, waivers, release readiness, metrics and debt.",
+  "author": {
+    "name": "qa-tools contributors",
+    "url": "https://github.com/marekbrtkwcz/qa-tools"
+  },
+  "homepage": "https://github.com/marekbrtkwcz/qa-tools",
+  "repository": "https://github.com/marekbrtkwcz/qa-tools",
+  "license": "MIT",
+  "keywords": [
+    "testing",
+    "quality-engineering",
+    "vibe-cli",
+    "quality-gates"
+  ],
+  "extensions": {
+    "ai.mistral.vibe": {
+      "schemaVersion": 1,
+      "displayName": "quality-gates (qa-tools)"
+    }
+  }
+}

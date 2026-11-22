@@ -6,7 +6,6 @@ qa-core:
   icon: 🧭
   description: "Test design, planning, exploratory testing, requirements traceability and bug reporting, packaged natively for Vibe CLI."
   version: "0.1.0"
-  user_invocable: true
   skills:
     - bug-report
     - communicating-quality-findings
@@ -41,7 +40,139 @@ qa-core:
     - ai-architect
   knowledge:
     - beyond-codegen
+  mcp:
+    - playwright
+
+test-automation:
+  icon: 🤖
+  description: "Unit tests, TDD, Playwright, mocking, visual regression, migration and test code review, with a quality-gate hook against test anti-patterns."
+  version: "0.1.0"
+  skills:
+    - analyze-test-results
+    - automating-ci-test-pipelines
+    - code-review
+    - code-review-advanced
+    - designing-test-automation-architecture
+    - diagnosing-test-failures
+    - explain-test-failure
+    - fix-tests
+    - migrate-tests-to-playwright
+    - migrating-tests-to-playwright
+    - mocking-network-and-time
+    - playwright-explore-website
+    - playwright-explore-website-requests
+    - playwright-generate-test
+    - refactor-to-page-objects
+    - running-visual-regression-tests
+    - stabilize-flaky-tests
+    - stabilizing-flaky-tests
+    - static-code-analysis-typescript
+    - tech-debt-audit
+    - test-driven-development
+    - test-driven-development-quick
+    - test-generator
+    - unslop-tests
+    - writing-unit-tests
+    - writing-unit-tests-quick
+  agents:
+    - test-automation-expert
+    - playwright-automation-engineer-ts
+    - playwright-automation-engineer-ts-detailed
+    - ui-test-automation
+    - test-code-reviewer
   hooks:
     - test-file-guard
   mcp:
     - playwright
+
+api-testing:
+  icon: 🔌
+  description: "API test automation with Playwright and contract testing."
+  version: "0.1.0"
+  skills:
+    - api-playwright-test-developer
+    - api-test-plan-and-tests
+    - testing-api-contracts
+  agents:
+    - api-test-automation-openapi
+    - openapi-test-automation-expert
+
+non-functional-testing:
+  icon: ⚡
+  description: "Accessibility, performance and load, and application security testing."
+  version: "0.1.0"
+  skills:
+    - a11y-audit-deep-dive
+    - a11y-webpage-audit
+    - auditing-accessibility
+    - performance-reliability-plan
+    - testing-application-security
+    - testing-performance-and-load
+  agents:
+    - accessibility-expert
+  mcp:
+    - playwright
+
+ai-quality:
+  icon: 🧠
+  description: "Testing LLM features, guardrails, groundedness and agent skills."
+  version: "0.1.0"
+  skills:
+    - design-llm-eval-suite
+    - reviewing-ai-output-groundedness
+    - test-llm-guardrails
+    - testing-agent-skills
+    - testing-llm-features
+    - testing-llm-guardrails
+    - unslop-answers
+  agents:
+    - llm-feature-test-engineer
+  knowledge:
+    - ai-product-qa
+
+quality-gates:
+  icon: 🚦
+  description: "Quality contracts, change gates, waivers, release readiness, metrics and debt."
+  version: "0.1.0"
+  skills:
+    - analyzing-quality-metrics
+    - analyzing-regression-scope
+    - assessing-comprehension-debt
+    - assessing-release-readiness
+    - attesting-manual-verification
+    - audit-quality-debt
+    - derive-quality-contract
+    - deriving-a-quality-contract
+    - generating-quality-gate-workflows
+    - governing-quality-waivers
+    - record-change-intent
+    - recording-change-intent
+    - scope-change-gate
+    - scoping-change-relevance
+    - tech-debt-analysis
+    - tracking-quality-trends
+    - verifying-change-coverage
+  agents:
+    - change-gate-reviewer
+    - quality-contract-architect
+    - quality-debt-auditor
+    - tech-debt-auditor
+  knowledge:
+    - quality-governance
+
+authoring:
+  icon: 🛠️
+  description: "Creating skills, custom agents, prompts, instructions, hooks, plugins and orchestration packs, plus auditing a whole collection."
+  version: "0.1.0"
+  skills:
+    - audit-collection-health
+    - create-skill
+    - creating-custom-agents
+    - creating-hooks
+    - creating-instructions
+    - creating-orchestration-packs
+    - creating-plugins
+    - creating-prompts
+    - creating-skills
+  agents:
+    - skill-librarian

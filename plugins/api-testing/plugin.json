@@ -1,0 +1,25 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "api-testing",
+  "version": "0.1.0",
+  "description": "API test automation with Playwright and contract testing.",
+  "author": {
+    "name": "qa-tools contributors",
+    "url": "https://github.com/marekbrtkwcz/qa-tools"
+  },
+  "homepage": "https://github.com/marekbrtkwcz/qa-tools",
+  "repository": "https://github.com/marekbrtkwcz/qa-tools",
+  "license": "MIT",
+  "keywords": [
+    "testing",
+    "quality-engineering",
+    "vibe-cli",
+    "api-testing"
+  ],
+  "extensions": {
+    "ai.mistral.vibe": {
+      "schemaVersion": 1,
+      "displayName": "api-testing (qa-tools)"
+    }
+  }
+}

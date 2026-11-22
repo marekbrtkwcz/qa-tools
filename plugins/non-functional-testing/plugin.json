@@ -1,0 +1,25 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "non-functional-testing",
+  "version": "0.1.0",
+  "description": "Accessibility, performance and load, and application security testing.",
+  "author": {
+    "name": "qa-tools contributors",
+    "url": "https://github.com/marekbrtkwcz/qa-tools"
+  },
+  "homepage": "https://github.com/marekbrtkwcz/qa-tools",
+  "repository": "https://github.com/marekbrtkwcz/qa-tools",
+  "license": "MIT",
+  "keywords": [
+    "testing",
+    "quality-engineering",
+    "vibe-cli",
+    "non-functional-testing"
+  ],
+  "extensions": {
+    "ai.mistral.vibe": {
+      "schemaVersion": 1,
+      "displayName": "non-functional-testing (qa-tools)"
+    }
+  }
+}
