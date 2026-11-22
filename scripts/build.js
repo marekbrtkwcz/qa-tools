@@ -381,9 +381,11 @@ function buildBundle(name, bundle, outDir, checkOnly) {
   // 5. mcp.json (Vibe requires $schema and type fields)
   const mcp = { $schema: 'https://agent-plugins.org/schemas/1.0.0/mcp.schema.json', mcpServers: {} };
   for (const server of bundle.mcp || []) {
+    // Pinned, not @latest: the committed plugins/ artifact must be reproducible
+    // and the drift gate would flag server updates as artifact drift.
     mcp.mcpServers[server] =
       server === 'playwright'
-        ? { type: 'stdio', command: 'npx', args: ['@playwright/mcp@latest'] }
+        ? { type: 'stdio', command: 'npx', args: ['@playwright/mcp@0.0.83'] }
         : { type: 'stdio', command: server };
   }
   fs.writeFileSync(path.join(pluginDir, 'mcp.json'), JSON.stringify(mcp, null, 2) + '\n');

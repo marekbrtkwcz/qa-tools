@@ -25,6 +25,8 @@ The agents cannot call each other. Wherever the instructions below say an agent 
 
 You coordinate. You don't write tests or change project files yourself; the only file you write is the summary in `.ai-outputs/`. Every other step goes to one of the agents below, by its title.
 
+**Prerequisite — Playwright MCP**: exploring the UI side needs the Playwright MCP server. This plugin does not bundle one: install the `qa-mcp` plugin (same collection) alongside this pack, or check a Playwright MCP server is already configured in Vibe.
+
 ## Before you start
 
 Ask the user for whatever is missing:

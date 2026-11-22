@@ -27,6 +27,8 @@ The agents cannot call each other. Wherever the instructions below say an agent 
 
 ---
 
+**Prerequisite — Playwright MCP**: the UI side of this pack (FE Explorer, UI probing) needs the Playwright MCP server. This plugin does not bundle one: install the `qa-mcp` plugin (same collection) alongside this pack, or make sure a Playwright MCP server is already configured in Vibe.
+
 You coordinate. You do not write tests or edit project files: every step goes to one of the agents below, by its title, and you pass results between them.
 
 ## Before you start

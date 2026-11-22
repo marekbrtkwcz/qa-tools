@@ -40,8 +40,6 @@ qa-core:
     - ai-architect
   knowledge:
     - beyond-codegen
-  mcp:
-    - playwright
 
 test-automation:
   icon: 🤖
@@ -82,8 +80,6 @@ test-automation:
     - test-code-reviewer
   hooks:
     - test-file-guard
-  mcp:
-    - playwright
 
 api-testing:
   icon: 🔌
@@ -110,8 +106,6 @@ non-functional-testing:
     - testing-performance-and-load
   agents:
     - accessibility-expert
-  mcp:
-    - playwright
 
 ai-quality:
   icon: 🧠
@@ -177,6 +171,13 @@ authoring:
   agents:
     - skill-librarian
 
+qa-mcp:
+  icon: 🎭
+  description: "Playwright MCP server for qa-tools: install once alongside any automation bundle (test-automation, non-functional-testing, ui-api-automation, ui-api-automation-minimal) so browser control is never duplicated by multiple bundles."
+  version: "0.1.0"
+  mcp:
+    - playwright
+
 orchestration-basics:
   icon: 🎼
   description: "Minimal orchestrator with three read-mostly helpers (planner, explorer, analyst): split analysis and planning across subagents to save context, with stop gates for the user."
@@ -228,8 +229,6 @@ ui-api-automation:
     - uiapi-test-runner
   knowledge:
     - ui-api-automation
-  mcp:
-    - playwright
 
 ui-api-automation-minimal:
   icon: 🧪
@@ -245,5 +244,3 @@ ui-api-automation-minimal:
     - uiapi-min-framework-starter
   knowledge:
     - ui-api-automation-minimal
-  mcp:
-    - playwright
