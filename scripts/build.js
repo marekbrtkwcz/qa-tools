@@ -341,6 +341,16 @@ function buildBundle(name, bundle, outDir, checkOnly) {
       continue;
     }
     copyDir(from, path.join(pluginDir, 'skills', skill));
+    // skills/<name>/agents/openai.yaml holds Codex/OpenAI-format trigger
+    // metadata (display_name, allow_implicit_invocation). Vibe takes all of
+    // it from the SKILL.md frontmatter (disable-model-invocation/user-invocable),
+    // so the folder is dropped from the native artifact. Verified 42/42: every
+    // yaml sets allow_implicit_invocation: false and every SKILL.md already
+    // carries disable-model-invocation: true.
+    fs.rmSync(path.join(pluginDir, 'skills', skill, 'agents'), {
+      recursive: true,
+      force: true,
+    });
     const skillBody = bundle.pack ? rewritePackSkill(skillText) : skillText;
     fs.writeFileSync(path.join(pluginDir, 'skills', skill, 'SKILL.md'), appendEmojiStyle(skillBody) + '\n');
   }
@@ -541,6 +551,7 @@ if (require.main === module) {
 
 /* Exposed for scripts/build.test.js (node:test). No dependencies. */
 module.exports = {
+  buildBundle,
   parseBundles,
   parseAgentMd,
   toolsOf,

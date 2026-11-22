@@ -114,6 +114,7 @@ Zmiana konwencji = edycja `src/shared/emoji-style.md` + `node scripts/build.js`.
 | agent `.md` (frontmatter: name/title/description/capabilities, w paczkach też `tools: Read, Grep…`) | `agents/*.toml` (snake_case!) | `schema_version`, `agent_type`, `display_name` (+ikona bundla, np. `Test Planner 🧭`), opis ≤300 zn., `enabled_tools`; Edit/Write/Bash → `safety = "neutral"` |
 | guides | `knowledge/<name>/KNOWLEDGE.md` | frontmatter: name/description(≤300)/display_name/icon |
 | mcp | `mcp.json` | Vibe wymaga `$schema` + `type` |
+| skill `agents/openai.yaml` (42×) | — (filtrowane przy buildzie) | wyzwalacze Codex/OpenAI (`display_name`, `allow_implicit_invocation`) mają odpowiednik w frontmatter SKILL.md (`disable-model-invocation`); folder nie pływa w natywnym artefakcie |
 | — | `hooks.toml` | Vibe-only: quality gates na eventach `pre_tool`/`post_agent` |
 
 Konwencje potwierdzone testami (patrz historia commitów): klucze TOML **snake_case**, `description` ≤300 znaków, hooki nieblokujące z `strict = false` na start.

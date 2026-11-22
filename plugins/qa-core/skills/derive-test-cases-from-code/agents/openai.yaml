@@ -1,4 +1,0 @@
-interface:
-  display_name: Derive test cases from code
-policy:
-  allow_implicit_invocation: false

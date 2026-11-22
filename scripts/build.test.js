@@ -18,6 +18,7 @@ const os = require('node:os');
 const path = require('node:path');
 
 const {
+  buildBundle,
   parseBundles,
   parseAgentMd,
   toolsOf,
@@ -51,6 +52,23 @@ function writeTree(root, files) {
     fs.writeFileSync(p, content);
   }
 }
+
+/* ---------- buildBundle (integration, real src tree) ---------- */
+
+test('buildBundle: Codex trigger folder (agents/openai.yaml) is not shipped in the Vibe artifact', () => {
+  // create-skill is a real skill whose src folder carries agents/openai.yaml
+  // (all 42 of them only set display_name / allow_implicit_invocation, and the
+  // SKILL.md frontmatter already covers the invocation policy).
+  const out = tmpDir();
+  const errors = buildBundle('authoring', { skills: ['create-skill'] }, out);
+  assert.deepEqual(errors, []);
+  const skillDir = path.join(out, 'authoring', 'skills', 'create-skill');
+  assert.ok(fs.existsSync(path.join(skillDir, 'SKILL.md')), 'SKILL.md must ship');
+  assert.ok(
+    !fs.existsSync(path.join(skillDir, 'agents')),
+    'Codex/OpenAI trigger folder must be filtered from the artifact'
+  );
+});
 
 /* ---------- parseBundles (minimal YAML subset) ---------- */
 
