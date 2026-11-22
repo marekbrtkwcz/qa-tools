@@ -55,7 +55,8 @@ qa-tools/
 │   └── knowledge/<name>.md           # guides → baza wiedzy
 ├── bundles.yaml                       # podział na pluginy + członkostwo skilli
 ├── scripts/
-│   ├── build.js                       # build → plugins/ (natywny Vibe)
+│   ├── build.js                       # build → plugins/ (natywny Vibe); --check, --verify
+│   ├── validate-manifests.js          # walidacja JSON manifestów w plugins/
 │   └── assets/test-file-guard.js     # skrypt hooka
 └── plugins/<bundle>/              # artefakt buildu — do skopiowania (7 pluginów)
     ├── plugin.json                    # manifest Agent Plugins 1.0 + rozszerzenie ai.mistral.vibe
@@ -73,9 +74,11 @@ qa-tools/
 ```bash
 node scripts/build.js            # buduje plugins/<bundle>
 node scripts/build.js --check    # walidacja: członkostwo w bundles.yaml, name rules, frontmatter
+node scripts/build.js --verify   # drift-gate: świeży build do katalogu tmp vs commitowany plugins/ (exit 1 przy różnicach; nie modyfikuje plugins/; porównanie ignoruje wyłącznie różnice EOL — core.autocrlf na Windows przepisuje working tree)
+node scripts/validate-manifests.js  # walidacja parsowania wszystkich JSON w plugins/
 ```
 
-`plugins/` jest commitowany (jak w projekcie źródłowym) — użytkownik może zainstalować bez uruchamiania builda.
+`plugins/` jest commitowany (jak w projekcie źródłowym) — użytkownik może zainstalować bez uruchamiania builda. **Drift-gate** (`--verify`, uruchamiany też w CI) pilnuje, żeby commitowany artefakt zawsze odpowiadał `src/` + `bundles.yaml`: po każdej edycji źródeł wystarczy przebudować i zcommitować, inaczej CI failuje.
 
 ## 🎨 Konwencja emotek
 
@@ -118,7 +121,8 @@ Konwencje potwierdzone testami (patrz historia commitów): klucze TOML **snake_c
 ## 🧭 Roadmapa
 
 - [ ] `connectors.json` (GitHub, k6) dla bundle'i automatyzujących
-- [ ] GitHub Actions CI: `build.js --check` + weryfikacja ładowania pluginu w Vibe headless
+- [x] GitHub Actions CI (`.github/workflows/ci.yml`): `build.js --check` + walidacja manifestów JSON + drift-gate `--verify`, matrysa ubuntu + windows
+- [ ] weryfikacja ładowania pluginu w Vibe headless w CI (wymaga zainstalowanego CLI i auth — świadomie poza pierwszą iteracją CI)
 - [ ] hook strict (blokujący) po zdefiniowaniu polityki jakości
 - [ ] hook-only pluginy źródła (`always-on-skills`, `print-tool-info`) — częściowo pokryte przez `test-file-guard`
 

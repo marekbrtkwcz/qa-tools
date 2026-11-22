@@ -6,13 +6,18 @@
  * Adapted in concept from awesome-agents-for-quality (MIT):
  * https://github.com/jaktestowac/awesome-agents-for-quality
  *
- * Usage: node scripts/build.js [--bundle <name>] [--out plugins] [--check]
- *   --check  validate only: bundle membership, required files, name rules.
- *            Exit code 1 on any error. Used by CI.
+ * Usage: node scripts/build.js [--bundle <name>] [--out plugins] [--check] [--verify]
+ *   --check   validate only: bundle membership, required files, name rules.
+ *             Exit code 1 on any error. Used by CI.
+ *   --verify  drift gate (CI): rebuild into a temp dir and compare the result
+ *             with the committed plugins/ artifact. Exit code 1 on any
+ *             difference. Never modifies plugins/. With --bundle, only that
+ *             bundle is compared.
  */
 'use strict';
 
 const fs = require('fs');
+const os = require('os');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
@@ -418,37 +423,110 @@ function buildBundle(name, bundle, outDir, checkOnly) {
   return errors;
 }
 
+/* ---------- drift gate (--verify) ---------- */
+
+/** List all files under dir as slash-normalized relative paths, sorted. */
+function listFiles(dir, base = dir) {
+  const out = [];
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const p = path.join(dir, entry.name);
+    if (entry.isDirectory()) out.push(...listFiles(p, base));
+    else out.push(path.relative(base, p).split(path.sep).join('/'));
+  }
+  return out.sort();
+}
+
+/**
+ * Compare a fresh build (builtDir/<name>) with the committed artifact
+ * (expectedDir/<name>) for each selected bundle. Returns error strings:
+ * files missing from the artifact, stale files only in the artifact,
+ * and files whose content differs.
+ *
+ * Content is compared after normalizing CRLF to LF: with core.autocrlf=true
+ * (default on Windows) git rewrites text files in the working tree with CRLF
+ * on any checkout/restore, so byte-identity would produce false drift on
+ * Windows. Line endings are the only difference this gate tolerates.
+ */
+function diffTrees(builtDir, expectedDir, selected) {
+  const errors = [];
+  const norm = (buf) => buf.toString('utf8').replace(/\r\n/g, '\n');
+  for (const name of selected) {
+    const builtPath = path.join(builtDir, name);
+    const committedPath = path.join(expectedDir, name);
+    const built = fs.existsSync(builtPath) ? listFiles(builtPath) : [];
+    const committed = fs.existsSync(committedPath) ? listFiles(committedPath) : [];
+    const builtSet = new Set(built);
+    const committedSet = new Set(committed);
+    for (const f of built) {
+      if (!committedSet.has(f)) {
+        errors.push(`[${name}] ${f}: missing from committed plugins/ — rebuild and commit`);
+        continue;
+      }
+      const a = fs.readFileSync(path.join(builtPath, f));
+      const b = fs.readFileSync(path.join(committedPath, f));
+      if (norm(a) !== norm(b)) errors.push(`[${name}] ${f}: differs from committed plugins/ — rebuild and commit`);
+    }
+    for (const f of committed) {
+      if (!builtSet.has(f)) errors.push(`[${name}] ${f}: stale in committed plugins/ (not produced by build)`);
+    }
+  }
+  return errors;
+}
+
 /* ---------- main ---------- */
 
 function main() {
   const args = process.argv.slice(2);
   const checkOnly = args.includes('--check');
+  const verifyOnly = !checkOnly && args.includes('--verify');
   const bundleFlag = args.indexOf('--bundle');
   const outFlag = args.indexOf('--out');
   const outDir = outFlag >= 0 ? path.resolve(args[outFlag + 1]) : OUT;
   const bundles = parseBundles(path.join(ROOT, 'bundles.yaml'));
   const selected = bundleFlag >= 0 ? [args[bundleFlag + 1]] : Object.keys(bundles);
 
+  const unknown = selected.filter((s) => !bundles[s]);
+  if (unknown.length) {
+    console.error(`Unknown bundle(s): ${unknown.join(', ')}. Known: ${Object.keys(bundles).join(', ')}`);
+    process.exit(2);
+  }
+
   let allErrors = checkMembership(bundles);
-  for (const name of selected) {
-    const bundle = bundles[name];
-    if (!bundle) {
-      console.error(`Unknown bundle: ${name}. Known: ${Object.keys(bundles).join(', ')}`);
-      process.exit(2);
+
+  if (verifyOnly) {
+    const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'qa-tools-verify-'));
+    try {
+      for (const name of selected) {
+        const errors = buildBundle(name, bundles[name], tmp);
+        allErrors = allErrors.concat(errors.map((e) => `[${name}] ${e}`));
+      }
+      allErrors = allErrors.concat(diffTrees(tmp, outDir, selected));
+    } finally {
+      fs.rmSync(tmp, { recursive: true, force: true });
     }
-    const errors = buildBundle(name, bundle, outDir, checkOnly);
-    if (errors.length) {
-      allErrors = allErrors.concat(errors.map((e) => `[${name}] ${e}`));
-    } else if (!checkOnly) {
-      console.log(`built: ${name}`);
+  } else {
+    for (const name of selected) {
+      const errors = buildBundle(name, bundles[name], outDir, checkOnly);
+      if (errors.length) {
+        allErrors = allErrors.concat(errors.map((e) => `[${name}] ${e}`));
+      } else if (!checkOnly) {
+        console.log(`built: ${name}`);
+      }
     }
   }
+
   if (allErrors.length) {
     console.error('\nERRORS:');
     for (const e of allErrors) console.error('  - ' + e);
     process.exit(1);
   }
-  console.log(checkOnly ? 'All bundles valid.' : 'Done.');
+  console.log(
+    verifyOnly
+      ? 'Committed plugins/ matches a fresh build.'
+      : checkOnly
+        ? 'All bundles valid.'
+        : 'Done.'
+  );
 }
 
 main();

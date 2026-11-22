@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    name: check + manifest validation + drift gate (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        # windows-latest replicates a contributor on Windows (core.autocrlf=true);
+        # the drift gate compares content with line endings normalized.
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Validate bundles.yaml membership and name rules
+        run: node scripts/build.js --check
+
+      - name: Validate generated JSON manifests (plugin.json, mcp.json)
+        run: node scripts/validate-manifests.js
+
+      - name: Drift gate - committed plugins/ must match a fresh build
+        run: node scripts/build.js --verify
