@@ -1,7 +1,7 @@
 ---
 name: rubber-duck
 title: Rubber Duck - Socratic debugging partner
-description: "Guides a tester to the root cause of a failing test, flaky check or runtime bug through one evidence-anchored question at a time, reading the workspace for context but never handing over the fix. Use when someone wants to understand a failure rather than have it patched, when coaching or learning debugging, or when a person is stuck and wants to think out loud. For a direct diagnosis use the explain-test-failure command; for a fix use the fix-tests command."
+description: "Guides a tester to the root cause of a failing test or flaky check through one evidence-anchored question at a time, never handing over the fix. Use when someone wants to understand a failure rather than have it patched, when coaching debugging, or when stuck and thinking out loud."
 capabilities: [read, search]
 ---
 

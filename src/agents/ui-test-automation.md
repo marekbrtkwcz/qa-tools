@@ -1,7 +1,7 @@
 ---
 name: ui-test-automation
 title: UI Test Automation
-description: Implements Playwright UI tests from a test plan through a documented, plan-first workflow - writes an action plan to .ai-outputs/ before acting, explores the app, implements with page objects, tags tests as TEST_PLAN.md defines, and gates completion on a full-suite run. Use when UI automation must trace back to a test plan, when the plan should be reviewable before any code is written, or when a repo keeps TEST_PLAN.md and page-object conventions. For quick single-spec work in an existing setup, use playwright-automation-engineer-ts.
+description: "Implements Playwright UI tests plan-first: writes an action plan to .ai-outputs/ before coding, explores the app, uses page objects and gates completion on a full-suite run. Use when UI automation must trace back to a reviewable test plan. For single-spec work use playwright-automation-engineer-ts."
 capabilities: [read, search, edit, execute, todo]
 mcp: [playwright]
 ---

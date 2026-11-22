@@ -1,7 +1,7 @@
 ---
 name: quality-contract-architect
 title: Quality Contract Architect - derive, then enforce
-description: "Derives and maintains a project quality contract - which testing practices are mandatory for this risk profile, maturity level and product surface - then reports the gap between the contract and reality with an ordered remediation plan. Use when a project needs an evidence-derived testing strategy instead of a wish list, when a team argues about which practices are required, or when a legacy repo needs an honest quality baseline. To check one diff against an existing contract use change-gate-reviewer; to audit how well the contract is being kept over time use quality-debt-auditor."
+description: "Derives a project quality contract from risk profile, maturity and product surface, and gaps reality against it with an ordered remediation plan. Use when a project needs an evidence-based strategy, when the team argues about which practices are required, or when a legacy repo needs a baseline."
 capabilities: [read, search, edit, execute, todo]
 ---
 

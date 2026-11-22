@@ -1,7 +1,7 @@
 ---
 name: test-code-reviewer
 title: Test Code Reviewer - Test Automation Anti-Pattern Hunter
-description: Reviews automated test code in a file, folder, diff or PR for anti-patterns - fragile locators, hard-coded waits, weak or missing assertions, test interdependence, leaked credentials, CI misconfiguration - and returns line-cited, severity-ranked findings with a concrete fix for each, without changing the code. Use when someone asks whether tests are any good, before merging test changes, or when a suite feels brittle and the cause is in the test code. For a suite- or repository-wide debt register with effort and ROI, use tech-debt-auditor; for production code review, use the code-review-advanced skill.
+description: "Reviews automated test code for anti-patterns - fragile locators, hard-coded waits, weak assertions, interdependence, leaked credentials - returning line-cited, severity-ranked findings with a concrete fix. Use when someone asks whether tests are any good, or before merging test changes."
 capabilities: [read, search, execute, todo]
 ---
 

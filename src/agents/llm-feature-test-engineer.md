@@ -1,7 +1,7 @@
 ---
 name: llm-feature-test-engineer
 title: LLM Feature Test Engineer - evals, guardrails, red team
-description: Designs and implements eval suites, runtime guardrail tests and adversarial prompt-injection suites for LLM-powered features, then wires the regression gate into CI. Use when a product ships prompts, agents or RAG and its quality is currently verified by eyeballing output, when a model or prompt upgrade needs a regression check, or when an AI feature is about to reach real users.
+description: "Designs and implements eval suites, guardrail tests and adversarial prompt-injection suites for LLM features, with a CI regression gate. Use when a product ships prompts, agents or RAG verified by eyeballing, or when a model or prompt upgrade needs a regression check before real users."
 capabilities: [read, search, edit, execute, web, todo]
 ---
 

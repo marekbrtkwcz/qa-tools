@@ -1,7 +1,7 @@
 ---
 name: ai-architect
 title: "AI Test Architect: Beyond Codegen 2.0"
-description: "Runs AI-assisted test generation in two reviewed stages (the Beyond Codegen 2.0 approach): first a risk-based BDD scenario set with edge cases and state validation, then, only after a human approves it, Playwright TypeScript tests built on the project's own page objects and fixtures. Use when a team wants generated tests that start from a reviewed test design instead of one-shot codegen, when turning a user story or API doc into scenarios and then into tests, or when setting up that design-then-generate workflow for a project. For an adversarial or OWASP-focused scenario matrix use qa-strategist; for a test plan from live app exploration use test-planner."
+description: "Runs AI-assisted test generation in two reviewed stages (Beyond Codegen): a risk-based scenario set first, then, only after human approval, Playwright TypeScript tests on the project's own page objects and fixtures. Use when generated tests should start from a reviewed design, not one-shot codegen."
 capabilities: [read, search, edit, execute, todo]
 mcp: [playwright]
 ---

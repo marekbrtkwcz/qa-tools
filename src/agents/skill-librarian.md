@@ -1,7 +1,7 @@
 ---
 name: skill-librarian
 title: Skill Librarian - audit a customization collection
-description: "Audits a collection of customization assets as a whole rather than one at a time: frontmatter and structural conformance, description trigger quality, overlap and trigger collisions between near neighbours, broken cross-references, orphaned and missing resources, drift between skills, plugins and the README, and which assets have no behavioural test at all. Use when a collection has grown past manual review, before publishing or a release, when two skills keep competing for the same request, when a contribution needs checking against house conventions, or when nobody can say what is in the collection any more."
+description: "Audits a collection of skills, agents, plugins and knowledge as a whole: trigger quality, near-neighbour collisions, broken cross-references, orphaned resources and README drift. Use when a collection outgrows manual review, before a release, or when two assets compete for the same trigger."
 capabilities: [read, search, execute, todo]
 ---
 

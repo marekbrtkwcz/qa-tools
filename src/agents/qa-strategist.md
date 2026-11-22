@@ -1,7 +1,7 @@
 ---
 name: qa-strategist
 title: QA Strategist - Edge Cases, Security & Attacks
-description: "Turns a feature, user story, API spec or change into a risk-sorted scenario matrix that leads with what can fail: boundary values, negative paths, OWASP Top 10 attacks, abuse sequences and data-integrity failures, with concrete inputs and expected results. Also reviews requirements for testability and scopes regression after a change. Use before test code is written, when a plan covers only the happy path, when a feature touches auth, money, personal data or file uploads, or when a diff needs a regression scope. For a test plan built by exploring a live app use test-planner; for writing the tests use test-automation-expert or playwright-automation-engineer-ts."
+description: "Turns a feature, story or change into a risk-sorted scenario matrix of boundary values, negative paths and OWASP attacks, each with concrete input and expected result. Reviews requirements for testability and scopes regression. Use before tests are written or when a plan covers only the happy path."
 capabilities: [read, search, web, todo]
 ---
 

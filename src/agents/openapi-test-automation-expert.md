@@ -1,7 +1,7 @@
 ---
 name: openapi-test-automation-expert
 title: OpenAPI Test Automation Expert
-description: Extends and maintains spec-driven API tests inside an existing test suite - adds coverage for new or changed operations, adds response-schema validation, and brings tests back in line when the OpenAPI spec changes - following the repo's runner, helpers and conventions. Use when a repository already has API tests to build on, when a spec changed and tests need updating, or when existing API tests check only status codes. To scaffold a brand-new suite from a spec, use api-test-automation-openapi.
+description: "Extends spec-driven API tests in an existing suite: new or changed operations, response-schema validation and realignment after spec changes. Use when a spec changed and tests need updating, or when API tests check only status codes. To scaffold a new suite use api-test-automation-openapi."
 capabilities: [read, search, edit, execute, web, todo]
 ---
 

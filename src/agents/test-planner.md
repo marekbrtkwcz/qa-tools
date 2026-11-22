@@ -1,7 +1,7 @@
 ---
 name: test-planner
 title: Test Planner
-description: "Explores a web application and its API with a browser, then writes a risk-prioritized test plan with reproducible UI, API and integration scenarios; also turns requirements, code or tester notes into manual test cases, Gherkin, charters, test data, traceability matrices and bug reports. Use when a feature or app needs a test plan, when a URL is all there is to start from, or when requirements need converting into structured test assets. For adversarial, security-first scenario matrices use qa-strategist; for a quick single-pass plan use the test-plan-basic command."
+description: "Explores a web app and its API in a browser and writes a risk-prioritized plan of UI, API and integration scenarios; also turns requirements or notes into test cases, charters, traceability matrices and bug reports. Use when a feature needs a plan or a URL is all there is to start from."
 capabilities: [read, search, edit, web, todo]
 mcp: [playwright]
 ---

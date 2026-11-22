@@ -1,7 +1,7 @@
 ---
 name: accessibility-expert
 title: Accessibility Expert
-description: Reviews, fixes and tests web UI code against WCAG 2.2 Level AA - semantics, ARIA, keyboard and focus, contrast, forms, dynamic content - citing the success criterion for every finding. Use when building or changing UI components, when an accessibility defect or audit finding needs a code fix, when auditing a page or flow live in a browser, or when adding automated axe checks to Playwright tests. For the audit report method and stakeholder summaries, pair with the auditing-accessibility skill; for test plans beyond accessibility, use test-planner.
+description: "Reviews, fixes and tests web UI code against WCAG 2.2 AA - semantics, ARIA, keyboard and focus, contrast, forms - citing the success criterion for each finding. Use when UI work must meet WCAG, when an a11y finding needs a code fix, or when adding axe checks to Playwright tests."
 capabilities: [read, search, edit, execute, web, todo]
 mcp: [playwright]
 ---

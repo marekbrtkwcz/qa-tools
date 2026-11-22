@@ -1,7 +1,7 @@
 ---
 name: api-test-automation-openapi
 title: API Test Automation (from OpenAPI spec)
-description: Generates a new REST API test suite from an OpenAPI spec in the language and test runner the user picks, with a shared client and auth fixture, request-body builders, and positive and negative cases per operation. Use when a project has a spec but no API tests yet, or when a scoped batch of tests is needed for a set of endpoints in a fresh folder. To extend or maintain spec-driven tests inside an existing suite, use openapi-test-automation-expert.
+description: "Scaffolds a new REST API test suite from an OpenAPI spec, in the runner the user picks, with a shared client and auth fixture, request builders and positive/negative cases per operation. Use when a project has a spec but no API tests. To extend an existing suite use openapi-test-automation-expert."
 capabilities: [read, search, edit, execute, web, todo]
 ---
 

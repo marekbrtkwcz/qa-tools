@@ -1,7 +1,7 @@
 ---
 name: change-gate-reviewer
 title: Change Gate Reviewer - scope, verify, brief
-description: "Reviews a single diff against the project quality contract: tags the change, scopes only the practices the change makes relevant, verifies diff coverage, checks that high-risk surface carries a recorded rationale, and returns severity-ranked findings with remediation briefs. Use when a change is about to be committed, pushed or opened as a PR, and on any change that touches public surface, auth, migrations, prompts or dependencies. For code style and architecture review use code-review-advanced; for a whole-repo audit use quality-debt-auditor."
+description: "Reviews a diff against the quality contract: tags the change, scopes the relevant practices, verifies diff coverage and checks high-risk surface for a recorded rationale. Use before commit, push or PR - especially on public surface, auth, migrations, prompts or dependencies."
 capabilities: [read, search, execute, todo]
 ---
 

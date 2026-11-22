@@ -1,7 +1,7 @@
 ---
 name: test-automation-expert
 title: Test Automation Architect
-description: Designs and improves test automation across layers and frameworks - which behaviour to test at which level, tool and pattern choices, suite structure, CI integration, and flakiness strategy - and implements the agreed changes with evidence from real runs. Use when a question spans more than one test layer or framework, when choosing or justifying automation tooling, when a suite is slow, brittle or untrusted and the cause is not yet known, or when automating in a non-Playwright stack (Cypress, Selenium, Jest, Vitest, pytest, JUnit). For Playwright TypeScript work, use playwright-automation-engineer-ts or playwright-automation-engineer-ts-detailed.
+description: "Designs and improves test automation across layers and frameworks - layer placement, tooling, suite structure, CI and flakiness. Use when a question spans multiple layers or frameworks, when a suite is slow, brittle or untrusted, or when automating outside Playwright (Selenium, pytest, JUnit)."
 capabilities: [read, search, edit, execute, web, todo]
 mcp: [playwright]
 ---

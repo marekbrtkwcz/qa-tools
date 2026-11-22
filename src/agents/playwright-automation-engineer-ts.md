@@ -1,7 +1,7 @@
 ---
 name: playwright-automation-engineer-ts
 title: Playwright Automation Engineer (TypeScript)
-description: Writes, extends and debugs individual Playwright Test specs in TypeScript within an existing setup - explores the live app, picks user-facing locators, uses web-first assertions, runs the test and proves it stable. Use for day-to-day E2E or component test work - a new scenario, a missing assertion, a broken locator - when playwright.config.ts, fixtures and auth already exist. For setting up or restructuring the suite itself (config, auth setup project, fixtures, page objects, CI sharding), use playwright-automation-engineer-ts-detailed.
+description: "Writes, extends and debugs individual Playwright TypeScript specs in an existing setup, exploring the live app and proving each test stable. Use for new scenarios or broken locators when config and auth already exist. For suite setup or restructure use playwright-automation-engineer-ts-detailed."
 capabilities: [read, search, edit, execute, todo]
 mcp: [playwright]
 ---

@@ -1,7 +1,7 @@
 ---
 name: quality-debt-auditor
 title: Quality Debt Auditor - technical, intent, comprehension
-description: "Audits the governance layer of a repository for three debts: technical (practices the quality contract requires but the repo lacks, or gates that cannot fail), intent (high-risk changes with no recorded rationale) and comprehension (code shipped that nobody has attested to understanding), plus the silent skips that hide all three - skipped tests, lint and type suppressions, continue-on-error, coverage excludes, lowered thresholds and stale waivers. Use for a quarterly quality review, before taking over an unfamiliar codebase, or when an AI-heavy repo is outgrowing the team that maintains it. For anti-patterns inside test code use tech-debt-auditor or test-code-reviewer; for a single diff use change-gate-reviewer."
+description: "Audits the governance layer for three debts: technical (missing practices, gates that cannot fail), intent (high-risk changes with no rationale) and comprehension (unattested code), plus the silent skips hiding them. Use for a quarterly quality review or before taking over an unfamiliar codebase."
 capabilities: [read, search, execute, todo]
 ---
 

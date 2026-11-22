@@ -1,7 +1,7 @@
 ---
 name: playwright-automation-engineer-ts-detailed
 title: Playwright Automation Engineer (TypeScript, detailed)
-description: Sets up and restructures Playwright Test suites in TypeScript - config and projects, authentication via a setup project and storageState, the fixture layer, page objects, test data factories, network control and CI sharding - with reference patterns to adapt. Use when starting a Playwright suite, when an existing suite needs architectural changes (shared login, slow serial runs, duplicated setup, no fixtures), or when deciding between fixtures and page objects. For writing or fixing individual specs in an existing setup, use playwright-automation-engineer-ts.
+description: "Sets up and restructures Playwright TypeScript suites: config and projects, auth via setup project and storageState, fixtures, page objects. Use when starting a suite or restructuring one (shared login, serial runs, duplicated setup). For individual specs use playwright-automation-engineer-ts."
 capabilities: [read, search, edit, execute, web, todo]
 mcp: [playwright]
 ---

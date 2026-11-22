@@ -4,6 +4,9 @@ Wszystkie istotne zmiany tego projektu są dokumentowane tutaj. Format zbliżony
 
 ## [Unreleased]
 
+### Zmienione
+- **Opisy 18 agentów skrócone do limitu 300 znaków** (668→299 w najdłuższym przypadku): build truncuje `description` w emitowanym TOML na 300 znaków, więc host widział urwane opisy (`qa-strategist`, `ai-architect`, `test-automation-expert`, obaj `playwright-automation-engineer-ts*`, `test-code-reviewer`, `quality-debt-auditor`, `tech-debt-auditor`, `skill-librarian` i 9 dalszych). Każdy skrócony opis zachowuje sygnał routingu (rola + kiedy użyć + najważniejszy cross-ref); `npm run check` z tej listy wychodzi teraz bez żadnego WARN.
+
 ## [0.2.1] - 2026-11-22
 
 Cykl po audycie kolekcji (2026-11-22): domknięcie driftu cross-referencji skilli, luki obszarowe, bramki walidacji builda, polityka hooka i porządki procesu. Wszystkie pluginy: wersja 0.2.1.

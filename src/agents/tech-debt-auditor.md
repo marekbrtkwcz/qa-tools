@@ -1,7 +1,7 @@
 ---
 name: tech-debt-auditor
 title: Tech Debt Auditor
-description: Audits technical debt across a repository or a whole test suite - architecture, code, test-suite health, build and CI, dependencies, operations, documentation - and produces an evidence-backed debt register scored by severity, risk, effort and ROI, with a Now/Next/Later roadmap and staged plans for risky refactors. Use for a periodic health check, before planning a refactor or a quarter, when delivery has slowed or a test suite is no longer trusted and the causes span many files, or when taking over an unfamiliar codebase. For line-by-line review of specific test files or a PR, use test-code-reviewer; for skipped tests, waivers and disabled gates as governance debt, use quality-debt-auditor.
+description: "Audits technical debt across a repo or test suite - architecture, test-suite health, CI, dependencies - into an evidence-backed register scored by severity, risk, effort and ROI. Use when delivery slows, before planning a refactor, or when taking over an unfamiliar codebase."
 capabilities: [read, search, edit, execute, todo]
 ---
 
