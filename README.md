@@ -8,9 +8,9 @@ Repozytorium inspirowane ideą i strukturą projektu **[awesome-agents-for-quali
 
 | Plugin | Skille | Agenci | Knowledge | Hook | Zakres |
 |---|---|---|---|---|---|
-| `qa-core` 🧭 | 26 | 4 | 1 | — | planowanie testów, eksploracja, bug reporty, RTM, kryteria akceptacji |
-| `test-automation` 🤖 | 31 | 5 | — | ✅ test-file-guard | unit testy, TDD, Playwright, mocki, flakiness, review, bootstrap suity |
-| `api-testing` 🔌 | 3 | 2 | — | — | automatyzacja API (Playwright) i contract testing |
+| `qa-core` 🧭 | 27 | 4 | 1 | — | planowanie testów, eksploracja, bug reporty, RTM, kryteria akceptacji, integracja trackerów (Xray/TestRail/Jira) |
+| `test-automation` 🤖 | 33 | 5 | — | ✅ test-file-guard | unit testy, TDD, Playwright, mocki, flakiness, review, bootstrap suity, raporty/artefakty CI, portowanie na pytest/JUnit/NUnit |
+| `api-testing` 🔌 | 4 | 2 | — | — | automatyzacja API (Playwright), contract testing: schema/OpenAPI (L25) + Pact (consumer-driven) |
 | `non-functional-testing` ⚡ | 6 | 1 | — | — | accessibility, performance/load, security |
 | `ai-quality` 🧠 | 7 | 1 | 1 | — | testowanie funkcji LLM, guardrails, groundedness |
 | `quality-gates` 🚦 | 17 | 4 | 1 | — | quality contracts, change gates, release readiness |
@@ -22,7 +22,7 @@ Repozytorium inspirowane ideą i strukturą projektu **[awesome-agents-for-quali
 | `ui-api-automation` 🖥️ | 1 | 7 | 1 | — | paczka: pipeline testów UI + API (explorers → plan → implement → run) |
 | `ui-api-automation-minimal` 🧪 | 1 | 4 | 1 | — | paczka: minimalna wersja powyższego |
 
-Razem: **13 pluginów**, **104 skille**, **42 subagentów**, **7 knowledge**, **1 quality-gate hook**.
+Razem: **13 pluginów**, **108 skilli**, **42 subagentów**, **7 knowledge**, **1 quality-gate hook**.
 
 Paczki orkiestracyjne działają jak w źródle: driver-skill (user-invocable) prowadzi orkiestrację, każdy krok delegujesz do subagenta przez `tools.agents` + `config_name` (np. `plan-explore-review-commit:perc-implementer`); GUIDE paczki jest jej knowledge. Build przepisuje instrukcje hostów (Claude Code / Codex) na Vibe: tabela agentów dostaje kolumnę `Vibe` z dokładnie tymi `config_name`, które Vibe potrafi zespawnować.
 
@@ -130,8 +130,8 @@ Konwencje potwierdzone testami (patrz historia commitów): klucze TOML **snake_c
 
 ## ✅ Co zostało zwalidowane (Vibe headless)
 
-- 12 pierwszych pluginów ładuje się bez błędów walidacji (`plugin.*.invalid`); `mobile-testing` (dodany później) jest na razie pokryty bramkami builda (check, manifesty, drift-gate, testy) — walidacja headless w toku
-- 58 skilli widocznych dla modelu (104 − 46 z `disable-model-invocation: true`; policzone z frontmatterów `src/skills`; user-invocable dostępne na wywołanie — w tym 4 driver-skille paczek)
+- 13 pluginów ładuje się bez błędów walidacji (`plugin.*.invalid`); `mobile-testing` potwierdzony headless po instalacji 2026-11 (bramki builda i manifestów + walidacja instalacji: parzystość plików `plugins/`↔`~/.vibe/plugins`, wersje manifestów, obecność skilli/agentów + załadowanie w sesji Vibe)
+- 65 skilli widocznych dla modelu (108 − 43 z `disable-model-invocation: true`; policzone z frontmatterów `src/skills`; user-invocable dostępne na wywołanie — w tym 4 driver-skille paczek)
 - spawn subagentów z personami z instrukcji: `qa-core:rubber-duck` 🦆, `quality-gates:change-gate-reviewer`, `test-automation:test-code-reviewer`, `orchestration-basics:basics-analyst`
 - 7 knowledge folders (3 z bundle'ów + 4 GUIDE paczek orkiestracyjnych)
 - hook `pre_tool` test-file-guard (w `test-automation`, 3 wpisy: `write_file`/`edit`/`bash`): **blokuje** zapis `.only()`/`fit()` oraz `.skip()`/`xit()`/`xdescribe()` w plikach testowych (structured `decision: deny`, klasyfikacja po nazwie pliku; świadoma kwarantanna przechodzi — zapis z adnotacją `waiver` (owner + expiry) jest zamieniany na ostrzeżenie), **ostrzega** o `waitForTimeout`, sleepach, tautologiach oraz zapisie pliku testowego przez `bash` (heredoc/tee/sed — omija bramki plikowe; parsowanie komendy jest zawodne, więc bash jest zawsze warn-only); wszystko logowane w `$PLUGIN_DATA`. Awaria hooka = fail-open (ostrzeżenie, edyt przechodzi), reguły w `vibe-hooks/test-file-guard.js`, 16 testów jednostkowych przypina model severity (`scripts/assets/test-file-guard.test.js`; walidacja `.only()`/fit headless — z 0.2.0, rodzina skip i tryb bash — testy jednostkowe, headless w toku)
