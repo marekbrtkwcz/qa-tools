@@ -1,0 +1,22 @@
+{
+  "name": "qa-tools",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Native Mistral Vibe CLI plugins for test automation: skills, subagents, knowledge and quality-gate hooks (Agent Plugins 1.0 format).",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/marekbrtkwcz/qa-tools.git"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "node scripts/build.js",
+    "check": "node scripts/build.js --check",
+    "verify": "node scripts/build.js --verify",
+    "validate-manifests": "node scripts/validate-manifests.js",
+    "test": "node --test scripts/build.test.js",
+    "ci": "npm run check && npm run validate-manifests && npm run verify && npm test"
+  }
+}

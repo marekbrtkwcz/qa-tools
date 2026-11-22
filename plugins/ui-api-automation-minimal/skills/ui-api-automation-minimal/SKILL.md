@@ -16,10 +16,10 @@ The agents cannot call each other. Wherever the instructions below say an agent 
 
 | Name used below | Vibe |
 | --- | --- |
-| Test Coder Agent (Minimal) | `ui-api-automation-minimal:uiapi-min-coder`
-| Explorer Agent (Minimal) | `ui-api-automation-minimal:uiapi-min-explorer`
-| Test Framework Starter Agent (Minimal) | `ui-api-automation-minimal:uiapi-min-framework-starter`
-| Test Planner (Minimal) | `ui-api-automation-minimal:uiapi-min-planner`
+| Test Coder Agent (Minimal) | `ui-api-automation-minimal:uiapi-min-coder` |
+| Explorer Agent (Minimal) | `ui-api-automation-minimal:uiapi-min-explorer` |
+| Test Framework Starter Agent (Minimal) | `ui-api-automation-minimal:uiapi-min-framework-starter` |
+| Test Planner (Minimal) | `ui-api-automation-minimal:uiapi-min-planner` |
 
 ---
 

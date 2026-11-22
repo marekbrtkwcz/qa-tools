@@ -16,9 +16,9 @@ The agents cannot call each other. Wherever the instructions below say an agent 
 
 | Name used below | Vibe |
 | --- | --- |
-| Analyst | `orchestration-basics:basics-analyst`
-| Explorer | `orchestration-basics:basics-explorer`
-| Planner | `orchestration-basics:basics-planner`
+| Analyst | `orchestration-basics:basics-analyst` |
+| Explorer | `orchestration-basics:basics-explorer` |
+| Planner | `orchestration-basics:basics-planner` |
 
 ---
 

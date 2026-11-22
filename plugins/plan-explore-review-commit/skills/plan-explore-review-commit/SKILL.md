@@ -16,15 +16,15 @@ The agents cannot call each other. Wherever the instructions below say an agent 
 
 | Name used below | Vibe |
 | --- | --- |
-| Architect Subagent | `plan-explore-review-commit:perc-architect`
-| Code Review Subagent | `plan-explore-review-commit:perc-code-reviewer`
-| Docs Writer Subagent | `plan-explore-review-commit:perc-docs-writer`
-| Explorer Subagent | `plan-explore-review-commit:perc-explorer`
-| Implementer Subagent | `plan-explore-review-commit:perc-implementer`
-| Planner Agent | `plan-explore-review-commit:perc-planner`
-| QA Strategy Subagent | `plan-explore-review-commit:perc-qa-strategist`
-| Researcher Subagent | `plan-explore-review-commit:perc-researcher`
-| Security Auditor Subagent | `plan-explore-review-commit:perc-security-auditor`
+| Architect Subagent | `plan-explore-review-commit:perc-architect` |
+| Code Review Subagent | `plan-explore-review-commit:perc-code-reviewer` |
+| Docs Writer Subagent | `plan-explore-review-commit:perc-docs-writer` |
+| Explorer Subagent | `plan-explore-review-commit:perc-explorer` |
+| Implementer Subagent | `plan-explore-review-commit:perc-implementer` |
+| Planner Agent | `plan-explore-review-commit:perc-planner` |
+| QA Strategy Subagent | `plan-explore-review-commit:perc-qa-strategist` |
+| Researcher Subagent | `plan-explore-review-commit:perc-researcher` |
+| Security Auditor Subagent | `plan-explore-review-commit:perc-security-auditor` |
 
 ---
 

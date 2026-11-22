@@ -22,11 +22,14 @@ jobs:
         with:
           node-version: 20
 
+      - name: Unit tests (node:test, no dependencies)
+        run: npm test
+
       - name: Validate bundles.yaml membership and name rules
-        run: node scripts/build.js --check
+        run: npm run check
 
       - name: Validate generated JSON manifests (plugin.json, mcp.json)
-        run: node scripts/validate-manifests.js
+        run: npm run validate-manifests
 
       - name: Drift gate - committed plugins/ must match a fresh build
-        run: node scripts/build.js --verify
+        run: npm run verify

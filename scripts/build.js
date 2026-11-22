@@ -201,8 +201,9 @@ function rewritePackSkill(text) {
         out.push(line.replace(/\s*-+\s*\|\s*$/, ''));
         continue;
       }
-      // data row: drop the trailing Codex cell `some_name` (underscore-only name)
-      out.push(line.replace(/\s*\|\s*`[a-z0-9_]+`\s*\|\s*$/, ''));
+      // data row: drop the trailing Codex cell `some_name` (underscore-only name),
+      // keeping the row's closing pipe so the markdown table stays valid
+      out.push(line.replace(/\s*\|\s*`[a-z0-9_]+`\s*\|\s*$/, ' |'));
       continue;
     }
     out.push(line);
@@ -534,4 +535,19 @@ function main() {
   );
 }
 
-main();
+if (require.main === module) {
+  main();
+}
+
+/* Exposed for scripts/build.test.js (node:test). No dependencies. */
+module.exports = {
+  parseBundles,
+  parseAgentMd,
+  toolsOf,
+  isMutating,
+  truncateDescription,
+  rewritePackSkill,
+  appendEmojiStyle,
+  listFiles,
+  diffTrees,
+};

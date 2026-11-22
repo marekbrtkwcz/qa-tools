@@ -16,13 +16,13 @@ The agents cannot call each other. Wherever the instructions below say an agent 
 
 | Name used below | Vibe |
 | --- | --- |
-| BE Test Implementer | `ui-api-automation:uiapi-be-implementer`
-| FE Explorer (Playwright MCP) | `ui-api-automation:uiapi-fe-explorer`
-| FE Test Implementer | `ui-api-automation:uiapi-fe-implementer`
-| OpenAPI Explorer | `ui-api-automation:uiapi-openapi-explorer`
-| Solution Reviewer | `ui-api-automation:uiapi-solution-reviewer`
-| Test Planner | `ui-api-automation:uiapi-test-planner`
-| Test Runner & Verifier | `ui-api-automation:uiapi-test-runner`
+| BE Test Implementer | `ui-api-automation:uiapi-be-implementer` |
+| FE Explorer (Playwright MCP) | `ui-api-automation:uiapi-fe-explorer` |
+| FE Test Implementer | `ui-api-automation:uiapi-fe-implementer` |
+| OpenAPI Explorer | `ui-api-automation:uiapi-openapi-explorer` |
+| Solution Reviewer | `ui-api-automation:uiapi-solution-reviewer` |
+| Test Planner | `ui-api-automation:uiapi-test-planner` |
+| Test Runner & Verifier | `ui-api-automation:uiapi-test-runner` |
 
 ---
 

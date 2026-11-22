@@ -57,8 +57,10 @@ qa-tools/
 │   ├── agents/<name>.md              # definicje agentów (neutralny format)
 │   └── knowledge/<name>.md           # guides → baza wiedzy
 ├── bundles.yaml                       # podział na pluginy + członkostwo skilli
+├── package.json                       # npm scripts: build / check / verify / test
 ├── scripts/
 │   ├── build.js                       # build → plugins/ (natywny Vibe); --check, --verify
+│   ├── build.test.js                  # testy jednostkowe builda (node:test)
 │   ├── validate-manifests.js          # walidacja JSON manifestów w plugins/
 │   └── assets/test-file-guard.js     # skrypt hooka
 └── plugins/<bundle>/              # artefakt buildu — do skopiowania (7 pluginów)
@@ -79,7 +81,10 @@ node scripts/build.js            # buduje plugins/<bundle>
 node scripts/build.js --check    # walidacja: członkostwo w bundles.yaml, name rules, frontmatter
 node scripts/build.js --verify   # drift-gate: świeży build do katalogu tmp vs commitowany plugins/ (exit 1 przy różnicach; nie modyfikuje plugins/; porównanie ignoruje wyłącznie różnice EOL — core.autocrlf na Windows przepisuje working tree)
 node scripts/validate-manifests.js  # walidacja parsowania wszystkich JSON w plugins/
+npm test                          # testy jednostkowe builda (node:test, zero zależności)
 ```
+
+…albo przez npm: `npm run build | check | verify | validate-manifests | test`, a całość CI: `npm run ci`.
 
 `plugins/` jest commitowany (jak w projekcie źródłowym) — użytkownik może zainstalować bez uruchamiania builda. **Drift-gate** (`--verify`, uruchamiany też w CI) pilnuje, żeby commitowany artefakt zawsze odpowiadał `src/` + `bundles.yaml`: po każdej edycji źródeł wystarczy przebudować i zcommitować, inaczej CI failuje.
 
