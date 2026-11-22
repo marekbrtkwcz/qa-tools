@@ -5,7 +5,8 @@ Wszystkie istotne zmiany tego projektu są dokumentowane tutaj. Format zbliżony
 ## [Unreleased]
 
 ### Dodane
-- **plugin `mobile-testing`** 📱 — skill `mobile-app-testing` (Maestro-first, Appium jako świadomy fallback: selektory accessibility-id, deterministyczne środowisko urządzenia, obsługa dialogów OS, matryce CI łącznie z ograniczeniem iOS=macOS) + agent `mobile-test-automation-expert`.
+- **Bramki walidacji builda** (audyt INF-2/INF-3/INF-5): `--check` waliduje teraz frontmatter i name rules (folder ↔ `name:`) również bez pełnego builda; `checkMembership` pilnuje **sierót i duplikatów agents oraz knowledge** (wcześniej tylko skilli); drift-gate (`--verify`) zgłasza **katalog pluginu w artefakcie, którego nie ma w `bundles.yaml`** (wcześniej usunięty bundle zostawał zielony na zawsze); `validate-manifests` waliduje **składnię wygenerowanych TOML** (`agents/*.toml`, `hooks.toml`); `validateFrontmatter` — opisy skilli twarde >1024 = błąd, opisy agentów >300 ostrzegają (bo build je ucina: dziś 18 z 42). Testy jednostkowe: 26 (z 18): checkMembership (sieroty/duplikaty), validateFrontmatter (name-rules, limity, ostrzeżenia), orphanPluginDirs (blind-spot drift-gate), validateTomlText/validateAll (bramka TOML).
+- **plugin `mobile-testing`** 📱 — skill `mobile-app-testing` (Maestro-first, Appium jako świadomy fallback: selektory accessibility-id, deterministyczne środowisko urządzenia, obsługa dialogów OS, matrycy CI łącznie z ograniczeniem iOS=macOS) + agent `mobile-test-automation-expert`.
 - 5 nowych skilli w `test-automation` z audytu luk obszarowych: `bootstrap-test-suite` (deterministyczny init Playwright/Vitest od zera z zielonym smoke-gate), `testing-auth-flows` (setup project + storageState, tokeny, SSO, wygaśnięcia jako scenariusz), `component-testing-vitest-rtl` (Vitest + Testing Library / Playwright CT), `test-data-factories` (fabryki, seeded Faker, unikalność pod paralleizm, teardown), `property-based-testing` (fast-check: własności, shrink, seed, budżet CI).
 
 ### Naprawione
@@ -13,6 +14,9 @@ Wszystkie istotne zmiany tego projektu są dokumentowane tutaj. Format zbliżony
 
 ### Zmienione
 - Serwer Playwright MCP w `qa-mcp` przypięty z `@playwright/mcp@0.0.83` na `@0.0.86` (aktualny latest wg rejestru npm).
+- CI (`.github/workflows/ci.yml`): `timeout-minutes: 10` na jobie i `concurrency` z `cancel-in-progress` (równoległe pushy nie kolejkują zestawionych runów); nazwy kroków odzwierciedlają realny zasięg bramek.
+- Parser `bundles.yaml` (`parseBundles`): usunięty martwy callback „stripowania komentarzy" — obsługiwane są wyłącznie komentarze pełnolinijkowe (inline komentarze celowo nie, bo wsiakają w wartości; udokumentowane w kodzie).
+- Ostrzeżenia walidacji źródeł drukują się pełną listą w `--check`, w pozostałych trybach jako jedna linia podsumowania (logi build/verify bez szumu).
 - Cross-referencje antykolizyjne i domknięcia delegacji (audyt treści 98 skilli): `tech-debt-audit` → `tech-debt-analysis` (description + guardrail dla audytu całego repo z effort/ROI), `a11y-webpage-audit` → `auditing-accessibility` (pełny protokół manualny; quick-path pozostaje samodzielny), `governing-quality-waivers` → `audit-quality-debt` (pełny audyt długu), `testing-agent-skills` ↔ `audit-collection-health` (wzajemne rozgraniczenie: behawioralne vs strukturalne), `scope-change-gate` — description nazywa agregowane skille (`scoping-change-relevance` + `verifying-change-coverage` + `recording-change-intent`) i odsyła do każdego osobno.
 
 ## [0.2.0] - 2026-11-22

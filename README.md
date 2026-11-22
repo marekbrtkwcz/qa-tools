@@ -79,9 +79,9 @@ qa-tools/
 
 ```bash
 node scripts/build.js            # buduje plugins/<bundle>
-node scripts/build.js --check    # walidacja: członkostwo w bundles.yaml, name rules, frontmatter
-node scripts/build.js --verify   # drift-gate: świeży build do katalogu tmp vs commitowany plugins/ (exit 1 przy różnicach; nie modyfikuje plugins/; porównanie ignoruje wyłącznie różnice EOL — core.autocrlf na Windows przepisuje working tree)
-node scripts/validate-manifests.js  # walidacja parsowania wszystkich JSON w plugins/
+node scripts/build.js --check    # walidacja bez builda: członkostwo w bundles.yaml (skille + agenci + knowledge, duplikaty i sieroty), name rules (folder ↔ frontmatter), frontmatter i limity description; ostrzeżenia o obcięciach (agenci >300 zn. — build ucina przy generacji)
+node scripts/build.js --verify   # drift-gate: świeży build do katalogu tmp vs commitowany plugins/ (exit 1 przy różnicach, również dla katalogu pluginu w artefakcie, którego nie ma już w bundles.yaml; nie modyfikuje plugins/; porównanie ignoruje wyłącznie różnice EOL — core.autocrlf na Windows przepisuje working tree)
+node scripts/validate-manifests.js  # walidacja parsowania wszystkich JSON oraz składni wygenerowanych TOML (ageni, hooks.toml) w plugins/
 npm test                          # testy jednostkowe builda (node:test, zero zależności)
 ```
 

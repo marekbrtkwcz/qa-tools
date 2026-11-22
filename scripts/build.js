@@ -8,12 +8,15 @@
  *
  * Usage: node scripts/build.js [--bundle <name>] [--out plugins] [--check] [--verify]
  *             [--set-version <x.y.z>]
- *   --check   validate only: bundle membership, required files, name rules.
- *             Exit code 1 on any error. Used by CI.
+ *   --check   validate only, no build: membership of skills/agents/knowledge
+ *             in bundles.yaml, duplicates, orphans in src/, skill frontmatter
+ *             name rules, description limits (errors) and truncation
+ *             warnings. Exit code 1 on any error. Used by CI.
  *   --verify  drift gate (CI): rebuild into a temp dir and compare the result
  *             with the committed plugins/ artifact. Exit code 1 on any
- *             difference. Never modifies plugins/. With --bundle, only that
- *             bundle is compared.
+ *             difference, including a committed plugin dir that bundles.yaml
+ *             no longer declares. Never modifies plugins/. With --bundle,
+ *             only that bundle is compared.
  *   --set-version  bump the version: of the selected bundles (all of them
  *             without --bundle) in bundles.yaml. Preserves comments,
  *             indentation and line endings. Does not build - run the build
@@ -37,9 +40,10 @@ function parseBundles(file) {
   let current = null;
   let currentKey = null;
   for (const rawLine of text.split(/\r?\n/)) {
-    const line = rawLine.replace(/(^|\s)#.*$/, (m, offset) =>
-      rawLine.includes('#') && rawLine.trim().startsWith('#') ? '' : rawLine.trim().startsWith('#') ? '' : m
-    );
+    // Full-line comments only. Inline comments are NOT supported: a value
+    // like `icon: X # note` would soak the note into the value, so the
+    // parser deliberately does not strip them.
+    const line = rawLine.trim().startsWith('#') ? '' : rawLine;
     if (!line.trim() || line.trim().startsWith('#')) continue;
     const indent = line.length - line.trimStart().length;
     const trimmed = line.trim();
@@ -270,33 +274,141 @@ function titleFromDescription(text) {
 
 /* ---------- per-bundle build ---------- */
 
-/** Global membership check: every src/skills folder belongs to exactly one bundle. */
+/**
+ * Membership checks across all three source kinds:
+ * - every src/skills/<dir> is declared in exactly one bundle
+ * - every src/agents/<name>.md is declared in exactly one bundle
+ * - every src/knowledge/<name>.md is declared in exactly one bundle
+ * and every declared name exists in src/.
+ * Runs in every mode (--check, build, --verify): it is read-only and cheap.
+ */
 function checkMembership(bundles) {
   const errors = [];
-  const owner = new Map();
-  for (const [name, bundle] of Object.entries(bundles)) {
-    for (const skill of bundle.skills || []) {
-      const from = path.join(SRC, 'skills', skill);
-      if (!fs.existsSync(path.join(from, 'SKILL.md'))) {
-        errors.push(`[${name}] bundles.yaml skill "${skill}" has no src/skills folder`);
-        continue;
-      }
-      if (owner.has(skill)) {
-        errors.push(`Skill "${skill}" declared in both "${owner.get(skill)}" and "${name}"`);
-      } else {
-        owner.set(skill, name);
+  const kinds = [
+    {
+      key: 'skills',
+      entry: (n) => `src/skills/${n} (SKILL.md)`,
+      exists: (n) => fs.existsSync(path.join(SRC, 'skills', n, 'SKILL.md')),
+      list: () =>
+        fs
+          .readdirSync(path.join(SRC, 'skills'), { withFileTypes: true })
+          .filter((d) => d.isDirectory())
+          .map((d) => d.name)
+          .sort(),
+    },
+    {
+      key: 'agents',
+      entry: (n) => `src/agents/${n}.md`,
+      exists: (n) => fs.existsSync(path.join(SRC, 'agents', `${n}.md`)),
+      list: () =>
+        fs
+          .readdirSync(path.join(SRC, 'agents'))
+          .filter((f) => f.endsWith('.md'))
+          .map((f) => f.replace(/\.md$/, ''))
+          .sort(),
+    },
+    {
+      key: 'knowledge',
+      entry: (n) => `src/knowledge/${n}.md`,
+      exists: (n) => fs.existsSync(path.join(SRC, 'knowledge', `${n}.md`)),
+      list: () =>
+        fs
+          .readdirSync(path.join(SRC, 'knowledge'))
+          .filter((f) => f.endsWith('.md'))
+          .map((f) => f.replace(/\.md$/, ''))
+          .sort(),
+    },
+  ];
+  for (const kind of kinds) {
+    const owner = new Map();
+    for (const [bundleName, bundle] of Object.entries(bundles)) {
+      for (const item of bundle[kind.key] || []) {
+        if (!kind.exists(item)) {
+          errors.push(`[${bundleName}] bundles.yaml ${kind.key} "${item}" has no ${kind.entry(item)}`);
+          continue;
+        }
+        if (owner.has(item)) {
+          errors.push(
+            `${kind.key.slice(0, -1)} "${item}" declared in both "${owner.get(item)}" and "${bundleName}"`
+          );
+        } else {
+          owner.set(item, bundleName);
+        }
       }
     }
-  }
-  const dirs = fs
-    .readdirSync(path.join(SRC, 'skills'), { withFileTypes: true })
-    .filter((d) => d.isDirectory())
-    .map((d) => d.name)
-    .sort();
-  for (const dir of dirs) {
-    if (!owner.has(dir)) errors.push(`src/skills/${dir} not declared in any bundle`);
+    for (const name of kind.list()) {
+      if (!owner.has(name)) errors.push(`${kind.entry(name)} not declared in any bundle`);
+    }
   }
   return errors;
+}
+
+/**
+ * Frontmatter validation for sources, running in every mode:
+ * - skill frontmatter name must match its directory (the same rule the
+ *   full build enforces when it copies)
+ * - skill descriptions: present, and within the host hard limit of 1024
+ *   (the agent-style 300 limit is deliberately NOT enforced on skills:
+ *   routing descriptions in this collection are long on purpose)
+ * - agents: name matches the file, description present; a description
+ *   longer than 300 only WARNs, because the build truncates it silently —
+ *   the warning shows what would be cut
+ * - knowledge: the first paragraph (the generated description) over the
+ *   build's 297-char slice point warns for the same reason
+ * Errors fail the run; warnings never change the exit code.
+ */
+function validateFrontmatter(bundles, srcRoot = SRC) {
+  const errors = [];
+  const warnings = [];
+  for (const [bundleName, bundle] of Object.entries(bundles)) {
+    for (const skill of bundle.skills || []) {
+      const skillMd = path.join(srcRoot, 'skills', skill, 'SKILL.md');
+      const text = readIfExists(skillMd);
+      if (!text) continue; // missing file already reported by checkMembership
+      const fmName = text.match(/^---\r?\n[\s\S]*?name:\s*["']?([\w-]+)/);
+      if (!fmName || fmName[1] !== skill) {
+        errors.push(`[${bundleName}] skill ${skill}: frontmatter name "${fmName ? fmName[1] : '(none)'}" != directory name`);
+      }
+      const desc = (text.match(/^description:[ \t]*(.+)$/m) || [])[1] || '';
+      const descValue = desc.trim().replace(/^["']|["']$/g, '');
+      if (!descValue) errors.push(`[${bundleName}] skill ${skill}: missing frontmatter description`);
+      else if (descValue.length > 1024)
+        errors.push(`[${bundleName}] skill ${skill}: description is ${descValue.length} chars (max 1024)`);
+    }
+    for (const agent of bundle.agents || []) {
+      const md = path.join(srcRoot, 'agents', `${agent}.md`);
+      const text = readIfExists(md);
+      if (!text) continue; // missing file already reported by checkMembership
+      let meta;
+      try {
+        meta = parseAgentMd(text).meta;
+      } catch (e) {
+        errors.push(`[${bundleName}] agent ${agent}: ${e.message}`);
+        continue;
+      }
+      if (meta.name !== agent) {
+        errors.push(`[${bundleName}] agent ${agent}: frontmatter name "${meta.name || '(none)'}" != file name`);
+      }
+      const desc = meta.description || '';
+      if (!desc) errors.push(`[${bundleName}] agent ${agent}: missing frontmatter description`);
+      else if (desc.length > 300)
+        warnings.push(`agent ${agent}: description is ${desc.length} chars — the build will truncate it at 300`);
+    }
+    for (const topic of bundle.knowledge || []) {
+      const md = path.join(srcRoot, 'knowledge', `${topic}.md`);
+      const raw = readIfExists(md);
+      if (!raw) continue; // missing file already reported by checkMembership
+      const para =
+        raw
+          .split(/\r?\n/)
+          .map((l) => l.trim())
+          .find((l) => l && !l.startsWith('#')) || '';
+      const clean = para.replace(/^[-*>]+\s*/, '');
+      if (clean.length > 297)
+        warnings.push(`knowledge ${topic}: first paragraph is ${clean.length} chars — the build will slice it at 297 plus '...'`);
+    }
+  }
+  return { errors, warnings };
 }
 
 function buildBundle(name, bundle, outDir, checkOnly) {
@@ -527,6 +639,21 @@ function diffTrees(builtDir, expectedDir, selected) {
   return errors;
 }
 
+/**
+ * Whole-bundle blind spot of the drift gate: a plugin directory committed
+ * under plugins/ but no longer declared in bundles.yaml never shows up in
+ * the per-file comparison (that iterates bundle keys only), so it would
+ * stay green forever. Returns one error per stale directory.
+ */
+function orphanPluginDirs(expectedDir, known) {
+  if (!fs.existsSync(expectedDir)) return [];
+  const knownSet = new Set(known);
+  return fs
+    .readdirSync(expectedDir, { withFileTypes: true })
+    .filter((d) => d.isDirectory() && !knownSet.has(d.name))
+    .map((d) => `plugins/${d.name}: committed but not declared in bundles.yaml — remove it or re-add the bundle`);
+}
+
 /* ---------- main ---------- */
 
 function main() {
@@ -561,6 +688,14 @@ function main() {
   }
 
   let allErrors = checkMembership(bundles);
+  const fm = validateFrontmatter(bundles);
+  allErrors = allErrors.concat(fm.errors);
+  if (fm.warnings.length) {
+    // Full list in --check (the actionable place); one summary line in the
+    // other modes so build/verify logs stay readable.
+    if (checkOnly) for (const w of fm.warnings) console.error('WARN ' + w);
+    else console.error(`WARN ${fm.warnings.length} source warning(s) — run npm run check to list them`);
+  }
 
   if (verifyOnly) {
     const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'qa-tools-verify-'));
@@ -570,6 +705,9 @@ function main() {
         allErrors = allErrors.concat(errors.map((e) => `[${name}] ${e}`));
       }
       allErrors = allErrors.concat(diffTrees(tmp, outDir, selected));
+      // Only a full run can judge the whole plugins/ tree: with --bundle,
+      // unrelated directories are expected to be there.
+      if (bundleFlag < 0) allErrors = allErrors.concat(orphanPluginDirs(outDir, Object.keys(bundles)));
     } finally {
       fs.rmSync(tmp, { recursive: true, force: true });
     }
@@ -615,4 +753,7 @@ module.exports = {
   appendEmojiStyle,
   listFiles,
   diffTrees,
+  checkMembership,
+  validateFrontmatter,
+  orphanPluginDirs,
 };

@@ -29,7 +29,11 @@ const {
   appendEmojiStyle,
   listFiles,
   diffTrees,
+  checkMembership,
+  validateFrontmatter,
+  orphanPluginDirs,
 } = require('./build.js');
+const { validateTomlText, validateAll } = require('./validate-manifests.js');
 
 /* ---------- setBundlesVersions (--set-version) ---------- */
 
@@ -339,4 +343,116 @@ test('diffTrees: non-selected bundles are not compared', () => {
   writeTree(built, { 'other/stale.txt': 'x' });
   writeTree(committed, { 'other/stale.txt': 'y' }); // differs, but bundle "other" not selected
   assert.deepEqual(diffTrees(built, committed, ['qa-core']), []);
+});
+
+/* ---------- checkMembership: agents and knowledge orphans and duplicates ---------- */
+
+test('checkMembership: the real collection is clean; duplicating an agent across bundles is an error', () => {
+  const real = parseBundles(path.join(__dirname, '..', 'bundles.yaml'));
+  assert.deepEqual(checkMembership(real), [], 'the real collection must have no membership errors');
+  const dup = JSON.parse(JSON.stringify(real));
+  dup['test-automation'].agents = [...dup['test-automation'].agents, dup['qa-core'].agents[0]];
+  const errors = checkMembership(dup);
+  assert.equal(errors.length, 1);
+  assert.ok(errors[0].includes('declared in both'), `unexpected: ${errors[0]}`);
+});
+
+test('checkMembership: missing agent and knowledge sources are reported', () => {
+  const real = JSON.parse(JSON.stringify(parseBundles(path.join(__dirname, '..', 'bundles.yaml'))));
+  real['qa-core'].agents = [...real['qa-core'].agents, 'no-such-agent'];
+  real['qa-core'].knowledge = [...real['qa-core'].knowledge, 'no-such-knowledge'];
+  const errors = checkMembership(real);
+  assert.equal(errors.filter((e) => e.includes('no-such-agent')).length, 1);
+  assert.equal(errors.filter((e) => e.includes('no-such-knowledge')).length, 1);
+});
+
+/* ---------- validateFrontmatter ---------- */
+
+test('validateFrontmatter: the real collection has no frontmatter errors; warnings only name agents/knowledge', () => {
+  const real = parseBundles(path.join(__dirname, '..', 'bundles.yaml'));
+  const { errors, warnings } = validateFrontmatter(real);
+  assert.deepEqual(errors, [], 'the real collection must have no frontmatter errors');
+  assert.ok(Array.isArray(warnings));
+  assert.ok(warnings.every((w) => w.startsWith('agent ') || w.startsWith('knowledge ')));
+});
+
+test('validateFrontmatter: name mismatch, missing description and over-limit skill description are errors', () => {
+  const srcRoot = tmpDir();
+  const longDesc = 'x'.repeat(1025);
+  writeTree(path.join(srcRoot, 'skills'), {
+    'good/SKILL.md': '---\nname: good\ndescription: "Valid trigger. Use when x."\n---\n\n# Good\n',
+    'bad-name/SKILL.md': '---\nname: not-bad-name\ndescription: ""\n---\n\n# Bad\n',
+    'long/SKILL.md': '---\nname: long\ndescription: "' + longDesc + '"\n---\n\n# Long\n',
+  });
+  const bundles = { b: { skills: ['good', 'bad-name', 'long'], agents: [], knowledge: [] } };
+  const { errors, warnings } = validateFrontmatter(bundles, srcRoot);
+  assert.equal(errors.length, 3, JSON.stringify(errors));
+  assert.ok(errors.some((e) => e.includes('skill bad-name') && e.includes('!= directory name')));
+  assert.ok(errors.some((e) => e.includes('skill bad-name') && e.includes('missing frontmatter description')));
+  assert.ok(errors.some((e) => e.includes('skill long') && e.includes('1024')));
+  assert.deepEqual(warnings, []);
+});
+
+test('validateFrontmatter: agent descriptions over 300 warn (build truncates), never error', () => {
+  const srcRoot = tmpDir();
+  const long = 'a'.repeat(320);
+  writeTree(path.join(srcRoot, 'agents'), {
+    'mine.md': '---\nname: mine\ntitle: Mine\ndescription: ' + long + '\ncapabilities: [read]\n---\n\nBody.\n',
+  });
+  const bundles = { b: { skills: [], agents: ['mine'], knowledge: [] } };
+  const { errors, warnings } = validateFrontmatter(bundles, srcRoot);
+  assert.deepEqual(errors, []);
+  assert.equal(warnings.length, 1);
+  assert.ok(warnings[0].includes('agent mine') && warnings[0].includes('320'));
+});
+
+/* ---------- orphanPluginDirs (drift gate whole-bundle blind spot) ---------- */
+
+test('orphanPluginDirs: a committed plugin dir missing from bundles.yaml is drift', () => {
+  const committed = tmpDir();
+  writeTree(committed, {
+    'qa-core/plugin.json': '{}\n',
+    'ghost/plugin.json': '{}\n',
+  });
+  assert.deepEqual(orphanPluginDirs(committed, ['qa-core', 'ghost']), []);
+  const errors = orphanPluginDirs(committed, ['qa-core']);
+  assert.equal(errors.length, 1);
+  assert.ok(errors[0].includes('plugins/ghost') && errors[0].includes('not declared in bundles.yaml'));
+  assert.deepEqual(orphanPluginDirs(tmpDir(), ['qa-core']), [], 'missing plugins dir is not an error');
+});
+
+/* ---------- validate-manifests: generated TOML syntax gate ---------- */
+
+test('validateTomlText: build-emitted TOML passes; broken string and non-kv line fail with line numbers', () => {
+  const clean = [
+    '# comment',
+    'schema_version = 1',
+    'agent_type = "subagent"',
+    'enabled_tools = ["read_file", "edit"]',
+    'strict = false',
+    '',
+    '[[hooks]]',
+    'name = "gate"',
+  ].join('\n');
+  assert.deepEqual(validateTomlText(clean, 'a.toml'), []);
+  const broken = 'instructions = "line1 broken quote';
+  const errs = validateTomlText(broken, 'a.toml');
+  assert.equal(errs.length, 1);
+  assert.ok(errs[0].includes('a.toml:1'), errs[0]);
+  // a raw newline inside a TOML string (the build escapes them, but if it
+  // ever stops) is flagged on both halves, so it can never pass silently
+  const split = validateTomlText('instructions = "line1\nline2 tail', 'c.toml');
+  assert.equal(split.length, 2);
+  assert.ok(split[0].includes('c.toml:1') && split[1].includes('c.toml:2'));
+  const notKv = validateTomlText('just some text\n', 'b.toml');
+  assert.equal(notKv.length, 1);
+  assert.ok(notKv[0].includes('not a recognizable TOML line'));
+});
+
+test('validateAll: the real plugins/ tree passes both JSON and TOML gates', () => {
+  const results = validateAll(path.join(__dirname, '..', 'plugins'));
+  assert.equal(results.jsonErrors.length, 0, JSON.stringify(results.jsonErrors));
+  assert.equal(results.tomlErrors.length, 0, JSON.stringify(results.tomlErrors));
+  assert.ok(results.jsonCount >= 13);
+  assert.ok(results.tomlCount >= 42);
 });

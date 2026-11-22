@@ -5,9 +5,16 @@ on:
     branches: [main]
   pull_request:
 
+# Parallel pushes to the same ref should queue, not multiply: keep the latest.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     name: check + manifest validation + drift gate (${{ matrix.os }})
+    # The suite is fast (~10 s); a hung job should fail by timeout, not hold runners.
+    timeout-minutes: 10
     strategy:
       fail-fast: false
       matrix:
@@ -25,11 +32,11 @@ jobs:
       - name: Unit tests (node:test, no dependencies)
         run: npm test
 
-      - name: Validate bundles.yaml membership and name rules
+      - name: Validate membership, name rules and frontmatter limits (orphan skills/agents/knowledge)
         run: npm run check
 
-      - name: Validate generated JSON manifests (plugin.json, mcp.json)
+      - name: Validate generated JSON manifests (plugin.json, mcp.json) and agent TOML syntax
         run: npm run validate-manifests
 
-      - name: Drift gate - committed plugins/ must match a fresh build
+      - name: Drift gate - committed plugins/ must match a fresh build (orphan plugin dirs included)
         run: npm run verify
