@@ -3,6 +3,7 @@ name: CI
 on:
   push:
     branches: [main]
+    tags: ['v*']
   pull_request:
 
 # Parallel pushes to the same ref should queue, not multiply: keep the latest.
@@ -40,3 +41,20 @@ jobs:
 
       - name: Drift gate - committed plugins/ must match a fresh build (orphan plugin dirs included)
         run: npm run verify
+
+  release-gate:
+    # A v* tag is a release claim: the tag, every bundles.yaml version and the
+    # CHANGELOG header must agree before the tag is trusted.
+    name: tag = bundles.yaml versions = CHANGELOG header
+    if: startsWith(github.ref, 'refs/tags/v')
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Release consistency gate
+        run: node scripts/check-release.js --tag "${GITHUB_REF_NAME}"

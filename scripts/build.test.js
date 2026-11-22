@@ -16,6 +16,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
+const { spawnSync } = require('node:child_process');
 
 const {
   buildBundle,
@@ -32,8 +33,12 @@ const {
   checkMembership,
   validateFrontmatter,
   orphanPluginDirs,
+  swapStagedBundles,
 } = require('./build.js');
 const { validateTomlText, validateAll } = require('./validate-manifests.js');
+const { checkRelease } = require('./check-release.js');
+
+const REPO_ROOT = path.join(__dirname, '..');
 
 /* ---------- setBundlesVersions (--set-version) ---------- */
 
@@ -484,4 +489,171 @@ test('validateAll: the real plugins/ tree passes both JSON and TOML gates', () =
   assert.equal(results.tomlErrors.length, 0, JSON.stringify(results.tomlErrors));
   assert.ok(results.jsonCount >= 13);
   assert.ok(results.tomlCount >= 42);
+});
+
+/* ---------- checkMembership: orphans and missing sources (fixture tree) ---------- */
+
+test('checkMembership: orphan skill/agent/knowledge and missing sources are errors', () => {
+  const srcRoot = tmpDir();
+  writeTree(srcRoot, {
+    'skills/used/SKILL.md': 'x',
+    'skills/orphan-skill/SKILL.md': 'x',
+    'agents/used.md': 'x',
+    'agents/orphan-agent.md': 'x',
+    'knowledge/used.md': 'x',
+    'knowledge/orphan-knowledge.md': 'x',
+  });
+  const bundles = {
+    a: { skills: ['used'], agents: ['used'], knowledge: ['used'] },
+    b: { skills: ['ghost-skill'], knowledge: ['used'] }, // ghost has no source; used knowledge duplicated
+  };
+  const errors = checkMembership(bundles, srcRoot);
+  assert.ok(
+    errors.some((e) => e.includes('orphan-skill') && e.includes('not declared in any bundle')),
+    `orphan skill reported, got: ${errors}`
+  );
+  assert.ok(
+    errors.some((e) => e.includes('orphan-agent') && e.includes('not declared in any bundle')),
+    'orphan agent reported'
+  );
+  assert.ok(
+    errors.some((e) => e.includes('orphan-knowledge') && e.includes('not declared in any bundle')),
+    'orphan knowledge reported'
+  );
+  assert.ok(errors.some((e) => e.includes('"ghost-skill" has no src/skills')), 'missing source reported');
+  assert.ok(
+    errors.some((e) => e.includes('knowledge "used" declared in both "a" and "b"')),
+    'duplicate knowledge across bundles reported'
+  );
+});
+
+/* ---------- hooks.toml emission ---------- */
+
+test('buildBundle: hooks.toml emitted only for bundles that declare hooks, three matchers per hook, valid TOML', () => {
+  const gated = tmpDir();
+  const errors = buildBundle(
+    'gated',
+    { description: 'gated', version: '0.1.0', hooks: ['test-file-guard'] },
+    gated
+  );
+  assert.deepEqual(errors, []);
+  const tomlPath = path.join(gated, 'gated', 'ai.mistral.vibe', 'hooks.toml');
+  assert.ok(fs.existsSync(tomlPath), 'hooks.toml emitted');
+  const toml = fs.readFileSync(tomlPath, 'utf8');
+  assert.equal((toml.match(/\[\[hooks\]\]/g) || []).length, 3, 'one [[hooks]] entry per matcher');
+  assert.ok(toml.includes('match = "file_system.write_file"'));
+  assert.ok(toml.includes('match = "file_system.edit"'));
+  assert.ok(toml.includes('match = "file_system.bash"'));
+  assert.ok(toml.includes('name = "test-file-guard"'), 'hook base name present');
+  assert.ok(toml.includes('name = "test-file-guard-bash"'), 'bash matcher derived name present');
+  assert.ok(fs.existsSync(path.join(gated, 'gated', 'vibe-hooks', 'test-file-guard.js')), 'guard script copied');
+
+  const plain = tmpDir();
+  assert.deepEqual(buildBundle('plain', { description: 'plain', version: '0.1.0' }, plain), []);
+  assert.ok(
+    !fs.existsSync(path.join(plain, 'plain', 'ai.mistral.vibe', 'hooks.toml')),
+    'no hooks.toml without a declared hook'
+  );
+  assert.ok(!fs.existsSync(path.join(plain, 'plain', 'vibe-hooks')), 'no vibe-hooks dir without a declared hook');
+});
+
+/* ---------- atomic build swap ---------- */
+
+test('swapStagedBundles: staged dirs replace destinations wholesale; leftovers cannot survive', () => {
+  const staging = tmpDir();
+  const out = tmpDir();
+  writeTree(path.join(staging, 'b'), { 'plugin.json': '{"v":2}\n' });
+  writeTree(path.join(out, 'b'), { 'plugin.json': '{"v":1}\n', 'junk.txt': 'leftover\n' });
+  swapStagedBundles(staging, out, ['b']);
+  assert.equal(fs.readFileSync(path.join(out, 'b', 'plugin.json'), 'utf8'), '{"v":2}\n');
+  assert.ok(!fs.existsSync(path.join(out, 'b', 'junk.txt')), 'old junk must not survive the swap');
+});
+
+test('swapStagedBundles: a failed rename restores the previous tree, never leaves a hole', () => {
+  const staging = tmpDir();
+  const out = tmpDir();
+  writeTree(path.join(out, 'b'), { 'plugin.json': '{"v":1}\n' });
+  // nothing staged for "b": renaming the staged source must fail
+  assert.throws(() => swapStagedBundles(staging, out, ['b']));
+  assert.equal(
+    fs.readFileSync(path.join(out, 'b', 'plugin.json'), 'utf8'),
+    '{"v":1}\n',
+    'the old bundle must be restored in place'
+  );
+});
+
+/* ---------- CLI paths (--check / --verify / usage errors) ---------- */
+
+test('CLI: --check exits 0 and reports "All bundles valid."', () => {
+  const r = spawnSync(process.execPath, [path.join('scripts', 'build.js'), '--check'], {
+    cwd: REPO_ROOT,
+    encoding: 'utf8',
+  });
+  assert.equal(r.status, 0, r.stderr);
+  assert.ok(r.stdout.includes('All bundles valid.'), `stdout`);
+});
+
+test('CLI: --verify exits 0 against the real committed plugins/ tree', () => {
+  const r = spawnSync(process.execPath, [path.join('scripts', 'build.js'), '--verify'], {
+    cwd: REPO_ROOT,
+    encoding: 'utf8',
+  });
+  assert.equal(r.status, 0, r.stderr);
+  assert.ok(r.stdout.includes('Committed plugins/ matches a fresh build.'));
+});
+
+test('CLI: usage errors exit 2 (bad --set-version, unknown --bundle)', () => {
+  const badVersion = spawnSync(
+    process.execPath,
+    [path.join('scripts', 'build.js'), '--set-version', 'next'],
+    { cwd: REPO_ROOT, encoding: 'utf8' }
+  );
+  assert.equal(badVersion.status, 2, badVersion.stderr);
+  assert.ok(badVersion.stderr.includes('x.y.z'));
+
+  const ghostBundle = spawnSync(
+    process.execPath,
+    [path.join('scripts', 'build.js'), '--bundle', 'ghost'],
+    { cwd: REPO_ROOT, encoding: 'utf8' }
+  );
+  assert.equal(ghostBundle.status, 2, ghostBundle.stderr);
+  assert.ok(ghostBundle.stderr.includes('Unknown bundle'));
+});
+
+/* ---------- release consistency gate ---------- */
+
+test('checkRelease: tag, bundle versions and CHANGELOG header must agree', () => {
+  const dir = tmpDir();
+  const bundlesFile = path.join(dir, 'bundles.yaml');
+  fs.writeFileSync(bundlesFile, 'a:\n  version: "0.3.0"\n  description: x\nb:\n  version: "0.3.0"\n  description: y\n');
+  const changelog = path.join(dir, 'CHANGELOG.md');
+  fs.writeFileSync(changelog, '# CHANGELOG\n\n## [Unreleased]\n\n## [0.3.0] - 2026-11-23\n');
+
+  assert.deepEqual(checkRelease(bundlesFile, changelog, 'v0.3.0').errors, [], 'consistent release passes');
+
+  const mismatched = checkRelease(bundlesFile, changelog, 'v0.2.0');
+  assert.ok(mismatched.errors.some((e) => e.includes('version 0.3.0 != tag version 0.2.0')));
+  assert.ok(mismatched.errors.some((e) => e.includes('"## [0.2.0]')));
+  assert.ok(checkRelease(bundlesFile, changelog, 'not-a-tag').errors.length > 0, 'non-tag form rejected');
+
+  const versionless = dir2(path.join(dir, 'nov'));
+  const bundles2 = path.join(versionless, 'bundles.yaml');
+  fs.writeFileSync(bundles2, 'a:\n  description: x\n');
+  const missing = checkRelease(bundles2, changelog, 'v0.3.0');
+  assert.ok(missing.errors.some((e) => e.includes('bundle "a" has no version')));
+});
+
+function dir2(p) {
+  fs.mkdirSync(p, { recursive: true });
+  return p;
+}
+
+test('checkRelease CLI: the real repo passes for tag v0.2.1', () => {
+  const r = spawnSync(
+    process.execPath,
+    [path.join('scripts', 'check-release.js'), '--tag', 'v0.2.1'],
+    { cwd: REPO_ROOT, encoding: 'utf8' }
+  );
+  assert.equal(r.status, 0, r.stderr);
+  assert.ok(r.stdout.includes('Release gate OK'));
 });

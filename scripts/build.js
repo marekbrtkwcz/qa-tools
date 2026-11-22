@@ -282,16 +282,16 @@ function titleFromDescription(text) {
  * and every declared name exists in src/.
  * Runs in every mode (--check, build, --verify): it is read-only and cheap.
  */
-function checkMembership(bundles) {
+function checkMembership(bundles, srcRoot = SRC) {
   const errors = [];
   const kinds = [
     {
       key: 'skills',
       entry: (n) => `src/skills/${n} (SKILL.md)`,
-      exists: (n) => fs.existsSync(path.join(SRC, 'skills', n, 'SKILL.md')),
+      exists: (n) => fs.existsSync(path.join(srcRoot, 'skills', n, 'SKILL.md')),
       list: () =>
         fs
-          .readdirSync(path.join(SRC, 'skills'), { withFileTypes: true })
+          .readdirSync(path.join(srcRoot, 'skills'), { withFileTypes: true })
           .filter((d) => d.isDirectory())
           .map((d) => d.name)
           .sort(),
@@ -299,10 +299,10 @@ function checkMembership(bundles) {
     {
       key: 'agents',
       entry: (n) => `src/agents/${n}.md`,
-      exists: (n) => fs.existsSync(path.join(SRC, 'agents', `${n}.md`)),
+      exists: (n) => fs.existsSync(path.join(srcRoot, 'agents', `${n}.md`)),
       list: () =>
         fs
-          .readdirSync(path.join(SRC, 'agents'))
+          .readdirSync(path.join(srcRoot, 'agents'))
           .filter((f) => f.endsWith('.md'))
           .map((f) => f.replace(/\.md$/, ''))
           .sort(),
@@ -310,10 +310,10 @@ function checkMembership(bundles) {
     {
       key: 'knowledge',
       entry: (n) => `src/knowledge/${n}.md`,
-      exists: (n) => fs.existsSync(path.join(SRC, 'knowledge', `${n}.md`)),
+      exists: (n) => fs.existsSync(path.join(srcRoot, 'knowledge', `${n}.md`)),
       list: () =>
         fs
-          .readdirSync(path.join(SRC, 'knowledge'))
+          .readdirSync(path.join(srcRoot, 'knowledge'))
           .filter((f) => f.endsWith('.md'))
           .map((f) => f.replace(/\.md$/, ''))
           .sort(),
@@ -328,8 +328,10 @@ function checkMembership(bundles) {
           continue;
         }
         if (owner.has(item)) {
+          // strip a trailing "s" only: "knowledge" must not lose its "e"
+          const kindName = kind.key.replace(/s$/, '');
           errors.push(
-            `${kind.key.slice(0, -1)} "${item}" declared in both "${owner.get(item)}" and "${bundleName}"`
+            `${kindName} "${item}" declared in both "${owner.get(item)}" and "${bundleName}"`
           );
         } else {
           owner.set(item, bundleName);
@@ -682,6 +684,43 @@ function orphanPluginDirs(expectedDir, known) {
 
 /* ---------- main ---------- */
 
+/**
+ * Swap freshly staged bundle dirs into the output tree, transactionally:
+ * the current dir is parked (not deleted) until the staged one has been
+ * renamed into place, so a failed rename can never leave a hole. On
+ * Windows, renames of freshly written dirs occasionally fail with a
+ * transient EPERM/EBUSY (antivirus indexing); those get a short retry.
+ */
+function renameSyncWithRetry(from, to, attempts = 3, waitMs = 100) {
+  let lastErr;
+  for (let i = 0; i < attempts; i++) {
+    try {
+      return fs.renameSync(from, to);
+    } catch (e) {
+      lastErr = e;
+      if (!['EPERM', 'EBUSY', 'EACCES'].includes(e.code) || i === attempts - 1) break;
+      Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, waitMs); // sync sleep
+    }
+  }
+  throw lastErr;
+}
+
+function swapStagedBundles(staging, outDir, names) {
+  for (const name of names) {
+    const src = path.join(staging, name);
+    const dst = path.join(outDir, name);
+    const parked = path.join(staging, `.parked-${name}`);
+    if (fs.existsSync(dst)) renameSyncWithRetry(dst, parked);
+    try {
+      renameSyncWithRetry(src, dst);
+    } catch (e) {
+      if (fs.existsSync(parked) && !fs.existsSync(dst)) renameSyncWithRetry(parked, dst);
+      throw e;
+    }
+    fs.rmSync(parked, { recursive: true, force: true });
+  }
+}
+
 function main() {
   const args = process.argv.slice(2);
   const checkOnly = args.includes('--check');
@@ -737,14 +776,30 @@ function main() {
     } finally {
       fs.rmSync(tmp, { recursive: true, force: true });
     }
+  } else if (checkOnly) {
+    // --check validates sources without writing any artifact.
+    for (const name of selected) buildBundle(name, bundles[name], outDir, true);
   } else {
-    for (const name of selected) {
-      const errors = buildBundle(name, bundles[name], outDir, checkOnly);
-      if (errors.length) {
-        allErrors = allErrors.concat(errors.map((e) => `[${name}] ${e}`));
-      } else if (!checkOnly) {
-        console.log(`built: ${name}`);
+    // Atomic build: everything is staged in a sibling temp dir and swapped
+    // into place only when the whole run succeeded, so a failure mid-build
+    // can never leave plugins/ half-rebuilt (the drift gate would then
+    // compare a mix of old and new artifacts).
+    const staging = path.join(outDir, '.tmp-build');
+    fs.rmSync(staging, { recursive: true, force: true });
+    let built = [];
+    try {
+      fs.mkdirSync(staging, { recursive: true });
+      for (const name of selected) {
+        const errors = buildBundle(name, bundles[name], staging);
+        if (errors.length) allErrors = allErrors.concat(errors.map((e) => `[${name}] ${e}`));
+        else built.push(name);
       }
+      if (!allErrors.length) {
+        swapStagedBundles(staging, outDir, built);
+        for (const name of built) console.log(`built: ${name}`);
+      }
+    } finally {
+      fs.rmSync(staging, { recursive: true, force: true });
     }
   }
 
@@ -782,4 +837,5 @@ module.exports = {
   checkMembership,
   validateFrontmatter,
   orphanPluginDirs,
+  swapStagedBundles,
 };
