@@ -390,7 +390,10 @@ function buildBundle(name, bundle, outDir, checkOnly) {
   }
   fs.writeFileSync(path.join(pluginDir, 'mcp.json'), JSON.stringify(mcp, null, 2) + '\n');
 
-  // 6. hooks: demo quality gate (log-only, non-strict)
+  // 6. hooks: quality gate (blocks .only()/fit() in test files via
+  // structured deny on stdout; warns on waits/tautologies). strict = false:
+  // a crashing guard fails open (warning only), denial is data-driven,
+  // never a non-zero exit code.
   // Only in bundles that declare hooks — no empty hooks.toml or stray guard
   // scripts in bundles without a gate.
   if ((bundle.hooks || []).length) {

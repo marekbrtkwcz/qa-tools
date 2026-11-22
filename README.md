@@ -119,14 +119,15 @@ Konwencje potwierdzone testami (patrz historia commitów): klucze TOML **snake_c
 - 61 skilli widocznych dla modelu; user-invocable dostępne na wywołanie (w tym 4 driver-skille paczek)
 - spawn subagentów z personami z instrukcji: `qa-core:rubber-duck` 🦆, `quality-gates:change-gate-reviewer`, `test-automation:test-code-reviewer`, `orchestration-basics:basics-analyst`
 - 7 knowledge folders (3 z bundle'ów + 4 GUIDE paczek orkiestracyjnych)
-- hook `pre_tool` test-file-guard (w `test-automation`): wykrywa `waitForTimeout` w zapisie `.spec.ts`, loguje w `$PLUGIN_DATA`
+- hook `pre_tool` test-file-guard (w `test-automation`): **blokuje** zapis `.only()`/`fit()` w plikach testowych (structured `decision: deny` — zero false-positive, klasyfikacja po nazwie pliku), **ostrzega** o `waitForTimeout`, sleepach i tautologiach (`system_message`); wszystko logowane w `$PLUGIN_DATA`. Awaria hooka = fail-open (ostrzeżenie, edyt przechodzi), reguły w `vibe-hooks/test-file-guard.js`
 
 ## 🧭 Roadmapa
 
 - [ ] `connectors.json` (GitHub, k6) dla bundle'i automatyzujących
 - [x] GitHub Actions CI (`.github/workflows/ci.yml`): `build.js --check` + walidacja manifestów JSON + drift-gate `--verify`, matrysa ubuntu + windows
 - [ ] weryfikacja ładowania pluginu w Vibe headless w CI (wymaga zainstalowanego CLI i auth — świadomie poza pierwszą iteracją CI)
-- [ ] hook strict (blokujący) po zdefiniowaniu polityki jakości
+- [x] hook blokujący dla `.only()`/`fit()` w plikach testowych — deny przez structured response (exit 0), fail-open na awarię hooka
+- [ ] pełna polityka jakości hooka: kolejne wzorce (mock-only tests, retries jako „fix"), decyzja fail-open vs strict fail-closed
 - [ ] hook-only pluginy źródła (`always-on-skills`, `print-tool-info`) — częściowo pokryte przez `test-file-guard`
 
 ## 📄 Licencja i atrybucja
