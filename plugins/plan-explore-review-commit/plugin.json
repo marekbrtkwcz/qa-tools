@@ -19,7 +19,7 @@
   "extensions": {
     "ai.mistral.vibe": {
       "schemaVersion": 1,
-      "displayName": "plan-explore-review-commit (qa-tools)"
+      "displayName": "plan-explore-review-commit 🔄 (qa-tools)"
     }
   }
 }

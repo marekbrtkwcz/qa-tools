@@ -89,6 +89,8 @@ Słownictwo (pełne w `src/shared/emoji-style.md`): ✅ passed · ❌ failed/def
 
 Zasady: jedna emotka na nagłówek/komórkę statusu, **nigdy** w nazwach testów, identyfikatorach kodu, plikach, commitach i branchach.
 
+Ikonki bundli z `bundles.yaml` (`icon:`) są buildem podłączane tam, gdzie schemat na to pozwala: do `displayName` pluginu (np. `qa-core 🧭 (qa-tools)`) i `display_name` każdego subagenta (np. `Test Planner 🧭`). ⚠️ Identyfikatory (`name`, `config_name`, ścieżki) i `name` w frontmatter pozostają bez emotek — to wymóg walidacji builda i schematu Vibe (Agent Plugins 1.0 nie definiuje top-level `icon` w manifeście; Vibe go ignoruje z ostrzeżeniem).
+
 Zmiana konwencji = edycja `src/shared/emoji-style.md` + `node scripts/build.js`. 🚫 nie edytuj wygenerowanych `plugins/` ręcznie.
 
 ## 🔄 Konwersja formatów (Vibe ⚠ inne niż Claude/Copilot/Codex)
@@ -96,9 +98,9 @@ Zmiana konwencji = edycja `src/shared/emoji-style.md` + `node scripts/build.js`.
 | Źródło (awesome-agents-for-quality) | Target Vibe | Uwagi |
 |---|---|---|
 | `SKILL.md` (open Agent Skills) | `skills/` 1:1 | + wstrzykiwana sekcja emotek (patrz 🎨 wyżej) |
-| `plugin.json` Agent Plugins 1.0 | 1:1 | bez zmian |
+| `plugin.json` Agent Plugins 1.0 | 1:1 | tylko `displayName` w rozszerzeniu Vibe dostaje ikonę bundla (`qa-core 🧭 (qa-tools)`) |
 | slash commands | skill z `user-invocable` | Vibe nie ma komend |
-| agent `.md` (frontmatter: name/title/description/capabilities, w paczkach też `tools: Read, Grep…`) | `agents/*.toml` (snake_case!) | `schema_version`, `agent_type`, `display_name`, opis ≤300 zn., `enabled_tools`; Edit/Write/Bash → `safety = "neutral"` |
+| agent `.md` (frontmatter: name/title/description/capabilities, w paczkach też `tools: Read, Grep…`) | `agents/*.toml` (snake_case!) | `schema_version`, `agent_type`, `display_name` (+ikona bundla, np. `Test Planner 🧭`), opis ≤300 zn., `enabled_tools`; Edit/Write/Bash → `safety = "neutral"` |
 | guides | `knowledge/<name>/KNOWLEDGE.md` | frontmatter: name/description(≤300)/display_name/icon |
 | mcp | `mcp.json` | Vibe wymaga `$schema` + `type` |
 | — | `hooks.toml` | Vibe-only: quality gates na eventach `pre_tool`/`post_agent` |
