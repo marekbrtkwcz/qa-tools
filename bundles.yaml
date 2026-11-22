@@ -5,7 +5,7 @@
 qa-core:
   icon: 🧭
   description: "Test design, planning, exploratory testing, requirements traceability and bug reporting, packaged natively for Vibe CLI."
-  version: "0.2.1"
+  version: "0.3.0"
   skills:
     - bug-report
     - communicating-quality-findings
@@ -45,7 +45,7 @@ qa-core:
 test-automation:
   icon: 🤖
   description: "Unit tests, TDD, Playwright, mocking, visual regression, migration and test code review, with a quality-gate hook against test anti-patterns."
-  version: "0.2.1"
+  version: "0.3.0"
   skills:
     - analyze-test-results
     - automating-ci-test-pipelines
@@ -92,7 +92,7 @@ test-automation:
 api-testing:
   icon: 🔌
   description: "API test automation with Playwright and contract testing."
-  version: "0.2.1"
+  version: "0.3.0"
   skills:
     - api-playwright-test-developer
     - api-test-plan-and-tests
@@ -105,7 +105,7 @@ api-testing:
 non-functional-testing:
   icon: ⚡
   description: "Accessibility, performance and load, and application security testing."
-  version: "0.2.1"
+  version: "0.3.0"
   skills:
     - a11y-audit-deep-dive
     - a11y-webpage-audit
@@ -119,7 +119,7 @@ non-functional-testing:
 ai-quality:
   icon: 🧠
   description: "Testing LLM features, guardrails, groundedness and agent skills."
-  version: "0.2.1"
+  version: "0.3.0"
   skills:
     - design-llm-eval-suite
     - reviewing-ai-output-groundedness
@@ -136,7 +136,7 @@ ai-quality:
 quality-gates:
   icon: 🚦
   description: "Quality contracts, change gates, waivers, release readiness, metrics and debt."
-  version: "0.2.1"
+  version: "0.3.0"
   skills:
     - analyzing-quality-metrics
     - analyzing-regression-scope
@@ -166,7 +166,7 @@ quality-gates:
 authoring:
   icon: 🛠️
   description: "Creating skills, custom agents, prompts, instructions, hooks, plugins and orchestration packs, plus auditing a whole collection."
-  version: "0.2.1"
+  version: "0.3.0"
   skills:
     - audit-collection-health
     - create-skill
@@ -183,7 +183,7 @@ authoring:
 qa-mcp:
   icon: 🎭
   description: "Playwright MCP server for qa-tools: install once alongside any automation bundle (test-automation, non-functional-testing, ui-api-automation, ui-api-automation-minimal) so browser control is never duplicated by multiple bundles."
-  version: "0.2.1"
+  version: "0.3.0"
   # Server version pins, one per line as name=version. Pinned, never @latest:
   # the committed plugins/ artifact must be reproducible and the drift gate
   # would flag server updates as artifact drift. Bump consciously with a
@@ -198,7 +198,7 @@ qa-mcp:
 mobile-testing:
   icon: 📱
   description: "Mobile app test automation: Maestro-first flows with Appium as the deliberate fallback, stable selectors, deterministic device setup and CI device matrices."
-  version: "0.2.1"
+  version: "0.3.0"
   skills:
     - mobile-app-testing
   agents:
@@ -207,7 +207,7 @@ mobile-testing:
 orchestration-basics:
   icon: 🎼
   description: "Minimal orchestrator with three read-mostly helpers (planner, explorer, analyst): split analysis and planning across subagents to save context, with stop gates for the user."
-  version: "0.2.1"
+  version: "0.3.0"
   pack: true
   skills:
     - orchestration-basics
@@ -221,7 +221,7 @@ orchestration-basics:
 plan-explore-review-commit:
   icon: 🔄
   description: "Full delivery pipeline: planner and orchestrator drive architect, researcher, explorer, implementer, QA strategy, security, code review and docs subagents through small test-first phases, with a user-approved commit after each."
-  version: "0.2.1"
+  version: "0.3.0"
   pack: true
   skills:
     - plan-explore-review-commit
@@ -241,7 +241,7 @@ plan-explore-review-commit:
 ui-api-automation:
   icon: 🖥️
   description: "UI + API test automation pipeline: OpenAPI and frontend explorers, a test planner, FE/BE implementers, a solution reviewer and a test runner."
-  version: "0.2.1"
+  version: "0.3.0"
   pack: true
   skills:
     - ui-api-automation
@@ -259,7 +259,7 @@ ui-api-automation:
 ui-api-automation-minimal:
   icon: 🧪
   description: "Minimal UI + API test automation pipeline: explorer, planner, coder and framework starter only."
-  version: "0.2.1"
+  version: "0.3.0"
   pack: true
   skills:
     - ui-api-automation-minimal

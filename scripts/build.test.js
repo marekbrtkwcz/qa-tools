@@ -648,10 +648,14 @@ function dir2(p) {
   return p;
 }
 
-test('checkRelease CLI: the real repo passes for tag v0.2.1', () => {
+test('checkRelease CLI: the real repo passes for its current version tag', () => {
+  const bundlesText = fs.readFileSync(path.join(REPO_ROOT, 'bundles.yaml'), 'utf8');
+  const versionMatch = bundlesText.match(/version:\s*"?(\d+\.\d+\.\d+)/); // mono-version: tag matches every bundle
+  assert.ok(versionMatch, 'no version found in bundles.yaml');
+  const tag = `v${versionMatch[1]}`;
   const r = spawnSync(
     process.execPath,
-    [path.join('scripts', 'check-release.js'), '--tag', 'v0.2.1'],
+    [path.join('scripts', 'check-release.js'), '--tag', tag],
     { cwd: REPO_ROOT, encoding: 'utf8' }
   );
   assert.equal(r.status, 0, r.stderr);

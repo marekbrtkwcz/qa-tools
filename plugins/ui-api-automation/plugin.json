@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "ui-api-automation",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "UI + API test automation pipeline: OpenAPI and frontend explorers, a test planner, FE/BE implementers, a solution reviewer and a test runner.",
   "author": {
     "name": "qa-tools contributors",
