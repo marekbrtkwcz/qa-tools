@@ -5,7 +5,7 @@
       "type": "stdio",
       "command": "npx",
       "args": [
-        "@playwright/mcp@0.0.83"
+        "@playwright/mcp@0.0.86"
       ]
     }
   }

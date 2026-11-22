@@ -15,7 +15,7 @@ Repozytorium inspirowane ideą i strukturą projektu **[awesome-agents-for-quali
 | `ai-quality` 🧠 | 7 | 1 | 1 | — | testowanie funkcji LLM, guardrails, groundedness |
 | `quality-gates` 🚦 | 17 | 4 | 1 | — | quality contracts, change gates, release readiness |
 | `authoring` 🛠️ | 9 | 1 | — | — | tworzenie skilli/agentów/pluginów/hooków |
-| `qa-mcp` 🎭 | — | — | — | — | serwer Playwright MCP (przypięty `0.0.83`); instaluj **raz**, obok dowolnego bundla automatyzującego |
+| `qa-mcp` 🎭 | — | — | — | — | serwer Playwright MCP (przypięty `0.0.86`); instaluj **raz**, obok dowolnego bundla automatyzującego |
 | `orchestration-basics` 🎼 | 1 | 3 | 1 | — | paczka: orchestrator + planner/explorer/analyst (start tutaj) |
 | `plan-explore-review-commit` 🔄 | 1 | 9 | 1 | — | paczka: pełny pipeline dostarczania z review i commitem |
 | `ui-api-automation` 🖥️ | 1 | 7 | 1 | — | paczka: pipeline testów UI + API (explorers → plan → implement → run) |

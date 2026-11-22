@@ -401,7 +401,7 @@ function buildBundle(name, bundle, outDir, checkOnly) {
     // and the drift gate would flag server updates as artifact drift.
     mcp.mcpServers[server] =
       server === 'playwright'
-        ? { type: 'stdio', command: 'npx', args: ['@playwright/mcp@0.0.83'] }
+        ? { type: 'stdio', command: 'npx', args: ['@playwright/mcp@0.0.86'] }
         : { type: 'stdio', command: server };
   }
   fs.writeFileSync(path.join(pluginDir, 'mcp.json'), JSON.stringify(mcp, null, 2) + '\n');

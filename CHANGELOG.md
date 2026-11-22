@@ -4,6 +4,9 @@ Wszystkie istotne zmiany tego projektu są dokumentowane tutaj. Format zbliżony
 
 ## [Unreleased]
 
+### Zmienione
+- Serwer Playwright MCP w `qa-mcp` przypięty z `@playwright/mcp@0.0.83` na `@0.0.86` (aktualny latest wg rejestru npm).
+
 ## [0.2.0] - 2026-11-22
 
 Cykl przeglądu i usztytniania kolekcji (7 zmian z audytu). Wszystkie pluginy: wersja 0.2.0.
