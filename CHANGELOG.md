@@ -4,6 +4,10 @@ Wszystkie istotne zmiany tego projektu są dokumentowane tutaj. Format zbliżony
 
 ## [Unreleased]
 
+### Dodane
+- **plugin `mobile-testing`** 📱 — skill `mobile-app-testing` (Maestro-first, Appium jako świadomy fallback: selektory accessibility-id, deterministyczne środowisko urządzenia, obsługa dialogów OS, matryce CI łącznie z ograniczeniem iOS=macOS) + agent `mobile-test-automation-expert`.
+- 5 nowych skilli w `test-automation` z audytu luk obszarowych: `bootstrap-test-suite` (deterministyczny init Playwright/Vitest od zera z zielonym smoke-gate), `testing-auth-flows` (setup project + storageState, tokeny, SSO, wygaśnięcia jako scenariusz), `component-testing-vitest-rtl` (Vitest + Testing Library / Playwright CT), `test-data-factories` (fabryki, seeded Faker, unikalność pod paralleizm, teardown), `property-based-testing` (fast-check: własności, shrink, seed, budżet CI).
+
 ### Naprawione
 - 11 martwych manifestów `mcp.json` (puste `mcpServers: {}`) usuniętych z artefaktu — build emituje `mcp.json` tylko w bundlach deklarujących `mcp:` (dziś wyłącznie `qa-mcp`), tak samo jak robi to dla `hooks.toml`.
 

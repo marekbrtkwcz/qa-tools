@@ -1,0 +1,25 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "mobile-testing",
+  "version": "0.2.0",
+  "description": "Mobile app test automation: Maestro-first flows with Appium as the deliberate fallback, stable selectors, deterministic device setup and CI device matrices.",
+  "author": {
+    "name": "qa-tools contributors",
+    "url": "https://github.com/marekbrtkwcz/qa-tools"
+  },
+  "homepage": "https://github.com/marekbrtkwcz/qa-tools",
+  "repository": "https://github.com/marekbrtkwcz/qa-tools",
+  "license": "MIT",
+  "keywords": [
+    "testing",
+    "quality-engineering",
+    "vibe-cli",
+    "mobile-testing"
+  ],
+  "extensions": {
+    "ai.mistral.vibe": {
+      "schemaVersion": 1,
+      "displayName": "mobile-testing 📱 (qa-tools)"
+    }
+  }
+}

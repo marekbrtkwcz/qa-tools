@@ -48,8 +48,10 @@ test-automation:
   skills:
     - analyze-test-results
     - automating-ci-test-pipelines
+    - bootstrap-test-suite
     - code-review
     - code-review-advanced
+    - component-testing-vitest-rtl
     - designing-test-automation-architecture
     - diagnosing-test-failures
     - explain-test-failure
@@ -60,14 +62,17 @@ test-automation:
     - playwright-explore-website
     - playwright-explore-website-requests
     - playwright-generate-test
+    - property-based-testing
     - refactor-to-page-objects
     - running-visual-regression-tests
     - stabilize-flaky-tests
     - stabilizing-flaky-tests
     - static-code-analysis-typescript
     - tech-debt-audit
+    - test-data-factories
     - test-driven-development
     - test-driven-development-quick
+    - testing-auth-flows
     - test-generator
     - unslop-tests
     - writing-unit-tests
@@ -177,6 +182,15 @@ qa-mcp:
   version: "0.2.0"
   mcp:
     - playwright
+
+mobile-testing:
+  icon: 📱
+  description: "Mobile app test automation: Maestro-first flows with Appium as the deliberate fallback, stable selectors, deterministic device setup and CI device matrices."
+  version: "0.2.0"
+  skills:
+    - mobile-app-testing
+  agents:
+    - mobile-test-automation-expert
 
 orchestration-basics:
   icon: 🎼

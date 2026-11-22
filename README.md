@@ -4,24 +4,25 @@ Narzędzia dla testera automatyzującego — **natywne pluginy dla [Mistral Vibe
 
 Repozytorium inspirowane ideą i strukturą projektu **[awesome-agents-for-quality](https://github.com/jaktestowac/awesome-agents-for-quality)** (MIT, jaktestowac.pl). Wszystkie treści `src/` pochodzą z tego projektu (adaptacja na format natywny Vibe).
 
-## ✨ Kolekcja — 7 bundle'ów + 4 orkiestracje + 1 wtyczka MCP
+## ✨ Kolekcja — 8 bundle'ów + 4 orkiestracje + 1 wtyczka MCP
 
 | Plugin | Skille | Agenci | Knowledge | Hook | Zakres |
 |---|---|---|---|---|---|
 | `qa-core` 🧭 | 26 | 4 | 1 | — | planowanie testów, eksploracja, bug reporty, RTM, kryteria akceptacji |
-| `test-automation` 🤖 | 26 | 5 | — | ✅ test-file-guard | unit testy, TDD, Playwright, mocki, flakiness, review |
+| `test-automation` 🤖 | 31 | 5 | — | ✅ test-file-guard | unit testy, TDD, Playwright, mocki, flakiness, review, bootstrap suity |
 | `api-testing` 🔌 | 3 | 2 | — | — | automatyzacja API (Playwright) i contract testing |
 | `non-functional-testing` ⚡ | 6 | 1 | — | — | accessibility, performance/load, security |
 | `ai-quality` 🧠 | 7 | 1 | 1 | — | testowanie funkcji LLM, guardrails, groundedness |
 | `quality-gates` 🚦 | 17 | 4 | 1 | — | quality contracts, change gates, release readiness |
 | `authoring` 🛠️ | 9 | 1 | — | — | tworzenie skilli/agentów/pluginów/hooków |
 | `qa-mcp` 🎭 | — | — | — | — | serwer Playwright MCP (przypięty `0.0.86`); instaluj **raz**, obok dowolnego bundla automatyzującego |
+| `mobile-testing` 📱 | 1 | 1 | — | — | mobile: Maestro-first (Appium jako świadomy fallback), selektory accessibility-id, deterministyczne urządzenia, matryce CI |
 | `orchestration-basics` 🎼 | 1 | 3 | 1 | — | paczka: orchestrator + planner/explorer/analyst (start tutaj) |
 | `plan-explore-review-commit` 🔄 | 1 | 9 | 1 | — | paczka: pełny pipeline dostarczania z review i commitem |
 | `ui-api-automation` 🖥️ | 1 | 7 | 1 | — | paczka: pipeline testów UI + API (explorers → plan → implement → run) |
 | `ui-api-automation-minimal` 🧪 | 1 | 4 | 1 | — | paczka: minimalna wersja powyższego |
 
-Razem: **12 pluginów**, **98 skilli**, **41 subagentów**, **7 knowledge**, **1 quality-gate hook**.
+Razem: **13 pluginów**, **104 skille**, **42 subagentów**, **7 knowledge**, **1 quality-gate hook**.
 
 Paczki orkiestracyjne działają jak w źródle: driver-skill (user-invocable) prowadzi orkiestrację, każdy krok delegujesz do subagenta przez `tools.agents` + `config_name` (np. `plan-explore-review-commit:perc-implementer`); GUIDE paczki jest jej knowledge. Build przepisuje instrukcje hostów (Claude Code / Codex) na Vibe: tabela agentów dostaje kolumnę `Vibe` z dokładnie tymi `config_name`, które Vibe potrafi zespawnować.
 
@@ -127,8 +128,8 @@ Konwencje potwierdzone testami (patrz historia commitów): klucze TOML **snake_c
 
 ## ✅ Co zostało zwalidowane (Vibe headless)
 
-- wszystkie 12 pluginów ładuje się bez błędów walidacji (`plugin.*.invalid`)
-- 61 skilli widocznych dla modelu; user-invocable dostępne na wywołanie (w tym 4 driver-skille paczek)
+- 12 pierwszych pluginów ładuje się bez błędów walidacji (`plugin.*.invalid`); `mobile-testing` (dodany później) jest na razie pokryty bramkami builda (check, manifesty, drift-gate, testy) — walidacja headless w toku
+- 58 skilli widocznych dla modelu (104 − 46 z `disable-model-invocation: true`; policzone z frontmatterów `src/skills`; user-invocable dostępne na wywołanie — w tym 4 driver-skille paczek)
 - spawn subagentów z personami z instrukcji: `qa-core:rubber-duck` 🦆, `quality-gates:change-gate-reviewer`, `test-automation:test-code-reviewer`, `orchestration-basics:basics-analyst`
 - 7 knowledge folders (3 z bundle'ów + 4 GUIDE paczek orkiestracyjnych)
 - hook `pre_tool` test-file-guard (w `test-automation`): **blokuje** zapis `.only()`/`fit()` w plikach testowych (structured `decision: deny` — zero false-positive, klasyfikacja po nazwie pliku), **ostrzega** o `waitForTimeout`, sleepach i tautologiach (`system_message`); wszystko logowane w `$PLUGIN_DATA`. Awaria hooka = fail-open (ostrzeżenie, edyt przechodzi), reguły w `vibe-hooks/test-file-guard.js`

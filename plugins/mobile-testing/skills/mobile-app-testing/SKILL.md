@@ -1,0 +1,99 @@
+---
+name: mobile-app-testing
+description: 'Automates mobile app testing with Maestro first and Appium where grids or existing suites demand it: flow files as the unit of coverage, stable selectors (accessibility id over XPath), emulator/simulator setup including the iOS-needs-macOS constraint, device-lab CI (Firebase Test Lab, BrowserStack, Sauce), animations-off and permission-dialog discipline that keeps device runs deterministic, and a smoke-to-regression growth path. Use when an Android or iOS app has no automated coverage, when device runs are flaky around system dialogs and animations, or when a team must choose between Maestro and Appium. For test plans across the app as a product, use designing-functional-tests; for the web part of a hybrid app, use the Playwright skills in this collection.'
+argument-hint: 'The app under test (apk/ipa or workspace), platforms (Android/iOS), available devices or emulators, and whether CI device access exists'
+user-invocable: true
+---
+
+# Mobile App Testing (Maestro-first, Appium when needed)
+
+Use this skill when a mobile app is verified by tapping it by hand, or when a device automation attempt has already turned flaky around system dialogs, animations, or "works on my emulator".
+
+The discipline that makes mobile automation trustworthy is almost all environment control: stable identifiers, deterministic device state, animations off, and knowing that permission dialogs come from the OS, not the app. Maestro covers this cheaply with YAML flows; Appium pays for its complexity with grid scale and suite reuse that Maestro does not have. This skill helps spend that complexity only where it is earned.
+
+## When to Use
+
+- an Android/iOS app has no automated tests and needs its first smoke-to-regression coverage
+- device tests fail intermittently on permission dialogs, keyboards, or animation states
+- the team must choose (or defend) Maestro vs Appium for a new or inherited suite
+- CI needs device runs wired (Firebase Test Lab, BrowserStack, Sauce Labs, or local emulator matrix)
+- an existing Appium suite is unstable and nobody knows which parts are fixable vs structural
+
+## Operating Principles
+
+- **Maestro first, unless a named requirement says otherwise.** Flows are readable YAML a product person can review, setup is minutes, and startup/onboarding coverage lands the same day a build does. Choose Appium for: existing Java/JS suites, needing WebDriver-level grid scale (Selenium Grid/Appium Server devices), or lab integrations Maestro does not support - and write the reason down.
+- **Selectors: accessibility ids, then text, never nest XPath.** `id:` (the `accessibilityIdentifier`/`viewId` the team set) survives refactors; deep XPath survives nothing.
+- **The device is part of the test environment and must be tamed.** Animations off, fixed locale/timezone where the app cares, keyboard and permission dialogs handled explicitly (`runFlow` of an onboarding sub-flow, or explicit grant-before), one stated device profile per CI job.
+- **Flows are the unit of coverage.** One flow per user-visible capability, named after it (`login.yaml`, `checkout.yaml`), composed with `runFlow` - not one mega-flow passing through six screens.
+- **Smoke gates deploys; regression grows per risk.** Start with install+launch+login+one core path; add flows per `designing-functional-tests` risk ranking, not per screengrab.
+
+## Workflow
+
+1. **Pick the harness and say why.** Default Maestro (the `maestro` CLI drives YAML flows). Appium only for a stated reason (existing suite, grid scale, unsupported lab). If the choice is pre-made by the team, record it as the constraint and proceed.
+2. **Prepare the environment once, deterministically.** Android: emulator images named in scripts, `adb` on PATH, animations disabled (developer settings or `platform-tools`), permissions via `adb pm grant` where needed. iOS: simulators require macOS hardware - state this constraint in the suite docs; Windows CI runs Android in the matrix, iOS on mac runners or a device cloud.
+3. **Establish stable identifiers with the team.** Ask for/Fill in `accessibilityIdentifier` (iOS) and `viewId`/`resource-id` (Android) on the screens in scope; naming flows against accessibility ids doubles as an accessibility investment. Where a screen has no ids yet, `text` selectors are the temporary bridge, marked TODO.
+4. **Write the smoke flow first.** Install (apk/ipa path from env), launch, assert the home state, run login (sub-flow via `runFlow`), one core action. `maestro test login.yaml` locally, quoted output.
+5. **Handle the OS-owned interruptions explicitly.** Permission dialogs via `runFlow` onboarding/grant flows; keyboards via `hideKeyboard`; system sheets not app UI - each named in the flow, never waited on with a sleep.
+6. **Grow regression by risk.** Per release risk, add flows for payments, deep states, and error paths; the flow set stays the coverage catalog (`.qa/` doc or suite README) so "what does mobile automation cover" has one answer.
+7. **Wire CI with device strategy stated.** Local emulator matrix (Android), macOS runners or a device cloud for iOS, cloud labs (Firebase Test Lab/BrowserStack/Sauce) when real-device matrices matter. Artifacts: video/screenshots from the lab on failure, per `automating-ci-test-pipelines`.
+8. **Determinism pass.** If a flow flakes, `diagnosing-test-failures` before any `wait`-flation: device automation flakiness is nearly always environment (animations, locale, another app's dialog) or a reappearing un-tamed state.
+
+## What People Say vs What Happens
+
+| They say | What happens | Do instead |
+| --- | --- | --- |
+| "Maestro is a toy, we need a real framework" | The team writes zero Appium tests for a quarter. | Maestro for the first 80% of value; Appium at grid/suite-reuse scale, reason written down. |
+| "XPath finds it, it works" | Refactor of a layout breaks 40 selectors overnight. | Accessibility ids; text as a marked temporary bridge. |
+| "Add sleep for the dialog" | 5s x every test = minutes, and the flow still races the dialog. | `runFlow` the permission/onboarding flow explicitly. |
+| "We'll run on device X manual-model in CI later" | iOS on Linux CI fails for hours on a Monday. | State the macOS/device-cloud constraint in the plan from day one. |
+| "Run every flow on every device in the matrix" | CI hours explode and the signal drowns. | Smoke on the matrix; regression on one or two named device profiles, others via risk decision. |
+
+## Red Flags
+
+- XPath with 3+ levels anywhere in a flow.
+- Sleeps around permissions, keyboards, or launch.
+- A flow longer than ~30 lines covering "the whole app".
+- Device state from previous run leaking in (logged-in user not reset).
+- No accessibility ids anywhere - selectors are text or coordinates.
+- iOS mentioned but no macOS anywhere in the plan (silent assumption it will be fine).
+
+## Related Skills
+
+- `designing-functional-tests` - the risk-ranked plan the flow set implements
+- `diagnosing-test-failures` - root-cause class-first on the flake before touching the flow
+- `automating-ci-test-pipelines` - matrix strategy, device labs, artifacts on failure
+- `testing-auth-flows` - login sub-flow design
+- `mobile-test-automation-expert` agent - hands this work off when available
+
+## Definition of Done
+
+This skill is complete when:
+
+- the harness choice is stated with a reason (default Maestro; Appium only with a named justification)
+- the smoke flow runs locally against a named device/emulator, with the run quoted
+- selectors use accessibility ids (with any text-bridge TODOs marked), and the OS interruptions are handled explicitly, not with sleeps
+- the device profile(s) per CI job are stated, and the iOS/macOS constraint is written in the suite docs
+- the coverage catalog lists the flows against capabilities, so "what is covered" has one canonical answer
+- a CI job (or a stated plan for one) runs the smoke on each deploy
+---
+
+## 🎨 Emoji in output
+
+Emoji in this collection carry meaning; they never replace words. Use them in chat replies, summary messages, reports and generated markdown artifacts.
+
+Standard vocabulary (use these, in status cells, findings and headers):
+
+| Emoji | Meaning | | Emoji | Meaning |
+|---|---|---|---|---|
+| ✅ | passed / verified / done | | 🚧 | blocked / in progress |
+| ❌ | failed / confirmed defect | | 🚢 | release go / shipped |
+| ⚠️ | risk / warning / needs attention | | ⛔ | no-go / forbidden |
+| 🐛 | defect / bug | | 📊 | metrics / measurement |
+| 🔍 | gap / missing coverage | | 🧪 | test / under test |
+
+Rules:
+
+- One emoji per header, bullet or status cell. Never two in a row, never mid-sentence.
+- Emoji belong in prose and markdown artifacts only — never in code identifiers, test names, file names, commit messages or branch names.
+- The emoji must point at the meaning; if a reader has to ask what it stands for, use a word instead.
+- Blanket emoji ban overrides this section where the destination enforces it (e.g. generated OpenAPI YAML, CSV, JSON).
