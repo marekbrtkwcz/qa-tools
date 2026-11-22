@@ -29,6 +29,7 @@ qa-core:
     - reporting-bugs
     - requirements-test-coverage-mapper
     - review-requirements
+    - test-management-integration
     - test-plan-basic
     - tracing-requirements-to-code
     - verify-acceptance-criteria
@@ -62,6 +63,7 @@ test-automation:
     - playwright-explore-website
     - playwright-explore-website-requests
     - playwright-generate-test
+    - port-suite-to-python-java
     - property-based-testing
     - refactor-to-page-objects
     - running-visual-regression-tests
@@ -72,8 +74,9 @@ test-automation:
     - test-data-factories
     - test-driven-development
     - test-driven-development-quick
-    - testing-auth-flows
     - test-generator
+    - test-reports-and-artifacts
+    - testing-auth-flows
     - unslop-tests
     - writing-unit-tests
     - writing-unit-tests-quick
@@ -93,6 +96,7 @@ api-testing:
   skills:
     - api-playwright-test-developer
     - api-test-plan-and-tests
+    - pact-contract-testing
     - testing-api-contracts
   agents:
     - api-test-automation-openapi
