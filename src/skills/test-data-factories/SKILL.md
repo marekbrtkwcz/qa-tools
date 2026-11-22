@@ -36,6 +36,14 @@ Liternals copy, copies drift, and drift means the test verifies data nobody prod
 5. **Handle the parallel question explicitly.** State the formula: how many workers, which resources they share, what makes their data disjoint. A suite that "usually" survives parallelism is a suite failing on CI only.
 6. **Prove it.** Run the suite twice in a row without intervening cleanup - the second green run is the evidence teardown and uniqueness actually work. Quote both runs.
 
+## If Faker is not installed
+
+Seeded Faker is a dev dependency, not a system tool: `npm i -D @faker-js/faker` in the project whose tests need it. If it cannot be installed right now:
+
+- the fallback is deterministic generators you own: a run-prefixed counter or uuid for uniqueness, small realistic pools for names, a tiny idn-free email pattern - all seeded with the run id, so reruns still reproduce
+- what stays true either way: no `Math.random()`/`Date.now()` for uniqueness, no hand-pasted literal rows pasted across files - those are the reasons factories exist, not Faker-specific rules
+- label the choice in the factory header (`// faker unavailable: counter+uuid strategy, seed recorded`), so the shape-realism gap (names, addresses, company strings) is visible to the next reader instead of silent
+
 ## What People Say vs What Happens
 
 | They say | What happens | Do instead |

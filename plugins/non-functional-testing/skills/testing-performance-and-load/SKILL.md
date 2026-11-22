@@ -148,6 +148,14 @@ Add a lightweight CI check when there is something worth protecting: a short run
 - naming a bottleneck from client-side numbers alone
 - a CI perf gate so tight it flakes, then gets disabled and never re-enabled
 
+## If k6 (or Artillery) is not installed
+
+The load tool is the instrument; without it there are no load numbers, and none may be invented.
+
+1. **Install it - it is one command, not a project milestone.** k6: `brew install k6` (macOS), `choco install k6` (Windows), `sudo apt install k6` (Linux with the Grafana repo), or zero-install via Docker: `docker run --rm -i grafana/k6 run - < script.js`. Artillery: `npm i -D artillery` where a Node project already exists.
+2. **If installation is not possible right now, degrade the claim, not the output.** A single-request latency check (`curl -w` timing or one API call) may be run and reported as *single-user latency, not load*. Browser tabs opened in parallel are not a load test and must not be presented as one.
+3. **Never** present capacity numbers, VU counts, or percentile tables that no tool actually produced - quotes in the report name the tool and version that ran (`k6 run --vus 50 --duration 5m`, with output pasted).
+
 ## Resource Map
 
 - `./resources/workload-model.md` - deriving the endpoint mix, concurrency, think time, and data distribution from real traffic, with a worked example

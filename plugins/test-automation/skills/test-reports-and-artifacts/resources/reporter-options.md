@@ -43,6 +43,12 @@ Allure only shows trends when the `allure-report` history directory survives bet
 3. `allure generate` reads history and writes it back into the report; upload the generated `allure-report/` as an artifact.
 4. Publish where the team reaches it (a documentation site, a known artifact URL, Netlify-style drop). A generated report nobody can open is a retention cost, not a feature.
 
+### If the Allure CLI is not installed
+
+Nothing above needs a system install: `npm i -D allure-commandline` in the test project and run it as `npx allure generate allure-results -o allure-report` (or `brew install allure` where a package manager is preferred). The **reporter** (e.g. `allure-playwright`) is a separate dependency and is useless without the CLI to render results - check both, since one usually installs without the other on CI images.
+
+If it cannot be installed right now: keep the runner's built-in HTML report (the skill's default recommendation anyway) and state that history/trends are unavailable - per-run reports, no trend page. A trend page hand-assembled from copied result folders is fabricated history: not every point was produced by the same pipeline, and the next real run would silently overwrite the fiction.
+
 ## Attachment Mode Trade-offs
 
 | Mode | Cost | Use when |

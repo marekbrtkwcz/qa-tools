@@ -39,6 +39,28 @@ Ask of each behaviour: what is the cheapest test that would fail if this broke?
 - an API test that asserts on HTML: the behaviour is UI; component or E2E
 - a component test that needs a running backend: either stub the backend or it is an E2E test
 
+## Branch: component tests - when the layer applies and when it does not
+
+Component tests pay rent when a behaviour lives **inside** one component and its states are cheap to enumerate: validation messages, loading/error/success states, widget ARIA, prop-driven rendering. Two placement rules keep them from becoming a second, worse E2E suite:
+
+- **Component, not page**: if the test needs routing, a session, or another component to observe the result, it is not a component test - push it to the E2E layer or restructure the component's contract.
+- **Stub the transport, own the owner**: mock the network at the fetch/MSW layer, never the app's own store or hooks - a component test with six `vi.mock` shims of owned modules proves the mocks, not the component (`mocking-network-and-time` owns the layer choice).
+
+Runner placement differs; the layer does not: Playwright component mode, Vitest+Testing Library, Storybook interactions are all the same layer - pick one per project and record which (`component-testing-vitest-rtl` for the JS stack).
+
+## Branch: mobile - which layer owns what on a device surface
+
+"Mobile" splits into three layers with different owners; conflating them is how device farms end up running tests that a unit layer should have caught:
+
+| Behaviour | Layer | Why |
+| --- | --- | --- |
+| ViewModel/presenter logic, offline queueing rules, platform branching in JS/TS/Dart/Kotlin/Swift | Unit | no device needed; exhaustive cases are cheap |
+| Rendered UI of one screen, state transitions | Component (Widget/unit-UI test) where the framework supports it (Flutter widget tests, Compose previews) | seconds, no emulator |
+| Journey across screens with OS behaviour: permissions, deep links, notifications, biometrics, backgrounds/foregrounds | Device E2E (Maestro first / Appium at grid scale - `mobile-app-testing`) | only a real device proves OS integration |
+| Responsive layout of a web app at mobile viewports | Visual at viewport (this suite, `running-visual-regression-tests`) - not the device layer | a browser at 390px is not an emulator, and does not need one |
+
+Signals a mobile test is on the wrong layer: a device suite looping over calculation variants (push to unit), a device test asserting a server response shape (push to API/contract), or an emulator farm used to check CSS breakpoints (push to visual).
+
 ## Push-down checklist (for an existing suite)
 
 1. List E2E tests by runtime and by count per feature.

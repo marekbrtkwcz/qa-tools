@@ -55,6 +55,16 @@ Subagents never call each other: every result comes back to the orchestrator, wh
 - Read the plan before approving it; the plan is the cheapest place to change direction.
 - Commit at each gate. Skipping the gate merges phases and makes review and rollback harder.
 
+## Handing off to the operational skills
+
+The pack's reviewers are bounded; some findings deserve a specialized sibling skill by name (bundles install the same way this plugin did, or keep the reference in the record):
+
+- `unslop-tests` - the review rounds kept approving tests that prove little; this skill is the test-lens review with execution-backed Tier 1 proof
+- `code-review` and `code-review-advanced` - a phase needs a deeper review than the subagent's bounded pass, or a pre-merge opinion on a diff outside the pack's phases
+- `recording-change-intent` - the gated commits should also carry intent records for high-risk changes, not only the commit message
+- `stabilizing-flaky-tests` and `diagnosing-test-failures` - a phase's proof run failed; classify before burning the fix attempts
+- `tech-debt-analysis` - the Explorer/Researcher surfaced accumulated debt worth a roadmap, not a phase plan
+
 ## Design principles
 
 - **Context conservation**: heavy reading is delegated and summarized.

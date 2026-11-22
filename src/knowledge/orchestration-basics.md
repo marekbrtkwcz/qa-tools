@@ -93,3 +93,13 @@ Context: Explorer results (attached); constraints: backward compatible REST API,
 ## Extending the pattern
 
 Add a helper the same way: one role, a clear scope, minimal capabilities, an output contract, and a stop condition. [`plan-explore-review-commit`](../plan-explore-review-commit/) shows the result with an implementer, code reviewer, security auditor and docs writer added.
+
+## Handing off to the operational skills
+
+This pack analyzes and plans; the deep work names a specialized skill from the sibling qa-* bundles instead of re-deriving it. When a subagent's finding or the user's next request matches one below, name it in the record (install the bundle the same way this plugin was installed, or keep the reference for whoever runs it next):
+
+- `analyzing-regression-scope` and `scoping-change-relevance` - an analysis pass asks what a change can break or which checks it needs
+- `tech-debt-analysis` - the exploration surfaced debt that deserves its own prioritized register, not a bullet in a summary
+- `qa-strategy` and `derive-quality-contract` - planning has to become an agreed testing strategy or contract rather than a one-off plan
+- `manual-test-cases` and `documenting-test-suites` - planned analysis work must land as maintainable test design or suite documentation
+- `communicating-quality-findings` - stakeholder-facing retelling of what the pack found

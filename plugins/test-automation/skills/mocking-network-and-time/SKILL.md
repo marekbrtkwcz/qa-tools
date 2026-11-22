@@ -1,6 +1,6 @@
 ---
 name: mocking-network-and-time
-description: 'Decides what to fake and fakes it correctly: mocking third-party APIs with Playwright route interception or HAR replay, MSW handlers, fake clocks that freeze time, and fixed timezones. Use when a UI, component, or unit test depends on a third-party service or API, when a date-sensitive test breaks overnight, when a suite is slow because it calls real services, or when a mocked test stays green while production is broken.'
+description: 'Decides what to fake and fakes it correctly: mocking third-party APIs with Playwright route interception or HAR replay, MSW handlers, fake clocks that freeze time, fixed timezones, and realtime channels (WebSocket, server-sent events) whose messages a test cannot otherwise control. Use when a UI, component, or unit test depends on a third-party service or API, when a date-sensitive test breaks overnight, when a suite is slow because it calls real services, or when a mocked test stays green while production is broken.'
 argument-hint: 'Test files or flows to stabilize, the dependency in question (API, third party, clock, timezone), and the test level'
 user-invocable: true
 ---
@@ -18,6 +18,7 @@ Mocking buys determinism and pays for it in **fidelity**. Every mock is a claim 
 - a suite takes minutes because every test hits a real backend
 - a test passes with a mock while the same flow is broken in production
 - a team is deciding between MSW, Playwright `route`, and a real test environment
+- a realtime flow (WebSocket, SSE, live updates) is flaky because the test waits for a real event stream, or needs to force failure cases a live channel never shows
 - fixtures were recorded once and nobody knows whether they still match the API
 
 ## Operating Principles
@@ -38,6 +39,7 @@ Before choosing a tool, say what exactly is uncontrolled. One of:
 - **external service** - a system you do not deploy
 - **internal service** - a system your team owns, deployed separately
 - **time** - now, durations, timers, expiry, scheduling
+- **realtime** - live channels (WebSocket, server-sent events, long polling) whose messages arrive on their own schedule
 - **environment** - timezone, locale, random values, IDs, ports
 - **data** - state left over from other tests or other people
 
@@ -63,6 +65,7 @@ If the answer is "mock our own API in an end-to-end test", the test has stopped 
 | Application fetch layer | MSW (`setupServer` / `setupWorker`) | Component and integration tests, shared handlers across runners |
 | Module boundary | Runner mocks (`vi.mock`, `jest.mock`) | Unit tests, and only when the seam is your own module |
 | Clock | Playwright `clock`, `vi.useFakeTimers` | Anything time-dependent |
+| Realtime channel | Playwright `routeWebSocket`/`page.on('websocket')`, MSW `ws` handlers, a stub server | WS and SSE flows where the test must control message order, timing, and failure branches - reconnects, dropped frames, out-of-order events |
 | Process env | `TZ`, `LANG`, seeded random | Timezone, locale, and ID determinism |
 
 Recipes for each are in `./resources/playwright-route-recipes.md`, `./resources/msw-recipes.md`, and `./resources/clock-and-timezone.md`.
@@ -117,6 +120,7 @@ Use `./resources/mocking-decision-record.md`.
 - a single giant HAR recorded eighteen months ago, refreshed by nobody, matched loosely
 - fake timers installed without restoring them, so an unrelated later test hangs on a real timeout
 - freezing the clock but not the timezone, so the suite passes in Warsaw and fails in the CI region
+- a realtime mock that only replays a happy ordered stream, so reconnect logic and out-of-order handling never execute
 - reaching for `vi.mock` on a module to solve what is actually a network problem
 
 ## Common Rationalizations
@@ -144,6 +148,7 @@ Use `./resources/mocking-decision-record.md`.
 
 - `./resources/when-to-mock.md` - decision table by test level and dependency type, with the fidelity cost of each choice
 - `./resources/playwright-route-recipes.md` - `route`, `fulfill`, `abort`, request modification, and HAR record and replay
+- `./resources/realtime-recipes.md` - WebSocket and SSE interception: `routeWebSocket` mock servers, MSW `ws` handlers, fake SSE streams, long-polling stubs, and the event-order failure cases a live channel never shows
 - `./resources/msw-recipes.md` - node and browser setup, handler patterns, strict unhandled-request config, per-test overrides
 - `./resources/clock-and-timezone.md` - fake clocks, fixed timezone and locale, DST and leap-day cases, per-runner spellings
 - `./resources/mocking-decision-record.md` - short template for recording the fidelity trade and the drift guard

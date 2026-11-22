@@ -10,7 +10,8 @@ Per class: what it looks like, what to look for in the evidence, and a before/af
 4. Environment
 5. External dependency
 6. Time and randomness
-7. Application race: the product is the bug
+7. Realtime timing: WebSocket, SSE, live channels
+8. Application race: the product is the bug
 
 ---
 
@@ -137,7 +138,34 @@ Stub the boundary and keep a drift guard; `mocking-network-and-time` owns the de
 - seed generators and print the seed in the failure output
 - assert on sets when order is not part of the contract
 
-## 7. Application race: the product is the bug
+## 7. Realtime timing: WebSocket, SSE, live channels
+
+**Signature**: fails only when a pushed message (socket frame, SSE event, long-poll response) lands after the test read the DOM; worse on CI, under load, or when the real channel is slow. Related shape: fails in CI because the real stream is unavailable or rate-limited there at all - that is class 5 (external dependency) hiding inside a realtime transport.
+
+**Evidence in the trace**: the failing assertion runs before the frame that would satisfy it appears in the network log; between passing and failing runs only the timing of frames differs (order and payload are the same). If frames arrive in a different **order** between runs, upgrade to class 8 - the app mishandles out-of-order pushes, and that is a product bug, not a test bug.
+
+```typescript
+// Before: channel open == "ready" (open is transport, not readiness)
+const wsPromise = page.waitForEvent('websocket');
+await page.goto('/ticker');
+const ws = await wsPromise;
+await expect(page.getByTestId('price')).toHaveText('3.98'); // frame not delivered yet
+
+// After: wait for the rendered effect of the first message the handler produces,
+// and let the web-first assertion retry until the state exists
+await page.goto('/ticker');
+await expect(page.getByTestId('price')).toHaveText('3.98');
+```
+
+When the app updates non-DOM state on a frame, poll for it instead of guessing the latency:
+
+```typescript
+await expect.poll(async () => page.evaluate(() => window.__tickerState?.lastTickId)).toBe(42);
+```
+
+To prove the fix, force the timing instead of hoping for it: mock the channel (`mocking-network-and-time`, realtime recipes) so frames arrive after a deliberate delay, then run repeatedly. A fix proven only against a fast local channel has proven nothing.
+
+## 8. Application race: the product is the bug
 
 **Signature**: the test does the right thing and waits correctly, and the application still produces the wrong result some of the time. Examples: a double click creates two orders; two responses arrive out of order and the older one wins; an optimistic update is not rolled back on error; a cache serves stale data after a write.
 

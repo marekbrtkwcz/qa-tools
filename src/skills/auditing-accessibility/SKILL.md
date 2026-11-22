@@ -76,6 +76,7 @@ Then cover the page or flow through these passes:
 4. **Dynamic behavior** - menus, accordions, modals, toasts, live updates, state announcements
 5. **Visual accessibility** - contrast, zoom/reflow, hidden content, motion, target size
 6. **Media and alternatives** - alt text, transcripts, captions, decorative handling
+7. **Localization and RTL** - `dir`/`lang` correctness, focus order after mirroring, long-string overflow, translated labels and errors (see the RTL section of `./resources/manual-a11y-checklist.md`; an LTR-only audit covers half the product when an RTL build ships)
 
 For WCAG 2.2 work, explicitly check:
 
@@ -85,6 +86,12 @@ For WCAG 2.2 work, explicitly check:
 - 3.2.6 Consistent Help
 - 3.3.7 Redundant Entry
 - 3.3.8 Accessible Authentication (Minimum)
+
+**If axe-core is not installed** (`E: Cannot find module '@axe-core/playwright'` or the equivalent): add it with `npm i -D @axe-core/playwright` - it is a dev dependency of the test project, not a system install. If packages cannot be installed right now, the browser extension pass (axe DevTools) still produces leads, but:
+
+- label the result **extension triage**, not an automated pass - it ran on one rendering, in one browser, on whatever state the person was looking at, and those facts change the finding's weight
+- the report states the tool actually used; a report that says "automated axe-core pass" when an extension was used is a fabricated method section
+- the retest checklist (`./resources/manual-a11y-checklist.md`) does not need any tool and can run in full regardless
 
 ### Phase 3: Normalize findings
 
@@ -156,6 +163,7 @@ If the user does not specify, default to the technical report.
 - reporting contrast or keyboard issues without describing the user impact
 - citing WCAG numbers loosely or with the wrong criterion name
 - flooding the report with duplicates from repeated components
+- auditing only the default LTR locale when an RTL or localized build ships, leaving mirroring and overflow findings out of the report
 - calling the audit complete without a clear scope statement
 
 ## Resource Map

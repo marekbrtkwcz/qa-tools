@@ -68,6 +68,23 @@ Each of these gets its own pull request that changes only baselines, so the diff
 - **Browser image bump**: [quarterly / on Playwright release]
 - **Full baseline audit**: [twice a year] - delete snapshots that have never failed and never caught anything
 
+## i18n, RTL and pseudo-localization
+
+Localization is not "the same page with longer labels". Three specific regressions live only in localized builds, and each has a cheapest place to catch it:
+
+| Risk | Cheapest place to catch it | Visual test's role |
+| --- | --- | --- |
+| Long strings overflow their containers (German, Polish, Finnish) | Component snapshot of the translated template - one snapshot per risky component | Snapshot with the longest-shipping locale, not all locales |
+| RTL mirroring breaks layout (icons, chevrons, margins, progress direction, truncated side) | Component snapshots under `dir="rtl"` | Direction is its own axis: an RTL baseline set, smallest surfaces first |
+| Wrong language file loaded / missing translation keys | Assertion (visible text key) | Not a visual problem |
+
+Rules of thumb:
+
+- **Direction is an axis like theme.** An RTL build is a different picture - same thresholds compare a mirrored layout against an LTR baseline and either always fail or, worse, silence real mirroring bugs. LTR and RTL never share baselines.
+- **Two snapshot sets beat N**: default locale + direction, and the longest-string locale + direction, covers the overflow and mirroring classes. A baseline per supported locale is cost with no additional defect class caught.
+- **Pseudo-localization is a test-data trick, not a baseline axis**: render the default template under `dir="rtl"` with pseudo-localized strings (accented, padded ~30% longer - libraries or a small fixture generator do this) to find overflow and mirroring *before* translators deliver; keep the real-locale small set for release checks.
+- Setting the direction in the test, not in a separate build: `await page.goto('/'); await page.evaluate(() => document.documentElement.dir = 'rtl')` or a query param your app supports - record which mechanism the suite uses, in the same place the locale axis is recorded.
+
 ## Retention and artifacts
 
 - **CI diff artifacts kept for**: [days]

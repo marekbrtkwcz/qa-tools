@@ -1,6 +1,6 @@
 ---
 name: api-playwright-test-developer
-description: 'Writes and reviews API automation tests with Playwright Test: the request fixture and APIRequestContext, fixture-based setup and teardown, assertions on status and body, data management, and hybrid API+UI flows. Use when creating backend API tests, data-driven API coverage, API+UI hybrid workflows, or reviewing existing Playwright API suites. For schema validation against OpenAPI or breaking-change detection between spec versions, use testing-api-contracts.'
+description: 'Writes and reviews API automation tests with Playwright Test: the request fixture and APIRequestContext, fixture-based setup and teardown, assertions on status and body, data management, and hybrid API+UI flows. Use when creating backend API tests, data-driven API coverage, API+UI hybrid workflows, or reviewing existing Playwright API suites - including flows past plain request/response such as file upload, download, webhook simulation, and long-polling. For schema validation against OpenAPI or breaking-change detection between spec versions, use testing-api-contracts.'
 argument-hint: 'Endpoint or OpenAPI spec, expected behaviors, auth details, and any existing fixtures or helpers'
 user-invocable: true
 ---
@@ -164,6 +164,10 @@ The test asserts on data it created, so it would fail if the endpoint returned t
 - [ ] Use `test.step` for complex flows to improve readability
 - [ ] Clean up created test data in fixture teardown (or `afterEach`)
 - [ ] Regularly review and refactor tests to remove redundancy and improve clarity
+
+## Resource Map
+
+- `./resources/api-cookbook.md` - read when a flow goes past plain request/response: multipart file uploads and downloads through the request context and the UI, inbound webhook simulation (payload plus signature), long-held and long-polling requests, and the polling patterns that stay deterministic
 
 ## Related Skills
 

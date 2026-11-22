@@ -34,3 +34,12 @@ See the plugin README: pick **QA Orchestrator (Minimal)** in Copilot's agent dro
 ## Output contract
 
 Every subagent returns the same **Handoff Packet**: objective, inputs used, findings, decisions/assumptions, artifacts produced, gaps/TODO, risks, recommended next action. The orchestrator passes the template in each delegation and merges the packets into the summary.
+
+## Handing off to the operational skills
+
+This pack has no review or verification stage, so the work it leaves behind meets the deeper skills sooner. Name them in the summary when they apply (install their bundle the same way this plugin was installed, or keep the reference for whoever runs next):
+
+- `diagnosing-test-failures` - a red coder run needs classification (app bug, test bug, environment, data) before fix attempts turn into guesses
+- `unslop-tests` - a first batch of tests deserves one pass of this skill before anyone calls it coverage
+- `reporting-bugs` - application bugs marked `test.fixme('BUG: …')` during implementation should reach the tracker, not only the code comment
+- when the suite earns review and verification stages, graduate to the full [`ui-api-automation`](../ui-api-automation/) pack

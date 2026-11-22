@@ -73,6 +73,7 @@ Assign one primary class per test, using the evidence from Phase 1 and the trace
 | **Environment** | CI-only; differs by container, timezone, locale, viewport, resources | pin the variable: container image, `TZ`, locale, viewport; give the job the resources it needs |
 | **External dependency** | failure correlates with a third-party or shared-environment outage | stub the boundary you do not own; see `mocking-network-and-time` |
 | **Time and randomness** | fails at midnight, month end, DST, or with certain seeds | freeze the clock and timezone; seed and log the generator |
+| **Realtime timing (WS/SSE)** | the assertion ran before the pushed message arrived; worse under load or slow CI; the trace shows the socket frame landing after the read | wait on the rendered effect of the message (or the frame itself), never on channel open; force the timing with a mocked channel via `mocking-network-and-time` |
 | **Application race (product bug)** | the trace shows the app itself doing the wrong thing intermittently: double submit, lost update, stale cache, out-of-order responses | file a bug with the trace; mark the test as a known failure linked to the bug; do not weaken the assertion |
 
 `./resources/root-cause-catalogue.md` has the signatures in more detail, the evidence to look for in a trace, and before/after code for each class.
@@ -122,6 +123,7 @@ For each test, fill in `./resources/flake-record-template.md`: class, evidence, 
 ## Common Failure Modes
 
 - reproducing with one worker when the flake only appears with four
+- waiting for a socket or stream to be open, then asserting immediately: open is transport, not readiness - the first frame has not arrived
 - fixing the symptom in a helper used by forty tests, so the change cannot be reviewed or attributed
 - a product race hidden by a test that now waits until the race has resolved
 - quarantine with no owner or expiry, so the quarantine list becomes the place coverage goes to die

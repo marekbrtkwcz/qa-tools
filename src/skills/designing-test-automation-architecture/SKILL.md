@@ -116,7 +116,7 @@ Before the design is declared done, implement one real journey end to end in the
 
 ## Resource Map
 
-- `./resources/layer-placement.md` - which layer proves which behaviour, signals of a misplaced test, and the push-down checklist
+- `./resources/layer-placement.md` - which layer proves which behaviour, signals of a misplaced test, the push-down checklist, plus branches for component tests and mobile/device placement
 - `./resources/reuse-patterns.md` - fixtures, page objects, helpers, and screenplay: selection rules, boundaries, and examples
 - `./resources/structure-config-and-tags.md` - folder layouts, config skeleton with setup and role projects, environment handling, tag taxonomy, ownership
 - `./resources/architecture-decision-checklist.md` - the decisions worth recording and the questions each record must answer

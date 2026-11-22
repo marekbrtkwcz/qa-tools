@@ -42,6 +42,19 @@ Use this checklist for triage, retest, or when automated tools cannot confirm a 
 - [ ] 3.3.7 Redundant Entry: information already entered in the same process is pre-filled or selectable
 - [ ] 3.3.8 Accessible Authentication (Minimum): login does not require a cognitive test; paste and password managers work
 
+## Localization and RTL
+
+Run these on the RTL build and at least one non-default locale when the product ships one; an LTR-only audit is an audit of half the product.
+
+- [ ] `<html lang>` (and `dir`) match the current language and direction
+- [ ] Focus order follows the reading order in RTL - mirroring the layout must mirror the tab order, not just the pixels
+- [ ] Long strings (German, Polish, Finnish) do not overflow containers, truncate buttons, or push controls off-screen
+- [ ] Directional icons mirror in RTL (chevrons, arrows, progress indicators, back buttons)
+- [ ] Mixed-direction text (bidi: Latin inside Arabic/Hebrew or vice versa) renders sensibly, especially in inputs and user-generated content
+- [ ] Translated labels, errors, and aria messages fit their association with the right field after translation
+- [ ] Screen reader announces the translated page in the right language (voice/lang switching where available)
+- [ ] Target sizes still hold after translation (buttons grew, spacing shrank)
+
 ## Retest notes
 
 - [ ] Findings verified after the fix

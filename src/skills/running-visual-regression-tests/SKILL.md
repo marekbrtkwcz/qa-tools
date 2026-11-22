@@ -1,6 +1,6 @@
 ---
 name: running-visual-regression-tests
-description: 'Sets up and maintains visual regression testing with screenshot comparison: what to snapshot, baseline strategy, masking dynamic regions, threshold tuning, containerized baselines, and the review-and-update workflow. Use when styling regressions escape to production, when snapshots fail on every machine or every run, when baselines are being updated without being looked at, or when deciding whether visual testing is the right tool at all.'
+description: 'Sets up and maintains visual regression testing with screenshot comparison: what to snapshot, baseline strategy, masking dynamic regions, threshold tuning, containerized baselines, and the review-and-update workflow. Use when styling regressions escape to production, when snapshots fail on every machine or every run, when baselines are being updated without being looked at, when a localized or RTL release needs its own direction-aware baselines, or when deciding whether visual testing is the right tool at all.'
 argument-hint: 'Pages or components to cover, the current snapshot setup if any, the CI platform, and the failure being investigated'
 user-invocable: true
 ---
@@ -16,6 +16,7 @@ Visual testing has one failure mode that dominates all others: a suite so noisy 
 - styling and layout regressions reach production while the functional suite stays green
 - snapshots pass locally and fail in CI on every run
 - baselines get regenerated wholesale because nobody can tell signal from noise
+- the product ships localized or RTL builds, and direction mirroring or long-string overflow must be caught per direction
 - a design system or theme change needs a blast-radius check
 - deciding whether a case belongs in a visual test, an assertion, or an accessibility check
 
@@ -78,7 +79,7 @@ Default to region-level. Add full-page snapshots for a small set of layout-criti
 Decide and record, using `./resources/baseline-policy.md`:
 
 - **Where baselines are generated**: a container image pinned by digest, matching the CI runner. Locally generated baselines and CI comparison is the second most common cause of permanent redness.
-- **Which platforms have baselines**: one per project (browser, viewport, theme, locale). Every added axis multiplies the file count and the review burden.
+- **Which platforms have baselines**: one per project (browser, viewport, theme, locale - and text direction: an RTL build mirrors the layout and is a different picture, not a threshold away from LTR). Every added axis multiplies the file count and the review burden.
 - **Where baselines live**: in the repository with the tests, or in a hosted service. In-repo is simpler and grows the repository; state which you chose.
 - **Who may update them**: the rule that stops reflex updates. A pull request that changes baselines carries the rendered before-and-after in its description.
 
@@ -137,6 +138,7 @@ A visual suite is worth its cost when it has caught something. Write down what i
 - raising the diff ratio until the suite goes quiet, then discovering it no longer detects a missing element
 - full-page snapshots of every route, so one header change produces forty failures with one cause
 - masking a region and never recording why, until nobody knows what stopped being covered
+- one baseline set shared by LTR and RTL (or by the default locale and the longest-string locale), so a mirroring or truncation regression ships invisible
 - visual tests standing in for assertions the suite should have had
 - baselines committed without the diff image visible in the pull request
 - no artifact upload on failure, so the only way to see the diff is to reproduce it locally

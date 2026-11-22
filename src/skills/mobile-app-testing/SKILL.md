@@ -38,6 +38,16 @@ The discipline that makes mobile automation trustworthy is almost all environmen
 7. **Wire CI with device strategy stated.** Local emulator matrix (Android), macOS runners or a device cloud for iOS, cloud labs (Firebase Test Lab/BrowserStack/Sauce) when real-device matrices matter. Artifacts: video/screenshots from the lab on failure, per `automating-ci-test-pipelines`.
 8. **Determinism pass.** If a flow flakes, `diagnosing-test-failures` before any `wait`-flation: device automation flakiness is nearly always environment (animations, locale, another app's dialog) or a reappearing un-tamed state.
 
+## If the maestro CLI is missing
+
+Flows can be authored without the CLI (they are YAML), but **no run output may exist without a run**. Before anything else: install it - `curl -fsSL "https://get.maestro.mobile.dev" | bash` (the official installer), `brew install maestro` on macOS, and check the current platform matrix in the Maestro docs before promising Windows-native runs (WSL is the usual answer where unsupported). Then `maestro --version`, quoted.
+
+If the CLI cannot be installed right now:
+
+- author the flows and mark the run status explicitly: `run: not executed - CLI unavailable` in the coverage doc, never a green cell
+- do not substitute claimable outputs: screenshots from a manual session are evidence of a manual check, not of a flow passing
+- the environment prep (step 2) and identifier work (step 3) can proceed - they are prerequisites for whatever harness ends up running, including Appium
+
 ## What People Say vs What Happens
 
 | They say | What happens | Do instead |

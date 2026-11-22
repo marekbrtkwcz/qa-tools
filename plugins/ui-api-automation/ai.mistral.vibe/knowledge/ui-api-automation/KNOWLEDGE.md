@@ -44,3 +44,13 @@ See the plugin README: pick **QA Orchestrator** in Copilot's agent dropdown, run
 ## Output contract
 
 Every subagent returns the same **Handoff Packet**: objective, inputs used, findings, decisions/assumptions, artifacts produced, gaps/TODO, risks, recommended next action. The orchestrator passes the template in each delegation and merges the packets into the final summary.
+
+## Handing off to the operational skills
+
+The pack gets you to an implemented, reviewed, run suite; deeper failure work belongs to sibling skills by name (install their bundle the same way this plugin was installed, or keep the reference in the handoff packet):
+
+- `diagnosing-test-failures` - the verifier's classification is a first pass; a persistent red needs root-cause work, not a third fix round
+- `stabilizing-flaky-tests` - a suite that went green on retry hands an open defect to this skill, with the flake history the verifier produced
+- `test-reports-and-artifacts` - the runs should leave traces and one merged report behind; configure it rather than relying on terminal scrollback
+- `reporting-bugs` - application bugs found during verification become tracker tickets with evidence, not only a `test.fixme('BUG: …')` marker in the suite
+- `mocking-network-and-time` - tests that depend on a live third party or the wall clock need the boundary mocked, with a drift guard
