@@ -551,6 +551,13 @@ function buildBundle(name, bundle, outDir, checkOnly) {
           'command = "node vibe-hooks/test-file-guard.js"',
           'strict = false',
           '',
+          '[[hooks]]',
+          `name = ${tomlString(h + '-bash')}`,
+          'type = "pre_tool"',
+          'match = "file_system.bash"',
+          'command = "node vibe-hooks/test-file-guard.js"',
+          'strict = false',
+          '',
         ].join('\n')
       )
       .join('\n');

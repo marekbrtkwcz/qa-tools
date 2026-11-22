@@ -16,7 +16,7 @@
     "check": "node scripts/build.js --check",
     "verify": "node scripts/build.js --verify",
     "validate-manifests": "node scripts/validate-manifests.js",
-    "test": "node --test scripts/build.test.js",
+    "test": "node --test scripts/build.test.js scripts/assets/test-file-guard.test.js",
     "ci": "npm run check && npm run validate-manifests && npm run verify && npm test"
   }
 }
