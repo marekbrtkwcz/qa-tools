@@ -92,7 +92,7 @@ In this collection the plugin README is generated from the bundle. In a user's r
 - This collection: `npm run validate`, `npm run build`, `npm run check` all pass.
 - Any repository: add the marketplace from a local path or the repository in each target host, install the plugin, start a new session, and confirm that one skill triggers and one command runs.
 
-## Common failure modes
+## Common Failure Modes
 
 - editing a generated file under `plugins/` in this collection; the next build overwrites it and CI fails until then
 - bundling by topic, so one plugin ships a dozen competing descriptions
@@ -103,7 +103,7 @@ In this collection the plugin README is generated from the bundle. In a user's r
 - one skill installed both by hand and as a plugin, so it loads twice
 - different versions in a manifest and its marketplace entry (in a hand-written setup)
 
-## Resource map
+## Resource Map
 
 - [`resources/plugin-manifest.template.md`](resources/plugin-manifest.template.md): manifests and marketplace entries for each host, what this collection's build writes, and sources. Read when writing or checking manifests.
 - [`resources/plugin-readme.template.md`](resources/plugin-readme.template.md): README structure for a hand-written plugin. Read when publishing from your own repository.

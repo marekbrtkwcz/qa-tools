@@ -26,7 +26,7 @@ Read the conventions from the collection itself before finding anything. Do not 
 
 Behaviour cases for a single asset (activation, output contract, before/after gate) belong to the `testing-agent-skills` skill if it is installed; this audit stays structural and points to it instead of expanding into it.
 
-## Inputs
+## Inputs to collect
 
 | Input | Required | Notes |
 | --- | --- | --- |

@@ -80,7 +80,7 @@ Run [`resources/hook-quality-checklist.md`](resources/hook-quality-checklist.md)
 
 The Codex column comes from OpenAI's Claude-to-Codex migration reference (checked 2026-04-20); it notes the runtimes are not 1:1 and that Codex does not discover hooks from skills, agents or plugins. Re-check before relying on it.
 
-## Common failure modes
+## Common Failure Modes
 
 - a hook where an instruction would do
 - broad deny patterns with a vague message
@@ -91,7 +91,7 @@ The Codex column comes from OpenAI's Claude-to-Codex migration reference (checke
 - Bash-only scripts for a team on Windows, with no `powershell` entry or cross-platform runtime
 - configuration and scripts that disagree with the README
 
-## Resource map
+## Resource Map
 
 - [`resources/host-hook-formats.md`](resources/host-hook-formats.md): config shape, events, payload and output per host, with sources. Read before writing a script.
 - [`resources/hook-template-pack.md`](resources/hook-template-pack.md): README, config and script scaffolds for Copilot and Claude Code. Read when starting.

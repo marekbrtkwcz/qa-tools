@@ -62,7 +62,7 @@ Start from [`resources/prompt.template.prompt.md`](resources/prompt.template.pro
 
 For Codex, OpenAI's own migration guide turns Claude Code commands into skills, so a skill the model may not start on its own is the equivalent used here.
 
-## Common failure modes
+## Common Failure Modes
 
 - a command that reads like a system prompt or persona
 - required inputs missing, so the output is generic every time
@@ -71,7 +71,7 @@ For Codex, OpenAI's own migration guide turns Claude Code commands into skills, 
 - no output location, so results vanish into the chat
 - a host-specific placeholder (`${input:…}`, `$ARGUMENTS`) in a command meant for every host
 
-## Resource map
+## Resource Map
 
 - [`resources/prompt.template.prompt.md`](resources/prompt.template.prompt.md): scaffold in Copilot format, with notes for the other hosts. Read when starting.
 - [`resources/prompt.example.prompt.md`](resources/prompt.example.prompt.md): a finished review command. Read when unsure about inputs or output.

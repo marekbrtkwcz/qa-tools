@@ -81,7 +81,7 @@ Codex workaround used by this collection: put each rule in `.agents/rules/<name>
 
 Formats, examples and sources: [`resources/host-instruction-formats.md`](resources/host-instruction-formats.md) (read it when writing for a user's project or porting rules between tools).
 
-## Common failure modes
+## Common Failure Modes
 
 - `applyTo: '**'` (or an unscoped `CLAUDE.md` section) for advice that matters in one folder
 - a tutorial instead of a rule set
@@ -90,7 +90,7 @@ Formats, examples and sources: [`resources/host-instruction-formats.md`](resourc
 - rules with no reason where the reason is not obvious
 - one rule repeated in the repository-wide file and a scoped file, drifting apart
 
-## Resource map
+## Resource Map
 
 - [`resources/copilot-instructions.template.md`](resources/copilot-instructions.template.md): repository-wide file scaffold, usable as `copilot-instructions.md`, `CLAUDE.md` or `AGENTS.md`. Read when writing the repository-wide file.
 - [`resources/copilot-instructions.example.md`](resources/copilot-instructions.example.md): a finished repository-wide file for a test automation repository.

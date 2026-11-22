@@ -37,7 +37,7 @@ Adversarial testing is security testing. Confirm in writing before running anyth
 
 If any of these is missing, **stop and say what is needed**. Do not run a single case, not even "just one to check".
 
-## Inputs
+## Inputs to collect
 
 | Input | Required | Notes |
 | --- | --- | --- |

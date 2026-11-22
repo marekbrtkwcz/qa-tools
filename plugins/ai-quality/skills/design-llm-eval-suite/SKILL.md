@@ -24,7 +24,7 @@ Build the eval suite that catches quality regressions in this LLM feature before
 
 Use the `testing-llm-features` skill for case design, scoring strategies and the implementation shapes.
 
-## Inputs
+## Inputs to collect
 
 | Input | Required | Notes |
 | --- | --- | --- |

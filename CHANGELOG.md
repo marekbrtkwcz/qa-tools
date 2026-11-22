@@ -8,6 +8,11 @@ Wszystkie istotne zmiany tego projektu są dokumentowane tutaj. Format zbliżony
 - **Sekcje `## When to Use` w 11 skillach model-invocable**, które ich nie miały — model dostaje jawne triggery aktywacji i „Route elsewhere" zanim zacznie pracę: `automating-ci-test-pipelines`, `code-review`, `creating-skills`, `creating-custom-agents`, `creating-hooks`, `creating-instructions`, `creating-orchestration-packs`, `creating-plugins`, `designing-test-automation-architecture`, `stabilizing-flaky-tests`, `unslop-tests`. Tam gdzie plik ma już `## When NOT to Use`/`Boundary`, nowa sekcja dublowania unika.
 
 ### Zmienione
+- **Higiena szablonu w całej kolekcji** (audyt C2/C3/C6):
+  - `api-test-plan-and-tests` sprowadzony do wzorca commandów: 197→89 linii w SKILL.md, szczegółowe przepisy faz przeniesione do `./resources/phase-recipes.md` (progressive disclosure), fazy zdegradowane z `#` do `##`, dodane `## Resource Map` i `## Definition of Done`, zachowane trzy checkpoint'y i guardrails.
+  - Podwójny nagłówek `## Inputs` (argumenty commanda + tabela inputów tasku) w **12 plikach**: drugie wystąpienie przemianowane na `## Inputs to collect` — w tym `performance-reliability-plan`, który audyt błędnie uznawał za już naprawiony.
+  - Wielkość liter nagłówków ujednolicona w rodzinie `creating-*`: `## Resource map`→`## Resource Map` i `## Common failure modes`→`## Common Failure Modes` w 7 skillach **oraz w samym `SKILL.template.md`**, który uczył błędnego wzorca u źródła.
+  - `prd-generator`: usunięty jedyny w kolekcji klucz `license: MIT` z frontmatter (licencja siedzi w `plugin.json`); zdaniowy `argument-hint` zostaje — to wzorzec domu dla skillów model-invocable, nie błąd.
 - **Opisy 18 agentów skrócone do limitu 300 znaków** (668→299 w najdłuższym przypadku): build truncuje `description` w emitowanym TOML na 300 znaków, więc host widział urwane opisy (`qa-strategist`, `ai-architect`, `test-automation-expert`, obaj `playwright-automation-engineer-ts*`, `test-code-reviewer`, `quality-debt-auditor`, `tech-debt-auditor`, `skill-librarian` i 9 dalszych). Każdy skrócony opis zachowuje sygnał routingu (rola + kiedy użyć + najważniejszy cross-ref); `npm run check` z tej listy wychodzi teraz bez żadnego WARN.
 
 ## [0.2.1] - 2026-11-22

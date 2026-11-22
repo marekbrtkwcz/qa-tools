@@ -20,7 +20,7 @@ Design a practical performance and reliability test plan for <system>, and draft
 
 If the `testing-performance-and-load` skill is installed, load it before starting; it holds the workload-modelling, threshold, and analysis rules this command relies on.
 
-## Inputs
+## Inputs to collect
 
 Ask concise questions for anything missing; infer the rest from the codebase and say what you inferred.
 

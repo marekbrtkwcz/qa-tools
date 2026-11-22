@@ -46,7 +46,7 @@ Delete this comment.
 - <field>: <value>
 ```
 
-## Resource map
+## Resource Map
 
 - `resources/<template>.md`: <what it holds>. Read when <condition>.
 - `resources/<checklist>.md`: <what it holds>. Read before handing off.

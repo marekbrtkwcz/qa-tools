@@ -104,7 +104,7 @@ Start from [`resources/orchestration-pack.template.md`](resources/orchestration-
 - Run [`resources/orchestration-quality-checklist.md`](resources/orchestration-quality-checklist.md).
 - Run the pack on one real task in each target host. Watch for an orchestrator that starts implementing, a subagent missing a tool that reports success anyway, vague handoff prompts, two agents doing the same work, and a `Gaps` section that is always empty.
 
-## Common failure modes
+## Common Failure Modes
 
 - an orchestrator that implements when a subagent returns something incomplete
 - a handoff or `agents` entry naming a title that does not exist in the pack
@@ -116,7 +116,7 @@ Start from [`resources/orchestration-pack.template.md`](resources/orchestration-
 - five agents where two would do
 - an MCP prerequisite (such as Playwright) nobody documented
 
-## Resource map
+## Resource Map
 
 - [`resources/orchestration-pack.template.md`](resources/orchestration-pack.template.md): a minimal pack (orchestrator + two subagents) in this collection's format, with notes for a hand-written Copilot, Claude Code or Codex version. Read when starting.
 - [`resources/handoff-packet.md`](resources/handoff-packet.md): the output contract section by section, a worked example, and how it degrades. Read when writing subagent output rules.

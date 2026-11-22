@@ -23,7 +23,7 @@ Audit the governance layer of this repository: what it claims to enforce, what i
 
 Use `governing-quality-waivers` for the silent-skip inventory, `recording-change-intent` for the intent pass, and `deriving-a-quality-contract` for the technical gap.
 
-## Inputs
+## Inputs to collect
 
 | Input | Required | Notes |
 | --- | --- | --- |

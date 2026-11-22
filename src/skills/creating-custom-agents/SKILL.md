@@ -100,7 +100,7 @@ This collection's capability mapping (from `scripts/lib/hosts.js`):
 | `todo` | `todo` | task tools | inherited |
 | `ide` | `vscode` | none | none |
 
-## Common failure modes
+## Common Failure Modes
 
 - a vague job ("help with testing") that overlaps every other agent
 - every tool granted out of convenience, or no tool list at all
@@ -110,7 +110,7 @@ This collection's capability mapping (from `scripts/lib/hosts.js`):
 - a model pinned in a file meant to outlive the model
 - an agent that must call other agents, shipped to a host where subagents cannot
 
-## Resource map
+## Resource Map
 
 - [`resources/custom-agent.template.agent.md`](resources/custom-agent.template.agent.md): body scaffold. Read when starting an agent.
 - [`resources/custom-agent.example.agent.md`](resources/custom-agent.example.agent.md): a finished read-only reviewer. Read when unsure about scope or output.

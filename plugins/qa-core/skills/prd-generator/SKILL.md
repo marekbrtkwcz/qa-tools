@@ -3,7 +3,6 @@ name: prd-generator
 description: 'Produces production-ready Product Requirements Documents (PRDs) for software systems and AI-powered features, with clear problem framing, measurable outcomes, scoped functionality, testable requirements, and explicit risks. Use when the user wants to write a PRD, define requirements, plan a feature, or turn a vague product idea into an implementation-ready specification.'
 argument-hint: 'Product or feature idea, target users, known constraints, and any existing requirements'
 user-invocable: true
-license: MIT
 ---
 
 # Product Requirements Document (PRD) Generator

@@ -24,7 +24,7 @@ If the `verifying-acceptance-criteria` skill is installed, load it before starti
 
 Verify whether the implementation in <evidence> satisfies the acceptance criteria in <criteria>.
 
-## Inputs
+## Inputs to collect
 
 | Input | If missing |
 | --- | --- |

@@ -23,7 +23,7 @@ Review the change between a base ref and `HEAD`: scope it, verify it, and return
 
 Use `scoping-change-relevance` for the tag grammar and the relevance recipes, `verifying-change-coverage` for coverage, and `recording-change-intent` for the rationale check.
 
-## Inputs
+## Inputs to collect
 
 | Input | Required | Notes |
 | --- | --- | --- |

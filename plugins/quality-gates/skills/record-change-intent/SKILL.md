@@ -19,7 +19,7 @@ Make sure this change carries a recorded reason, and that the reason is worth re
 
 Use the `recording-change-intent` skill for the trailer grammar, the high-risk surface rules and the validation rules.
 
-## Inputs
+## Inputs to collect
 
 | Input | Required | Notes |
 | --- | --- | --- |

@@ -23,7 +23,7 @@ If the `analyzing-regression-scope` skill is installed, load it before starting.
 
 Decide what must be retested after <change> and what can safely stay out of the first-pass regression pack.
 
-## Inputs
+## Inputs to collect
 
 | Input | If missing |
 | --- | --- |

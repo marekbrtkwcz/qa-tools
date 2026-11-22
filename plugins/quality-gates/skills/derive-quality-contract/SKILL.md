@@ -24,7 +24,7 @@ Derive this project's quality contract and report the gap between the contract a
 
 Use the `deriving-a-quality-contract` skill for the catalog, the profiles, the maturity model and the detection signals. Do not invent a practice list.
 
-## Inputs
+## Inputs to collect
 
 | Input | Required | Notes |
 | --- | --- | --- |

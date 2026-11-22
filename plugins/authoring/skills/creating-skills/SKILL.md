@@ -109,7 +109,7 @@ The same folder works in all three hosts. Only the install location and the opti
 
 All three also load skills from installed plugins (`creating-plugins`). Install a skill by one route only: one copied by hand and also installed as a plugin loads twice.
 
-## Common failure modes
+## Common Failure Modes
 
 - a topic name (`playwright`, `security`) instead of an activity
 - a description that says what the skill is about but never when to use it
@@ -119,7 +119,7 @@ All three also load skills from installed plugins (`creating-plugins`). Install 
 - several loosely related jobs in one skill because they feel adjacent
 - host-only frontmatter in a skill meant for every host
 
-## Resource map
+## Resource Map
 
 - [`resources/SKILL.template.md`](resources/SKILL.template.md): scaffold for a new `SKILL.md`. Read when starting the body.
 - [`resources/SKILL.example.md`](resources/SKILL.example.md): a compact finished skill. Read when unsure about tone or scope.

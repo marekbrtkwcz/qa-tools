@@ -26,7 +26,7 @@ Hand this task to the `test-planner` agent (`test_planner` in Codex). If that ag
 
 Prepare a risk-prioritized test plan for the website at <baseUrl> and, if given, its API at <apiBaseUrl>.
 
-## Inputs
+## Inputs to collect
 
 | Input | Value | If missing |
 | --- | --- | --- |
