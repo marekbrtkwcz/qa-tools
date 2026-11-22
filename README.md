@@ -4,7 +4,7 @@ Narzędzia dla testera automatyzującego — **natywne pluginy dla [Mistral Vibe
 
 Repozytorium inspirowane ideą i strukturą projektu **[awesome-agents-for-quality](https://github.com/jaktestowac/awesome-agents-for-quality)** (MIT, jaktestowac.pl). Wszystkie treści `src/` pochodzą z tego projektu (adaptacja na format natywny Vibe).
 
-## ✨ Kolekcja — 7 pluginów
+## ✨ Kolekcja — 7 bundle'ów + 4 orkiestracje
 
 | Plugin | Skille | Agenci | Knowledge | Hook | Zakres |
 |---|---|---|---|---|---|
@@ -15,8 +15,14 @@ Repozytorium inspirowane ideą i strukturą projektu **[awesome-agents-for-quali
 | `ai-quality` 🧠 | 7 | 1 | 1 | — | testowanie funkcji LLM, guardrails, groundedness |
 | `quality-gates` 🚦 | 17 | 4 | 1 | — | quality contracts, change gates, release readiness |
 | `authoring` 🛠️ | 9 | 1 | — | — | tworzenie skilli/agentów/pluginów/hooków |
+| `orchestration-basics` 🎼 | 1 | 3 | 1 | — | paczka: orchestrator + planner/explorer/analyst (start tutaj) |
+| `plan-explore-review-commit` 🔄 | 1 | 9 | 1 | — | paczka: pełny pipeline dostarczania z review i commitem |
+| `ui-api-automation` 🖥️ | 1 | 7 | 1 | — | paczka: pipeline testów UI + API (explorers → plan → implement → run) |
+| `ui-api-automation-minimal` 🧪 | 1 | 4 | 1 | — | paczka: minimalna wersja powyższego |
 
-Razem: **94 skille** (61 widocznych dla modelu + 33 user-invocable, pochodzące z komend), **18 subagentów**, **3 knowledge**, **1 quality-gate hook**.
+Razem: **98 skilli**, **41 subagentów**, **7 knowledge**, **1 quality-gate hook**.
+
+Paczki orkiestracyjne działają jak w źródle: driver-skill (user-invocable) prowadzi orkiestrację, każdy krok delegujesz do subagenta przez `tools.agents` + `config_name` (np. `plan-explore-review-commit:perc-implementer`); GUIDE paczki jest jej knowledge. Build przepisuje instrukcje hostów (Claude Code / Codex) na Vibe: tabela agentów dostaje kolumnę `Vibe` z dokładnie tymi `config_name`, które Vibe potrafi zespawnować.
 
 ## 🚀 Instalacja
 
@@ -78,7 +84,7 @@ node scripts/build.js --check    # walidacja: członkostwo w bundles.yaml, name 
 | `SKILL.md` (open Agent Skills) | `skills/` 1:1 | bez zmian |
 | `plugin.json` Agent Plugins 1.0 | 1:1 | bez zmian |
 | slash commands | skill z `user-invocable` | Vibe nie ma komend |
-| agent `.md` (frontmatter: name/title/description/capabilities) | `agents/*.toml` (snake_case!) | `schema_version`, `agent_type`, `display_name`, opis ≤300 zn., `enabled_tools` |
+| agent `.md` (frontmatter: name/title/description/capabilities, w paczkach też `tools: Read, Grep…`) | `agents/*.toml` (snake_case!) | `schema_version`, `agent_type`, `display_name`, opis ≤300 zn., `enabled_tools`; Edit/Write/Bash → `safety = "neutral"` |
 | guides | `knowledge/<name>/KNOWLEDGE.md` | frontmatter: name/description(≤300)/display_name/icon |
 | mcp | `mcp.json` | Vibe wymaga `$schema` + `type` |
 | — | `hooks.toml` | Vibe-only: quality gates na eventach `pre_tool`/`post_agent` |
@@ -87,18 +93,18 @@ Konwencje potwierdzone testami (patrz historia commitów): klucze TOML **snake_c
 
 ## ✅ Co zostało zwalidowane (Vibe headless)
 
-- wszystkie 7 pluginów ładuje się bez błędów walidacji (`plugin.*.invalid`)
-- 61 skilli widocznych dla modelu; 33 user-invocable dostępnych na wywołanie
-- spawn subagentów z personami z instrukcji: `qa-core:rubber-duck` 🦆, `quality-gates:change-gate-reviewer`, `test-automation:test-code-reviewer`
-- 3 knowledge folders (`qa-core:beyond-codegen`, `ai-quality:ai-product-qa`, `quality-gates:quality-governance`)
+- wszystkie 11 pluginów ładuje się bez błędów walidacji (`plugin.*.invalid`)
+- 61 skilli widocznych dla modelu; user-invocable dostępne na wywołanie (w tym 4 driver-skille paczek)
+- spawn subagentów z personami z instrukcji: `qa-core:rubber-duck` 🦆, `quality-gates:change-gate-reviewer`, `test-automation:test-code-reviewer`, `orchestration-basics:basics-analyst`
+- 7 knowledge folders (3 z bundle'ów + 4 GUIDE paczek orkiestracyjnych)
 - hook `pre_tool` test-file-guard (w `test-automation`): wykrywa `waitForTimeout` w zapisie `.spec.ts`, loguje w `$PLUGIN_DATA`
 
 ## 🧭 Roadmapa
 
-- [ ] orkiestracje ze źródła (`orchestration-basics`, `plan-explore-review-commit`, `ui-api-automation`) → subagenty Wibe
 - [ ] `connectors.json` (GitHub, k6) dla bundle'i automatyzujących
 - [ ] GitHub Actions CI: `build.js --check` + weryfikacja ładowania pluginu w Vibe headless
 - [ ] hook strict (blokujący) po zdefiniowaniu polityki jakości
+- [ ] hook-only pluginy źródła (`always-on-skills`, `print-tool-info`) — częściowo pokryte przez `test-file-guard`
 
 ## 📄 Licencja i atrybucja
 

@@ -176,3 +176,74 @@ authoring:
     - creating-skills
   agents:
     - skill-librarian
+
+orchestration-basics:
+  icon: 🎼
+  description: "Minimal orchestrator with three read-mostly helpers (planner, explorer, analyst): split analysis and planning across subagents to save context, with stop gates for the user."
+  version: "0.1.0"
+  pack: true
+  skills:
+    - orchestration-basics
+  agents:
+    - basics-planner
+    - basics-explorer
+    - basics-analyst
+  knowledge:
+    - orchestration-basics
+
+plan-explore-review-commit:
+  icon: 🔄
+  description: "Full delivery pipeline: planner and orchestrator drive architect, researcher, explorer, implementer, QA strategy, security, code review and docs subagents through small test-first phases, with a user-approved commit after each."
+  version: "0.1.0"
+  pack: true
+  skills:
+    - plan-explore-review-commit
+  agents:
+    - perc-planner
+    - perc-architect
+    - perc-researcher
+    - perc-explorer
+    - perc-implementer
+    - perc-qa-strategist
+    - perc-security-auditor
+    - perc-code-reviewer
+    - perc-docs-writer
+  knowledge:
+    - plan-explore-review-commit
+
+ui-api-automation:
+  icon: 🖥️
+  description: "UI + API test automation pipeline: OpenAPI and frontend explorers, a test planner, FE/BE implementers, a solution reviewer and a test runner."
+  version: "0.1.0"
+  pack: true
+  skills:
+    - ui-api-automation
+  agents:
+    - uiapi-openapi-explorer
+    - uiapi-fe-explorer
+    - uiapi-test-planner
+    - uiapi-fe-implementer
+    - uiapi-be-implementer
+    - uiapi-solution-reviewer
+    - uiapi-test-runner
+  knowledge:
+    - ui-api-automation
+  mcp:
+    - playwright
+
+ui-api-automation-minimal:
+  icon: 🧪
+  description: "Minimal UI + API test automation pipeline: explorer, planner, coder and framework starter only."
+  version: "0.1.0"
+  pack: true
+  skills:
+    - ui-api-automation-minimal
+  agents:
+    - uiapi-min-explorer
+    - uiapi-min-planner
+    - uiapi-min-coder
+    - uiapi-min-framework-starter
+  knowledge:
+    - ui-api-automation-minimal
+  mcp:
+    - playwright
