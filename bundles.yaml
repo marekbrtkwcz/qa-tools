@@ -1,0 +1,47 @@
+# Bundles published to Vibe CLI as native Agent Plugins 1.0 packages.
+# Adapted from https://github.com/jaktestowac/awesome-agents-for-quality (MIT).
+# Each bundle is generated into plugins/<name>/ by scripts/build.js.
+
+qa-core:
+  icon: 🧭
+  description: "Test design, planning, exploratory testing, requirements traceability and bug reporting, packaged natively for Vibe CLI."
+  version: "0.1.0"
+  user_invocable: true
+  skills:
+    - bug-report
+    - communicating-quality-findings
+    - create-test-plan
+    - derive-test-cases-from-code
+    - designing-functional-tests
+    - designing-test-data
+    - documenting-test-suites
+    - edge-case-scenario-generator
+    - explain-code
+    - generate-exploratory-charters
+    - generate-gherkin-scenarios
+    - generate-test-data
+    - handling-sensitive-test-data
+    - manual-test-cases
+    - map-requirements-coverage
+    - planning-exploratory-testing
+    - prd-generator
+    - qa-strategy
+    - regression-scope
+    - reporting-bugs
+    - requirements-test-coverage-mapper
+    - review-requirements
+    - test-plan-basic
+    - tracing-requirements-to-code
+    - verify-acceptance-criteria
+    - verifying-acceptance-criteria
+  agents:
+    - qa-strategist
+    - test-planner
+    - rubber-duck
+    - ai-architect
+  knowledge:
+    - beyond-codegen
+  hooks:
+    - test-file-guard
+  mcp:
+    - playwright
