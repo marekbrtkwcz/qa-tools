@@ -130,3 +130,25 @@ All three also load skills from installed plugins (`creating-plugins`). Install 
 - The body is under 500 lines, every step ends in a checkable criterion, and every supporting file is linked with a "read when" condition, one level deep.
 - At least one template or checklist exists where the output shape matters.
 - In this collection: the skill is in one bundle, the body names no host (unless it is about hosts), and `npm run validate` passes. In a user's project: the folder sits in the host's skill location and triggered on the test requests in a fresh session.
+---
+
+## 🎨 Emoji in output
+
+Emoji in this collection carry meaning; they never replace words. Use them in chat replies, summary messages, reports and generated markdown artifacts.
+
+Standard vocabulary (use these, in status cells, findings and headers):
+
+| Emoji | Meaning | | Emoji | Meaning |
+|---|---|---|---|---|
+| ✅ | passed / verified / done | | 🚧 | blocked / in progress |
+| ❌ | failed / confirmed defect | | 🚢 | release go / shipped |
+| ⚠️ | risk / warning / needs attention | | ⛔ | no-go / forbidden |
+| 🐛 | defect / bug | | 📊 | metrics / measurement |
+| 🔍 | gap / missing coverage | | 🧪 | test / under test |
+
+Rules:
+
+- One emoji per header, bullet or status cell. Never two in a row, never mid-sentence.
+- Emoji belong in prose and markdown artifacts only — never in code identifiers, test names, file names, commit messages or branch names.
+- The emoji must point at the meaning; if a reader has to ask what it stands for, use a word instead.
+- Blanket emoji ban overrides this section where the destination enforces it (e.g. generated OpenAPI YAML, CSV, JSON).

@@ -77,11 +77,25 @@ node scripts/build.js --check    # walidacja: członkostwo w bundles.yaml, name 
 
 `plugins/` jest commitowany (jak w projekcie źródłowym) — użytkownik może zainstalować bez uruchamiania builda.
 
+## 🎨 Konwencja emotek
+
+Emotki w tej kolekcji **niosą znaczenie, nie ozdobę** — i są wpisane w projekt na jednym poziomie: single-source w `src/shared/emoji-style.md`, a build wstrzykuje je (sekcja `## 🎨 Emoji in output`) do **każdego wygenerowanego SKILL.md (98)** i instrukcji **każdego subagenta (41 tom)**. Dzięki temu:
+
+- 🗨️ **zachowanie agentów** — każdy subagent dostaje konwencję w instrukcjach,
+- 📋 **generowane raporty** — skille QA użyją jej w nagłówkach, tabelach i statusach,
+- 📖 **dokumentacja** — poniższe słownictwo obowiązuje też w README.
+
+Słownictwo (pełne w `src/shared/emoji-style.md`): ✅ passed · ❌ failed/defekt · ⚠️ ryzyko · 🚧 blocked · 🚢 release go · ⛔ no-go · 🐛 bug · 📊 metryki · 🔍 luka · 🧪 test.
+
+Zasady: jedna emotka na nagłówek/komórkę statusu, **nigdy** w nazwach testów, identyfikatorach kodu, plikach, commitach i branchach.
+
+Zmiana konwencji = edycja `src/shared/emoji-style.md` + `node scripts/build.js`. 🚫 nie edytuj wygenerowanych `plugins/` ręcznie.
+
 ## 🔄 Konwersja formatów (Vibe ⚠ inne niż Claude/Copilot/Codex)
 
 | Źródło (awesome-agents-for-quality) | Target Vibe | Uwagi |
 |---|---|---|
-| `SKILL.md` (open Agent Skills) | `skills/` 1:1 | bez zmian |
+| `SKILL.md` (open Agent Skills) | `skills/` 1:1 | + wstrzykiwana sekcja emotek (patrz 🎨 wyżej) |
 | `plugin.json` Agent Plugins 1.0 | 1:1 | bez zmian |
 | slash commands | skill z `user-invocable` | Vibe nie ma komend |
 | agent `.md` (frontmatter: name/title/description/capabilities, w paczkach też `tools: Read, Grep…`) | `agents/*.toml` (snake_case!) | `schema_version`, `agent_type`, `display_name`, opis ≤300 zn., `enabled_tools`; Edit/Write/Bash → `safety = "neutral"` |

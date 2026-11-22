@@ -70,6 +70,25 @@ function copyDir(from, to) {
   fs.cpSync(from, to, { recursive: true });
 }
 
+/* ---------- shared emoji style injection ---------- */
+
+/**
+ * Single source for the collection's emoji conventions: src/shared/emoji-style.md.
+ * Appended to every generated SKILL.md and every generated agent TOML
+ * (agent chat behaviour + generated reports read the same vocabulary).
+ * Edit that file — not this script — to change the conventions.
+ */
+const EMOJI_STYLE = (() => {
+  const p = path.join(SRC, 'shared', 'emoji-style.md');
+  return fs.existsSync(p) ? fs.readFileSync(p, 'utf8').replace(/\s+$/, '') : '';
+})();
+
+/** Append the shared emoji conventions to a skill or agent body */
+function appendEmojiStyle(text) {
+  if (!EMOJI_STYLE) return text;
+  return text.replace(/\s+$/, '') + '\n' + EMOJI_STYLE;
+}
+
 /* ---------- frontmatter parser for src/agents/*.md ---------- */
 
 function parseAgentMd(text) {
@@ -208,7 +227,7 @@ function agentToToml(mdPath) {
   lines.push(`display_name = ${tomlString((meta.title || meta.name).slice(0, 100))}`);
   lines.push(`description = ${tomlString(truncateDescription(meta.description || meta.name))}`);
   lines.push(`safety = ${tomlString(safety)}`);
-  lines.push(`instructions = ${tomlString(body)}`);
+  lines.push(`instructions = ${tomlString(appendEmojiStyle(body))}`);
   if (caps.length) {
     lines.push(`enabled_tools = [${caps.map((t) => tomlString(t)).join(', ')}]`);
   }
@@ -316,12 +335,8 @@ function buildBundle(name, bundle, outDir, checkOnly) {
       continue;
     }
     copyDir(from, path.join(pluginDir, 'skills', skill));
-    if (bundle.pack) {
-      fs.writeFileSync(
-        path.join(pluginDir, 'skills', skill, 'SKILL.md'),
-        rewritePackSkill(skillText)
-      );
-    }
+    const skillBody = bundle.pack ? rewritePackSkill(skillText) : skillText;
+    fs.writeFileSync(path.join(pluginDir, 'skills', skill, 'SKILL.md'), appendEmojiStyle(skillBody) + '\n');
   }
 
   // 3. agents -> TOML
