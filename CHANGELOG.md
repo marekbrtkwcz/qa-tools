@@ -5,6 +5,7 @@ Wszystkie istotne zmiany tego projektu są dokumentowane tutaj. Format zbliżony
 ## [Unreleased]
 
 ### Dodane
+- **Audyt kolekcji 2026-11-22 w repo** (`.qa/collection-audit-2026.md`): trójosiowy przegląd (treść skilli, luki obszarowe, infrastruktura) z weryfikacją własną twierdzeń — źródłowy dokument całego cyklu poprawek od v0.2.1; commitywany jako ślad decyzji (części 1–6 zrealizowane w commbach d1f5685..439b7a8, część 7 w kolejce).
 - **4 nowe skille z audytu (część 4)** — domknięcie luk obszarowych kolekcji, każdy w konwencji domu (opis ≤600 zn., `## When to Use`/`## When NOT to Use`, `## Resource Map` z jednym plikiem zasobów, `## Definition of Done`):
   - `test-reports-and-artifacts` (test-automation) — dowody, jakie run zostawia: HTML/Allure, trace/video/screenshot on-failure, jeden scalony raport z shardów, historia runów i świadoma retencja; komplement do `automating-ci-test-pipelines` (tam pipeline, tu to, co pojedynczy run emituje).
   - `test-management-integration` (qa-core) — eksport JUnit XML/JSON ze stabilnymi ID wymagań/przypadków do Xray/TestRail/Jira bez duplikatów kas: dry-run z reconcyliacją liczników, stały kierunek importu, maszyna pisze wyniki, człowiek posiada plan testów.
