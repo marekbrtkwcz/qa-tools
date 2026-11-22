@@ -7,12 +7,17 @@
  * https://github.com/jaktestowac/awesome-agents-for-quality
  *
  * Usage: node scripts/build.js [--bundle <name>] [--out plugins] [--check] [--verify]
+ *             [--set-version <x.y.z>]
  *   --check   validate only: bundle membership, required files, name rules.
  *             Exit code 1 on any error. Used by CI.
  *   --verify  drift gate (CI): rebuild into a temp dir and compare the result
  *             with the committed plugins/ artifact. Exit code 1 on any
  *             difference. Never modifies plugins/. With --bundle, only that
  *             bundle is compared.
+ *   --set-version  bump the version: of the selected bundles (all of them
+ *             without --bundle) in bundles.yaml. Preserves comments,
+ *             indentation and line endings. Does not build - run the build
+ *             afterwards so the committed plugins/ mirrors the new versions.
  */
 'use strict';
 
@@ -439,6 +444,35 @@ function buildBundle(name, bundle, outDir, checkOnly) {
   return errors;
 }
 
+/* ---------- --set-version (bundles.yaml release bump) ---------- */
+
+/**
+ * Replace the version: value of the selected bundles in bundles.yaml,
+ * preserving comments, order, indentation and the file's own line endings.
+ * Returns the number of bundles whose version actually changed.
+ */
+function setBundlesVersions(file, selected, version) {
+  const text = fs.readFileSync(file, 'utf8');
+  const eol = text.includes('\r\n') ? '\r\n' : '\n';
+  let current = null;
+  let changed = 0;
+  const out = text.split(/\r?\n/).map((line) => {
+    if (/^\S/.test(line)) {
+      current = line.replace(/:\s*$/, '').trim();
+      return line;
+    }
+    const m = line.match(/^(\s+version:\s*)["'][^"']*["']\s*$/);
+    if (m && current && selected.includes(current)) {
+      changed++;
+      return `${m[1]}"${version}"`;
+    }
+    return line;
+  });
+  if (!changed) return 0;
+  fs.writeFileSync(file, out.join(eol));
+  return changed;
+}
+
 /* ---------- drift gate (--verify) ---------- */
 
 /** List all files under dir as slash-normalized relative paths, sorted. */
@@ -507,6 +541,21 @@ function main() {
     process.exit(2);
   }
 
+  const setVersionFlag = args.indexOf('--set-version');
+  if (setVersionFlag >= 0) {
+    const version = args[setVersionFlag + 1];
+    if (!version || !/^\d+\.\d+\.\d+$/.test(version)) {
+      console.error('--set-version expects an x.y.z version, e.g. --set-version 0.2.0');
+      process.exit(2);
+    }
+    const changed = setBundlesVersions(path.join(ROOT, 'bundles.yaml'), selected, version);
+    console.log(
+      `Set version ${version} on ${changed} bundle(s) in bundles.yaml.` +
+        (changed ? ' Now rebuild so plugins/ mirrors it: node scripts/build.js' : ' (nothing to change)')
+    );
+    process.exit(changed ? 0 : 1);
+  }
+
   let allErrors = checkMembership(bundles);
 
   if (verifyOnly) {
@@ -552,6 +601,7 @@ if (require.main === module) {
 /* Exposed for scripts/build.test.js (node:test). No dependencies. */
 module.exports = {
   buildBundle,
+  setBundlesVersions,
   parseBundles,
   parseAgentMd,
   toolsOf,

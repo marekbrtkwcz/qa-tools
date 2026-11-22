@@ -19,6 +19,7 @@ const path = require('node:path');
 
 const {
   buildBundle,
+  setBundlesVersions,
   parseBundles,
   parseAgentMd,
   toolsOf,
@@ -29,6 +30,29 @@ const {
   listFiles,
   diffTrees,
 } = require('./build.js');
+
+/* ---------- setBundlesVersions (--set-version) ---------- */
+
+test('setBundlesVersions: bumps only the selected bundles, preserving comments, values and CRLF', () => {
+  const file = writeTmp(
+    'bundles.yaml',
+    '# collection bundles\r\nqa-core:\r\n  version: "0.1.0"\r\n  icon: X\r\n  skills:\r\n    - s\r\n\r\nother:\r\n  version: "0.9.9"\r\n'
+  );
+  const changed = setBundlesVersions(file, ['qa-core'], '0.2.0');
+  assert.equal(changed, 1);
+  const text = fs.readFileSync(file, 'utf8');
+  assert.ok(text.includes('qa-core:\r\n  version: "0.2.0"'), 'selected bundle bumped');
+  assert.ok(text.includes('other:\r\n  version: "0.9.9"'), 'unselected bundle untouched');
+  assert.ok(text.startsWith('# collection bundles\r\n'), 'comments and CRLF preserved');
+  assert.ok(text.includes('  skills:\r\n    - s\r\n'), 'list structure preserved');
+});
+
+test('setBundlesVersions: returns 0 and writes nothing when no bundle matches', () => {
+  const body = 'a:\n  version: "0.1.0"\n';
+  const file = writeTmp('bundles.yaml', body);
+  assert.equal(setBundlesVersions(file, ['missing'], '0.2.0'), 0);
+  assert.equal(fs.readFileSync(file, 'utf8'), body);
+});
 
 /* ---------- helpers ---------- */
 

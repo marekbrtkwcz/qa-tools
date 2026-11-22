@@ -88,6 +88,12 @@ npm test                          # testy jednostkowe builda (node:test, zero za
 
 `plugins/` jest commitowany (jak w projekcie źródłowym) — użytkownik może zainstalować bez uruchamiania builda. **Drift-gate** (`--verify`, uruchamiany też w CI) pilnuje, żeby commitowany artefakt zawsze odpowiadał `src/` + `bundles.yaml`: po każdej edycji źródeł wystarczy przebudować i zcommitować, inaczej CI failuje.
 
+## 🏷️ Wersjonowanie
+
+- Wersja każdego pluginu = wersja kolekcji; jedyna prawda: `bundles.yaml`. Bump: `node scripts/build.js --set-version x.y.z` (wszystkie) albo `--bundle <n> --set-version x.y.z` (jeden) — zachowuje komentarze, wcięcia i EOL.
+- Historia zmian: `CHANGELOG.md` (wpis per wydanie, sekcje Dodane/Zmienione/Naprawione + uwagi o upgrade).
+- **Release**: bump → wpis w `CHANGELOG.md` → `npm run ci` (przebudowa `plugins/` + bramki: członkostwo, manifesty, drift-gate, testy) → commit → `git tag -a vx.y.z -m "..."`. Tag zawiera artefakt zgodny ze `src/`, bo git commit go pilnuje drift-gate.
+
 ## 🎨 Konwencja emotek
 
 Emotki w tej kolekcji **niosą znaczenie, nie ozdobę** — i są wpisane w projekt na jednym poziomie: single-source w `src/shared/emoji-style.md`, a build wstrzykuje je (sekcja `## 🎨 Emoji in output`) do **każdego wygenerowanego SKILL.md (98)** i instrukcji **każdego subagenta (41 tom)**. Dzięki temu:
