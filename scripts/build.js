@@ -509,17 +509,34 @@ function buildBundle(name, bundle, outDir, checkOnly) {
   // 5. mcp.json (Vibe requires $schema and type fields)
   // Only in bundles that declare mcp: — no empty mcpServers:{} manifests
   // in the other bundles (the same rule hooks follow below).
+  // Server version pins come from bundles.yaml (mcp-pins: name=version):
+  // the config file is the single source; a server without a pin is a
+  // build error, so nobody can silently ship an unpinned (floating @latest)
+  // server. The committed plugins/ artifact must be reproducible.
   if ((bundle.mcp || []).length) {
+    const pins = new Map();
+    for (const pin of bundle['mcp-pins'] || []) {
+      const m = String(pin).match(/^([\w-]+)=\S+$/);
+      if (m) pins.set(m[1], String(pin).slice(m[1].length + 1));
+    }
     const mcp = { $schema: 'https://agent-plugins.org/schemas/1.0.0/mcp.schema.json', mcpServers: {} };
     for (const server of bundle.mcp) {
-      // Pinned, not @latest: the committed plugins/ artifact must be reproducible
-      // and the drift gate would flag server updates as artifact drift.
-      mcp.mcpServers[server] =
-        server === 'playwright'
-          ? { type: 'stdio', command: 'npx', args: ['@playwright/mcp@0.0.86'] }
-          : { type: 'stdio', command: server };
+      if (server === 'playwright') {
+        const version = pins.get('playwright');
+        if (!version) {
+          errors.push('Bundle qa-mcp: playwright MCP has no version pin - add "playwright=<version>" to mcp-pins in bundles.yaml (pinned, never @latest)');
+          continue;
+        }
+        mcp.mcpServers[server] = { type: 'stdio', command: 'npx', args: [`@playwright/mcp@${version}`] };
+      } else {
+        mcp.mcpServers[server] = { type: 'stdio', command: server };
+      }
     }
-    fs.writeFileSync(path.join(pluginDir, 'mcp.json'), JSON.stringify(mcp, null, 2) + '\n');
+    // A build error must never leave a dead mcpServers:{} manifest behind
+    // (the 0.2.0 lesson): write only when every declared server resolved.
+    if (Object.keys(mcp.mcpServers).length === (bundle.mcp || []).length) {
+      fs.writeFileSync(path.join(pluginDir, 'mcp.json'), JSON.stringify(mcp, null, 2) + '\n');
+    }
   }
 
   // 6. hooks: quality gate (blocks .only()/fit() in test files via

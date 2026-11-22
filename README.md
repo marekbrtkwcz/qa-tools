@@ -41,6 +41,8 @@ cp -r plugins/qa-core <projekt>/.vibe/plugins/qa-core
 
 ⚠️ **MCP bez duplikatów**: serwer Playwright MCP jest tylko w pluginie `qa-mcp`. Jeśli używasz browser automation (test-automation, non-functional-testing, paczki UI/API), doinstaluj `cp -r plugins/qa-mcp ~/.vibe/plugins/` **raz** — same bundle nie deklarują już `mcp:`, więc instalacja kilku nie powiela serwera.
 
+Wersja serwera (`@playwright/mcp@0.0.86`) jest przypięta w **`bundles.yaml`** (`mcp-pins:` w bundle `qa-mcp`) — to jedyne miejsce konfiguracji; build czyta ją stamtąd i pada, gdy pinu brak (nigdy `@latest`, artefakt musi być reprodukowalny). Bump: `npm view @playwright/mcp version` → edytuj `mcp-pins` → `npm run build` → wpis w CHANGELOG.
+
 Potem w sesji Vibe: `/reload`.
 
 Weryfikacja:

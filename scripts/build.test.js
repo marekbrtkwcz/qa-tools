@@ -109,16 +109,32 @@ test('buildBundle: no dead mcp.json for bundles without mcp; qa-mcp ships a pinn
     'bundle without mcp: must not ship an empty mcp.json'
   );
 
-  const mcpErrors = buildBundle('qa-mcp', { mcp: ['playwright'] }, out);
-  assert.deepEqual(mcpErrors, []);
+  // The pin comes from the bundle config (bundles.yaml mcp-pins), never
+  // from a constant in build.js.
+  const pinned = buildBundle('qa-mcp', { mcp: ['playwright'], 'mcp-pins': ['playwright=0.0.86'] }, out);
+  assert.deepEqual(pinned, []);
   const manifest = JSON.parse(fs.readFileSync(path.join(out, 'qa-mcp', 'mcp.json'), 'utf8'));
   assert.deepEqual(Object.keys(manifest.mcpServers), ['playwright']);
   const args = manifest.mcpServers.playwright.args;
   assert.equal(args.length, 1, 'one fully pinned npx arg, never @latest');
+  assert.equal(args[0], '@playwright/mcp@0.0.86');
+});
+
+test('buildBundle: the MCP pin is version-controlled config — a playwright server without a pin is a build error', () => {
+  const out = tmpDir();
+  const errors = buildBundle('qa-mcp', { mcp: ['playwright'] }, out);
+  assert.equal(errors.length, 1);
+  assert.ok(errors[0].includes('no version pin'), errors[0]);
   assert.ok(
-    /^@playwright\/mcp@\d+\.\d+\.\d+$/.test(args[0]),
-    `expected an exact @playwright/mcp@x.y.z pin, got ${args[0]}`
+    !fs.existsSync(path.join(out, 'qa-mcp', 'mcp.json')),
+    'an unpinned server must not produce a manifest at all'
   );
+  // and the pin flows through end to end: a new version in the config
+  // lands verbatim in the generated manifest
+  const bumped = buildBundle('qa-mcp', { mcp: ['playwright'], 'mcp-pins': ['playwright=1.2.3'] }, out);
+  assert.deepEqual(bumped, []);
+  const manifest = JSON.parse(fs.readFileSync(path.join(out, 'qa-mcp', 'mcp.json'), 'utf8'));
+  assert.equal(manifest.mcpServers.playwright.args[0], '@playwright/mcp@1.2.3');
 });
 
 /* ---------- parseBundles (minimal YAML subset) ---------- */

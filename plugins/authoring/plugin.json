@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "authoring",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Creating skills, custom agents, prompts, instructions, hooks, plugins and orchestration packs, plus auditing a whole collection.",
   "author": {
     "name": "qa-tools contributors",
