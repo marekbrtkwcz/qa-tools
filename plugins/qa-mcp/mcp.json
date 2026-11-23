@@ -37,6 +37,15 @@
         "--redactNetworkHeaders",
         "--no-usageStatistics"
       ]
+    },
+    "k6": {
+      "type": "stdio",
+      "command": "k6",
+      "args": [
+        "x",
+        "mcp",
+        "--quiet"
+      ]
     }
   }
 }

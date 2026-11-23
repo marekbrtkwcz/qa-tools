@@ -123,20 +123,25 @@ test('buildBundle: no dead mcp.json for bundles without mcp; qa-mcp ships the gl
     'bundle without mcp: must not ship an empty mcp.json'
   );
 
-  const built = buildBundle('qa-mcp', { mcp: ['playwright', 'chrome-devtools'] }, out);
+  const built = buildBundle('qa-mcp', { mcp: ['playwright', 'chrome-devtools', 'k6'] }, out);
   assert.deepEqual(built, [], 'the servers need no pin: install versions float by design');
   const manifest = JSON.parse(fs.readFileSync(path.join(out, 'qa-mcp', 'mcp.json'), 'utf8'));
-  assert.deepEqual(Object.keys(manifest.mcpServers), ['playwright', 'chrome-devtools']);
-  // Short server names are the uniform convention (name != binary for both
-  // servers); a user-level [[mcp_servers]] entry with the same short name
-  // shadows the plugin copy instead of spawning a second browser instance.
+  assert.deepEqual(Object.keys(manifest.mcpServers), ['playwright', 'chrome-devtools', 'k6']);
+  // Short server names are the uniform convention (name != binary for the
+  // browser servers; k6 is the one case where they are the same word); a
+  // user-level [[mcp_servers]] entry with the same short name shadows the
+  // plugin copy instead of spawning a second instance.
   assert.equal(manifest.mcpServers.playwright.command, 'playwright-mcp');
   assert.equal(manifest.mcpServers['chrome-devtools'].command, 'chrome-devtools-mcp');
+  assert.equal(manifest.mcpServers.k6.command, 'k6');
+  // k6 MCP ships as a subcommand of the binary itself.
+  assert.deepEqual(manifest.mcpServers.k6.args, ['x', 'mcp', '--quiet']);
   // args come from GLOBAL_BINARY_SERVERS verbatim (single source of truth):
   // command + QA flag set, and never a version.
   const table = Object.fromEntries(GLOBAL_BINARY_SERVERS.map((s) => [s.name, s]));
   assert.deepEqual(manifest.mcpServers.playwright.args, table.playwright.args);
   assert.deepEqual(manifest.mcpServers['chrome-devtools'].args, table['chrome-devtools'].args);
+  assert.deepEqual(manifest.mcpServers.k6.args, table.k6.args);
   assert.ok(!manifest.mcpServers.playwright.args.some((a) => /@/.test(a)), 'no version in the manifest: no pin even inside args');
   assert.ok(
     !manifest.mcpServers['chrome-devtools'].args.some((a) => /@/.test(a)),
@@ -159,37 +164,40 @@ test('buildBundle: an unknown mcp server name is a build error, not a dead manif
   );
 });
 
-test('checkGlobalBinaryInstallDoc: the README must document both floating @latest install lines', () => {
-  // The plugin runs the global playwright-mcp and chrome-devtools-mcp
-  // binaries, so without a documented npm i -g prerequisite each server
+test('checkGlobalBinaryInstallDoc: the README must document all floating install lines', () => {
+  // The plugin runs the global playwright-mcp, chrome-devtools-mcp and k6
+  // binaries, so without a documented install prerequisite each server
   // fails with a spawn error on every machine. The gate keeps every line
   // present - and rejects a pinned version, which reads as a
   // pre-policy-change README.
   const out = tmpDir();
 
-  // no README at all: one error naming both required install lines
+  // no README at all: one error naming all three required install lines
   const missing = checkGlobalBinaryInstallDoc(out);
   assert.equal(missing.length, 1);
   assert.ok(missing[0].includes('npm i -g @playwright/mcp@latest'), missing[0]);
   assert.ok(missing[0].includes('npm i -g chrome-devtools-mcp@latest'), missing[0]);
+  assert.ok(missing[0].includes('winget install grafana.k6'), missing[0]);
 
   // a pinned version (the old policy) must also fail, not pass silently
   fs.writeFileSync(path.join(out, 'README.md'), 'npm i -g @playwright/mcp@0.0.86\n');
   const stale = checkGlobalBinaryInstallDoc(out);
-  assert.equal(stale.length, 2, 'a pinned install line must fail the gate, and the second prerequisite is missing too');
+  assert.equal(stale.length, 3, 'a pinned install line must fail the gate, and the other two prerequisites are missing too');
   assert.ok(stale.some((e) => e.includes('npm i -g @playwright/mcp@latest')), 'error names the playwright line');
   assert.ok(stale.some((e) => e.includes('npm i -g chrome-devtools-mcp@latest')), 'error names the chrome-devtools line');
+  assert.ok(stale.some((e) => e.includes('winget install grafana.k6')), 'error names the k6 line');
 
-  // only the playwright line present: the chrome-devtools line still flagged
+  // only the playwright line present: the other two lines each flagged
   fs.writeFileSync(path.join(out, 'README.md'), 'Instalacja globalna:\n\nnpm i -g @playwright/mcp@latest\n');
   const half = checkGlobalBinaryInstallDoc(out);
-  assert.equal(half.length, 1, 'only one prerequisite documented: one error');
-  assert.ok(half[0].includes('chrome-devtools-mcp@latest'), half[0]);
+  assert.equal(half.length, 2, 'two prerequisites missing: one error each');
+  assert.ok(half.some((e) => e.includes('chrome-devtools-mcp@latest')), half.join('\n'));
+  assert.ok(half.some((e) => e.includes('winget install grafana.k6')), half.join('\n'));
 
-  // both floating lines, anywhere in the README: no errors
+  // all three floating lines, anywhere in the README: no errors
   fs.writeFileSync(
     path.join(out, 'README.md'),
-    'Instalacja globalna:\n\nnpm i -g @playwright/mcp@latest\nnpm i -g chrome-devtools-mcp@latest\n'
+    'Instalacja globalna:\n\nnpm i -g @playwright/mcp@latest\nnpm i -g chrome-devtools-mcp@latest\nwinget install grafana.k6\n'
   );
   assert.deepEqual(checkGlobalBinaryInstallDoc(out), []);
 });

@@ -283,21 +283,24 @@ function titleFromDescription(text) {
  * Runs in every mode (--check, build, --verify): it is read-only and cheap.
  */
 /*
- * Both MCP servers run global binaries. Server names are short and
- * product-style (playwright, chrome-devtools) - one uniform naming
+ * All MCP servers run global binaries. Server names are short and
+ * product-style (playwright, chrome-devtools, k6) - one uniform naming
  * convention for every MCP server across bundles, plugin manifests and
  * user configs - while the binaries keep their own package names
- * (playwright-mcp, chrome-devtools-mcp). This table is the single
- * name->binary(+args) mapping; the args arrays carry the fixed QA flag
- * set (caps, timeouts, snapshot and category flags) so the plugin is
- * self-sufficient: no user-level [[mcp_servers]] entry is required for
- * ordinary QA browsing. What the manifest still cannot carry is a
+ * (playwright-mcp, chrome-devtools-mcp); k6 is the one case where the
+ * short product name and the binary name are the same word. This table
+ * is the single name->binary(+args) mapping; the args arrays carry the
+ * fixed QA flag set (caps, timeouts, snapshot and category flags; for
+ * k6 the `x mcp` subcommand) so the plugin is self-sufficient: no
+ * user-level [[mcp_servers]] entry is required for ordinary QA work.
+ * What the manifest still cannot carry is a
  * version or a timeout - those live in the user's global install and,
  * when longer tool timeouts are needed, in a user-level entry (which
  * shadows the plugin copy by name) or spawning a second browser
  * instance.
- * The README therefore ships a floating @latest install line for each binary
- * - pinning would force users to downgrade a binary other tools also use.
+ * The README therefore ships one floating install line per binary - npm i -g
+ * @latest for the browser servers, winget (always current) for k6 - because
+ * pinning would force users to downgrade a binary other tools also use.
  * All this check enforces is that every prerequisite stays documented: the
  * plugin spawns a bare command, so a README that loses an install line ships
  * a server that fails with a spawn error nobody was told to prevent. A
@@ -339,6 +342,18 @@ const GLOBAL_BINARY_SERVERS = [
       '--no-usageStatistics',
     ],
   },
+  {
+    // k6 MCP ships as a subcommand of the global k6 binary itself
+    // (`k6 x mcp`), so - unlike the two browser servers - name == binary.
+    // The plugin copy carries no tool timeout (the manifest schema has
+    // none), and k6 tools run whole load tests, so a user-level entry
+    // with tool_timeout_sec shadowing this copy is the expected setup
+    // for long runs, not a workaround.
+    name: 'k6',
+    binary: 'k6',
+    line: 'winget install grafana.k6',
+    args: ['x', 'mcp', '--quiet'],
+  },
 ];
 
 function checkGlobalBinaryInstallDoc(docRoot = ROOT) {
@@ -354,7 +369,7 @@ function checkGlobalBinaryInstallDoc(docRoot = ROOT) {
   for (const server of GLOBAL_BINARY_SERVERS) {
     if (!readme.includes(server.line)) {
       errors.push(
-        `Bundle qa-mcp: README.md does not contain the install prerequisite "${server.line}" - the plugin runs the global ${server.binary} binary, so without a documented npm i -g line the server fails with a spawn error on every machine; keep the line (floating @latest on purpose)`
+        `Bundle qa-mcp: README.md does not contain the install prerequisite "${server.line}" - the plugin runs the global ${server.binary} binary, so without a documented install line the server fails with a spawn error on every machine; keep the line verbatim (the version lives in the user's global install on purpose)`
       );
     }
   }

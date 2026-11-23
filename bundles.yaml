@@ -182,24 +182,31 @@ authoring:
 
 qa-mcp:
   icon: 🎭
-  description: "Browser-control MCP servers for qa-tools (Playwright MCP + Chrome DevTools MCP): install once alongside any automation bundle (test-automation, non-functional-testing, ui-api-automation, ui-api-automation-minimal) so browser control is never duplicated by multiple bundles."
+  description: "QA MCP servers for qa-tools (browser: Playwright MCP + Chrome DevTools MCP; load testing: k6 MCP): install once alongside any automation bundle (test-automation, non-functional-testing, ui-api-automation, ui-api-automation-minimal) so browser control and load testing are never duplicated by multiple bundles."
   version: "0.3.0"
-  # Both servers spawn global binaries and carry short, product-style server
-  # names (playwright, chrome-devtools) - deliberately NOT the binary names
-  # (playwright-mcp, chrome-devtools-mcp): one uniform naming convention for
-  # every MCP server in this repo and in user configs. Shadowing still works:
-  # a user-level [[mcp_servers]] entry with the same short name replaces the
-  # plugin copy (custom flags, longer timeouts) instead of spawning a second
-  # browser instance. The npm i -g lines in README.md ship floating @latest
-  # (version-controlled pins were dropped: the plugin manifest carries only a
-  # bare command, so the version lives in the user's shared global install
-  # anyway - pinning forced a downgrade on machines that already run a newer
-  # binary). Build only enforces that the README keeps documenting the install
-  # prerequisites (checkGlobalBinaryInstallDoc) and that every declared server
-  # name has a known binary (GLOBAL_BINARY_SERVERS).
+  # All three servers spawn global binaries and carry short, product-style
+  # server names (playwright, chrome-devtools, k6) - deliberately NOT the
+  # binary names (playwright-mcp, chrome-devtools-mcp; k6 is the one case
+  # where short name and binary name are the same word): one uniform naming
+  # convention for every MCP server in this repo and in user configs.
+  # Shadowing still works: a user-level [[mcp_servers]] entry with the same
+  # short name replaces the plugin copy (custom flags, longer timeouts)
+  # instead of spawning a second instance. For k6 a user-level entry is the
+  # expected setup, not a fallback: k6 tools run whole load tests and the
+  # plugin manifest carries no tool timeout, so tool_timeout_sec for long
+  # runs lives only in a user-level entry. The install lines in README.md
+  # ship floating (npm i -g ... @latest for the browser binaries, winget for
+  # k6; version-controlled pins were dropped: the plugin manifest carries
+  # only a bare command, so the version lives in the user's shared global
+  # install anyway - pinning forced a downgrade on machines that already
+  # run a newer binary). Build only enforces that the README keeps
+  # documenting the install prerequisites (checkGlobalBinaryInstallDoc)
+  # and that every declared server name has a known binary
+  # (GLOBAL_BINARY_SERVERS).
   mcp:
     - playwright
     - chrome-devtools
+    - k6
 
 mobile-testing:
   icon: 📱
