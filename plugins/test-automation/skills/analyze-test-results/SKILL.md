@@ -15,6 +15,8 @@ Take these from what the user typed after the command, or from the conversation.
 
 # Task
 
+If the `diagnosing-test-failures` skill is installed, load it before starting.
+
 Your goal is to convert a noisy test run into a short list of decisions, so nobody has to scroll through hundreds of log lines.
 
 Analyze the test results from <resultsSource>.

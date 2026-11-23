@@ -15,6 +15,8 @@ Take these from what the user typed after the command, or from the conversation.
 
 # Task
 
+If the `recording-change-intent` skill is installed, load it before starting.
+
 Make sure this change carries a recorded reason, and that the reason is worth reading.
 
 Use the `recording-change-intent` skill for the trailer grammar, the high-risk surface rules and the validation rules.

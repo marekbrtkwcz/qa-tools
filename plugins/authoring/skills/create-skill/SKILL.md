@@ -14,7 +14,9 @@ Take these from what the user typed after the command, or from the conversation.
 - `capability`: what the skill should do and the requests that should trigger it
 - `target`: where it goes: this collection, or a project and host such as .github/skills, .claude/skills or .agents/skills (default: ask)
 
-Create one new skill for <capability>, placed according to <target>. Follow the `creating-skills` skill if it is available; the steps below are the short form.
+If the `creating-skills` skill is installed, load it before starting.
+
+Create one new skill for <capability>, placed according to <target>. The steps below are the short form; the `creating-skills` skill has the full method.
 
 ## Steps
 

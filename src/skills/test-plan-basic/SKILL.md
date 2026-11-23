@@ -15,6 +15,8 @@ Take these from what the user typed after the command, or from the conversation.
 
 # Task
 
+If the `designing-functional-tests` skill is installed, load it before starting.
+
 Explore the website at <baseUrl> and write a basic test plan for its main features in one pass.
 
 If no URL is provided, ask for one and stop until you have it. If the main features sit behind a login, ask for a test account; without one, plan only the public part and say so.
