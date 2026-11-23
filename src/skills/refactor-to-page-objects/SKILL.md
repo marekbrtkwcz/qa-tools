@@ -15,6 +15,8 @@ Take these from what the user typed after the command, or from the conversation.
 
 # Task
 
+If the `designing-test-automation-architecture` skill is installed, load it before starting.
+
 Refactor the tests in <targetScope> into page objects. This is a pure structural refactor: the same tests must check the same things afterwards.
 
 If no scope is provided, ask for it and stop until you have it. If the scope has more than about 10 spec files, propose an order (most duplicated first) and confirm before starting.

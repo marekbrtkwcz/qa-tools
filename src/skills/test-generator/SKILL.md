@@ -15,6 +15,8 @@ Take these from what the user typed after the command, or from the conversation.
 
 # Task
 
+If you have a single scenario in words and a running app, use the `playwright-generate-test` command instead.
+
 Generate automated tests for the test cases in <testPlanPath>.
 
 ## Before writing code

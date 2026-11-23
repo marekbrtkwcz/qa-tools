@@ -15,6 +15,8 @@ Take these from what the user typed after the command, or from the conversation.
 
 # Task
 
+If you only need the UI flows without network traffic, use the `playwright-explore-website` command instead.
+
 Explore the website at <url>, exercise its core functionality, and record the network traffic behind each user action.
 
 If no URL is provided, ask for one and stop until you have it. If the site needs login, ask for a test account; do not guess credentials.

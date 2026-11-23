@@ -15,6 +15,8 @@ Take these from what the user typed after the command, or from the conversation.
 
 # Task
 
+If you have a whole written test plan to automate, use the `test-generator` command instead.
+
 Generate a Playwright TypeScript test with `@playwright/test` for this scenario: <scenario>
 
 If no scenario is provided, or it does not say what outcome to check, ask for it and stop until you have it. If the app URL is not in the project config (`baseURL`) or the scenario, ask for it.

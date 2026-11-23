@@ -15,6 +15,8 @@ Take these from what the user typed after the command, or from the conversation.
 
 # Task
 
+If the `playwright-explore-website-requests` command is what you need (network traffic behind each flow), stop and use that instead.
+
 Explore the website at <url>, document its core functionality, and propose test cases based on observed behaviour.
 
 If no URL is provided, ask for one and stop until you have it. If the site needs login, ask for a test account; do not guess credentials.
