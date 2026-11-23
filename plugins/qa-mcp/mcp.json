@@ -5,6 +5,8 @@
       "type": "stdio",
       "command": "npx",
       "args": [
+        "--yes",
+        "--prefer-offline",
         "@playwright/mcp@0.0.86"
       ]
     }

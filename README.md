@@ -43,6 +43,16 @@ cp -r plugins/qa-core <projekt>/.vibe/plugins/qa-core
 
 Wersja serwera (`@playwright/mcp@0.0.86`) jest przypięta w **`bundles.yaml`** (`mcp-pins:` w bundle `qa-mcp`) — to jedyne miejsce konfiguracji; build czyta ją stamtąd i pada, gdy pinu brak (nigdy `@latest`, artefakt musi być reprodukowalny). Bump: `npm view @playwright/mcp version` → edytuj `mcp-pins` → `npm run build` → wpis w CHANGELOG.
 
+⚠️ **Budżet startu 10 s i cold start npx**: Vibe daje każdemu MCP-owi z pluginu twardy limit 10 s na handshake `initialize` (`startup_timeout_sec` w `vibe/core/config/models.py`), a schemat pluginowego `mcp.json` (`extra="forbid"`) nie ma pola timeout — podwyższyć się nie da. Na Windows `npx` (shim `.cmd` + resolving npm + cache/rejestr + skan antywirusowy, przy równoległym starcie kilku serwerów) potrafi ten limit przekroczyć → `Request 'initialize' timed out`. Mitygacja wbudowana w artefakt: npx dostaje `--yes` (na cache-miss prompt instalacji zjadłby request `initialize` ze stdin) i `--prefer-offline` (bez rund-trip do rejestru, gdy wersja jest w cache). Jeśli timeout i tak strzela (zimny cache, wolny dysk), dodaj w `~/.vibe/config.toml` serwer o nazwie `playwright` — user-config obsługuje `startup_timeout_sec` (np. 60), a serwer pluginu o tej samej nazwie zostaje wtedy automatycznie wywalony (shadow):
+
+```toml
+[[mcp_servers]]
+name = "playwright"          # shadowuje serwer z pluginu qa-mcp
+transport = "stdio"
+command = "playwright-mcp"   # globalny binarny: npm i -g @playwright/mcp
+startup_timeout_sec = 60
+```
+
 Potem w sesji Vibe: `/reload`.
 
 Weryfikacja:

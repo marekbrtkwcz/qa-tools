@@ -121,8 +121,10 @@ test('buildBundle: no dead mcp.json for bundles without mcp; qa-mcp ships a pinn
   const manifest = JSON.parse(fs.readFileSync(path.join(out, 'qa-mcp', 'mcp.json'), 'utf8'));
   assert.deepEqual(Object.keys(manifest.mcpServers), ['playwright']);
   const args = manifest.mcpServers.playwright.args;
-  assert.equal(args.length, 1, 'one fully pinned npx arg, never @latest');
-  assert.equal(args[0], '@playwright/mcp@0.0.86');
+  assert.equal(args.length, 3, 'npx flags plus one fully pinned arg, never @latest');
+  assert.equal(args[0], '--yes');
+  assert.equal(args[1], '--prefer-offline');
+  assert.equal(args[2], '@playwright/mcp@0.0.86');
 });
 
 test('buildBundle: the MCP pin is version-controlled config — a playwright server without a pin is a build error', () => {
@@ -139,7 +141,7 @@ test('buildBundle: the MCP pin is version-controlled config — a playwright ser
   const bumped = buildBundle('qa-mcp', { mcp: ['playwright'], 'mcp-pins': ['playwright=1.2.3'] }, out);
   assert.deepEqual(bumped, []);
   const manifest = JSON.parse(fs.readFileSync(path.join(out, 'qa-mcp', 'mcp.json'), 'utf8'));
-  assert.equal(manifest.mcpServers.playwright.args[0], '@playwright/mcp@1.2.3');
+  assert.equal(manifest.mcpServers.playwright.args[2], '@playwright/mcp@1.2.3');
 });
 
 /* ---------- parseBundles (minimal YAML subset) ---------- */

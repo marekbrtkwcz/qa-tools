@@ -4,6 +4,9 @@ Wszystkie istotne zmiany tego projektu są dokumentowane tutaj. Format zbliżony
 
 ## [Unreleased]
 
+### Zmienione
+- **`qa-mcp`: hardening startu serwera Playwright MCP** — npx woła teraz `--yes --prefer-offline` przed przypiętą paczką. Vibe daje MCP-om z pluginów twardy budżet 10 s na handshake `initialize` (schemat pluginowego `mcp.json` nie ma pola timeout), a cold start `npx` na Windows potrafi go przekroczyć; `--yes` eliminuje najgorszy tryb awarii (prompt instalacji na cache-miss czytałby request `initialize` prosto ze stdin serwera — deadlock do wygaśnięcia limitu), `--prefer-offline` tnie rund-trip do rejestru, gdy wersja jest już w cache. README dostaje sekcję „Budżet startu 10 s" z receptą shadow-serwera w `config.toml` (`startup_timeout_sec` działa tylko w `[[mcp_servers]]`, nie w pluginie). Generator (`scripts/build.js`) i jego testy (asercja 3-elementowych args) zaktualizowane; 53/53 testów zielonych.
+
 ## [0.3.0] - 2026-11-22
 
 Druga runda cyklu po audycie kolekcji (audyt z 2026-11-22, wszystkie 5 części zrealizowane): 4 nowe skille domykające luki domenowe (raporty/artefakty CI, integracja trackerów, kontrakty Pact, portowanie suit na pytest/JUnit/NUnit), rozszerzenia istniejących skilli (realtime WS/SSE, cookbook API, i18n/RTL w visual i a11y, gałęzie component/mobile, cross-refy paczek orkiestracyjnych, sekcje „if binary missing"), infrastruktura release'u (atomowy build, release-gate na tagach `v*`, 53 testy builda) i dokumentacja cyklu (audyt w repo, liczby README odświeżone). Wszystkie pluginy: wersja 0.3.0.

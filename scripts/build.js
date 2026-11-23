@@ -531,7 +531,12 @@ function buildBundle(name, bundle, outDir, checkOnly) {
           errors.push('Bundle qa-mcp: playwright MCP has no version pin - add "playwright=<version>" to mcp-pins in bundles.yaml (pinned, never @latest)');
           continue;
         }
-        mcp.mcpServers[server] = { type: 'stdio', command: 'npx', args: [`@playwright/mcp@${version}`] };
+        // --yes: on a cold npx cache the install prompt would read (and
+        // swallow) the MCP initialize request from stdin, deadlocking the
+        // server until Vibe's fixed 10 s plugin-MCP startup budget expires
+        // (the plugin mcp.json schema has no timeout field); --prefer-offline
+        // skips the registry roundtrip when the pinned version is cached.
+        mcp.mcpServers[server] = { type: 'stdio', command: 'npx', args: ['--yes', '--prefer-offline', `@playwright/mcp@${version}`] };
       } else {
         mcp.mcpServers[server] = { type: 'stdio', command: server };
       }
