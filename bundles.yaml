@@ -111,6 +111,7 @@ api-testing:
     - api-test-plan-and-tests
     - contract-testing-graphql
     - pact-contract-testing
+    - testing-microservices
     - testing-api-contracts
     - testing-graphql-apis
     - testing-grpc-apis
