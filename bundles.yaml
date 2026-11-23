@@ -86,6 +86,7 @@ test-automation:
     - test-reports-and-artifacts
     - testing-auth-flows
     - testing-event-driven-systems
+    - testing-server-sent-events
     - testing-websockets
     - testing-with-testcontainers
     - unslop-tests
@@ -112,6 +113,7 @@ api-testing:
     - pact-contract-testing
     - testing-api-contracts
     - testing-graphql-apis
+    - testing-grpc-apis
   agents:
     - api-test-automation-openapi
     - openapi-test-automation-expert
