@@ -336,6 +336,14 @@ Track your progress through the workflow:
 Provide this status in your responses to keep the user informed.
 
 </state_tracking>
+
+## Related Skills
+
+- `designing-functional-tests` - risk-based test plan design before implementation phases
+- `test-driven-development` - the red-green-refactor loop each implement phase follows
+- `code-review` / `code-review-advanced` - the review depth each phase's review step applies
+- `stabilizing-flaky-tests` - when a phase's test run surfaces intermittent failures
+- `reporting-bugs` - turning a confirmed app defect found during review into a tracked bug
 ---
 
 ## 🎨 Emoji in output

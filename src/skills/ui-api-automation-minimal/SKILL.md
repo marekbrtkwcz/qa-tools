@@ -80,3 +80,10 @@ Every agent returns exactly this structure:
 - Known limitations, assumptions and flaky points:
 - Next steps: up to five items
 ```
+
+## Related Skills
+
+- `bootstrap-test-suite` - when the project has no test framework; this pack's framework-starter covers the minimal case
+- `designing-functional-tests` - designing the test plan the planner agent works from
+- `api-playwright-test-developer` - the standard for Playwright API test code the coder produces
+- `ui-api-automation` - the full pack with review and verification stages when the minimal batch is not enough

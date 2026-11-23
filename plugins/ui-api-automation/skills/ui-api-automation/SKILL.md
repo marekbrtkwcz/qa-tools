@@ -87,6 +87,14 @@ Every agent returns exactly this structure:
 - Assumptions made:
 - Next steps: up to five items
 ```
+
+## Related Skills
+
+- `bootstrap-test-suite` - when the project has no test framework yet and the runner needs one
+- `api-playwright-test-developer` - the standard for writing and reviewing Playwright API tests
+- `testing-api-contracts` - OpenAPI/schema validation and breaking-change detection between spec versions
+- `stabilizing-flaky-tests` - when the test runner phase reports intermittent failures
+- `test-reports-and-artifacts` - wiring trace/video/screenshot evidence and merged reports into CI
 ---
 
 ## 🎨 Emoji in output

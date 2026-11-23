@@ -124,3 +124,8 @@ Output an **execution card**:
 **Recommendation:** [next step, and which agent or person should take it]
 **Delegated:** [which subagents ran, and why]
 ```
+
+## Related Skills
+
+- `plan-explore-review-commit` - the full delivery pipeline when the analysis needs to become code with review and commits
+- `creating-orchestration-packs` - how to build a pack like this one for a different workflow
