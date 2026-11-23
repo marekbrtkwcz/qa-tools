@@ -109,9 +109,12 @@ api-testing:
   skills:
     - api-playwright-test-developer
     - api-test-plan-and-tests
+    - api-versioning-and-deprecation
+    - openapi-spec-quality
     - contract-testing-graphql
     - pact-contract-testing
     - testing-microservices
+    - testing-webhooks
     - testing-api-contracts
     - testing-graphql-apis
     - testing-grpc-apis
