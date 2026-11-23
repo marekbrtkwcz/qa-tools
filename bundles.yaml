@@ -105,6 +105,7 @@ api-testing:
     - api-test-plan-and-tests
     - pact-contract-testing
     - testing-api-contracts
+    - testing-graphql-apis
   agents:
     - api-test-automation-openapi
     - openapi-test-automation-expert
