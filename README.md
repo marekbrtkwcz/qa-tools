@@ -41,15 +41,23 @@ cp -r plugins/qa-core <projekt>/.vibe/plugins/qa-core
 
 ⚠️ **MCP bez duplikatów**: serwery MCP są tylko w pluginie `qa-mcp` — **Playwright MCP** (`playwright`) i **Chrome DevTools MCP** (`chrome-devtools`) do sterowania przeglądarką oraz **k6 MCP** (`k6`) do testów obciążeniowych. Jeśli używasz browser automation lub k6 (test-automation, non-functional-testing, paczki UI/API), doinstaluj `cp -r plugins/qa-mcp ~/.vibe/plugins/` **raz** — same bundle nie deklarują już `mcp:`, więc instalacja kilku nie powiela serwerów.
 
-Wszystkie trzy serwery działają na **globalnych binarnych** (`playwright-mcp`, `chrome-devtools-mcp`, `k6` — nie na `npx`), więc wymagają jednorazowej instalacji:
+Wszystkie trzy serwery działają na **globalnych binarnych** (`playwright-mcp`, `chrome-devtools-mcp`, `k6` — nie na `npx`), więc wymagają jednorazowej instalacji. Przeglądarkowe binarne instalujesz przez npm (każdy system):
 
 ```
 npm i -g @playwright/mcp@latest
 npm i -g chrome-devtools-mcp@latest
-winget install k6 --source winget
 ```
 
-Wersje **celowo pływające** (`@latest`, winget zawsze bierze aktualną): manifest pluginu niesie tylko nazwy komend, więc wersja i tak żyje w globalnym installu użytkownika — współdzielonym z innymi narzędziami — a przypinanie wymuszałoby downgrade komuś, kto już ma nowszy binarny. Repo nie trzyma pinów; jedyny wymóg pilnowany przez build (`checkGlobalBinaryInstallDoc`) to, żeby te linie instalacyjne nie zginęły z README — bez nich serwery wypadają błędem spawn na każdej maszynie.
+k6 jest jedynym serwerem z instalacją zależną od systemu:
+
+```
+winget install k6 --source winget    # Windows
+brew install k6                      # macOS
+```
+
+Na Linuxie (Debian/Ubuntu, Fedora/CentOS) instalacja wymaga konfiguracji repo k6 (klucz GPG + źródło pakietu) — blok wielolinijkowy trzymają [oficjalne docs k6](https://grafana.com/docs/k6/latest/set-up/install-k6/); alternatywnie oficjalny instalator MSI z GitHub Releases albo obraz `docker pull grafana/k6`.
+
+Wersje **celowo pływające** (`@latest`, winget/brew zawsze biorą aktualną): manifest pluginu niesie tylko nazwy komend, więc wersja i tak żyje w globalnym installu użytkownika — współdzielonym z innymi narzędziami — a przypinanie wymuszałoby downgrade komuś, kto już ma nowszy binarny. Repo nie trzyma pinów; jedyny wymóg pilnowany przez build (`checkGlobalBinaryInstallDoc`) to, żeby linie instalacyjne (npm ×2, winget, brew) nie zginęły z README — bez nich serwery wypadają błędem spawn na każdej maszynie.
 
 ⚠️ **Dlaczego binarny, nie npx**: Vibe daje MCP-om z pluginów twardy budżet 10 s na handshake `initialize`, a schemat pluginowego `mcp.json` nie ma pola timeout. `npx` na Windows (shim `.cmd` + resolving npm + cache/rejestr) potrafił ten budżet przekraczać → `Request 'initialize' timed out`; globalny binarny startuje w ułamku sekundy, więc ta klasa awarii znika. Brak zainstalowanego binarnego objawia się od razu czytelnym błędem spawn przy starcie sesji. Gdybyś kiedyś mimo to potrzebował dłuższego budżetu: `startup_timeout_sec` działa tylko w `[[mcp_servers]]` w `config.toml` (user-config), a serwer pluginu o tej samej nazwie (`playwright`, `chrome-devtools`) zostaje przez taki wpis automatycznie wywalony (shadow).
 

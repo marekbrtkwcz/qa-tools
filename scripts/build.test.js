@@ -168,36 +168,44 @@ test('checkGlobalBinaryInstallDoc: the README must document all floating install
   // The plugin runs the global playwright-mcp, chrome-devtools-mcp and k6
   // binaries, so without a documented install prerequisite each server
   // fails with a spawn error on every machine. The gate keeps every line
-  // present - and rejects a pinned version, which reads as a
-  // pre-policy-change README.
+  // present - npm for the browser binaries (any OS) and, for k6, every
+  // single-line command per supported OS (winget, brew); the multi-line
+  // Linux repo setup deliberately stays documentation, not a gate.
+  // A pinned version, which reads as a pre-policy-change README, fails.
   const out = tmpDir();
 
-  // no README at all: one error naming all three required install lines
+  // no README at all: one error naming all four required install lines
   const missing = checkGlobalBinaryInstallDoc(out);
   assert.equal(missing.length, 1);
   assert.ok(missing[0].includes('npm i -g @playwright/mcp@latest'), missing[0]);
   assert.ok(missing[0].includes('npm i -g chrome-devtools-mcp@latest'), missing[0]);
   assert.ok(missing[0].includes('winget install k6 --source winget'), missing[0]);
+  assert.ok(missing[0].includes('brew install k6'), missing[0]);
 
   // a pinned version (the old policy) must also fail, not pass silently
   fs.writeFileSync(path.join(out, 'README.md'), 'npm i -g @playwright/mcp@0.0.86\n');
   const stale = checkGlobalBinaryInstallDoc(out);
-  assert.equal(stale.length, 3, 'a pinned install line must fail the gate, and the other two prerequisites are missing too');
+  assert.equal(stale.length, 4, 'a pinned install line must fail the gate, and the other prerequisites are missing too');
   assert.ok(stale.some((e) => e.includes('npm i -g @playwright/mcp@latest')), 'error names the playwright line');
   assert.ok(stale.some((e) => e.includes('npm i -g chrome-devtools-mcp@latest')), 'error names the chrome-devtools line');
-  assert.ok(stale.some((e) => e.includes('winget install k6 --source winget')), 'error names the k6 line');
+  assert.ok(
+    stale.some((e) => e.includes('winget install k6 --source winget')),
+    'error names the k6 Windows line'
+  );
+  assert.ok(stale.some((e) => e.includes('brew install k6')), 'error names the k6 macOS line');
 
-  // only the playwright line present: the other two lines each flagged
+  // only the playwright line present: the other three lines each flagged
   fs.writeFileSync(path.join(out, 'README.md'), 'Instalacja globalna:\n\nnpm i -g @playwright/mcp@latest\n');
   const half = checkGlobalBinaryInstallDoc(out);
-  assert.equal(half.length, 2, 'two prerequisites missing: one error each');
+  assert.equal(half.length, 3, 'three prerequisites missing: one error each');
   assert.ok(half.some((e) => e.includes('chrome-devtools-mcp@latest')), half.join('\n'));
   assert.ok(half.some((e) => e.includes('winget install k6 --source winget')), half.join('\n'));
+  assert.ok(half.some((e) => e.includes('brew install k6')), half.join('\n'));
 
-  // all three floating lines, anywhere in the README: no errors
+  // all four floating lines, anywhere in the README: no errors
   fs.writeFileSync(
     path.join(out, 'README.md'),
-    'Instalacja globalna:\n\nnpm i -g @playwright/mcp@latest\nnpm i -g chrome-devtools-mcp@latest\nwinget install k6 --source winget\n'
+    'Instalacja globalna:\n\nnpm i -g @playwright/mcp@latest\nnpm i -g chrome-devtools-mcp@latest\nwinget install k6 --source winget    # Windows\nbrew install k6                      # macOS\n'
   );
   assert.deepEqual(checkGlobalBinaryInstallDoc(out), []);
 });

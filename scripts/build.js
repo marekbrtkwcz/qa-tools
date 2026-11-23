@@ -298,9 +298,12 @@ function titleFromDescription(text) {
  * when longer tool timeouts are needed, in a user-level entry (which
  * shadows the plugin copy by name) or spawning a second browser
  * instance.
- * The README therefore ships one floating install line per binary - npm i -g
- * @latest for the browser servers, winget (always current) for k6 - because
- * pinning would force users to downgrade a binary other tools also use.
+ * The README therefore ships floating install lines per binary - npm i -g
+ * @latest for the browser servers (any OS), and one single-line command per
+ * supported OS for k6 (winget on Windows, brew on macOS; the multi-line
+ * Linux repo setup stays documentation with a pointer to the official k6
+ * install docs) - because pinning would force users to downgrade a binary
+ * other tools also use.
  * All this check enforces is that every prerequisite stays documented: the
  * plugin spawns a bare command, so a README that loses an install line ships
  * a server that fails with a spawn error nobody was told to prevent. A
@@ -349,9 +352,13 @@ const GLOBAL_BINARY_SERVERS = [
     // none), and k6 tools run whole load tests, so a user-level entry
     // with tool_timeout_sec shadowing this copy is the expected setup
     // for long runs, not a workaround.
+    // k6 is the only server whose install is OS-specific, so it guards
+    // every single-line install command the README documents (winget on
+    // Windows, brew on macOS); the multi-line Linux repo setup stays
+    // documentation with a pointer to the official k6 install docs.
     name: 'k6',
     binary: 'k6',
-    line: 'winget install k6 --source winget',
+    lines: ['winget install k6 --source winget', 'brew install k6'],
     args: ['x', 'mcp', '--quiet'],
   },
 ];
@@ -363,14 +370,16 @@ function checkGlobalBinaryInstallDoc(docRoot = ROOT) {
     readme = fs.readFileSync(path.join(docRoot, 'README.md'), 'utf8');
   } catch {
     return [
-      `Bundle qa-mcp: README.md is missing, so the MCP install prerequisites (${GLOBAL_BINARY_SERVERS.map((s) => `"${s.line}"`).join(', ')}) cannot be verified`,
+      `Bundle qa-mcp: README.md is missing, so the MCP install prerequisites (${GLOBAL_BINARY_SERVERS.flatMap((s) => (s.lines || [s.line]).map((l) => `"${l}"`)).join(', ')}) cannot be verified`,
     ];
   }
   for (const server of GLOBAL_BINARY_SERVERS) {
-    if (!readme.includes(server.line)) {
-      errors.push(
-        `Bundle qa-mcp: README.md does not contain the install prerequisite "${server.line}" - the plugin runs the global ${server.binary} binary, so without a documented install line the server fails with a spawn error on every machine; keep the line verbatim (the version lives in the user's global install on purpose)`
-      );
+    for (const line of server.lines || [server.line]) {
+      if (!readme.includes(line)) {
+        errors.push(
+          `Bundle qa-mcp: README.md does not contain the install prerequisite "${line}" - the plugin runs the global ${server.binary} binary, so without a documented install line the server fails with a spawn error on every machine; keep the line verbatim (the version lives in the user's global install on purpose)`
+        );
+      }
     }
   }
   return errors;

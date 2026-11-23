@@ -194,9 +194,11 @@ qa-mcp:
   # instead of spawning a second instance. For k6 a user-level entry is the
   # expected setup, not a fallback: k6 tools run whole load tests and the
   # plugin manifest carries no tool timeout, so tool_timeout_sec for long
-  # runs lives only in a user-level entry. The install lines in README.md
-  # ship floating (npm i -g ... @latest for the browser binaries, winget for
-  # k6; version-controlled pins were dropped: the plugin manifest carries
+  # runs live only in a user-level entry. The install lines in README.md
+  # ship floating (npm i -g ... @latest for the browser binaries, any OS;
+  # for k6 one single-line command per supported OS - winget on Windows,
+  # brew on macOS - while the multi-line Linux repo setup stays in the
+  # official k6 install docs; version-controlled pins were dropped: the plugin manifest carries
   # only a bare command, so the version lives in the user's shared global
   # install anyway - pinning forced a downgrade on machines that already
   # run a newer binary). Build only enforces that the README keeps
