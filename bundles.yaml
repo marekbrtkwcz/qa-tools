@@ -20,6 +20,7 @@ qa-core:
     - generate-gherkin-scenarios
     - generate-test-data
     - handling-sensitive-test-data
+    - manual-release-testing
     - manual-test-cases
     - map-requirements-coverage
     - planning-exploratory-testing
@@ -31,7 +32,9 @@ qa-core:
     - review-requirements
     - test-management-integration
     - test-plan-basic
+    - testing-documentation
     - tracing-requirements-to-code
+    - usability-quick-pass
     - verify-acceptance-criteria
     - verifying-acceptance-criteria
   agents:
