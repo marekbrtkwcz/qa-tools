@@ -21,7 +21,6 @@
  *   file gates, and unreliable command parsing must never block an edit
  * - no stdin / invalid JSON / non-matching tool input -> silent exit 0
  */
-'use strict';
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
@@ -58,7 +57,7 @@ function runHook(payload, rawStdin) {
   let decision = null;
   try {
     decision = JSON.parse(trimmed);
-  } catch (e) {
+  } catch (_e) {
     decision = null; // silence (no findings) is also a valid outcome
   }
   return { status: res.status, decision };
@@ -71,14 +70,14 @@ const bash = (command) => ({ tool_input: { command } });
 /* ---------- deny: focused-run filters (unchanged behavior) ---------- */
 
 test('BLOCK: focused-run filter in a .spec.ts write is denied', () => {
-  const { status, decision } = runHook(writeFile('src/app.spec.ts', C.testOnly + '"one", () => {});\n'));
+  const { status, decision } = runHook(writeFile('src/app.spec.ts', `${C.testOnly}"one", () => {});\n`));
   assert.equal(status, 0, 'the guard always exits 0 - a hook crash must fail open');
   assert.equal(decision.decision, 'deny');
   assert.ok(decision.reason.includes('.only'), decision.reason);
 });
 
 test('BLOCK: focused-run f-filter added via edit to a tests/ file is denied (exit 0)', () => {
-  const { status, decision } = runHook(editFile('tests/login.ts', C.fit + '"does login", () => {});\n'));
+  const { status, decision } = runHook(editFile('tests/login.ts', `${C.fit}"does login", () => {});\n`));
   assert.equal(status, 0);
   assert.equal(decision.decision, 'deny');
 });
@@ -86,7 +85,7 @@ test('BLOCK: focused-run f-filter added via edit to a tests/ file is denied (exi
 /* ---------- deny: the silent-skip family (new) ---------- */
 
 test('BLOCK: it-skip in a .spec.ts write is denied with the waiver hint', () => {
-  const { status, decision } = runHook(writeFile('src/app.spec.ts', C.itSkip + '"broken", () => {});\n'));
+  const { status, decision } = runHook(writeFile('src/app.spec.ts', `${C.itSkip}"broken", () => {});\n`));
   assert.equal(status, 0);
   assert.equal(decision.decision, 'deny');
   assert.ok(decision.reason.includes(C.itSkip), decision.reason);
@@ -94,23 +93,26 @@ test('BLOCK: it-skip in a .spec.ts write is denied with the waiver hint', () => 
 });
 
 test('BLOCK: x-prefixed skips in a .test.js write are denied', () => {
-  const xit = runHook(writeFile('a.test.js', C.xit + '"gone", () => {});\n'));
+  const xit = runHook(writeFile('a.test.js', `${C.xit}"gone", () => {});\n`));
   assert.equal(xit.decision.decision, 'deny');
   assert.ok(xit.decision.reason.includes(C.xit));
-  const xdescribe = runHook(writeFile('a.test.js', C.xdescribe + '"gone", () => {});\n'));
+  const xdescribe = runHook(writeFile('a.test.js', `${C.xdescribe}"gone", () => {});\n`));
   assert.equal(xdescribe.decision.decision, 'deny');
   assert.ok(xdescribe.decision.reason.includes(C.xdescribe));
 });
 
 test('BLOCK: describe-skip added via edit to an e2e/ file is denied', () => {
-  const { decision } = runHook(editFile('e2e/smoke.ts', C.describeSkip + '"flaky", () => {});\n'));
+  const { decision } = runHook(editFile('e2e/smoke.ts', `${C.describeSkip}"flaky", () => {});\n`));
   assert.equal(decision.decision, 'deny');
   assert.ok(decision.reason.includes(C.describeSkip));
 });
 
 test('PARDON: a skip with a waiver annotation is allowed with a pointed warning', () => {
   const { status, decision } = runHook(
-    writeFile('src/app.spec.ts', '// waiver: owner=me until=2027-06-01 flake in CI\n' + C.itSkip + '"flaky login", () => {});\n')
+    writeFile(
+      'src/app.spec.ts',
+      `// waiver: owner=me until=2027-06-01 flake in CI\n${C.itSkip}"flaky login", () => {});\n`,
+    ),
   );
   assert.equal(status, 0);
   assert.equal(decision.decision, 'allow');
@@ -119,7 +121,7 @@ test('PARDON: a skip with a waiver annotation is allowed with a pointed warning'
 });
 
 test('outside a test-named file a silent skip warns instead of denying', () => {
-  const { decision } = runHook(writeFile('src/index.ts', C.itSkip + '"not a test file", () => {});\n'));
+  const { decision } = runHook(writeFile('src/index.ts', `${C.itSkip}"not a test file", () => {});\n`));
   assert.equal(decision.decision, 'allow');
   assert.ok(decision.system_message.includes('outside a test-named file'));
 });
@@ -145,7 +147,11 @@ test('edit payload does not scan old_string: removing the focused filter stays s
   // scanned, it contains no findings, so the guard produces no output at
   // all - silence (exit 0, no JSON) is the pass-through outcome
   const { status, decision } = runHook({
-    tool_input: { file_path: 'a.spec.ts', old_string: C.itOnly + '"x", () => {});\n', new_string: 'test("x", () => {});\n' },
+    tool_input: {
+      file_path: 'a.spec.ts',
+      old_string: `${C.itOnly}"x", () => {});\n`,
+      new_string: 'test("x", () => {});\n',
+    },
   });
   assert.equal(status, 0);
   assert.equal(decision, null);
@@ -154,14 +160,14 @@ test('edit payload does not scan old_string: removing the focused filter stays s
 /* ---------- bash mode (new): warn-only ---------- */
 
 test('BASH: heredoc write into a .spec.ts warns about the bypass, never denies', () => {
-  const { status, decision } = runHook(bash('cat > login.spec.ts <<EOF\n' + C.itOnly + '"x", () => {})\nEOF\n'));
+  const { status, decision } = runHook(bash(`cat > login.spec.ts <<EOF\n${C.itOnly}"x", () => {})\nEOF\n`));
   assert.equal(status, 0);
   assert.equal(decision.decision, 'allow');
   assert.ok(decision.system_message.includes('bypasses test-file-guard'), decision.system_message);
 });
 
 test('BASH: sed in-place against a test/ path warns; a plain ls stays silent', () => {
-  const sed = runHook(bash("sed -i 's/it(/" + C.testSkip + "/' tests/checkout.ts"));
+  const sed = runHook(bash(`sed -i 's/it(/${C.testSkip}/' tests/checkout.ts`));
   assert.equal(sed.decision.decision, 'allow');
   assert.ok(sed.decision.system_message.includes('bypasses test-file-guard'));
   const ls = runHook(bash('ls -la src/'));

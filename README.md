@@ -9,7 +9,7 @@ Repozytorium inspirowane ideą i strukturą projektu **[awesome-agents-for-quali
 | Plugin | Skille | Agenci | Knowledge | Hook | Zakres |
 |---|---|---|---|---|---|
 | `qa-core` 🧭 | 27 | 4 | 1 | — | planowanie testów, eksploracja, bug reporty, RTM, kryteria akceptacji, integracja trackerów (Xray/TestRail/Jira) |
-| `test-automation` 🤖 | 33 | 5 | — | ✅ test-file-guard | unit testy, TDD, Playwright, mocki, flakiness, review, bootstrap suity, raporty/artefakty CI, portowanie na pytest/JUnit/NUnit |
+| `test-automation` 🤖 | 34 | 5 | — | ✅ test-file-guard, red-test-deletion-guard | unit testy, TDD, Playwright, mocki, flakiness, review, bootstrap suity, raporty/artefakty CI, mutacja (Stryker), portowanie na pytest/JUnit/NUnit |
 | `api-testing` 🔌 | 4 | 2 | — | — | automatyzacja API (Playwright), contract testing: schema/OpenAPI (L25) + Pact (consumer-driven) |
 | `non-functional-testing` ⚡ | 6 | 1 | — | — | accessibility, performance/load, security |
 | `ai-quality` 🧠 | 7 | 1 | 1 | — | testowanie funkcji LLM, guardrails, groundedness |
@@ -22,7 +22,7 @@ Repozytorium inspirowane ideą i strukturą projektu **[awesome-agents-for-quali
 | `ui-api-automation` 🖥️ | 1 | 7 | 1 | — | paczka: pipeline testów UI + API (explorers → plan → implement → run) |
 | `ui-api-automation-minimal` 🧪 | 1 | 4 | 1 | — | paczka: minimalna wersja powyższego |
 
-Razem: **13 pluginów**, **108 skilli**, **42 subagentów**, **7 knowledge**, **1 quality-gate hook**.
+Razem: **13 pluginów**, **109 skilli**, **42 subagentów**, **7 knowledge**, **2 quality-gate hooki**.
 
 Paczki orkiestracyjne działają jak w źródle: driver-skill (user-invocable) prowadzi orkiestrację, każdy krok delegujesz do subagenta przez `tools.agents` + `config_name` (np. `plan-explore-review-commit:perc-implementer`); GUIDE paczki jest jej knowledge. Build przepisuje instrukcje hostów (Claude Code / Codex) na Vibe: tabela agentów dostaje kolumnę `Vibe` z dokładnie tymi `config_name`, które Vibe potrafi zespawnować.
 
@@ -80,13 +80,14 @@ qa-tools/
 │   ├── agents/<name>.md              # definicje agentów (neutralny format)
 │   └── knowledge/<name>.md           # guides → baza wiedzy
 ├── bundles.yaml                       # podział na pluginy + członkostwo skilli
-├── package.json                       # npm scripts: build / check / verify / test
+├── package.json                       # npm scripts: build / check / verify / lint / test
+├── biome.json                         # Biome: lint+format scoped na scripts/ (npm run lint)
 ├── scripts/
 │   ├── build.js                       # build → plugins/ (natywny Vibe); --check, --verify
 │   ├── build.test.js                  # testy jednostkowe builda (node:test)
 │   ├── validate-manifests.js          # walidacja JSON manifestów w plugins/
-│   └── assets/test-file-guard.js     # skrypt hooka
-└── plugins/<bundle>/              # artefakt buildu — do skopiowania (12 pluginów)
+│   └── assets/                        # skrypty hooków + ich testy (node --test)
+└── plugins/<bundle>/              # artefakt buildu — do skopiowania (13 pluginów)
     ├── plugin.json                    # manifest Agent Plugins 1.0 + rozszerzenie ai.mistral.vibe
     ├── skills/                        # 1:1 ze src
     ├── mcp.json                       # tylko w pluginach deklarujących mcp: (dziś: qa-mcp)
@@ -104,10 +105,11 @@ node scripts/build.js            # buduje plugins/<bundle>
 node scripts/build.js --check    # walidacja bez builda: członkostwo w bundles.yaml (skille + agenci + knowledge, duplikaty i sieroty), name rules (folder ↔ frontmatter), frontmatter i limity description; ostrzeżenia o obcięciach (agenci >300 zn. — build ucina przy generacji)
 node scripts/build.js --verify   # drift-gate: świeży build do katalogu tmp vs commitowany plugins/ (exit 1 przy różnicach, również dla katalogu pluginu w artefakcie, którego nie ma już w bundles.yaml; nie modyfikuje plugins/; porównanie ignoruje wyłącznie różnice EOL — core.autocrlf na Windows przepisuje working tree)
 node scripts/validate-manifests.js  # walidacja parsowania wszystkich JSON oraz składni wygenerowanych TOML (ageni, hooks.toml) w plugins/
+npm run lint                      # Biome: lint + format check na scripts/ (bez mutacji plików)
 npm test                          # testy jednostkowe builda (node:test, zero zależności)
 ```
 
-…albo przez npm: `npm run build | check | verify | validate-manifests | test`, a całość CI: `npm run ci`.
+…albo przez npm: `npm run build | check | verify | validate-manifests | lint | test`, a całość CI: `npm run ci`.
 
 `plugins/` jest commitowany (jak w projekcie źródłowym) — użytkownik może zainstalować bez uruchamiania builda. **Drift-gate** (`--verify`, uruchamiany też w CI) pilnuje, żeby commitowany artefakt zawsze odpowiadał `src/` + `bundles.yaml`: po każdej edycji źródeł wystarczy przebudować i zcommitować, inaczej CI failuje.
 
@@ -148,7 +150,7 @@ Zmiana konwencji = edycja `src/shared/emoji-style.md` + `node scripts/build.js`.
 | skill `agents/openai.yaml` (42×) | — (filtrowane przy buildzie) | wyzwalacze Codex/OpenAI (`display_name`, `allow_implicit_invocation`) mają odpowiednik w frontmatter SKILL.md (`disable-model-invocation`); folder nie pływa w natywnym artefakcie |
 | — | `hooks.toml` | Vibe-only: quality gates na eventach `pre_tool`/`post_agent` |
 
-Konwencje potwierdzone testami (patrz historia commitów): klucze TOML **snake_case**, `description` ≤300 znaków, hooki nieblokujące z `strict = false` na start.
+Konwencje potwierdzone testami (patrz historia commitów): klucze TOML **snake_case**, `description` ≤300 znaków, hooki nieblokujące z `strict = false` na start, JS w `scripts/` lintowany Biome (`noRedundantUseStrict` wyłączona: hooki CJS celowo trzymają `'use strict'`).
 
 ## ✅ Co zostało zwalidowane (Vibe headless)
 
@@ -163,6 +165,7 @@ Konwencje potwierdzone testami (patrz historia commitów): klucze TOML **snake_c
 - 🔍 `connectors.json` (GitHub, k6) dla bundle'i automatyzujących
 - ✅ GitHub Actions CI (`.github/workflows/ci.yml`): `build.js --check` + walidacja manifestów JSON + drift-gate `--verify`, matrysa ubuntu + windows
 - 🔍 weryfikacja ładowania pluginu w Vibe headless w CI (wymaga zainstalowanego CLI i auth — świadomie poza pierwszą iteracją CI)
+- hook `pre_tool` red-test-deletion-guard (w `test-automation`, 3 wpisy: `write_file`/`edit`/`bash`, w tym samym modelu severity co test-file-guard): **blokuje** green-by-amnesia — `rm`/`git rm`/`mv`/`unlink` celujące w pliki czy katalogi testowe oraz edity w plikach testowych, które usuwają wszystkie asercje z zastąpionego fragmentu (structured `decision: deny`, exit 0; escape hatch jak wyżej — adnotacja `waiver` zamienia deny w ostrzeżenie), **ostrzega** o `rimraf`/`Remove-Item`/`del` na ścieżkach testowych, in-place edycjach `sed`/`perl`/`dd`/`tee` w plikach testowych oraz edytach zmniejszających liczbę asercji; `rm`/`mv` bez ścieżki testowej = cisza (zero fałszywych trafień), 20 testów jednostkowych przypina model severity (`scripts/assets/red-test-deletion-guard.test.js`)
 - ✅ hook blokujący dla `.only()`/`fit()` w plikach testowych — deny przez structured response (exit 0), fail-open na awarię hooka
 - 🔍 pełna polityka jakości hooka: kolejne wzorce (mock-only tests, retries jako „fix"), decyzja fail-open vs strict fail-closed
 - 🔍 hook-only pluginy źródła (`always-on-skills`, `print-tool-info`) — częściowo pokryte przez `test-file-guard`

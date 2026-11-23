@@ -146,6 +146,7 @@ Fill in `./resources/diagnosis-record.md`.
 - `./resources/classification-evidence.md` - signatures per class, the evidence that separates neighbouring classes, and questions for a reported defect
 - `./resources/feedback-loops.md` - loop commands for Playwright (trace, `--debug`, `--repeat-each`, `--workers=1`, `--grep`, screenshots, video) and unit runners, `git bisect run`, and proving a fixed test can still fail
 - `./resources/ci-only-failures.md` - what to diff when it fails only in CI: versions, timezone, locale, resources, secrets, filesystem, network
+- `./resources/playwright-trace-forensics.md` - read when the evidence is a `trace.zip`: what to open first, the reading order per failure class, what to quote into the record, and what a trace cannot tell you
 - `./resources/diagnosis-record.md` - hypothesis table, the per-failure record, the summary, and sources
 
 ## Related Skills

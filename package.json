@@ -16,7 +16,11 @@
     "check": "node scripts/build.js --check",
     "verify": "node scripts/build.js --verify",
     "validate-manifests": "node scripts/validate-manifests.js",
-    "test": "node --test scripts/build.test.js scripts/assets/test-file-guard.test.js",
-    "ci": "npm run check && npm run validate-manifests && npm run verify && npm test"
+    "lint": "biome check scripts",
+    "test": "node --test scripts/build.test.js scripts/assets/test-file-guard.test.js scripts/assets/red-test-deletion-guard.test.js",
+    "ci": "npm run check && npm run validate-manifests && npm run lint && npm run verify && npm test"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.6.8"
   }
 }

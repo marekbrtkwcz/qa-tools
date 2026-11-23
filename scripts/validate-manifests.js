@@ -13,10 +13,9 @@
  * Usage: node scripts/validate-manifests.js [--dir <plugins>]
  * Exit code 1 on any parse failure. Used by CI.
  */
-'use strict';
 
-const fs = require('fs');
-const path = require('path');
+const fs = require('node:fs');
+const path = require('node:path');
 
 const ROOT = path.resolve(__dirname, '..');
 
@@ -94,11 +93,11 @@ function main() {
   const bad = [...results.jsonErrors, ...results.tomlErrors];
   if (bad.length) {
     console.error('❌ ERRORS:');
-    for (const b of bad) console.error('  - ' + b);
+    for (const b of bad) console.error(`  - ${b}`);
     process.exit(1);
   }
   console.log(
-    `✅ ${results.jsonCount} JSON manifest(s) and ${results.tomlCount} TOML file(s) parse cleanly under ${path.relative(ROOT, dir) || '.'}`
+    `✅ ${results.jsonCount} JSON manifest(s) and ${results.tomlCount} TOML file(s) parse cleanly under ${path.relative(ROOT, dir) || '.'}`,
   );
 }
 

@@ -9,7 +9,6 @@
  * pack SKILL.md rewrite (3 -> 2 column agent tables), and the drift gate's
  * comparison semantics (file sets, content, EOL tolerance).
  */
-'use strict';
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
@@ -48,7 +47,7 @@ const REPO_ROOT = path.join(__dirname, '..');
 test('setBundlesVersions: bumps only the selected bundles, preserving comments, values and CRLF', () => {
   const file = writeTmp(
     'bundles.yaml',
-    '# collection bundles\r\nqa-core:\r\n  version: "0.1.0"\r\n  icon: X\r\n  skills:\r\n    - s\r\n\r\nother:\r\n  version: "0.9.9"\r\n'
+    '# collection bundles\r\nqa-core:\r\n  version: "0.1.0"\r\n  icon: X\r\n  skills:\r\n    - s\r\n\r\nother:\r\n  version: "0.9.9"\r\n',
   );
   const changed = setBundlesVersions(file, ['qa-core'], '0.2.0');
   assert.equal(changed, 1);
@@ -102,7 +101,7 @@ test('buildBundle: Codex trigger folder (agents/openai.yaml) is not shipped in t
   assert.ok(fs.existsSync(path.join(skillDir, 'SKILL.md')), 'SKILL.md must ship');
   assert.ok(
     !fs.existsSync(path.join(skillDir, 'agents')),
-    'Codex/OpenAI trigger folder must be filtered from the artifact'
+    'Codex/OpenAI trigger folder must be filtered from the artifact',
   );
 });
 
@@ -120,7 +119,7 @@ test('buildBundle: no dead mcp.json for bundles without mcp; qa-mcp ships the gl
   assert.deepEqual(noErrors, []);
   assert.ok(
     !fs.existsSync(path.join(out, 'authoring', 'mcp.json')),
-    'bundle without mcp: must not ship an empty mcp.json'
+    'bundle without mcp: must not ship an empty mcp.json',
   );
 
   const built = buildBundle('qa-mcp', { mcp: ['playwright', 'chrome-devtools', 'k6'] }, out);
@@ -142,10 +141,13 @@ test('buildBundle: no dead mcp.json for bundles without mcp; qa-mcp ships the gl
   assert.deepEqual(manifest.mcpServers.playwright.args, table.playwright.args);
   assert.deepEqual(manifest.mcpServers['chrome-devtools'].args, table['chrome-devtools'].args);
   assert.deepEqual(manifest.mcpServers.k6.args, table.k6.args);
-  assert.ok(!manifest.mcpServers.playwright.args.some((a) => /@/.test(a)), 'no version in the manifest: no pin even inside args');
+  assert.ok(
+    !manifest.mcpServers.playwright.args.some((a) => /@/.test(a)),
+    'no version in the manifest: no pin even inside args',
+  );
   assert.ok(
     !manifest.mcpServers['chrome-devtools'].args.some((a) => /@/.test(a)),
-    'no version in the manifest: no pin even inside args'
+    'no version in the manifest: no pin even inside args',
   );
 });
 
@@ -160,7 +162,7 @@ test('buildBundle: an unknown mcp server name is a build error, not a dead manif
   assert.ok(built[0].includes('playwright, chrome-devtools'), 'error lists the known server names');
   assert.ok(
     !fs.existsSync(path.join(out, 'qa-mcp', 'mcp.json')),
-    'a failed resolution must not ship a partial mcp.json'
+    'a failed resolution must not ship a partial mcp.json',
   );
 });
 
@@ -185,27 +187,49 @@ test('checkGlobalBinaryInstallDoc: the README must document all floating install
   // a pinned version (the old policy) must also fail, not pass silently
   fs.writeFileSync(path.join(out, 'README.md'), 'npm i -g @playwright/mcp@0.0.86\n');
   const stale = checkGlobalBinaryInstallDoc(out);
-  assert.equal(stale.length, 4, 'a pinned install line must fail the gate, and the other prerequisites are missing too');
-  assert.ok(stale.some((e) => e.includes('npm i -g @playwright/mcp@latest')), 'error names the playwright line');
-  assert.ok(stale.some((e) => e.includes('npm i -g chrome-devtools-mcp@latest')), 'error names the chrome-devtools line');
+  assert.equal(
+    stale.length,
+    4,
+    'a pinned install line must fail the gate, and the other prerequisites are missing too',
+  );
+  assert.ok(
+    stale.some((e) => e.includes('npm i -g @playwright/mcp@latest')),
+    'error names the playwright line',
+  );
+  assert.ok(
+    stale.some((e) => e.includes('npm i -g chrome-devtools-mcp@latest')),
+    'error names the chrome-devtools line',
+  );
   assert.ok(
     stale.some((e) => e.includes('winget install k6 --source winget')),
-    'error names the k6 Windows line'
+    'error names the k6 Windows line',
   );
-  assert.ok(stale.some((e) => e.includes('brew install k6')), 'error names the k6 macOS line');
+  assert.ok(
+    stale.some((e) => e.includes('brew install k6')),
+    'error names the k6 macOS line',
+  );
 
   // only the playwright line present: the other three lines each flagged
   fs.writeFileSync(path.join(out, 'README.md'), 'Instalacja globalna:\n\nnpm i -g @playwright/mcp@latest\n');
   const half = checkGlobalBinaryInstallDoc(out);
   assert.equal(half.length, 3, 'three prerequisites missing: one error each');
-  assert.ok(half.some((e) => e.includes('chrome-devtools-mcp@latest')), half.join('\n'));
-  assert.ok(half.some((e) => e.includes('winget install k6 --source winget')), half.join('\n'));
-  assert.ok(half.some((e) => e.includes('brew install k6')), half.join('\n'));
+  assert.ok(
+    half.some((e) => e.includes('chrome-devtools-mcp@latest')),
+    half.join('\n'),
+  );
+  assert.ok(
+    half.some((e) => e.includes('winget install k6 --source winget')),
+    half.join('\n'),
+  );
+  assert.ok(
+    half.some((e) => e.includes('brew install k6')),
+    half.join('\n'),
+  );
 
   // all four floating lines, anywhere in the README: no errors
   fs.writeFileSync(
     path.join(out, 'README.md'),
-    'Instalacja globalna:\n\nnpm i -g @playwright/mcp@latest\nnpm i -g chrome-devtools-mcp@latest\nwinget install k6 --source winget    # Windows\nbrew install k6                      # macOS\n'
+    'Instalacja globalna:\n\nnpm i -g @playwright/mcp@latest\nnpm i -g chrome-devtools-mcp@latest\nwinget install k6 --source winget    # Windows\nbrew install k6                      # macOS\n',
   );
   assert.deepEqual(checkGlobalBinaryInstallDoc(out), []);
 });
@@ -234,7 +258,7 @@ test('parseBundles: structure, lists, quoted values, booleans, comments', () => 
       '  icon: Y',
       '  pack: false',
       '',
-    ].join('\n')
+    ].join('\n'),
   );
   const bundles = parseBundles(file);
   assert.deepEqual(Object.keys(bundles), ['qa-core', 'second']);
@@ -246,20 +270,14 @@ test('parseBundles: structure, lists, quoted values, booleans, comments', () => 
   assert.deepEqual(qa.skills, ['a-skill', 'b-skill']);
   assert.deepEqual(qa.hooks, ['test-file-guard']);
   assert.deepEqual(qa.mcp, ['playwright']);
-  assert.equal(bundles['second'].pack, false);
+  assert.equal(bundles.second.pack, false);
 });
 
 test('parseBundles: survives CRLF line endings (Windows working tree)', () => {
-  const body = [
-    'a:',
-    '  icon: X',
-    '  skills:',
-    '    - one',
-    '',
-  ].join('\r\n');
+  const body = ['a:', '  icon: X', '  skills:', '    - one', ''].join('\r\n');
   const bundles = parseBundles(writeTmp('bundles.yaml', body));
-  assert.equal(bundles['a'].icon, 'X');
-  assert.deepEqual(bundles['a'].skills, ['one']);
+  assert.equal(bundles.a.icon, 'X');
+  assert.deepEqual(bundles.a.skills, ['one']);
 });
 
 /* ---------- parseAgentMd (frontmatter in src/agents/*.md) ---------- */
@@ -291,16 +309,9 @@ test('parseAgentMd: name/title/description, capabilities array, pack tools, body
 
 test('toolsOf: maps capabilities and pack tool names, lowercases, dedupes', () => {
   assert.deepEqual(toolsOf({ capabilities: ['read'] }), ['read_file']);
-  assert.deepEqual(toolsOf({ tools: 'Read, WebFetch, Bash' }), [
-    'read_file',
-    'web_search',
-    'bash',
-  ]);
+  assert.deepEqual(toolsOf({ tools: 'Read, WebFetch, Bash' }), ['read_file', 'web_search', 'bash']);
   // combined, duplicates collapse in first-seen order
-  assert.deepEqual(toolsOf({ capabilities: ['read'], tools: 'Read, Grep' }), [
-    'read_file',
-    'bash',
-  ]);
+  assert.deepEqual(toolsOf({ capabilities: ['read'], tools: 'Read, Grep' }), ['read_file', 'bash']);
   // unknown capability names map to nothing
   assert.deepEqual(toolsOf({ capabilities: ['teleport'] }), []);
   // no capabilities at all
@@ -325,7 +336,7 @@ test('truncateDescription: short and exactly-300 strings pass through', () => {
 });
 
 test('truncateDescription: over-limit cut on a word boundary with ellipsis, never longer than 300', () => {
-  const long = ('word '.repeat(60).trim()) + ' tail'; // 299 + 5 chars
+  const long = `${'word '.repeat(60).trim()} tail`; // 299 + 5 chars
   const out = truncateDescription(long);
   assert.ok(out.length <= 300, `result too long: ${out.length}`);
   assert.ok(out.endsWith('…'), 'must end with ellipsis');
@@ -353,9 +364,10 @@ test('rewritePackSkill: agent table 3 columns -> 2, host bullets rewritten', () 
   const lines = out.split('\n');
   assert.equal(lines[2], '| Name used below | Vibe |');
   assert.equal(lines[3], '| --- | --- |');
-  assert.equal(lines[4], '| Analyst | `basics-analyst` |');  assert.ok(
+  assert.equal(lines[4], '| Analyst | `basics-analyst` |');
+  assert.ok(
     lines.some((l) => l === '- In Vibe, spawn the agent with `tools.agents` using `config_name` from the Vibe column.'),
-    'Claude Code bullet must be rewritten to the Vibe instruction'
+    'Claude Code bullet must be rewritten to the Vibe instruction',
   );
   assert.ok(!out.includes('In Codex, spawn'), 'Codex bullet must be dropped');
   assert.ok(out.includes('- Normal bullet stays.'));
@@ -462,7 +474,13 @@ test('validateFrontmatter: the real collection has no frontmatter errors; warnin
   const { errors, warnings } = validateFrontmatter(real);
   assert.deepEqual(errors, [], 'the real collection must have no frontmatter errors');
   assert.ok(Array.isArray(warnings));
-  assert.ok(warnings.length === 0 || warnings.every((test_w) => test_w.startsWith('agent ') || test_w.startsWith('knowledge ') || test_w.startsWith('skill ')), 'real-collection warnings must follow the declared policy classes');
+  assert.ok(
+    warnings.length === 0 ||
+      warnings.every(
+        (test_w) => test_w.startsWith('agent ') || test_w.startsWith('knowledge ') || test_w.startsWith('skill '),
+      ),
+    'real-collection warnings must follow the declared policy classes',
+  );
 });
 
 test('validateFrontmatter: name mismatch, missing description and over-limit skill description are errors', () => {
@@ -471,7 +489,7 @@ test('validateFrontmatter: name mismatch, missing description and over-limit ski
   writeTree(path.join(srcRoot, 'skills'), {
     'good/SKILL.md': '---\nname: good\ndescription: "Valid trigger. Use when x."\n---\n\n# Good\n',
     'bad-name/SKILL.md': '---\nname: not-bad-name\ndescription: ""\n---\n\n# Bad\n',
-    'long/SKILL.md': '---\nname: long\ndescription: "' + longDesc + '"\n---\n\n# Long\n',
+    'long/SKILL.md': `---\nname: long\ndescription: "${longDesc}"\n---\n\n# Long\n`,
   });
   const bundles = { b: { skills: ['good', 'bad-name', 'long'], agents: [], knowledge: [] } };
   const { errors, warnings } = validateFrontmatter(bundles, srcRoot);
@@ -486,7 +504,7 @@ test('validateFrontmatter: agent descriptions over 300 warn (build truncates), n
   const srcRoot = tmpDir();
   const long = 'a'.repeat(320);
   writeTree(path.join(srcRoot, 'agents'), {
-    'mine.md': '---\nname: mine\ntitle: Mine\ndescription: ' + long + '\ncapabilities: [read]\n---\n\nBody.\n',
+    'mine.md': `---\nname: mine\ntitle: Mine\ndescription: ${long}\ncapabilities: [read]\n---\n\nBody.\n`,
   });
   const bundles = { b: { skills: [], agents: ['mine'], knowledge: [] } };
   const { errors, warnings } = validateFrontmatter(bundles, srcRoot);
@@ -499,7 +517,7 @@ test('validateFrontmatter: skill descriptions over 700 warn (routing signal), ne
   const srcRoot = tmpDir();
   const long = 'd'.repeat(750);
   writeTree(path.join(srcRoot, 'skills'), {
-    'mine/SKILL.md': '---\nname: mine\ndescription: ' + long + '\n---\n\nBody.\n',
+    'mine/SKILL.md': `---\nname: mine\ndescription: ${long}\n---\n\nBody.\n`,
   });
   const bundles = { b: { skills: ['mine'], agents: [], knowledge: [] } };
   const { errors, warnings } = validateFrontmatter(bundles, srcRoot);
@@ -578,20 +596,23 @@ test('checkMembership: orphan skill/agent/knowledge and missing sources are erro
   const errors = checkMembership(bundles, srcRoot);
   assert.ok(
     errors.some((e) => e.includes('orphan-skill') && e.includes('not declared in any bundle')),
-    `orphan skill reported, got: ${errors}`
+    `orphan skill reported, got: ${errors}`,
   );
   assert.ok(
     errors.some((e) => e.includes('orphan-agent') && e.includes('not declared in any bundle')),
-    'orphan agent reported'
+    'orphan agent reported',
   );
   assert.ok(
     errors.some((e) => e.includes('orphan-knowledge') && e.includes('not declared in any bundle')),
-    'orphan knowledge reported'
+    'orphan knowledge reported',
   );
-  assert.ok(errors.some((e) => e.includes('"ghost-skill" has no src/skills')), 'missing source reported');
+  assert.ok(
+    errors.some((e) => e.includes('"ghost-skill" has no src/skills')),
+    'missing source reported',
+  );
   assert.ok(
     errors.some((e) => e.includes('knowledge "used" declared in both "a" and "b"')),
-    'duplicate knowledge across bundles reported'
+    'duplicate knowledge across bundles reported',
   );
 });
 
@@ -599,11 +620,7 @@ test('checkMembership: orphan skill/agent/knowledge and missing sources are erro
 
 test('buildBundle: hooks.toml emitted only for bundles that declare hooks, three matchers per hook, valid TOML', () => {
   const gated = tmpDir();
-  const errors = buildBundle(
-    'gated',
-    { description: 'gated', version: '0.1.0', hooks: ['test-file-guard'] },
-    gated
-  );
+  const errors = buildBundle('gated', { description: 'gated', version: '0.1.0', hooks: ['test-file-guard'] }, gated);
   assert.deepEqual(errors, []);
   const tomlPath = path.join(gated, 'gated', 'ai.mistral.vibe', 'hooks.toml');
   assert.ok(fs.existsSync(tomlPath), 'hooks.toml emitted');
@@ -620,7 +637,7 @@ test('buildBundle: hooks.toml emitted only for bundles that declare hooks, three
   assert.deepEqual(buildBundle('plain', { description: 'plain', version: '0.1.0' }, plain), []);
   assert.ok(
     !fs.existsSync(path.join(plain, 'plain', 'ai.mistral.vibe', 'hooks.toml')),
-    'no hooks.toml without a declared hook'
+    'no hooks.toml without a declared hook',
   );
   assert.ok(!fs.existsSync(path.join(plain, 'plain', 'vibe-hooks')), 'no vibe-hooks dir without a declared hook');
 });
@@ -646,7 +663,7 @@ test('swapStagedBundles: a failed rename restores the previous tree, never leave
   assert.equal(
     fs.readFileSync(path.join(out, 'b', 'plugin.json'), 'utf8'),
     '{"v":1}\n',
-    'the old bundle must be restored in place'
+    'the old bundle must be restored in place',
   );
 });
 
@@ -671,19 +688,17 @@ test('CLI: --verify exits 0 against the real committed plugins/ tree', () => {
 });
 
 test('CLI: usage errors exit 2 (bad --set-version, unknown --bundle)', () => {
-  const badVersion = spawnSync(
-    process.execPath,
-    [path.join('scripts', 'build.js'), '--set-version', 'next'],
-    { cwd: REPO_ROOT, encoding: 'utf8' }
-  );
+  const badVersion = spawnSync(process.execPath, [path.join('scripts', 'build.js'), '--set-version', 'next'], {
+    cwd: REPO_ROOT,
+    encoding: 'utf8',
+  });
   assert.equal(badVersion.status, 2, badVersion.stderr);
   assert.ok(badVersion.stderr.includes('x.y.z'));
 
-  const ghostBundle = spawnSync(
-    process.execPath,
-    [path.join('scripts', 'build.js'), '--bundle', 'ghost'],
-    { cwd: REPO_ROOT, encoding: 'utf8' }
-  );
+  const ghostBundle = spawnSync(process.execPath, [path.join('scripts', 'build.js'), '--bundle', 'ghost'], {
+    cwd: REPO_ROOT,
+    encoding: 'utf8',
+  });
   assert.equal(ghostBundle.status, 2, ghostBundle.stderr);
   assert.ok(ghostBundle.stderr.includes('Unknown bundle'));
 });
@@ -726,11 +741,7 @@ test('checkRelease: tag, bundle versions and CHANGELOG header must agree', () =>
   const pkg = path.join(dir, 'package.json');
   fs.writeFileSync(pkg, '{ "name": "qa-tools", "version": "0.3.0" }\n');
 
-  assert.deepEqual(
-    checkRelease(bundlesFile, changelog, 'v0.3.0', pkg).errors,
-    [],
-    'consistent release passes'
-  );
+  assert.deepEqual(checkRelease(bundlesFile, changelog, 'v0.3.0', pkg).errors, [], 'consistent release passes');
 
   const mismatched = checkRelease(bundlesFile, changelog, 'v0.2.0');
   assert.ok(mismatched.errors.some((e) => e.includes('version 0.3.0 != tag version 0.2.0')));
@@ -756,7 +767,7 @@ test('checkRelease: the repo package.json version must match the tag', () => {
   const stale = checkRelease(bundlesFile, changelog, 'v0.3.0', pkgOld);
   assert.ok(
     stale.errors.some((e) => e.includes('package.json version 0.2.0 != tag version 0.3.0')),
-    'a repo-level version left behind the tag is reported'
+    'a repo-level version left behind the tag is reported',
   );
 
   const pkgNoVersion = path.join(dir, 'noversion.json');
@@ -775,11 +786,10 @@ test('checkRelease CLI: the real repo passes for its current version tag', () =>
   const versionMatch = bundlesText.match(/version:\s*"?(\d+\.\d+\.\d+)/); // mono-version: tag matches every bundle
   assert.ok(versionMatch, 'no version found in bundles.yaml');
   const tag = `v${versionMatch[1]}`;
-  const r = spawnSync(
-    process.execPath,
-    [path.join('scripts', 'check-release.js'), '--tag', tag],
-    { cwd: REPO_ROOT, encoding: 'utf8' }
-  );
+  const r = spawnSync(process.execPath, [path.join('scripts', 'check-release.js'), '--tag', tag], {
+    cwd: REPO_ROOT,
+    encoding: 'utf8',
+  });
   assert.equal(r.status, 0, r.stderr);
   assert.ok(r.stdout.includes('Release gate OK'));
 });

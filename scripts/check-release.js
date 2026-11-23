@@ -12,10 +12,9 @@
  * releaser remembering four places at once.
  * Exit codes: 0 = consistent, 1 = mismatch, 2 = usage error.
  */
-'use strict';
 
-const fs = require('fs');
-const path = require('path');
+const fs = require('node:fs');
+const path = require('node:path');
 const { parseBundles } = require('./build.js');
 
 function checkRelease(bundlesFile, changelogFile, tag, packageFile) {
@@ -44,8 +43,7 @@ function checkRelease(bundlesFile, changelogFile, tag, packageFile) {
     try {
       const pkgVersion = JSON.parse(fs.readFileSync(packageFile, 'utf8')).version;
       if (!pkgVersion) errors.push(`package.json has no "version" field`);
-      else if (pkgVersion !== version)
-        errors.push(`package.json version ${pkgVersion} != tag version ${version}`);
+      else if (pkgVersion !== version) errors.push(`package.json version ${pkgVersion} != tag version ${version}`);
     } catch (e) {
       errors.push(`cannot read package.json version from ${packageFile}: ${e.message}`);
     }
@@ -61,12 +59,9 @@ function main() {
   const changelogFlag = args.indexOf('--changelog');
   const packageFlag = args.indexOf('--package');
   const root = path.join(__dirname, '..');
-  const bundlesFile =
-    bundlesFlag >= 0 ? path.resolve(args[bundlesFlag + 1]) : path.join(root, 'bundles.yaml');
-  const changelogFile =
-    changelogFlag >= 0 ? path.resolve(args[changelogFlag + 1]) : path.join(root, 'CHANGELOG.md');
-  const packageFile =
-    packageFlag >= 0 ? path.resolve(args[packageFlag + 1]) : path.join(root, 'package.json');
+  const bundlesFile = bundlesFlag >= 0 ? path.resolve(args[bundlesFlag + 1]) : path.join(root, 'bundles.yaml');
+  const changelogFile = changelogFlag >= 0 ? path.resolve(args[changelogFlag + 1]) : path.join(root, 'CHANGELOG.md');
+  const packageFile = packageFlag >= 0 ? path.resolve(args[packageFlag + 1]) : path.join(root, 'package.json');
 
   if (!tag) {
     console.error('usage: node scripts/check-release.js --tag vX.Y.Z');
@@ -86,7 +81,7 @@ function main() {
     process.exit(1);
   }
   console.log(
-    `✅ Release gate OK: tag ${tag} matches version ${result.version} on ${result.bundles.length} bundle(s), the CHANGELOG header and the repo package.json.`
+    `✅ Release gate OK: tag ${tag} matches version ${result.version} on ${result.bundles.length} bundle(s), the CHANGELOG header and the repo package.json.`,
   );
 }
 

@@ -28,15 +28,16 @@
  * The script always exits 0: a guard bug fails open (Vibe prints a warning,
  * the gated action proceeds) instead of blocking someone's edit.
  */
+
 'use strict';
 
-const fs = require('fs');
-const path = require('path');
+const fs = require('node:fs');
+const path = require('node:path');
 
 let raw = '';
 try {
   raw = fs.readFileSync(0, 'utf8');
-} catch (e) {
+} catch (_e) {
   process.exit(0); // no stdin -> nothing to guard, stay silent
 }
 
@@ -47,16 +48,16 @@ function pluginDataDir() {
       fs.mkdirSync(env, { recursive: true });
       return env;
     }
-  } catch (e) {
+  } catch (_e) {
     /* ignore */
   }
-  return require('os').tmpdir();
+  return require('node:os').tmpdir();
 }
 
 function logLine(line) {
   try {
-    fs.appendFileSync(path.join(pluginDataDir(), 'test-file-guard.log'), line + '\n');
-  } catch (e) {
+    fs.appendFileSync(path.join(pluginDataDir(), 'test-file-guard.log'), `${line}\n`);
+  } catch (_e) {
     /* ignore write failures */
   }
 }
@@ -126,14 +127,13 @@ function classify(rawText) {
   let payload = null;
   try {
     payload = JSON.parse(rawText);
-  } catch (e) {
+  } catch (_e) {
     return null;
   }
-  const input = payload && payload.tool_input;
+  const input = payload?.tool_input;
   if (!input || typeof input !== 'object') return null;
   const filePath =
-    typeof input.path === 'string' ? input.path :
-    typeof input.file_path === 'string' ? input.file_path : null;
+    typeof input.path === 'string' ? input.path : typeof input.file_path === 'string' ? input.file_path : null;
   if (!filePath) {
     if (typeof input.command === 'string' && input.command) return { bash: true, command: input.command };
     return null;
@@ -147,7 +147,8 @@ function classify(rawText) {
 
 // Bash write primitives that create or rewrite a file. Deliberately a
 // subset (redirection, tee, in-place editors): listing files is harmless.
-const BASH_WRITE = />>?|\btee\b|\btruncate\b|\bsed\b[\s\S]{0,40}?-[a-z]*i[a-z]*\b|\bperl\b[\s\S]{0,40}?-pi\b|\bdd\b[\s\S]{0,40}?of\s*=/;
+const BASH_WRITE =
+  />>?|\btee\b|\btruncate\b|\bsed\b[\s\S]{0,40}?-[a-z]*i[a-z]*\b|\bperl\b[\s\S]{0,40}?-pi\b|\bdd\b[\s\S]{0,40}?of\s*=/;
 
 const info = classify(raw);
 if (!info) process.exit(0);
@@ -162,7 +163,9 @@ const stamp = new Date().toISOString();
 if (info.bash) {
   const reasons = [];
   if (BASH_WRITE.test(info.command) && TEST_FILE_BASH.test(info.command)) {
-    reasons.push('bash write to a test file bypasses test-file-guard — use the file tools for test files so the gate can check them');
+    reasons.push(
+      'bash write to a test file bypasses test-file-guard — use the file tools for test files so the gate can check them',
+    );
   }
   for (const b of BLOCK) {
     if (b.re.test(info.command) && !reasons.includes(b.why)) reasons.push(b.why);
@@ -173,10 +176,10 @@ if (info.bash) {
   if (reasons.length) {
     logLine(`[test-file-guard] ${stamp} WARN (bash): ${reasons.join('; ')}`);
     process.stdout.write(
-      JSON.stringify({
+      `${JSON.stringify({
         decision: 'allow',
         system_message: `test-file-guard (bash command): ${reasons.join('; ')}`,
-      }) + '\n'
+      })}\n`,
     );
   }
   process.exit(0);
@@ -207,7 +210,7 @@ for (const text of info.texts) {
 let block = blockFindings;
 if (blockFindings.length && !isTestFile) {
   warnFindings.push(
-    `blocked smell outside a test-named file (${path.basename(info.filePath)}) — if this is a test file, the name should say so`
+    `blocked smell outside a test-named file (${path.basename(info.filePath)}) — if this is a test file, the name should say so`,
   );
   block = [];
 }
@@ -226,17 +229,17 @@ if (block.length) {
     ? ' For a deliberate quarantine, annotate the skip with a waiver comment (e.g. "waiver: owner=<you> until=<date>") and save again.'
     : '';
   process.stdout.write(
-    JSON.stringify({
+    `${JSON.stringify({
       decision: 'deny',
       reason: `${name}: ${block.join('; ')}. Remove the focused-run filter or silent skip before saving.${skipHint}${notes}`,
-    }) + '\n'
+    })}\n`,
   );
 } else if (warnFindings.length) {
   process.stdout.write(
-    JSON.stringify({
+    `${JSON.stringify({
       decision: 'allow',
       system_message: `test-file-guard on ${name}: ${warnFindings.join('; ')}`,
-    }) + '\n'
+    })}\n`,
   );
 }
 process.exit(0);

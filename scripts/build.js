@@ -22,11 +22,10 @@
  *             indentation and line endings. Does not build - run the build
  *             afterwards so the committed plugins/ mirrors the new versions.
  */
-'use strict';
 
-const fs = require('fs');
-const os = require('os');
-const path = require('path');
+const fs = require('node:fs');
+const os = require('node:os');
+const path = require('node:path');
 
 const ROOT = path.resolve(__dirname, '..');
 const SRC = path.join(ROOT, 'src');
@@ -100,7 +99,7 @@ const EMOJI_STYLE = (() => {
 /** Append the shared emoji conventions to a skill or agent body */
 function appendEmojiStyle(text) {
   if (!EMOJI_STYLE) return text;
-  return text.replace(/\s+$/, '') + '\n' + EMOJI_STYLE;
+  return `${text.replace(/\s+$/, '')}\n${EMOJI_STYLE}`;
 }
 
 /* ---------- frontmatter parser for src/agents/*.md ---------- */
@@ -130,7 +129,7 @@ function parseAgentMd(text) {
       // continuation of a long quoted description
       if (lastKey && typeof meta[lastKey] === 'string' && !line.trim().startsWith('-')) {
         const cont = line.trim().replace(/"$/, '');
-        meta[lastKey] = (meta[lastKey] + ' ' + cont).trim();
+        meta[lastKey] = `${meta[lastKey]} ${cont}`.trim();
       }
     }
   }
@@ -225,7 +224,7 @@ function truncateDescription(text, max = 300) {
   if (text.length <= max) return text;
   const cut = text.slice(0, max - 1);
   const lastSpace = cut.lastIndexOf(' ');
-  return (lastSpace > 100 ? cut.slice(0, lastSpace) : cut).replace(/[,;.\s]+$/, '') + '…';
+  return `${(lastSpace > 100 ? cut.slice(0, lastSpace) : cut).replace(/[,;.\s]+$/, '')}…`;
 }
 
 /** Convert a src/agents/<name>.md into a Vibe ai.mistral.vibe/agents/<name>.toml */
@@ -247,7 +246,7 @@ function agentToToml(mdPath, bundleIcon) {
   if (caps.length) {
     lines.push(`enabled_tools = [${caps.map((t) => tomlString(t)).join(', ')}]`);
   }
-  return lines.join('\n') + '\n';
+  return `${lines.join('\n')}\n`;
 }
 
 /* ---------- knowledge conversion ---------- */
@@ -311,20 +310,38 @@ function titleFromDescription(text) {
  * pre-policy-change README. Read-only and cheap; runs in every mode,
  * like checkMembership.
  */
+// Known bundle hooks: hook name -> guard script in scripts/assets/ (same
+// registry rule as GLOBAL_BINARY_SERVERS: a bundle may only declare a hook
+// that exists here, one source file per hook, one [[hooks]] entry per
+// file-tool matcher with a matcher-derived name). test-file-guard blocks
+// focused-run filters and silent skips; red-test-deletion-guard blocks the
+// green-by-amnesia shape (deleting test files or stripping assertions to
+// silence a red suite).
+const BUNDLE_HOOKS = [
+  { name: 'test-file-guard', script: 'test-file-guard.js' },
+  { name: 'red-test-deletion-guard', script: 'red-test-deletion-guard.js' },
+];
+
 const GLOBAL_BINARY_SERVERS = [
   {
     name: 'playwright',
     binary: 'playwright-mcp',
     line: 'npm i -g @playwright/mcp@latest',
     args: [
-      '--caps', 'vision,pdf,devtools,network,storage,testing',
+      '--caps',
+      'vision,pdf,devtools,network,storage,testing',
       '--ignore-https-errors',
-      '--timeout-action', '30000',
-      '--timeout-navigation', '180000',
-      '--timeout-settle', '2000',
-      '--image-responses', 'allow',
+      '--timeout-action',
+      '30000',
+      '--timeout-navigation',
+      '180000',
+      '--timeout-settle',
+      '2000',
+      '--image-responses',
+      'allow',
       '--snapshot-boxes',
-      '--snapshot-mode', 'full',
+      '--snapshot-mode',
+      'full',
     ],
   },
   {
@@ -377,7 +394,7 @@ function checkGlobalBinaryInstallDoc(docRoot = ROOT) {
     for (const line of server.lines || [server.line]) {
       if (!readme.includes(line)) {
         errors.push(
-          `Bundle qa-mcp: README.md does not contain the install prerequisite "${line}" - the plugin runs the global ${server.binary} binary, so without a documented install line the server fails with a spawn error on every machine; keep the line verbatim (the version lives in the user's global install on purpose)`
+          `Bundle qa-mcp: README.md does not contain the install prerequisite "${line}" - the plugin runs the global ${server.binary} binary, so without a documented install line the server fails with a spawn error on every machine; keep the line verbatim (the version lives in the user's global install on purpose)`,
         );
       }
     }
@@ -405,7 +422,7 @@ function checkVersionQuoting(bundlesFile = path.join(ROOT, 'bundles.yaml')) {
     if (!/^\s+version:/.test(line)) return;
     if (!/^(\s*version:\s*)["'][^"']*["']\s*$/.test(line)) {
       errors.push(
-        `bundle "${current}": version on line ${i + 1} is not a quoted value — setBundlesVersions only rewrites quoted versions, so a bare version: would silently survive a --set-version bump; write version: "0.1.0" (single or double quotes)`
+        `bundle "${current}": version on line ${i + 1} is not a quoted value — setBundlesVersions only rewrites quoted versions, so a bare version: would silently survive a --set-version bump; write version: "0.1.0" (single or double quotes)`,
       );
     }
   });
@@ -460,9 +477,7 @@ function checkMembership(bundles, srcRoot = SRC) {
         if (owner.has(item)) {
           // strip a trailing "s" only: "knowledge" must not lose its "e"
           const kindName = kind.key.replace(/s$/, '');
-          errors.push(
-            `${kindName} "${item}" declared in both "${owner.get(item)}" and "${bundleName}"`
-          );
+          errors.push(`${kindName} "${item}" declared in both "${owner.get(item)}" and "${bundleName}"`);
         } else {
           owner.set(item, bundleName);
         }
@@ -499,7 +514,9 @@ function validateFrontmatter(bundles, srcRoot = SRC) {
       if (!text) continue; // missing file already reported by checkMembership
       const fmName = text.match(/^---\r?\n[\s\S]*?name:\s*["']?([\w-]+)/);
       if (!fmName || fmName[1] !== skill) {
-        errors.push(`[${bundleName}] skill ${skill}: frontmatter name "${fmName ? fmName[1] : '(none)'}" != directory name`);
+        errors.push(
+          `[${bundleName}] skill ${skill}: frontmatter name "${fmName ? fmName[1] : '(none)'}" != directory name`,
+        );
       }
       const desc = (text.match(/^description:[ \t]*(.+)$/m) || [])[1] || '';
       const descValue = desc.trim().replace(/^["']|["']$/g, '');
@@ -507,7 +524,9 @@ function validateFrontmatter(bundles, srcRoot = SRC) {
       else if (descValue.length > 1024)
         errors.push(`[${bundleName}] skill ${skill}: description is ${descValue.length} chars (max 1024)`);
       else if (descValue.length > 700)
-        warnings.push(`skill ${skill}: description is ${descValue.length} chars — the hard limit is 1024, but routing signal blurs past ~600`);
+        warnings.push(
+          `skill ${skill}: description is ${descValue.length} chars — the hard limit is 1024, but routing signal blurs past ~600`,
+        );
     }
     for (const agent of bundle.agents || []) {
       const md = path.join(srcRoot, 'agents', `${agent}.md`);
@@ -539,7 +558,9 @@ function validateFrontmatter(bundles, srcRoot = SRC) {
           .find((l) => l && !l.startsWith('#')) || '';
       const clean = para.replace(/^[-*>]+\s*/, '');
       if (clean.length > 297)
-        warnings.push(`knowledge ${topic}: first paragraph is ${clean.length} chars — the build will slice it at 297 plus '...'`);
+        warnings.push(
+          `knowledge ${topic}: first paragraph is ${clean.length} chars — the build will slice it at 297 plus '...'`,
+        );
     }
   }
   return { errors, warnings };
@@ -571,11 +592,11 @@ function buildBundle(name, bundle, outDir, checkOnly) {
     extensions: {
       'ai.mistral.vibe': {
         schemaVersion: 1,
-        displayName: `${name}${bundle.icon ? ' ' + bundle.icon : ''} (qa-tools)`,
+        displayName: `${name}${bundle.icon ? ` ${bundle.icon}` : ''} (qa-tools)`,
       },
     },
   };
-  fs.writeFileSync(path.join(pluginDir, 'plugin.json'), JSON.stringify(manifest, null, 2) + '\n');
+  fs.writeFileSync(path.join(pluginDir, 'plugin.json'), `${JSON.stringify(manifest, null, 2)}\n`);
 
   // 2. skills
   for (const skill of bundle.skills || []) {
@@ -603,7 +624,7 @@ function buildBundle(name, bundle, outDir, checkOnly) {
       force: true,
     });
     const skillBody = bundle.pack ? rewritePackSkill(skillText) : skillText;
-    fs.writeFileSync(path.join(pluginDir, 'skills', skill, 'SKILL.md'), appendEmojiStyle(skillBody) + '\n');
+    fs.writeFileSync(path.join(pluginDir, 'skills', skill, 'SKILL.md'), `${appendEmojiStyle(skillBody)}\n`);
   }
 
   // 3. agents -> TOML
@@ -663,7 +684,7 @@ function buildBundle(name, bundle, outDir, checkOnly) {
       const known = GLOBAL_BINARY_SERVERS.find((s) => s.name === server);
       if (!known) {
         errors.push(
-          `Bundle ${name}: mcp server "${server}" is not a known global-binary server (known: ${GLOBAL_BINARY_SERVERS.map((s) => s.name).join(', ')})`
+          `Bundle ${name}: mcp server "${server}" is not a known global-binary server (known: ${GLOBAL_BINARY_SERVERS.map((s) => s.name).join(', ')})`,
         );
         continue;
       }
@@ -680,50 +701,60 @@ function buildBundle(name, bundle, outDir, checkOnly) {
     // A build error must never leave a dead mcpServers:{} manifest behind
     // (the 0.2.0 lesson): write only when every declared server resolved.
     if (Object.keys(mcp.mcpServers).length === (bundle.mcp || []).length) {
-      fs.writeFileSync(path.join(pluginDir, 'mcp.json'), JSON.stringify(mcp, null, 2) + '\n');
+      fs.writeFileSync(path.join(pluginDir, 'mcp.json'), `${JSON.stringify(mcp, null, 2)}\n`);
     }
   }
 
-  // 6. hooks: quality gate (blocks .only()/fit() in test files via
-  // structured deny on stdout; warns on waits/tautologies). strict = false:
-  // a crashing guard fails open (warning only), denial is data-driven,
-  // never a non-zero exit code.
-  // Only in bundles that declare hooks — no empty hooks.toml or stray guard
-  // scripts in bundles without a gate.
+  // 6. hooks: deterministic pre_tool quality gates (see BUNDLE_HOOKS):
+  // strict = false - a crashing guard fails open (Vibe prints a warning,
+  // the gated action proceeds); denial is data-driven via the structured
+  // response JSON on stdout, never a non-zero exit code.
+  // Only in bundles that declare hooks - no empty hooks.toml or stray
+  // guard scripts in bundles without a gate.
   if ((bundle.hooks || []).length) {
     fs.mkdirSync(path.join(pluginDir, 'vibe-hooks'), { recursive: true });
-    fs.writeFileSync(
-      path.join(pluginDir, 'vibe-hooks/test-file-guard.js'),
-      fs.readFileSync(path.join(ROOT, 'scripts/assets/test-file-guard.js'), 'utf8')
-    );
-    const hookEntries = (bundle.hooks || [])
-      .map((h) =>
+    const hookEntries = [];
+    for (const h of bundle.hooks || []) {
+      const known = BUNDLE_HOOKS.find((x) => x.name === h);
+      if (!known) {
+        errors.push(
+          `Bundle ${name}: hook "${h}" is not a known guard (known: ${BUNDLE_HOOKS.map((x) => x.name).join(', ')})`,
+        );
+        continue;
+      }
+      fs.writeFileSync(
+        path.join(pluginDir, 'vibe-hooks', known.script),
+        fs.readFileSync(path.join(ROOT, 'scripts', 'assets', known.script), 'utf8'),
+      );
+      hookEntries.push(
         [
           '[[hooks]]',
           `name = ${tomlString(h)}`,
           'type = "pre_tool"',
           'match = "file_system.write_file"',
-          'command = "node vibe-hooks/test-file-guard.js"',
+          `command = "node vibe-hooks/${known.script}"`,
           'strict = false',
           '',
           '[[hooks]]',
-          `name = ${tomlString(h + '-edit')}`,
+          `name = ${tomlString(`${h}-edit`)}`,
           'type = "pre_tool"',
           'match = "file_system.edit"',
-          'command = "node vibe-hooks/test-file-guard.js"',
+          `command = "node vibe-hooks/${known.script}"`,
           'strict = false',
           '',
           '[[hooks]]',
-          `name = ${tomlString(h + '-bash')}`,
+          `name = ${tomlString(`${h}-bash`)}`,
           'type = "pre_tool"',
           'match = "file_system.bash"',
-          'command = "node vibe-hooks/test-file-guard.js"',
+          `command = "node vibe-hooks/${known.script}"`,
           'strict = false',
           '',
-        ].join('\n')
-      )
-      .join('\n');
-    fs.writeFileSync(path.join(pluginDir, 'ai.mistral.vibe/hooks.toml'), hookEntries);
+        ].join('\n'),
+      );
+    }
+    if (hookEntries.length) {
+      fs.writeFileSync(path.join(pluginDir, 'ai.mistral.vibe/hooks.toml'), hookEntries.join('\n'));
+    }
   }
 
   return errors;
@@ -890,14 +921,14 @@ function main() {
     // half-finished bump as success.
     const quotingErrors = checkVersionQuoting();
     if (quotingErrors.length) {
-      for (const e of quotingErrors) console.error('❌ ERROR ' + e);
+      for (const e of quotingErrors) console.error(`❌ ERROR ${e}`);
       console.error('--set-version rewrites only quoted versions; fix the line(s) above first.');
       process.exit(1);
     }
     const changed = setBundlesVersions(path.join(ROOT, 'bundles.yaml'), selected, version);
     console.log(
       `Set version ${version} on ${changed} bundle(s) in bundles.yaml.` +
-        (changed ? ' Now rebuild so plugins/ mirrors it: node scripts/build.js' : ' (nothing to change)')
+        (changed ? ' Now rebuild so plugins/ mirrors it: node scripts/build.js' : ' (nothing to change)'),
     );
     process.exit(changed ? 0 : 1);
   }
@@ -910,7 +941,7 @@ function main() {
   if (fm.warnings.length) {
     // Full list in --check (the actionable place); one summary line in the
     // other modes so build/verify logs stay readable.
-    if (checkOnly) for (const w of fm.warnings) console.error('⚠️ WARN ' + w);
+    if (checkOnly) for (const w of fm.warnings) console.error(`⚠️ WARN ${w}`);
     else console.error(`⚠️ WARN ${fm.warnings.length} source warning(s) — run npm run check to list them`);
   }
 
@@ -938,7 +969,7 @@ function main() {
     // compare a mix of old and new artifacts).
     const staging = path.join(outDir, '.tmp-build');
     fs.rmSync(staging, { recursive: true, force: true });
-    let built = [];
+    const built = [];
     try {
       fs.mkdirSync(staging, { recursive: true });
       for (const name of selected) {
@@ -957,15 +988,11 @@ function main() {
 
   if (allErrors.length) {
     console.error('\n❌ ERRORS:');
-    for (const e of allErrors) console.error('  - ' + e);
+    for (const e of allErrors) console.error(`  - ${e}`);
     process.exit(1);
   }
   console.log(
-    verifyOnly
-      ? '✅ Committed plugins/ matches a fresh build.'
-      : checkOnly
-        ? '✅ All bundles valid.'
-        : '✅ Done.'
+    verifyOnly ? '✅ Committed plugins/ matches a fresh build.' : checkOnly ? '✅ All bundles valid.' : '✅ Done.',
   );
 }
 

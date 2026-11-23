@@ -60,6 +60,7 @@ test-automation:
     - migrate-tests-to-playwright
     - migrating-tests-to-playwright
     - mocking-network-and-time
+    - mutation-testing
     - playwright-explore-website
     - playwright-explore-website-requests
     - playwright-generate-test
@@ -88,6 +89,7 @@ test-automation:
     - test-code-reviewer
   hooks:
     - test-file-guard
+    - red-test-deletion-guard
 
 api-testing:
   icon: 🔌

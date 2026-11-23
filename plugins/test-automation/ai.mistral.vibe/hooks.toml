@@ -18,3 +18,24 @@ type = "pre_tool"
 match = "file_system.bash"
 command = "node vibe-hooks/test-file-guard.js"
 strict = false
+
+[[hooks]]
+name = "red-test-deletion-guard"
+type = "pre_tool"
+match = "file_system.write_file"
+command = "node vibe-hooks/red-test-deletion-guard.js"
+strict = false
+
+[[hooks]]
+name = "red-test-deletion-guard-edit"
+type = "pre_tool"
+match = "file_system.edit"
+command = "node vibe-hooks/red-test-deletion-guard.js"
+strict = false
+
+[[hooks]]
+name = "red-test-deletion-guard-bash"
+type = "pre_tool"
+match = "file_system.bash"
+command = "node vibe-hooks/red-test-deletion-guard.js"
+strict = false
