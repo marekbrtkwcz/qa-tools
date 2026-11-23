@@ -86,19 +86,19 @@ function main() {
   const dir = dirFlag >= 0 ? path.resolve(args[dirFlag + 1]) : path.join(ROOT, 'plugins');
 
   if (!fs.existsSync(dir)) {
-    console.error(`No such directory: ${dir}`);
+    console.error(`❌ No such directory: ${dir}`);
     process.exit(2);
   }
 
   const results = validateAll(dir);
   const bad = [...results.jsonErrors, ...results.tomlErrors];
   if (bad.length) {
-    console.error('ERRORS:');
+    console.error('❌ ERRORS:');
     for (const b of bad) console.error('  - ' + b);
     process.exit(1);
   }
   console.log(
-    `${results.jsonCount} JSON manifest(s) and ${results.tomlCount} TOML file(s) parse cleanly under ${path.relative(ROOT, dir) || '.'}`
+    `✅ ${results.jsonCount} JSON manifest(s) and ${results.tomlCount} TOML file(s) parse cleanly under ${path.relative(ROOT, dir) || '.'}`
   );
 }
 

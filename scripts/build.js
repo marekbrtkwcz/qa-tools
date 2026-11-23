@@ -874,7 +874,7 @@ function main() {
 
   const unknown = selected.filter((s) => !bundles[s]);
   if (unknown.length) {
-    console.error(`Unknown bundle(s): ${unknown.join(', ')}. Known: ${Object.keys(bundles).join(', ')}`);
+    console.error(`❌ Unknown bundle(s): ${unknown.join(', ')}. Known: ${Object.keys(bundles).join(', ')}`);
     process.exit(2);
   }
 
@@ -890,7 +890,7 @@ function main() {
     // half-finished bump as success.
     const quotingErrors = checkVersionQuoting();
     if (quotingErrors.length) {
-      for (const e of quotingErrors) console.error('ERROR ' + e);
+      for (const e of quotingErrors) console.error('❌ ERROR ' + e);
       console.error('--set-version rewrites only quoted versions; fix the line(s) above first.');
       process.exit(1);
     }
@@ -910,8 +910,8 @@ function main() {
   if (fm.warnings.length) {
     // Full list in --check (the actionable place); one summary line in the
     // other modes so build/verify logs stay readable.
-    if (checkOnly) for (const w of fm.warnings) console.error('WARN ' + w);
-    else console.error(`WARN ${fm.warnings.length} source warning(s) — run npm run check to list them`);
+    if (checkOnly) for (const w of fm.warnings) console.error('⚠️ WARN ' + w);
+    else console.error(`⚠️ WARN ${fm.warnings.length} source warning(s) — run npm run check to list them`);
   }
 
   if (verifyOnly) {
@@ -956,16 +956,16 @@ function main() {
   }
 
   if (allErrors.length) {
-    console.error('\nERRORS:');
+    console.error('\n❌ ERRORS:');
     for (const e of allErrors) console.error('  - ' + e);
     process.exit(1);
   }
   console.log(
     verifyOnly
-      ? 'Committed plugins/ matches a fresh build.'
+      ? '✅ Committed plugins/ matches a fresh build.'
       : checkOnly
-        ? 'All bundles valid.'
-        : 'Done.'
+        ? '✅ All bundles valid.'
+        : '✅ Done.'
   );
 }
 

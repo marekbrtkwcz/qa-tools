@@ -129,6 +129,8 @@ Słownictwo (pełne w `src/shared/emoji-style.md`): ✅ passed · ❌ failed/def
 
 Zasady: jedna emotka na nagłówek/komórkę statusu, **nigdy** w nazwach testów, identyfikatorach kodu, plikach, commitach i branchach.
 
+Słownictwo obowiązuje też w dokumentach i narzędziach repo: nagłówki kategorii CHANGELOG (`✅ Dodane`, `🔄 Zmienione`, `🐛 Naprawione`), roadmapa (✅ zrobione / 🔍 luka) i statusy konsoli builda (`✅` sukces, `⚠️` warning, `❌` błąd — słowa kluczowe `OK`/`WARN`/`ERROR` zostają, bo po nie się klika w logu).
+
 Ikonki bundli z `bundles.yaml` (`icon:`) są buildem podłączane tam, gdzie schemat na to pozwala: do `displayName` pluginu (np. `qa-core 🧭 (qa-tools)`) i `display_name` każdego subagenta (np. `Test Planner 🧭`). ⚠️ Identyfikatory (`name`, `config_name`, ścieżki) i `name` w frontmatter pozostają bez emotek — to wymóg walidacji builda i schematu Vibe (Agent Plugins 1.0 nie definiuje top-level `icon` w manifeście; Vibe go ignoruje z ostrzeżeniem).
 
 Zmiana konwencji = edycja `src/shared/emoji-style.md` + `node scripts/build.js`. 🚫 nie edytuj wygenerowanych `plugins/` ręcznie.
@@ -158,12 +160,12 @@ Konwencje potwierdzone testami (patrz historia commitów): klucze TOML **snake_c
 
 ## 🧭 Roadmapa
 
-- [ ] `connectors.json` (GitHub, k6) dla bundle'i automatyzujących
-- [x] GitHub Actions CI (`.github/workflows/ci.yml`): `build.js --check` + walidacja manifestów JSON + drift-gate `--verify`, matrysa ubuntu + windows
-- [ ] weryfikacja ładowania pluginu w Vibe headless w CI (wymaga zainstalowanego CLI i auth — świadomie poza pierwszą iteracją CI)
-- [x] hook blokujący dla `.only()`/`fit()` w plikach testowych — deny przez structured response (exit 0), fail-open na awarię hooka
-- [ ] pełna polityka jakości hooka: kolejne wzorce (mock-only tests, retries jako „fix"), decyzja fail-open vs strict fail-closed
-- [ ] hook-only pluginy źródła (`always-on-skills`, `print-tool-info`) — częściowo pokryte przez `test-file-guard`
+- 🔍 `connectors.json` (GitHub, k6) dla bundle'i automatyzujących
+- ✅ GitHub Actions CI (`.github/workflows/ci.yml`): `build.js --check` + walidacja manifestów JSON + drift-gate `--verify`, matrysa ubuntu + windows
+- 🔍 weryfikacja ładowania pluginu w Vibe headless w CI (wymaga zainstalowanego CLI i auth — świadomie poza pierwszą iteracją CI)
+- ✅ hook blokujący dla `.only()`/`fit()` w plikach testowych — deny przez structured response (exit 0), fail-open na awarię hooka
+- 🔍 pełna polityka jakości hooka: kolejne wzorce (mock-only tests, retries jako „fix"), decyzja fail-open vs strict fail-closed
+- 🔍 hook-only pluginy źródła (`always-on-skills`, `print-tool-info`) — częściowo pokryte przez `test-file-guard`
 
 ## 📄 Licencja i atrybucja
 

@@ -82,11 +82,11 @@ function main() {
   }
 
   if (result.errors.length) {
-    for (const e of result.errors) console.error(`RELEASE GATE: ${e}`);
+    for (const e of result.errors) console.error(`❌ RELEASE GATE: ${e}`);
     process.exit(1);
   }
   console.log(
-    `Release gate OK: tag ${tag} matches version ${result.version} on ${result.bundles.length} bundle(s), the CHANGELOG header and the repo package.json.`
+    `✅ Release gate OK: tag ${tag} matches version ${result.version} on ${result.bundles.length} bundle(s), the CHANGELOG header and the repo package.json.`
   );
 }
 
