@@ -282,6 +282,41 @@ function titleFromDescription(text) {
  * and every declared name exists in src/.
  * Runs in every mode (--check, build, --verify): it is read-only and cheap.
  */
+/*
+ * The playwright MCP server runs the global `playwright-mcp` binary, so the
+ * version pin can no longer live in the generated manifest (the mcp.json
+ * schema carries only the command). The pinned `npm i -g` install line in
+ * README.md is therefore the only thing pinning the version users install.
+ * This check keeps that guarantee mechanical: it reads mcp-pins from
+ * bundles.yaml and fails the build when the README line does not name the
+ * same version - a bump without the README edit is caught here, not on a
+ * user's machine. Read-only and cheap; runs in every mode, like
+ * checkMembership. A bundle without a pin stays quiet here: buildBundle
+ * owns the "no version pin" error.
+ */
+function checkPlaywrightInstallDoc(bundles, docRoot = ROOT) {
+  const errors = [];
+  const qa = bundles['qa-mcp'];
+  const pin = (qa && (qa['mcp-pins'] || []).find((p) => /^playwright=/.test(String(p)))) || null;
+  if (!pin) return errors;
+  const version = String(pin).split('=').pop();
+  const wanted = `npm i -g @playwright/mcp@${version}`;
+  let readme = '';
+  try {
+    readme = fs.readFileSync(path.join(docRoot, 'README.md'), 'utf8');
+  } catch {
+    return [
+      `Bundle qa-mcp: README.md is missing, so the pinned playwright MCP install command ("${wanted}") cannot be verified`,
+    ];
+  }
+  if (!readme.includes(wanted)) {
+    errors.push(
+      `Bundle qa-mcp: README.md does not contain the pinned install command "${wanted}" - the plugin runs the global playwright-mcp binary, so the README line is the only thing pinning the version users install; update it with the version from mcp-pins`
+    );
+  }
+  return errors;
+}
+
 function checkMembership(bundles, srcRoot = SRC) {
   const errors = [];
   const kinds = [
@@ -531,12 +566,15 @@ function buildBundle(name, bundle, outDir, checkOnly) {
           errors.push('Bundle qa-mcp: playwright MCP has no version pin - add "playwright=<version>" to mcp-pins in bundles.yaml (pinned, never @latest)');
           continue;
         }
-        // --yes: on a cold npx cache the install prompt would read (and
-        // swallow) the MCP initialize request from stdin, deadlocking the
-        // server until Vibe's fixed 10 s plugin-MCP startup budget expires
-        // (the plugin mcp.json schema has no timeout field); --prefer-offline
-        // skips the registry roundtrip when the pinned version is cached.
-        mcp.mcpServers[server] = { type: 'stdio', command: 'npx', args: ['--yes', '--prefer-offline', `@playwright/mcp@${version}`] };
+        // The server runs the global binary (npm i -g, pinned install line in
+        // README.md, enforced by checkPlaywrightInstallDoc). A direct spawn
+        // starts in well under Vibe's fixed 10 s plugin-MCP startup budget,
+        // where npx (shim + resolver + cache/registry) could exceed it on
+        // Windows. The version pin can no longer live in this manifest - the
+        // schema carries only the command - so the README install command
+        // is the only thing pinning what users run; the build fails when
+        // it drifts from mcp-pins.
+        mcp.mcpServers[server] = { type: 'stdio', command: 'playwright-mcp' };
       } else {
         mcp.mcpServers[server] = { type: 'stdio', command: server };
       }
@@ -758,6 +796,7 @@ function main() {
   }
 
   let allErrors = checkMembership(bundles);
+  allErrors = allErrors.concat(checkPlaywrightInstallDoc(bundles));
   const fm = validateFrontmatter(bundles);
   allErrors = allErrors.concat(fm.errors);
   if (fm.warnings.length) {
@@ -840,6 +879,7 @@ module.exports = {
   listFiles,
   diffTrees,
   checkMembership,
+  checkPlaywrightInstallDoc,
   validateFrontmatter,
   orphanPluginDirs,
   swapStagedBundles,
