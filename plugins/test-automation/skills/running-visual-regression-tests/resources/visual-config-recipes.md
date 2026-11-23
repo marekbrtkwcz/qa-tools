@@ -153,7 +153,7 @@ Run the whole job in the same container as baseline generation:
 
 ```yaml
     container:
-      image: mcr.microsoft.com/playwright:v1.56.0-noble
+      image: mcr.microsoft.com/playwright:latest-noble
 ```
 
 ## Regenerating baselines from CI
@@ -172,7 +172,7 @@ jobs:
   update:
     runs-on: ubuntu-latest
     container:
-      image: mcr.microsoft.com/playwright:v1.56.0-noble
+      image: mcr.microsoft.com/playwright:latest-noble
     steps:
       - uses: actions/checkout@v4
       - run: npm ci

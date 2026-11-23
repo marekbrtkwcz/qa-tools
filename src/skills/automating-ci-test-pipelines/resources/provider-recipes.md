@@ -144,7 +144,7 @@ On GitHub, a required check whose workflow is skipped by a path filter stays pen
 
 ```yaml
 e2e:
-  image: mcr.microsoft.com/playwright:v1.56.0-noble   # match the version in package.json
+  image: mcr.microsoft.com/playwright:latest-noble   # match the major version in package.json
   stage: test
   parallel: 4
   variables:
@@ -162,7 +162,7 @@ e2e:
     paths: [blob-report/, test-results/]
 
 merge-reports:
-  image: mcr.microsoft.com/playwright:v1.56.0-noble
+  image: mcr.microsoft.com/playwright:latest-noble
   stage: report
   needs: [e2e]
   when: always

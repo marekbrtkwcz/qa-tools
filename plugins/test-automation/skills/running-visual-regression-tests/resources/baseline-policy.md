@@ -19,7 +19,7 @@ The rule that matters: **baselines are generated in the same image that compares
 docker run --rm \
   -v "$(pwd):/work" -w /work \
   -e CI=true \
-  mcr.microsoft.com/playwright:v1.56.0-noble \
+  mcr.microsoft.com/playwright:latest-noble \
   npx playwright test --grep @visual --update-snapshots
 ```
 

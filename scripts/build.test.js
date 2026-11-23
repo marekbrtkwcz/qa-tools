@@ -485,7 +485,7 @@ test('validateFrontmatter: the real collection has no frontmatter errors; warnin
 
 test('validateFrontmatter: name mismatch, missing description and over-limit skill description are errors', () => {
   const srcRoot = tmpDir();
-  const longDesc = 'x'.repeat(1025);
+  const longDesc = 'x'.repeat(1024) + '.';
   writeTree(path.join(srcRoot, 'skills'), {
     'good/SKILL.md': '---\nname: good\ndescription: "Valid trigger. Use when x."\n---\n\n# Good\n',
     'bad-name/SKILL.md': '---\nname: not-bad-name\ndescription: ""\n---\n\n# Bad\n',
@@ -515,7 +515,7 @@ test('validateFrontmatter: agent descriptions over 300 warn (build truncates), n
 
 test('validateFrontmatter: skill descriptions over 700 warn (routing signal), never error', () => {
   const srcRoot = tmpDir();
-  const long = 'd'.repeat(750);
+  const long = 'd'.repeat(749) + '.';
   writeTree(path.join(srcRoot, 'skills'), {
     'mine/SKILL.md': `---\nname: mine\ndescription: ${long}\n---\n\nBody.\n`,
   });
@@ -524,6 +524,19 @@ test('validateFrontmatter: skill descriptions over 700 warn (routing signal), ne
   assert.deepEqual(errors, []);
   assert.equal(warnings.length, 1);
   assert.ok(warnings[0].includes('skill mine') && warnings[0].includes('750'));
+});
+
+test('validateFrontmatter: skill description without trailing period is an error', () => {
+  const srcRoot = tmpDir();
+  writeTree(path.join(srcRoot, 'skills'), {
+    'no-dot/SKILL.md': '---\nname: no-dot\ndescription: "Missing the trailing period"\n---\n\n# No dot\n',
+    'with-dot/SKILL.md': '---\nname: with-dot\ndescription: "Has the trailing period."\n---\n\n# With dot\n',
+  });
+  const bundles = { b: { skills: ['no-dot', 'with-dot'], agents: [], knowledge: [] } };
+  const { errors, warnings } = validateFrontmatter(bundles, srcRoot);
+  assert.equal(errors.length, 1, JSON.stringify(errors));
+  assert.ok(errors[0].includes('skill no-dot') && errors[0].includes('must end with a period'));
+  assert.deepEqual(warnings, []);
 });
 
 /* ---------- orphanPluginDirs (drift gate whole-bundle blind spot) ---------- */

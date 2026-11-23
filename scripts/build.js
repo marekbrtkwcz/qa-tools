@@ -521,6 +521,8 @@ function validateFrontmatter(bundles, srcRoot = SRC) {
       const desc = (text.match(/^description:[ \t]*(.+)$/m) || [])[1] || '';
       const descValue = desc.trim().replace(/^["']|["']$/g, '');
       if (!descValue) errors.push(`[${bundleName}] skill ${skill}: missing frontmatter description`);
+      else if (!descValue.endsWith('.'))
+        errors.push(`[${bundleName}] skill ${skill}: description must end with a period (.)`);
       else if (descValue.length > 1024)
         errors.push(`[${bundleName}] skill ${skill}: description is ${descValue.length} chars (max 1024)`);
       else if (descValue.length > 700)

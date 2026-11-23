@@ -119,7 +119,7 @@ The `|| echo` makes the job green whatever the tool says, and the `allow_failure
 ```yaml
 e2e:
   stage: verify
-  image: mcr.microsoft.com/playwright:v1.50.0-jammy
+  image: mcr.microsoft.com/playwright:latest-jammy
   parallel: 4
   script: npx playwright test --shard=$CI_NODE_INDEX/$CI_NODE_TOTAL
   rules:

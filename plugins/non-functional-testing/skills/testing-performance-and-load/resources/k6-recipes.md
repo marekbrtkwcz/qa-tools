@@ -8,7 +8,7 @@ Scripts for each test shape. An Artillery equivalent is at the end.
 import http from 'k6/http';
 import { check, sleep } from 'k6';
 import { Counter, Rate } from 'k6/metrics';
-import { randomIntBetween, randomItem } from 'https://jslib.k6.io/k6-utils/1.4.0/index.js';
+import { randomIntBetween, randomItem } from 'https://jslib.k6.io/k6-utils/1.6.0/index.js'; // check jslib.k6.io for the latest
 
 const checkoutCompleted = new Counter('checkout_completed');
 const checkoutSuccess = new Rate('checkout_success_rate');

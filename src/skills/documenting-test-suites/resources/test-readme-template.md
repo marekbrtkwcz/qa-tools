@@ -8,7 +8,7 @@
 
 - **Owner**: [team or person]
 - **Last verified**: [YYYY-MM-DD] by [name]
-- **Runners**: [Playwright 1.56 for E2E and API, Vitest 3 for unit]
+- **Runners**: [Playwright (latest) for E2E and API, Vitest (latest) for unit]
 
 ## Quickstart
 
@@ -18,8 +18,8 @@ Everything needed to get from a fresh clone to a green run.
 
 | Tool | Version | Check |
 | --- | --- | --- |
-| Node | 22.x | `node -v` |
-| npm | 10.x | `npm -v` |
+| Node | latest LTS | `node -v` |
+| npm | bundled with Node | `npm -v` |
 | Docker | any recent | `docker -v` |
 
 Version managers: `.nvmrc` is present, so `nvm use` picks the right Node.
@@ -137,7 +137,7 @@ Only the ones that are easy to get wrong.
 ```bash
 # Same container as CI, which matters for visual tests and font rendering
 docker run --rm -v "$(pwd):/work" -w /work \
-  mcr.microsoft.com/playwright:v1.56.0-noble \
+  mcr.microsoft.com/playwright:latest-noble \
   npx playwright test --grep "the failing test title"
 ```
 
