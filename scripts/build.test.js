@@ -118,17 +118,32 @@ test('buildBundle: no dead mcp.json for bundles without mcp; qa-mcp ships the gl
     'bundle without mcp: must not ship an empty mcp.json'
   );
 
-  const built = buildBundle('qa-mcp', { mcp: ['playwright', 'chrome-devtools-mcp'] }, out);
+  const built = buildBundle('qa-mcp', { mcp: ['playwright', 'chrome-devtools'] }, out);
   assert.deepEqual(built, [], 'the servers need no pin: install versions float by design');
   const manifest = JSON.parse(fs.readFileSync(path.join(out, 'qa-mcp', 'mcp.json'), 'utf8'));
-  assert.deepEqual(Object.keys(manifest.mcpServers), ['playwright', 'chrome-devtools-mcp']);
+  assert.deepEqual(Object.keys(manifest.mcpServers), ['playwright', 'chrome-devtools']);
   assert.equal(manifest.mcpServers.playwright.command, 'playwright-mcp');
-  // chrome-devtools-mcp keeps the server name identical to the binary, so a
-  // user-level [[mcp_servers]] entry with the same name shadows the plugin
-  // copy instead of spawning a second Chrome instance.
-  assert.equal(manifest.mcpServers['chrome-devtools-mcp'].command, 'chrome-devtools-mcp');
+  // Short server names are the uniform convention (name != binary for both
+  // servers); a user-level [[mcp_servers]] entry with the same short name
+  // shadows the plugin copy instead of spawning a second browser instance.
+  assert.equal(manifest.mcpServers['chrome-devtools'].command, 'chrome-devtools-mcp');
   assert.ok(!('args' in manifest.mcpServers.playwright), 'bare executable: no args, no version in the manifest');
-  assert.ok(!('args' in manifest.mcpServers['chrome-devtools-mcp']), 'bare executable: no args, no version in the manifest');
+  assert.ok(!('args' in manifest.mcpServers['chrome-devtools']), 'bare executable: no args, no version in the manifest');
+});
+
+test('buildBundle: an unknown mcp server name is a build error, not a dead manifest', () => {
+  // Every server declared under mcp: must resolve through
+  // GLOBAL_BINARY_SERVERS (the single name->binary mapping), otherwise the
+  // build errors and no mcp.json is written.
+  const out = tmpDir();
+  const built = buildBundle('qa-mcp', { mcp: ['playwright', 'not-a-known-server'] }, out);
+  assert.equal(built.length, 1, 'unknown server must surface exactly one error');
+  assert.ok(built[0].includes('not-a-known-server'), built[0]);
+  assert.ok(built[0].includes('playwright, chrome-devtools'), 'error lists the known server names');
+  assert.ok(
+    !fs.existsSync(path.join(out, 'qa-mcp', 'mcp.json')),
+    'a failed resolution must not ship a partial mcp.json'
+  );
 });
 
 test('checkGlobalBinaryInstallDoc: the README must document both floating @latest install lines', () => {

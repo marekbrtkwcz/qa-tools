@@ -5,7 +5,7 @@
       "type": "stdio",
       "command": "playwright-mcp"
     },
-    "chrome-devtools-mcp": {
+    "chrome-devtools": {
       "type": "stdio",
       "command": "chrome-devtools-mcp"
     }

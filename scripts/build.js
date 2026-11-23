@@ -283,9 +283,14 @@ function titleFromDescription(text) {
  * Runs in every mode (--check, build, --verify): it is read-only and cheap.
  */
 /*
- * Both MCP servers (playwright -> playwright-mcp, chrome-devtools-mcp) run
- * global binaries, so the manifest cannot carry a version; what users run is
- * their own npm i -g install, shared with every other tool on the machine.
+ * Both MCP servers run global binaries. Server names are short and
+ * product-style (playwright, chrome-devtools) - one uniform naming
+ * convention for every MCP server across bundles, plugin manifests and
+ * user configs - while the binaries keep their own package names
+ * (playwright-mcp, chrome-devtools-mcp). This table is the single
+ * name->binary mapping. Shadowing is unaffected: a user-level
+ * [[mcp_servers]] entry with the same short name replaces the plugin
+ * copy instead of spawning a second browser instance.
  * The README therefore ships a floating @latest install line for each binary
  * - pinning would force users to downgrade a binary other tools also use.
  * All this check enforces is that every prerequisite stays documented: the
@@ -297,7 +302,7 @@ function titleFromDescription(text) {
  */
 const GLOBAL_BINARY_SERVERS = [
   { name: 'playwright', binary: 'playwright-mcp', line: 'npm i -g @playwright/mcp@latest' },
-  { name: 'chrome-devtools-mcp', binary: 'chrome-devtools-mcp', line: 'npm i -g chrome-devtools-mcp@latest' },
+  { name: 'chrome-devtools', binary: 'chrome-devtools-mcp', line: 'npm i -g chrome-devtools-mcp@latest' },
 ];
 
 function checkGlobalBinaryInstallDoc(docRoot = ROOT) {
@@ -559,27 +564,31 @@ function buildBundle(name, bundle, outDir, checkOnly) {
   if ((bundle.mcp || []).length) {
     const mcp = { $schema: 'https://agent-plugins.org/schemas/1.0.0/mcp.schema.json', mcpServers: {} };
     for (const server of bundle.mcp) {
-      if (server === 'playwright') {
-        // The server runs the global binary (npm i -g, prerequisite
-        // documented in README.md, enforced by checkGlobalBinaryInstallDoc).
-        // A direct spawn starts in well under Vibe's fixed 10 s plugin-MCP
-        // startup budget, where npx (shim + resolver + cache/registry)
-        // could exceed it on Windows. No version pin here on purpose: the
-        // manifest schema carries only the command, the version lives in
-        // the user's shared global install, and the README line ships
-        // floating @latest so nobody is forced to downgrade a binary other
-        // tools also use.
-        mcp.mcpServers[server] = { type: 'stdio', command: 'playwright-mcp' };
-      } else {
-        // Same global-binary rule for every other declared server; today
-        // that is chrome-devtools-mcp, whose binary is named exactly like
-        // the server. Keeping the server name identical to the binary keeps
-        // it identical to the user-level [[mcp_servers]] entry too, so a
-        // user config with custom flags/timeouts shadows the plugin copy
-        // (Vibe drops the plugin server on a name clash) instead of
-        // spawning a second Chrome instance.
-        mcp.mcpServers[server] = { type: 'stdio', command: server };
+      // Every declared server must be a known global-binary server
+      // (GLOBAL_BINARY_SERVERS is the single name->binary mapping: short
+      // product-style server names, binaries keep their package names).
+      // The server runs the global binary (npm i -g, prerequisite
+      // documented in README.md, enforced by checkGlobalBinaryInstallDoc).
+      // A direct spawn starts in well under Vibe's fixed 10 s plugin-MCP
+      // startup budget, where npx (shim + resolver + cache/registry)
+      // could exceed it on Windows. No version pin here on purpose: the
+      // manifest schema carries only the command, the version lives in
+      // the user's shared global install, and the README line ships
+      // floating @latest so nobody is forced to downgrade a binary other
+      // tools also use.
+      // Keeping the server name short (playwright, chrome-devtools) keeps it
+      // identical to a user-level [[mcp_servers]] entry with the same name,
+      // so a user config with custom flags/timeouts shadows the plugin copy
+      // (Vibe drops the plugin server on a name clash) instead of spawning a
+      // second browser instance.
+      const known = GLOBAL_BINARY_SERVERS.find((s) => s.name === server);
+      if (!known) {
+        errors.push(
+          `Bundle ${name}: mcp server "${server}" is not a known global-binary server (known: ${GLOBAL_BINARY_SERVERS.map((s) => s.name).join(', ')})`
+        );
+        continue;
       }
+      mcp.mcpServers[server] = { type: 'stdio', command: known.binary };
     }
     // A build error must never leave a dead mcpServers:{} manifest behind
     // (the 0.2.0 lesson): write only when every declared server resolved.

@@ -39,7 +39,7 @@ cp -r plugins/qa-core ~/.vibe/plugins/qa-core
 cp -r plugins/qa-core <projekt>/.vibe/plugins/qa-core
 ```
 
-⚠️ **MCP bez duplikatów**: serwery browser automation są tylko w pluginie `qa-mcp` — **Playwright MCP** (`playwright`) i **Chrome DevTools MCP** (`chrome-devtools-mcp`). Jeśli używasz browser automation (test-automation, non-functional-testing, paczki UI/API), doinstaluj `cp -r plugins/qa-mcp ~/.vibe/plugins/` **raz** — same bundle nie deklarują już `mcp:`, więc instalacja kilku nie powiela serwerów.
+⚠️ **MCP bez duplikatów**: serwery browser automation są tylko w pluginie `qa-mcp` — **Playwright MCP** (`playwright`) i **Chrome DevTools MCP** (`chrome-devtools`). Jeśli używasz browser automation (test-automation, non-functional-testing, paczki UI/API), doinstaluj `cp -r plugins/qa-mcp ~/.vibe/plugins/` **raz** — same bundle nie deklarują już `mcp:`, więc instalacja kilku nie powiela serwerów.
 
 Oba serwery działają na **globalnych binarnych** (`playwright-mcp`, `chrome-devtools-mcp` — nie na `npx`), więc wymagają jednorazowej instalacji:
 
@@ -50,9 +50,9 @@ npm i -g chrome-devtools-mcp@latest
 
 Wersje **celowo pływające** (`@latest`): manifest pluginu niesie tylko nazwy komend, więc wersja i tak żyje w globalnym installu użytkownika — współdzielonym z innymi narzędziami — a przypinanie wymuszałoby downgrade komuś, kto już ma nowszy binarny. Repo nie trzyma pinów; jedyny wymóg pilnowany przez build (`checkGlobalBinaryInstallDoc`) to, żeby te linie `npm i -g` nie zginęły z README — bez nich serwery wypadają błędem spawn na każdej maszynie.
 
-⚠️ **Dlaczego binarny, nie npx**: Vibe daje MCP-om z pluginów twardy budżet 10 s na handshake `initialize`, a schemat pluginowego `mcp.json` nie ma pola timeout. `npx` na Windows (shim `.cmd` + resolving npm + cache/rejestr) potrafił ten budżet przekraczać → `Request 'initialize' timed out`; globalny binarny startuje w ułamku sekundy, więc ta klasa awarii znika. Brak zainstalowanego binarnego objawia się od razu czytelnym błędem spawn przy starcie sesji. Gdybyś kiedyś mimo to potrzebował dłuższego budżetu: `startup_timeout_sec` działa tylko w `[[mcp_servers]]` w `config.toml` (user-config), a serwer pluginu o tej samej nazwie (`playwright`, `chrome-devtools-mcp`) zostaje przez taki wpis automatycznie wywalony (shadow).
+⚠️ **Dlaczego binarny, nie npx**: Vibe daje MCP-om z pluginów twardy budżet 10 s na handshake `initialize`, a schemat pluginowego `mcp.json` nie ma pola timeout. `npx` na Windows (shim `.cmd` + resolving npm + cache/rejestr) potrafił ten budżet przekraczać → `Request 'initialize' timed out`; globalny binarny startuje w ułamku sekundy, więc ta klasa awarii znika. Brak zainstalowanego binarnego objawia się od razu czytelnym błędem spawn przy starcie sesji. Gdybyś kiedyś mimo to potrzebował dłuższego budżetu: `startup_timeout_sec` działa tylko w `[[mcp_servers]]` w `config.toml` (user-config), a serwer pluginu o tej samej nazwie (`playwright`, `chrome-devtools`) zostaje przez taki wpis automatycznie wywalony (shadow).
 
-⚠️ **Nazwa `chrome-devtools-mcp` celowo identyczna z binarką**: dzięki temu Twój własny wpis `[[mcp_servers]]` o tej nazwie (np. z kategoriami eksperymentalnymi czy dłuższym `tool_timeout_sec`) **shadowuje** kopię pluginu zamiast odpalać obok niej drugą instancję Chrome. Kopia pluginu startuje bez flag — wystarcza do sterowania przeglądarką; własne flagi konfigurujesz zawsze u siebie w `config.toml`.
+⚠️ **Nazwy serwerów ujednolicone do krótkich**: oba serwery używają krótkiej, „produktowej" nazwy (`playwright`, `chrome-devtools`) — celowo **nie** nazwy binarki (`playwright-mcp`, `chrome-devtools-mcp`); konwencja jest jedna dla całego repo i Twojego `config.toml`. Shadowing działa po nazwie serwera: Twój własny wpis `[[mcp_servers]]` o tej samej krótkiej nazwie (np. z kategoriami eksperymentalnymi czy dłuższym `tool_timeout_sec`) **shadowuje** kopię pluginu zamiast odpalać obok niej drugą instancję przeglądarki. Kopia pluginu startuje bez flag — wystarcza do sterowania przeglądarką; własne flagi konfigurujesz zawsze u siebie w `config.toml`.
 
 Potem w sesji Vibe: `/reload`.
 
