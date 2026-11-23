@@ -361,6 +361,33 @@ function checkGlobalBinaryInstallDoc(docRoot = ROOT) {
   return errors;
 }
 
+/**
+ * setBundlesVersions rewrites only versions that are quoted
+ * ("0.3.0"), so a bare `version: 0.3.0` would silently survive a
+ * --set-version bump and keep the old version in bundles.yaml while the
+ * releaser believes the bump ran. Guard before that drift can happen:
+ * every version: line must be exactly the form the bump path can rewrite.
+ * An error here fails every mode (check, build, verify) like membership.
+ */
+function checkVersionQuoting(bundlesFile = path.join(ROOT, 'bundles.yaml')) {
+  const errors = [];
+  const text = fs.readFileSync(bundlesFile, 'utf8');
+  let current = null;
+  text.split(/\r?\n/).forEach((line, i) => {
+    if (/^\S/.test(line)) {
+      current = line.replace(/:\s*$/, '').trim();
+      return;
+    }
+    if (!/^\s+version:/.test(line)) return;
+    if (!/^(\s*version:\s*)["'][^"']*["']\s*$/.test(line)) {
+      errors.push(
+        `bundle "${current}": version on line ${i + 1} is not a quoted value — setBundlesVersions only rewrites quoted versions, so a bare version: would silently survive a --set-version bump; write version: "0.1.0" (single or double quotes)`
+      );
+    }
+  });
+  return errors;
+}
+
 function checkMembership(bundles, srcRoot = SRC) {
   const errors = [];
   const kinds = [
@@ -834,6 +861,15 @@ function main() {
       console.error('--set-version expects an x.y.z version, e.g. --set-version 0.2.0');
       process.exit(2);
     }
+    // Gate before the bump: a bare version: line would silently survive the
+    // rewrite (changed < selected), so fail here instead of reporting a
+    // half-finished bump as success.
+    const quotingErrors = checkVersionQuoting();
+    if (quotingErrors.length) {
+      for (const e of quotingErrors) console.error('ERROR ' + e);
+      console.error('--set-version rewrites only quoted versions; fix the line(s) above first.');
+      process.exit(1);
+    }
     const changed = setBundlesVersions(path.join(ROOT, 'bundles.yaml'), selected, version);
     console.log(
       `Set version ${version} on ${changed} bundle(s) in bundles.yaml.` +
@@ -844,6 +880,7 @@ function main() {
 
   let allErrors = checkMembership(bundles);
   allErrors = allErrors.concat(checkGlobalBinaryInstallDoc());
+  allErrors = allErrors.concat(checkVersionQuoting());
   const fm = validateFrontmatter(bundles);
   allErrors = allErrors.concat(fm.errors);
   if (fm.warnings.length) {
@@ -927,6 +964,7 @@ module.exports = {
   diffTrees,
   checkMembership,
   checkGlobalBinaryInstallDoc,
+  checkVersionQuoting,
   validateFrontmatter,
   orphanPluginDirs,
   swapStagedBundles,

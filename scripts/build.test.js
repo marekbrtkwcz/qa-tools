@@ -32,6 +32,7 @@ const {
   diffTrees,
   checkMembership,
   checkGlobalBinaryInstallDoc,
+  checkVersionQuoting,
   validateFrontmatter,
   orphanPluginDirs,
   swapStagedBundles,
@@ -669,6 +670,33 @@ test('CLI: usage errors exit 2 (bad --set-version, unknown --bundle)', () => {
   );
   assert.equal(ghostBundle.status, 2, ghostBundle.stderr);
   assert.ok(ghostBundle.stderr.includes('Unknown bundle'));
+});
+
+/* ---------- version quoting gate (bundles.yaml) ---------- */
+
+test('checkVersionQuoting: only quoted versions can be bumped', () => {
+  const dir = tmpDir();
+  const quotedDouble = path.join(dir, 'double.yaml');
+  fs.writeFileSync(quotedDouble, 'a:\n  version: "0.3.0"\n  description: x\n');
+  assert.deepEqual(checkVersionQuoting(quotedDouble), [], 'double-quoted version passes');
+
+  const quotedSingle = path.join(dir, 'single.yaml');
+  fs.writeFileSync(quotedSingle, "a:\n  version: '0.3.0'\n  description: x\n");
+  assert.deepEqual(checkVersionQuoting(quotedSingle), [], 'single-quoted version passes');
+
+  const bare = path.join(dir, 'bare.yaml');
+  fs.writeFileSync(bare, 'a:\n  version: 0.3.0\n  description: x\n');
+  const bareErrors = checkVersionQuoting(bare);
+  assert.equal(bareErrors.length, 1, bareErrors.join('\n'));
+  assert.ok(bareErrors[0].includes('bundle "a"'), 'names the bundle');
+  assert.ok(bareErrors[0].includes('line 2'), 'points at the line');
+  assert.ok(bareErrors[0].includes('silently survive'), 'says why it matters');
+
+  const empty = path.join(dir, 'empty.yaml');
+  fs.writeFileSync(empty, 'a:\n  version:\n  description: x\n');
+  const emptyErrors = checkVersionQuoting(empty);
+  assert.equal(emptyErrors.length, 1, emptyErrors.join('\n'));
+  assert.ok(emptyErrors[0].includes('bundle "a"'), 'a versionless line is unbumpable too');
 });
 
 /* ---------- release consistency gate ---------- */
