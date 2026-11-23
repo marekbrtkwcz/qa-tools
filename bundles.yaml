@@ -34,6 +34,7 @@ qa-core:
     - test-management-integration
     - test-plan-basic
     - testing-documentation
+    - testing-internationalization
     - tracing-requirements-to-code
     - usability-quick-pass
     - verify-acceptance-criteria
