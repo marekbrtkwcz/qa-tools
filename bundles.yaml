@@ -125,6 +125,7 @@ non-functional-testing:
     - a11y-webpage-audit
     - auditing-accessibility
     - performance-reliability-plan
+    - resilience-smoke-testing
     - security-regression-smoke
     - testing-abuse-limits
     - testing-api-security
@@ -233,6 +234,7 @@ mobile-testing:
   version: "0.3.0"
   skills:
     - mobile-app-testing
+    - visual-regression-mobile
   agents:
     - mobile-test-automation-expert
 
