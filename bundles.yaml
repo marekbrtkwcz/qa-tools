@@ -103,6 +103,7 @@ api-testing:
   skills:
     - api-playwright-test-developer
     - api-test-plan-and-tests
+    - contract-testing-graphql
     - pact-contract-testing
     - testing-api-contracts
     - testing-graphql-apis
