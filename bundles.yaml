@@ -119,6 +119,7 @@ non-functional-testing:
     - performance-reliability-plan
     - security-regression-smoke
     - testing-abuse-limits
+    - testing-api-security
     - testing-application-security
     - testing-performance-and-load
   agents:
