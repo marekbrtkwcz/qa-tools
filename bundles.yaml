@@ -33,6 +33,7 @@ qa-core:
     - standardizing-test-records
     - test-management-integration
     - test-plan-basic
+    - testing-database-state
     - testing-documentation
     - testing-internationalization
     - tracing-requirements-to-code
@@ -83,6 +84,7 @@ test-automation:
     - test-generator
     - test-reports-and-artifacts
     - testing-auth-flows
+    - testing-event-driven-systems
     - unslop-tests
     - writing-unit-tests
     - writing-unit-tests-quick
