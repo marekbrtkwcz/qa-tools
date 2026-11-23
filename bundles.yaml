@@ -81,6 +81,7 @@ test-automation:
     - test-data-factories
     - test-driven-development
     - test-driven-development-quick
+    - test-environment-provisioning
     - test-generator
     - test-reports-and-artifacts
     - testing-auth-flows
