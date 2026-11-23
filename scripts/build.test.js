@@ -177,7 +177,7 @@ test('checkGlobalBinaryInstallDoc: the README must document all floating install
   assert.equal(missing.length, 1);
   assert.ok(missing[0].includes('npm i -g @playwright/mcp@latest'), missing[0]);
   assert.ok(missing[0].includes('npm i -g chrome-devtools-mcp@latest'), missing[0]);
-  assert.ok(missing[0].includes('winget install grafana.k6'), missing[0]);
+  assert.ok(missing[0].includes('winget install k6 --source winget'), missing[0]);
 
   // a pinned version (the old policy) must also fail, not pass silently
   fs.writeFileSync(path.join(out, 'README.md'), 'npm i -g @playwright/mcp@0.0.86\n');
@@ -185,19 +185,19 @@ test('checkGlobalBinaryInstallDoc: the README must document all floating install
   assert.equal(stale.length, 3, 'a pinned install line must fail the gate, and the other two prerequisites are missing too');
   assert.ok(stale.some((e) => e.includes('npm i -g @playwright/mcp@latest')), 'error names the playwright line');
   assert.ok(stale.some((e) => e.includes('npm i -g chrome-devtools-mcp@latest')), 'error names the chrome-devtools line');
-  assert.ok(stale.some((e) => e.includes('winget install grafana.k6')), 'error names the k6 line');
+  assert.ok(stale.some((e) => e.includes('winget install k6 --source winget')), 'error names the k6 line');
 
   // only the playwright line present: the other two lines each flagged
   fs.writeFileSync(path.join(out, 'README.md'), 'Instalacja globalna:\n\nnpm i -g @playwright/mcp@latest\n');
   const half = checkGlobalBinaryInstallDoc(out);
   assert.equal(half.length, 2, 'two prerequisites missing: one error each');
   assert.ok(half.some((e) => e.includes('chrome-devtools-mcp@latest')), half.join('\n'));
-  assert.ok(half.some((e) => e.includes('winget install grafana.k6')), half.join('\n'));
+  assert.ok(half.some((e) => e.includes('winget install k6 --source winget')), half.join('\n'));
 
   // all three floating lines, anywhere in the README: no errors
   fs.writeFileSync(
     path.join(out, 'README.md'),
-    'Instalacja globalna:\n\nnpm i -g @playwright/mcp@latest\nnpm i -g chrome-devtools-mcp@latest\nwinget install grafana.k6\n'
+    'Instalacja globalna:\n\nnpm i -g @playwright/mcp@latest\nnpm i -g chrome-devtools-mcp@latest\nwinget install k6 --source winget\n'
   );
   assert.deepEqual(checkGlobalBinaryInstallDoc(out), []);
 });

@@ -46,7 +46,7 @@ Wszystkie trzy serwery działają na **globalnych binarnych** (`playwright-mcp`,
 ```
 npm i -g @playwright/mcp@latest
 npm i -g chrome-devtools-mcp@latest
-winget install grafana.k6
+winget install k6 --source winget
 ```
 
 Wersje **celowo pływające** (`@latest`, winget zawsze bierze aktualną): manifest pluginu niesie tylko nazwy komend, więc wersja i tak żyje w globalnym installu użytkownika — współdzielonym z innymi narzędziami — a przypinanie wymuszałoby downgrade komuś, kto już ma nowszy binarny. Repo nie trzyma pinów; jedyny wymóg pilnowany przez build (`checkGlobalBinaryInstallDoc`) to, żeby te linie instalacyjne nie zginęły z README — bez nich serwery wypadają błędem spawn na każdej maszynie.

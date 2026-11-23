@@ -351,7 +351,7 @@ const GLOBAL_BINARY_SERVERS = [
     // for long runs, not a workaround.
     name: 'k6',
     binary: 'k6',
-    line: 'winget install grafana.k6',
+    line: 'winget install k6 --source winget',
     args: ['x', 'mcp', '--quiet'],
   },
 ];
