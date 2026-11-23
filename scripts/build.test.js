@@ -679,8 +679,14 @@ test('checkRelease: tag, bundle versions and CHANGELOG header must agree', () =>
   fs.writeFileSync(bundlesFile, 'a:\n  version: "0.3.0"\n  description: x\nb:\n  version: "0.3.0"\n  description: y\n');
   const changelog = path.join(dir, 'CHANGELOG.md');
   fs.writeFileSync(changelog, '# CHANGELOG\n\n## [Unreleased]\n\n## [0.3.0] - 2026-11-23\n');
+  const pkg = path.join(dir, 'package.json');
+  fs.writeFileSync(pkg, '{ "name": "qa-tools", "version": "0.3.0" }\n');
 
-  assert.deepEqual(checkRelease(bundlesFile, changelog, 'v0.3.0').errors, [], 'consistent release passes');
+  assert.deepEqual(
+    checkRelease(bundlesFile, changelog, 'v0.3.0', pkg).errors,
+    [],
+    'consistent release passes'
+  );
 
   const mismatched = checkRelease(bundlesFile, changelog, 'v0.2.0');
   assert.ok(mismatched.errors.some((e) => e.includes('version 0.3.0 != tag version 0.2.0')));
@@ -692,6 +698,27 @@ test('checkRelease: tag, bundle versions and CHANGELOG header must agree', () =>
   fs.writeFileSync(bundles2, 'a:\n  description: x\n');
   const missing = checkRelease(bundles2, changelog, 'v0.3.0');
   assert.ok(missing.errors.some((e) => e.includes('bundle "a" has no version')));
+});
+
+test('checkRelease: the repo package.json version must match the tag', () => {
+  const dir = tmpDir();
+  const bundlesFile = path.join(dir, 'bundles.yaml');
+  fs.writeFileSync(bundlesFile, 'a:\n  version: "0.3.0"\n  description: x\n');
+  const changelog = path.join(dir, 'CHANGELOG.md');
+  fs.writeFileSync(changelog, '# CHANGELOG\n\n## [0.3.0] - 2026-11-23\n');
+
+  const pkgOld = path.join(dir, 'package.json');
+  fs.writeFileSync(pkgOld, '{ "name": "qa-tools", "version": "0.2.0" }\n');
+  const stale = checkRelease(bundlesFile, changelog, 'v0.3.0', pkgOld);
+  assert.ok(
+    stale.errors.some((e) => e.includes('package.json version 0.2.0 != tag version 0.3.0')),
+    'a repo-level version left behind the tag is reported'
+  );
+
+  const pkgNoVersion = path.join(dir, 'noversion.json');
+  fs.writeFileSync(pkgNoVersion, '{ "name": "qa-tools" }\n');
+  const bare = checkRelease(bundlesFile, changelog, 'v0.3.0', pkgNoVersion);
+  assert.ok(bare.errors.some((e) => e.includes('package.json has no "version" field')));
 });
 
 function dir2(p) {

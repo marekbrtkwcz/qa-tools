@@ -5,9 +5,11 @@
  *   2. every bundle in bundles.yaml carries exactly <x.y.z> as its version
  *      (one release = one version across the collection; plugin.json inherits it)
  *   3. CHANGELOG.md has a matching "## [x.y.z] - ..." header
+ *   4. package.json carries exactly <x.y.z> as its version (the repo-level
+ *      version drifts with the collection, not on its own schedule)
  *
  * Keeps release discipline mechanical instead of relying on the
- * releaser remembering three places at once.
+ * releaser remembering four places at once.
  * Exit codes: 0 = consistent, 1 = mismatch, 2 = usage error.
  */
 'use strict';
@@ -16,7 +18,7 @@ const fs = require('fs');
 const path = require('path');
 const { parseBundles } = require('./build.js');
 
-function checkRelease(bundlesFile, changelogFile, tag) {
+function checkRelease(bundlesFile, changelogFile, tag, packageFile) {
   const errors = [];
   const m = /^v?(\d+\.\d+\.\d+)$/.exec(tag || '');
   if (!m) {
@@ -37,6 +39,17 @@ function checkRelease(bundlesFile, changelogFile, tag) {
   if (!new RegExp(`^## \\[${version}\\] `, 'm').test(changelog)) {
     errors.push(`CHANGELOG.md has no "## [${version}] - ..." header`);
   }
+
+  if (packageFile) {
+    try {
+      const pkgVersion = JSON.parse(fs.readFileSync(packageFile, 'utf8')).version;
+      if (!pkgVersion) errors.push(`package.json has no "version" field`);
+      else if (pkgVersion !== version)
+        errors.push(`package.json version ${pkgVersion} != tag version ${version}`);
+    } catch (e) {
+      errors.push(`cannot read package.json version from ${packageFile}: ${e.message}`);
+    }
+  }
   return { errors, version, bundles: names };
 }
 
@@ -46,11 +59,14 @@ function main() {
   const tag = tagFlag >= 0 ? args[tagFlag + 1] : process.env.GITHUB_REF_NAME || '';
   const bundlesFlag = args.indexOf('--bundles');
   const changelogFlag = args.indexOf('--changelog');
+  const packageFlag = args.indexOf('--package');
   const root = path.join(__dirname, '..');
   const bundlesFile =
     bundlesFlag >= 0 ? path.resolve(args[bundlesFlag + 1]) : path.join(root, 'bundles.yaml');
   const changelogFile =
     changelogFlag >= 0 ? path.resolve(args[changelogFlag + 1]) : path.join(root, 'CHANGELOG.md');
+  const packageFile =
+    packageFlag >= 0 ? path.resolve(args[packageFlag + 1]) : path.join(root, 'package.json');
 
   if (!tag) {
     console.error('usage: node scripts/check-release.js --tag vX.Y.Z');
@@ -59,7 +75,7 @@ function main() {
 
   let result;
   try {
-    result = checkRelease(bundlesFile, changelogFile, tag);
+    result = checkRelease(bundlesFile, changelogFile, tag, packageFile);
   } catch (e) {
     console.error(`ERROR reading release inputs: ${e.message}`);
     process.exit(1);
@@ -70,7 +86,7 @@ function main() {
     process.exit(1);
   }
   console.log(
-    `Release gate OK: tag ${tag} matches version ${result.version} on ${result.bundles.length} bundle(s) and the CHANGELOG header.`
+    `Release gate OK: tag ${tag} matches version ${result.version} on ${result.bundles.length} bundle(s), the CHANGELOG header and the repo package.json.`
   );
 }
 
