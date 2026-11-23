@@ -136,7 +136,10 @@ non-functional-testing:
     - testing-abuse-limits
     - testing-api-security
     - testing-application-security
+    - testing-mfa-and-credentials
+    - testing-oauth2-oidc
     - testing-performance-and-load
+    - testing-session-management
   agents:
     - accessibility-expert
 
