@@ -288,9 +288,14 @@ function titleFromDescription(text) {
  * convention for every MCP server across bundles, plugin manifests and
  * user configs - while the binaries keep their own package names
  * (playwright-mcp, chrome-devtools-mcp). This table is the single
- * name->binary mapping. Shadowing is unaffected: a user-level
- * [[mcp_servers]] entry with the same short name replaces the plugin
- * copy instead of spawning a second browser instance.
+ * name->binary(+args) mapping; the args arrays carry the fixed QA flag
+ * set (caps, timeouts, snapshot and category flags) so the plugin is
+ * self-sufficient: no user-level [[mcp_servers]] entry is required for
+ * ordinary QA browsing. What the manifest still cannot carry is a
+ * version or a timeout - those live in the user's global install and,
+ * when longer tool timeouts are needed, in a user-level entry (which
+ * shadows the plugin copy by name) or spawning a second browser
+ * instance.
  * The README therefore ships a floating @latest install line for each binary
  * - pinning would force users to downgrade a binary other tools also use.
  * All this check enforces is that every prerequisite stays documented: the
@@ -301,8 +306,39 @@ function titleFromDescription(text) {
  * like checkMembership.
  */
 const GLOBAL_BINARY_SERVERS = [
-  { name: 'playwright', binary: 'playwright-mcp', line: 'npm i -g @playwright/mcp@latest' },
-  { name: 'chrome-devtools', binary: 'chrome-devtools-mcp', line: 'npm i -g chrome-devtools-mcp@latest' },
+  {
+    name: 'playwright',
+    binary: 'playwright-mcp',
+    line: 'npm i -g @playwright/mcp@latest',
+    args: [
+      '--caps', 'vision,pdf,devtools,network,storage,testing',
+      '--ignore-https-errors',
+      '--timeout-action', '30000',
+      '--timeout-navigation', '180000',
+      '--timeout-settle', '2000',
+      '--image-responses', 'allow',
+      '--snapshot-boxes',
+      '--snapshot-mode', 'full',
+    ],
+  },
+  {
+    name: 'chrome-devtools',
+    binary: 'chrome-devtools-mcp',
+    line: 'npm i -g chrome-devtools-mcp@latest',
+    args: [
+      '--categoryExtensions',
+      '--categoryExperimentalThirdParty',
+      '--categoryExperimentalWebmcp',
+      '--categoryPwa',
+      '--experimentalVision',
+      '--experimentalDevtools',
+      '--experimentalStructuredContent',
+      '--experimentalIncludeAllPages',
+      '--memoryDebugging',
+      '--redactNetworkHeaders',
+      '--no-usageStatistics',
+    ],
+  },
 ];
 
 function checkGlobalBinaryInstallDoc(docRoot = ROOT) {
@@ -556,31 +592,23 @@ function buildBundle(name, bundle, outDir, checkOnly) {
   // 5. mcp.json (Vibe requires $schema and type fields)
   // Only in bundles that declare mcp: — no empty mcpServers:{} manifests
   // in the other bundles (the same rule hooks follow below).
-  // No version pins by design: the plugin manifest schema carries only the
-  // command, so the version lives in the user's global install (README
-  // ships a floating @latest npm i -g line per binary;
-  // checkGlobalBinaryInstallDoc only enforces that the lines stay
+  // No version pins or timeout fields by design: the plugin manifest schema
+  // carries the command and args only, so the version lives in the user's
+  // global install (README ships a floating @latest npm i -g line per
+  // binary; checkGlobalBinaryInstallDoc only enforces that the lines stay
   // documented).
   if ((bundle.mcp || []).length) {
     const mcp = { $schema: 'https://agent-plugins.org/schemas/1.0.0/mcp.schema.json', mcpServers: {} };
     for (const server of bundle.mcp) {
       // Every declared server must be a known global-binary server
-      // (GLOBAL_BINARY_SERVERS is the single name->binary mapping: short
-      // product-style server names, binaries keep their package names).
+      // (GLOBAL_BINARY_SERVERS is the single name->binary+args mapping:
+      // short product-style server names, binaries keep their package
+      // names, args carry the fixed QA flag set).
       // The server runs the global binary (npm i -g, prerequisite
       // documented in README.md, enforced by checkGlobalBinaryInstallDoc).
       // A direct spawn starts in well under Vibe's fixed 10 s plugin-MCP
       // startup budget, where npx (shim + resolver + cache/registry)
-      // could exceed it on Windows. No version pin here on purpose: the
-      // manifest schema carries only the command, the version lives in
-      // the user's shared global install, and the README line ships
-      // floating @latest so nobody is forced to downgrade a binary other
-      // tools also use.
-      // Keeping the server name short (playwright, chrome-devtools) keeps it
-      // identical to a user-level [[mcp_servers]] entry with the same name,
-      // so a user config with custom flags/timeouts shadows the plugin copy
-      // (Vibe drops the plugin server on a name clash) instead of spawning a
-      // second browser instance.
+      // could exceed it on Windows.
       const known = GLOBAL_BINARY_SERVERS.find((s) => s.name === server);
       if (!known) {
         errors.push(
@@ -588,7 +616,15 @@ function buildBundle(name, bundle, outDir, checkOnly) {
         );
         continue;
       }
-      mcp.mcpServers[server] = { type: 'stdio', command: known.binary };
+      // args: the fixed QA flag set from GLOBAL_BINARY_SERVERS makes the
+      // plugin self-sufficient; a user-level [[mcp_servers]] entry with the
+      // same name still replaces the whole copy (custom flags, longer
+      // timeouts - the manifest schema has no timeout fields) instead of
+      // spawning a second browser instance. No version pin on purpose: the
+      // version lives in the user's shared global install, and the README
+      // line ships floating @latest so nobody is forced to downgrade a
+      // binary other tools also use.
+      mcp.mcpServers[server] = { type: 'stdio', command: known.binary, args: known.args };
     }
     // A build error must never leave a dead mcpServers:{} manifest behind
     // (the 0.2.0 lesson): write only when every declared server resolved.
@@ -894,4 +930,5 @@ module.exports = {
   validateFrontmatter,
   orphanPluginDirs,
   swapStagedBundles,
+  GLOBAL_BINARY_SERVERS,
 };

@@ -3,11 +3,40 @@
   "mcpServers": {
     "playwright": {
       "type": "stdio",
-      "command": "playwright-mcp"
+      "command": "playwright-mcp",
+      "args": [
+        "--caps",
+        "vision,pdf,devtools,network,storage,testing",
+        "--ignore-https-errors",
+        "--timeout-action",
+        "30000",
+        "--timeout-navigation",
+        "180000",
+        "--timeout-settle",
+        "2000",
+        "--image-responses",
+        "allow",
+        "--snapshot-boxes",
+        "--snapshot-mode",
+        "full"
+      ]
     },
     "chrome-devtools": {
       "type": "stdio",
-      "command": "chrome-devtools-mcp"
+      "command": "chrome-devtools-mcp",
+      "args": [
+        "--categoryExtensions",
+        "--categoryExperimentalThirdParty",
+        "--categoryExperimentalWebmcp",
+        "--categoryPwa",
+        "--experimentalVision",
+        "--experimentalDevtools",
+        "--experimentalStructuredContent",
+        "--experimentalIncludeAllPages",
+        "--memoryDebugging",
+        "--redactNetworkHeaders",
+        "--no-usageStatistics"
+      ]
     }
   }
 }

@@ -35,6 +35,7 @@ const {
   validateFrontmatter,
   orphanPluginDirs,
   swapStagedBundles,
+  GLOBAL_BINARY_SERVERS,
 } = require('./build.js');
 const { validateTomlText, validateAll } = require('./validate-manifests.js');
 const { checkRelease } = require('./check-release.js');
@@ -107,9 +108,12 @@ test('buildBundle: Codex trigger folder (agents/openai.yaml) is not shipped in t
 test('buildBundle: no dead mcp.json for bundles without mcp; qa-mcp ships the global-binary servers', () => {
   // A bundle that does not declare mcp: must not ship an placeholder
   // mcpServers:{} manifest; the one that does runs the global binaries.
-  // No version pin anywhere on purpose: the manifest schema carries only
-  // the command, the version lives in the user's npm i -g install (README
-  // ships floating @latest), so the manifest is identical across versions.
+  // No version pin anywhere on purpose: the manifest schema carries neither
+  // versions nor timeout fields, so the version lives in the user's npm i -g
+  // install (README ships floating @latest) and the manifest is identical
+  // across versions. Args, however, do ship: the fixed QA flag set lives in
+  // GLOBAL_BINARY_SERVERS so the plugin is self-sufficient without any
+  // user-level [[mcp_servers]] entry.
   const out = tmpDir();
   const noErrors = buildBundle('authoring', { skills: ['create-skill'] }, out);
   assert.deepEqual(noErrors, []);
@@ -122,13 +126,21 @@ test('buildBundle: no dead mcp.json for bundles without mcp; qa-mcp ships the gl
   assert.deepEqual(built, [], 'the servers need no pin: install versions float by design');
   const manifest = JSON.parse(fs.readFileSync(path.join(out, 'qa-mcp', 'mcp.json'), 'utf8'));
   assert.deepEqual(Object.keys(manifest.mcpServers), ['playwright', 'chrome-devtools']);
-  assert.equal(manifest.mcpServers.playwright.command, 'playwright-mcp');
   // Short server names are the uniform convention (name != binary for both
   // servers); a user-level [[mcp_servers]] entry with the same short name
   // shadows the plugin copy instead of spawning a second browser instance.
+  assert.equal(manifest.mcpServers.playwright.command, 'playwright-mcp');
   assert.equal(manifest.mcpServers['chrome-devtools'].command, 'chrome-devtools-mcp');
-  assert.ok(!('args' in manifest.mcpServers.playwright), 'bare executable: no args, no version in the manifest');
-  assert.ok(!('args' in manifest.mcpServers['chrome-devtools']), 'bare executable: no args, no version in the manifest');
+  // args come from GLOBAL_BINARY_SERVERS verbatim (single source of truth):
+  // command + QA flag set, and never a version.
+  const table = Object.fromEntries(GLOBAL_BINARY_SERVERS.map((s) => [s.name, s]));
+  assert.deepEqual(manifest.mcpServers.playwright.args, table.playwright.args);
+  assert.deepEqual(manifest.mcpServers['chrome-devtools'].args, table['chrome-devtools'].args);
+  assert.ok(!manifest.mcpServers.playwright.args.some((a) => /@/.test(a)), 'no version in the manifest: no pin even inside args');
+  assert.ok(
+    !manifest.mcpServers['chrome-devtools'].args.some((a) => /@/.test(a)),
+    'no version in the manifest: no pin even inside args'
+  );
 });
 
 test('buildBundle: an unknown mcp server name is a build error, not a dead manifest', () => {
