@@ -86,6 +86,7 @@ test-automation:
     - test-reports-and-artifacts
     - testing-auth-flows
     - testing-event-driven-systems
+    - testing-with-testcontainers
     - unslop-tests
     - writing-unit-tests
     - writing-unit-tests-quick
