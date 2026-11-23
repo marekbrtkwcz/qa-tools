@@ -110,13 +110,15 @@ api-testing:
 
 non-functional-testing:
   icon: ⚡
-  description: "Accessibility, performance and load, and application security testing."
+  description: "Accessibility, performance and load, application security, security regression smoke, and abuse-limit testing."
   version: "0.3.0"
   skills:
     - a11y-audit-deep-dive
     - a11y-webpage-audit
     - auditing-accessibility
     - performance-reliability-plan
+    - security-regression-smoke
+    - testing-abuse-limits
     - testing-application-security
     - testing-performance-and-load
   agents:

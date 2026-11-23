@@ -158,6 +158,7 @@ State the stopping point explicitly. "Confirmed that user A can read user B's or
 
 - `./resources/scope-and-authorization-gate.md` - the Phase 0 record, what authorization must state, production rules, and stop conditions
 - `./resources/authz-matrix-template.md` - matrix format, the cases that find defects, and API-level verification recipes
+- `./resources/api-security-checklist.md` - read when the matrix is verified and the question is what breaks across endpoints: mass assignment, verb confusion, batch/collection IDOR, content-type smuggling, webhook gates, error-message disclosure, response over-fetching
 - `./resources/owasp-test-angles.md` - OWASP Top 10 mapped to concrete checks a tester can run, with the boundary of each
 - `./resources/finding-report-template.md` - severity guidance, reporting path, redaction rules, and a worked example
 
