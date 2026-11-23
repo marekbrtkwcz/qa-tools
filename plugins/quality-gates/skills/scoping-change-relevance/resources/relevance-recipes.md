@@ -71,7 +71,7 @@ The rule worth stating: **a new tool grant is always in scope for injection test
 | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
 | `intent-rationale`          | any escalation tag, `new-public-export` on `critical-path`, `db-migration`, `modified-auth`, or a change flagged high-risk by the contract |
 | `comprehension-attestation` | large diffs, high new-branch counts, or high-risk surface with no accompanying explanation (advisory only)                                 |
-| `waiver-governance`         | `disabled-check`, a new `.skip`, a new `eslint-disable`, a lowered threshold, a new `continue-on-error`                                    |
+| `waiver-governance`         | `disabled-check`, a new `.skip`, a new `eslint-disable` or `biome-ignore`, a lowered threshold, a new `continue-on-error`                    |
 | `release-readiness`         | a release-candidate branch or tag                                                                                                          |
 
 ## Scope subtraction

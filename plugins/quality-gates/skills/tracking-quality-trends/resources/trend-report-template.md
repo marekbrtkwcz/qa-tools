@@ -56,7 +56,7 @@ The section no snapshot contains.
 ## Governance
 
 - Waivers: 4 active, **1 expired** (W-003, `integration-testing` on `src/billing/**`, INFRA-412 still open), oldest 141 days, W-002 renewed twice
-- Suppressions: +7, including a second whole-file `eslint-disable` (`src/legacy/sync.ts:1`)
+- Suppressions: +7, including a second whole-file `biome-ignore` (`src/legacy/sync.ts:1`)
 - Unregistered suppressions: 39 of 46 carry no waiver id
 
 ## Findings

@@ -143,7 +143,7 @@ Better still, do the login once in a setup project and reuse the storage state a
 
 ## Traps
 
-- **Every action and assertion is awaited.** A missing `await` reports a pass while the assertion runs after the test ended. Enable `@typescript-eslint/no-floating-promises`; this is the single highest-value lint rule in a migrated suite.
+- **Every action and assertion is awaited.** A missing `await` reports a pass while the assertion runs after the test ended. Enable a floating-promise lint rule (Biome `lint/nursery/noFloatingPromises`, or `@typescript-eslint/no-floating-promises` in a typescript-eslint repo); this is the single highest-value lint rule in a migrated suite.
 - **`.should('not.exist')` is `toHaveCount(0)`**, not `toBeHidden()`. Hidden and absent are different states and the distinction matters.
 - **Playwright runs files in parallel by default.** A Cypress suite that relied on serial execution and shared state will fail in ways that look like flakiness. Fix the shared state; do not set `workers: 1` and move on.
 - **`cy.get` retries the query; a Playwright `locator` is lazy.** Creating a locator does nothing until it is used, which is why storing locators in page objects is safe.

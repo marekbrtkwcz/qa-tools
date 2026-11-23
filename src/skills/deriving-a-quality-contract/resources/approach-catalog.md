@@ -12,13 +12,13 @@ Thirty quality practices, each with its tier, the maturity level at which it ent
 
 | Practice               | From  | Proto | Std | Crit | Surface | Default tool                           | Exit criterion                                                              | Effort |
 | ---------------------- | ----- | ----- | --- | ---- | ------- | -------------------------------------- | --------------------------------------------------------------------------- | ------ |
-| `linting`              | crawl | M     | M   | M    | any     | ESLint flat config                     | `eslint .` clean with `--max-warnings 0` in CI                              | XS     |
+| `linting`              | crawl | M     | M   | M    | any     | Biome                                  | `biome ci .` clean in CI                                                     | XS     |
 | `type-safety`          | crawl | M     | M   | M    | any     | `tsc --noEmit`, `strict: true`         | Typecheck clean in CI; no new `any` or `@ts-expect-error` without a comment | S      |
-| `formatting`           | crawl | S     | M   | M    | any     | Prettier                               | Format check runs in CI; no formatting-only diffs in review                 | XS     |
+| `formatting`           | crawl | S     | M   | M    | any     | Biome formatter                         | `biome ci .` runs in CI; no formatting-only diffs in review                   | XS     |
 | `unit-testing`         | crawl | S     | M   | M    | any     | Vitest / Jest                          | Unit tests green in CI; diff coverage ≥ profile threshold                   | S      |
 | `secret-scanning`      | crawl | M     | M   | M    | any     | gitleaks                               | No secrets in history or diff; scan blocks on finding                       | XS     |
 | `dependency-audit`     | crawl | C     | M   | M    | any     | `npm audit` / osv-scanner / Dependabot | No known critical vulnerabilities; renewals tracked                         | XS     |
-| `no-skipped-tests`     | crawl | C     | M   | M    | any     | ESLint rule / CI grep                  | No `.skip`, `.only`, or quarantined test without a waiver                   | XS     |
+| `no-skipped-tests`     | crawl | C     | M   | M    | any     | Runner flag / CI grep                  | No `.skip`, `.only`, or quarantined test without a waiver                   | XS     |
 | `coverage-rigor`       | walk  | -     | M   | M    | any     | Vitest/Jest coverage + diff coverage   | Changed lines meet the profile threshold; repo coverage does not decrease   | M      |
 | `duplication`          | walk  | -     | S   | M    | any     | jscpd / SonarQube                      | Duplication does not increase more than 3% per change                       | S      |
 | `cognitive-complexity` | walk  | -     | S   | M    | any     | `eslint-plugin-sonarjs`                | No new function above the agreed complexity ceiling                         | S      |

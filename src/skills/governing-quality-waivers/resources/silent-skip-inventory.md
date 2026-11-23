@@ -25,13 +25,13 @@ What to look for: a `.skip` with no comment and no ticket; a `.only` that has be
 ## Lint
 
 ```bash
-rg -n "eslint-disable(-next-line|-line)?" --glob '!node_modules' | rg -v "--"   # disables with no reason
-rg -n "eslint-disable\b" --glob '!node_modules'                                  # whole-file disables - the loudest ones
-rg -n "\"off\"|: *0\b" eslint.config.* .eslintrc*                                # rules switched off in config
-rg -n "ignorePatterns|\"ignore\"" eslint.config.* .eslintrc* .eslintignore
+rg -n "eslint-disable(-next-line|-line)?|biome-ignore" --glob '!node_modules' | rg -v "W-[0-9]"   # disables with no register reference
+rg -n "eslint-disable\b|biome-ignore lint/[^:]*: *$" --glob '!node_modules'                          # whole-file disables - the loudest ones
+rg -n "\"off\"|: *0\b" biome.json biome.jsonc eslint.config.* .eslintrc*                               # rules switched off in config
+rg -n "ignorePatterns|\"ignore\"|useIgnoreFile.: *false" biome.json eslint.config.* .eslintrc* .eslintignore
 ```
 
-A whole-file `/* eslint-disable */` at the top of a source file is the highest-value find in this section: it silences every rule, forever, invisibly.
+A whole-file `/* eslint-disable */` or a file-top `// biome-ignore` at the top of a source file is the highest-value find in this section: it silences rules, forever, invisibly.
 
 ## Types
 

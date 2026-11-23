@@ -67,7 +67,7 @@ Six to eight metrics, each with a limit, a goal, an owner, an action at the limi
 
 - **Limit / goal:** trending down
 - **Measure:** the silent-skip inventory (`governing-quality-waivers`), same commands each run
-- **Caveat:** raw count treats a whole-file `eslint-disable` the same as one inline disable. Track "whole-file and whole-directory suppressions" as a second, smaller number
+- **Caveat:** raw count treats a whole-file `eslint-disable` (or file-top `biome-ignore`) the same as one inline disable. Track "whole-file and whole-directory suppressions" as a second, smaller number
 - **Gaming risk:** low, which is unusual and part of why it is worth tracking
 
 ### Intent coverage on high-risk changes

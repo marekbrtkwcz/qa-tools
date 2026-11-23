@@ -28,7 +28,7 @@ rg -n "toThrow\(\)|rejects\.toThrow\(\)" --glob '*.{test,spec}.*'
 rg -n "new Date\(\)|Date\.now\(\)|Math\.random\(\)|randomUUID\(" --glob '*.{test,spec}.*'
 
 # suppressions inside tests
-rg -n "@ts-(ignore|expect-error)|eslint-disable" --glob '*.{test,spec}.*'
+rg -n "@ts-(ignore|expect-error)|eslint-disable|biome-ignore" --glob '*.{test,spec}.*'
 ```
 
 A hit is a candidate, not a finding. `new Date()` in a fixture builder is fine; `new Date()` inside the expectation is pattern 17.

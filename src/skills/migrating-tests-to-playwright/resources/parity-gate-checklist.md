@@ -60,7 +60,7 @@ That last row is why this check exists. It found a ported test that proved nothi
 - [ ] Auth uses the shared storage state, not a UI login per test
 - [ ] Test data is created by the test and cleaned up by the test
 - [ ] No shared mutable state between tests in the slice
-- [ ] Every action and assertion is awaited (`@typescript-eslint/no-floating-promises` passes)
+- [ ] Every action and assertion is awaited (a floating-promise lint rule - Biome `lint/nursery/noFloatingPromises` or `@typescript-eslint/no-floating-promises` - passes)
 - [ ] Test titles state behaviour, not mechanics
 - [ ] Tags applied per the glossary
 

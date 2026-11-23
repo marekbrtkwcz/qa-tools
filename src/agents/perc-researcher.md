@@ -107,7 +107,7 @@ If a section is empty, state "None identified" rather than skipping it.
 **CI/CD & Tooling:**
 
 - **Test runner:** {How tests are executed in CI; parallelization strategy}
-- **Linter/formatter:** {ESLint, Prettier, Stylelint, etc.; configuration}
+- **Linter/formatter:** {Biome, ESLint, Prettier, Stylelint, etc.; configuration}
 - **Type checking:** {TypeScript, Flow, or none; strictness settings}
 - **Build/deploy:** {Build tool; deployment pipeline; secrets management}
 

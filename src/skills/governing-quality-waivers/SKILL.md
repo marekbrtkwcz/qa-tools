@@ -9,7 +9,7 @@ user-invocable: true
 
 Use this skill when something in the quality system is being switched off - or when you need to find out how much already has been.
 
-Every repo accumulates skips. A `test.skip` from a sprint that ended, an `eslint-disable-next-line` nobody can explain, a `continue-on-error: true` added during an incident, a coverage threshold lowered to match reality. None were wrong at the time. All of them are now invisible, unowned, and permanent.
+Every repo accumulates skips. A `test.skip` from a sprint that ended, an `eslint-disable-next-line` or `biome-ignore` nobody can explain, a `continue-on-error: true` added during an incident, a coverage threshold lowered to match reality. None were wrong at the time. All of them are now invisible, unowned, and permanent.
 
 A waiver makes the same decision visible: same skip, but with a reason, an owner, and a date. That is the entire mechanism, and it is the difference between a considered trade-off and rot.
 

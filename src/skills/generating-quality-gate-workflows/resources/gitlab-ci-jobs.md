@@ -34,8 +34,7 @@ The `workflow:` block is worth a comment explaining _why_ it is shaped this way 
 lint:
   stage: lint
   script:
-    - npx eslint . --max-warnings 0
-    - npx prettier --check .
+    - npx biome ci . # lint + format + import organization, non-mutating; add --error-on-warnings if warnings should fail
 
 typecheck:
   stage: lint
@@ -100,6 +99,8 @@ mutation:
 
 cognitive-complexity:
   stage: lint
+  # sonarjs stays the reference complexity gate: Biome has no ported cognitive-complexity
+  # rule, so this one job keeps eslint-plugin-sonarjs as a deliberate exception
   script: npx eslint . --rule '{"sonarjs/cognitive-complexity":["error",15]}'
   allow_failure: true # ramp-up: soft until the backlog is cleared, then flip
 ```
@@ -153,7 +154,7 @@ unregistered-suppressions:
   script:
     - |
       added=$(git diff origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME...HEAD -U0 \
-        | grep -E '^\+.*(eslint-disable|@ts-expect-error|@ts-nocheck|\.skip\(|\.only\(|allow_failure|istanbul ignore)' \
+        | grep -E '^\+.*(eslint-disable|biome-ignore|@ts-expect-error|@ts-nocheck|\.skip\(|\.only\(|allow_failure|istanbul ignore)' \
         | grep -vE 'W-[0-9]+' || true)
       if [ -n "$added" ]; then echo "Unregistered suppressions:"; echo "$added"; exit 1; fi
   rules:

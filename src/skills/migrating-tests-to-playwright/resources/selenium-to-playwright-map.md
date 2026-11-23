@@ -64,7 +64,7 @@ An explicit wait ported into Playwright is a wait on top of a wait: slower and n
 | `wdio.conf.js` capabilities | `projects` with `devices[...]` |
 | WDIO services (chromedriver, selenium-standalone) | Nothing. Playwright manages its own browsers |
 
-WebdriverIO's assertion syntax is close enough that the diff is mostly adding `await`. Enable `@typescript-eslint/no-floating-promises` before you start; a missing `await` in WDIO's sync-ish style is easy to leave behind and reports a false pass.
+WebdriverIO's assertion syntax is close enough that the diff is mostly adding `await`. Enable a floating-promise lint rule (Biome `lint/nursery/noFloatingPromises`, or `@typescript-eslint/no-floating-promises`) before you start; a missing `await` in WDIO's sync-ish style is easy to leave behind and reports a false pass.
 
 ## Protractor
 

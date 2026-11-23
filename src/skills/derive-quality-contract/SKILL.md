@@ -49,7 +49,7 @@ If the criticality answer is missing, **ask for it before resolving anything**. 
 ## Rules
 
 - **Configured is not verified.** A test runner in `package.json` proves the practice exists, not that recent changes were tested. Say which you measured.
-- **Catch the fake gates.** `continue-on-error: true`, `|| true`, `|| echo "non-blocking"`, ESLint without `--max-warnings 0`, a job that is not a required check, a threshold set below the current value. Each is PARTIAL, and quote the line.
+- **Catch the fake gates.** `continue-on-error: true`, `|| true`, `|| echo "non-blocking"`, a lint step that only warns and never fails (eslint without `--max-warnings 0`, `biome ci` without `--error-on-warnings`), a job that is not a required check, a threshold set below the current value. Each is PARTIAL, and quote the line.
 - **Never mark a manual practice PRESENT from tooling.** Code review, exploratory testing, UAT, accessibility, observability readiness are attested or unattested - with a date and a name, or nothing.
 - **Use UNKNOWN.** Where you cannot determine a state, say so and say what you would need. Do not collapse it into MISSING.
 - **No aspirational profiling.** An unsatisfiable contract gets ignored, which is worse than an honest `standard`.

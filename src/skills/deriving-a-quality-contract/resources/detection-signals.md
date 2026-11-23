@@ -20,7 +20,7 @@ Check these before calling anything PRESENT. Each one is a check that runs and c
 
 - `continue-on-error: true` on the step or job
 - `|| true`, `|| exit 0`, `|| echo "non-blocking"` appended to the command
-- `--max-warnings` absent from an ESLint step, so warnings pass silently
+- `--max-warnings` absent from an ESLint step, or `--error-on-warnings` absent from a `biome ci` step, so warnings pass silently
 - `set +e` in the surrounding script
 - The job is not in the branch protection required-checks list
 - The step runs only on a branch or schedule that is not the PR
@@ -34,16 +34,16 @@ A step matching any of these is PARTIAL. Quote the exact line.
 
 | Practice               | Configured                                                             | Enforced                                    | PARTIAL tells                                                               |
 | ---------------------- | ---------------------------------------------------------------------- | ------------------------------------------- | --------------------------------------------------------------------------- | --- | ----------------------------- |
-| `linting`              | `eslint.config.*`, `.eslintrc*`, `eslint` in devDeps                   | CI step running `eslint`                    | no `--max-warnings 0`; large `ignorePatterns`; many inline `eslint-disable` |
+| `linting`              | `biome.json` or `eslint.config.*`/`.eslintrc*`; matching devDeps (`@biomejs/biome`, `eslint`) | CI step running `biome ci` or `eslint`      | `eslint` without `--max-warnings 0` or `biome ci` without `--error-on-warnings`; large ignore lists; many inline `eslint-disable`/`biome-ignore` |
 | `type-safety`          | `tsconfig.json` with `strict: true`                                    | CI step running `tsc --noEmit`              | `strict: false`, `skipLibCheck` plus loose flags, many `@ts-expect-error`   |
-| `formatting`           | `.prettierrc*`, `prettier` in devDeps                                  | CI `prettier --check` or a lint-staged hook | formatter installed but only run manually                                   |
+| `formatting`           | `biome.json` (formatter on), or `.prettierrc*`, `prettier` in devDeps   | CI `biome ci`/`prettier --check` or a lint-staged hook | formatter installed but only run manually                                   |
 | `unit-testing`         | `vitest.config.*` / `jest.config.*`, test files present                | CI step running the suite                   | tests exist but only for utils; suite not in CI; `.skip` clusters           |
 | `secret-scanning`      | `.gitleaks.toml`, gitleaks/trufflehog in CI, GitHub secret scanning on | CI step blocking                            | scans the diff but never the history; findings allowlisted without expiry   |
 | `dependency-audit`     | `npm audit` step, `osv-scanner`, Dependabot/Renovate config            | CI step with a severity gate                | audit runs with `                                                           |     | true`; alerts open for months |
 | `no-skipped-tests`     | lint rule (`no-only-tests`, `vitest/no-disabled-tests`)                | CI enforcement                              | `.skip` present with no register                                            |
 | `coverage-rigor`       | coverage provider config, `thresholds` block                           | CI gate on thresholds or diff coverage      | repo-wide percentage only, no diff coverage; thresholds below current value |
 | `duplication`          | `jscpd` config, Sonar project                                          | CI step                                     | reported to a dashboard nobody gates on                                     |
-| `cognitive-complexity` | `eslint-plugin-sonarjs` or `complexity` rule enabled                   | lint step blocking                          | rule set to `warn`                                                          |
+| `cognitive-complexity` | `eslint-plugin-sonarjs`, a Biome/similar complexity rule enabled       | lint step blocking                          | rule set to `warn`                                                          |
 
 ### Feature testing
 
@@ -99,7 +99,7 @@ Rules: branch protection requiring one approval is evidence of `code-review` as 
 ```
 package.json                 scripts, dependencies, devDependencies, engines
 package-lock.json            actual installed tool versions
-eslint.config.*  .eslintrc*  tsconfig*.json  .prettierrc*
+biome.json  biome.jsonc  eslint.config.*  .eslintrc*  tsconfig*.json  .prettierrc*
 vitest.config.*  jest.config.*  playwright.config.*  stryker.conf.*
 promptfooconfig.*  evals/  prompts/
 .github/workflows/*.yml      the enforcement layer - read every step, not just names

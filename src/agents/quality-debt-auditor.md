@@ -40,7 +40,7 @@ The ceilings are the point. Technical debt is measurable, so it can gate. Intent
 
 Look for these first - they hide the most and cost the least to fix:
 
-- a whole-file `/* eslint-disable */` or `@ts-nocheck` at the top of a source file
+- a whole-file `/* eslint-disable */`, a file-top `// biome-ignore`, or `@ts-nocheck` at the top of a source file
 - `tool || echo "non-blocking"` next to `continue-on-error: false` - the step always passes and the `false` reads as strict
 - a coverage exclusion on the directory where the logic lives
 - a committed `.only`, which silently disables every other test in its file

@@ -42,8 +42,7 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 20, cache: npm }
       - run: npm ci
-      - run: npx eslint . --max-warnings 0 # not optional: without it, warnings pass
-      - run: npx prettier --check .
+      - run: npx biome ci . # lint + format + import organization, non-mutating; add --error-on-warnings if warnings should fail
 
   typecheck:
     needs: setup
@@ -224,7 +223,7 @@ unregistered-suppressions:
       with: { fetch-depth: 0 }
     - run: |
         added=$(git diff origin/${{ github.base_ref }}...HEAD -U0 \
-          | grep -E '^\+.*(eslint-disable|@ts-expect-error|@ts-nocheck|\.skip\(|\.only\(|continue-on-error|istanbul ignore|v8 ignore)' \
+          | grep -E '^\+.*(eslint-disable|biome-ignore|@ts-expect-error|@ts-nocheck|\.skip\(|\.only\(|continue-on-error|istanbul ignore|v8 ignore)' \
           | grep -vE 'W-[0-9]+' || true)
         if [ -n "$added" ]; then
           echo "::error::Unregistered suppressions added:"; echo "$added"; exit 1

@@ -24,7 +24,7 @@ Save to `.qa/quality-contract.md`. Keep the four sections and their order - gate
 
 | Practice           | Level | Tool               | Exit criterion                                  | Owner    |
 | ------------------ | ----- | ------------------ | ----------------------------------------------- | -------- |
-| `linting`          | MUST  | ESLint flat config | `eslint .` clean, `--max-warnings 0`, in CI     | @team    |
+| `linting`          | MUST  | Biome              | `biome ci .` clean in CI                         | @team    |
 | `unit-testing`     | MUST  | Vitest             | Suite green in CI; diff coverage ≥ 75%          | @team    |
 | `api-testing`      | MUST  | Playwright API     | Contract, auth, validation, error paths covered | @backend |
 | `mutation-testing` | COULD | Stryker            | Score tracked; no decrease on `src/pricing/`    | -        |
@@ -41,7 +41,7 @@ Save to `.qa/quality-contract.md`. Keep the four sections and their order - gate
 
 | Practice              | Level  | State      | Evidence                                                                                    | Verdict         |
 | --------------------- | ------ | ---------- | ------------------------------------------------------------------------------------------- | --------------- |
-| `linting`             | MUST   | PRESENT    | `eslint.config.js`; `ci.yml:31` runs `eslint . --max-warnings 0`                            | ok              |
+| `linting`             | MUST   | PRESENT    | `biome.json`; `ci.yml:31` runs `biome ci .`                                                 | ok              |
 | `type-safety`         | MUST   | PARTIAL    | `strict: true` in root `tsconfig.json`, but `apps/web/tsconfig.json:8` sets `strict: false` | fix             |
 | `coverage-rigor`      | MUST   | MISSING    | coverage provider configured, no threshold, no diff coverage                                | **blocker**     |
 | `e2e-testing`         | MUST   | PARTIAL    | `playwright.config.ts` present; `ci.yml:58` job runs on `schedule` only, not on PR          | fix             |
@@ -86,9 +86,9 @@ thresholds:
 contract:
   - practice: linting
     level: must
-    tool: eslint
+    tool: biome
     state: present
-    evidence: ['eslint.config.js', 'ci.yml:31']
+    evidence: ['biome.json', 'ci.yml:31']
   - practice: coverage-rigor
     level: must
     tool: vitest-coverage

@@ -58,7 +58,7 @@ The tags most reviews miss. Read the `-` lines.
 | `removed-validation` | deleted schema fields, deleted `if (!x) throw`, a relaxed regex, a removed `required`                        | inputs previously rejected are now accepted           |
 | `loosened-type`      | `any`, `unknown` cast onward, a new `@ts-expect-error`, a non-null `!`, `strict` turned off, a widened union | the compiler stopped checking something               |
 | `removed-guard`      | a deleted auth check, a deleted rate limit, a deleted feature flag gate, a removed `CSRF`/`CORS` restriction | a control disappeared                                 |
-| `disabled-check`     | `eslint-disable`, `continue-on-error: true` added, a threshold lowered, `retries` raised                     | a gate stopped gating                                 |
+| `disabled-check`     | `eslint-disable` or `biome-ignore` added, `continue-on-error: true` added, a threshold lowered, `retries` raised | a gate stopped gating                                 |
 
 `disabled-check` deserves special handling: it is a change to the _quality system itself_, so it belongs in the waiver conversation (`governing-quality-waivers`), not just the test scope.
 

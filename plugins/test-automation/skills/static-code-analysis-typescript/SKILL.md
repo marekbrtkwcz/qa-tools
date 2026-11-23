@@ -1,6 +1,6 @@
 ---
 name: static-code-analysis-typescript
-description: 'Creates, reviews, and modernizes static code analysis setups for Node.js and TypeScript repositories, covering ESLint flat config, typescript-eslint, tsconfig, Prettier, import sorting, Husky, lint-staged, package.json quality scripts, and CI quality gates. Use when setting up or auditing linting, formatting, type-checking, commit hooks, or GitHub Actions quality checks in a TypeScript project.'
+description: 'Creates, reviews, and modernizes static code analysis setups for Node.js and TypeScript repositories using Biome: biome.json configuration, the Biome linter, formatter, and assist import organization, migration from ESLint/Prettier, tsconfig, Husky, lint-staged, package.json quality scripts, and CI quality gates with biome ci. Use when setting up or auditing linting, formatting, type-checking, commit hooks, or CI quality checks in a JavaScript or TypeScript project.'
 argument-hint: 'Repository type, current tooling, and target quality gate'
 user-invocable: true
 ---
@@ -9,32 +9,30 @@ user-invocable: true
 
 Use this skill when you need to create, review, fix, or modernize static code analysis in a Node.js + TypeScript repository.
 
-It is designed for repositories that use or should use:
+This collection standardizes on a single-tool stack:
 
-- `eslint` (flat config)
-- `typescript-eslint`
-- `typescript`
-- `tsconfig.json`
-- `prettier`
-- `eslint-plugin-simple-import-sort` (import sorting via ESLint)
-- `husky`
-- `lint-staged`
+- `@biomejs/biome` - one binary for linting, formatting, and import organization
+- `biome.json` (or `biome.jsonc`) - one configuration file for all three
+- `typescript` with a strict `tsconfig.json` - Biome does not type-check, so `tsc --noEmit` remains the type gate
+- `husky` (plus `lint-staged` when staged-file workflows are wanted)
 - `package.json` scripts
-- CI quality gates (GitHub Actions)
+- CI quality gates (`biome ci`)
+
+Existing repositories that still run ESLint and/or Prettier are migrated to Biome as part of this workflow; the migration procedure is step 6.
 
 ## When to Use
 
 Use this skill when the user asks things like:
 
 - "set up static analysis for TypeScript"
-- "add ESLint / typescript-eslint / Prettier"
-- "review our lint, tsc, husky, or lint-staged setup"
+- "set up Biome"
+- "add linting and formatting to this repo"
+- "review our biome.json, tsc, husky, or lint-staged setup"
+- "migrate this repo from ESLint / Prettier to Biome"
 - "fix package.json scripts for code quality"
 - "prepare CI checks for linting and type checking"
 - "standardize naming for static code analysis scripts"
 - "audit whether this repo follows current best practices"
-- "set up import sorting"
-- "replace trivago import sorting plugin"
 - "add a CI quality gate workflow"
 
 ## Goals
@@ -46,26 +44,25 @@ This skill should help produce a setup that is:
 - CI-friendly
 - fast enough for local development
 - strict enough to catch issues early
-- easy to understand from `package.json`, `README.md`, and the config files
+- easy to understand from `package.json`, `README.md`, and `biome.json`
 - portable across Playwright, Cypress, and general TypeScript projects
 
 ## Recommended Outcome
 
 A strong baseline should usually include:
 
-- ESLint flat config (`eslint.config.mjs`)
-- `typescript-eslint` for TypeScript-aware linting
-- direct `typescript` dependency when `tsc` is used directly
-- strict `tsconfig.json`
-- clear split between formatting and linting responsibilities
-- import sorting via ESLint (`eslint-plugin-simple-import-sort`)
+- `@biomejs/biome` installed as an exact-pinned dev dependency (`npm install -D -E @biomejs/biome`, the `-E` flag) so every contributor and CI run executes the same version
+- `biome.json` created with `npx biome init` - formatter, linter, and assist actions on with their recommended settings
+- import organization via the assist action `source.organizeImports`
+- VCS integration enabled (`vcs.enabled`, `vcs.clientKind: "git"`, `vcs.useIgnoreFile`) so Biome reuses `.gitignore`
+- `typescript` as a direct dependency when `tsc` is used directly, with a strict `tsconfig.json`
 - `husky` hook for local guardrails
-- `lint-staged` for staged-file workflows
-- CI commands that do not mutate files
+- `lint-staged` for staged-file workflows when needed
+- CI commands that cannot mutate files (`biome ci`)
 - explicit Node version support in `package.json#engines`
-- a CI quality gate (integrated into an existing workflow when one exists)
+- a CI quality gate, integrated into an existing workflow when one exists
 
-Concrete baseline files (eslint.config.mjs, package.json scripts, tsconfig, Prettier, Husky, VS Code settings, CI workflows) live in `./resources/example-configs.md`.
+Concrete baseline files (biome.json, package.json scripts, tsconfig, Husky hook, lint-staged config, VS Code settings, CI workflows) live in `./resources/example-configs.md`.
 
 ## Procedure
 
@@ -74,10 +71,10 @@ Concrete baseline files (eslint.config.mjs, package.json scripts, tsconfig, Pret
 Check at least these files when they exist:
 
 - `package.json`
-- `eslint.config.*` (or legacy `.eslintrc*`)
+- `biome.json` / `biome.jsonc`
+- `eslint.config.*` or legacy `.eslintrc*`
 - `tsconfig.json`
-- `.prettierrc*`
-- `.prettierignore`
+- `.prettierrc*` / `.prettierignore`
 - `.husky/*`
 - `.github/workflows/*`
 - `.vscode/settings.json`
@@ -87,84 +84,94 @@ Check at least these files when they exist:
 
 Identify:
 
-- what tools are already installed
-- whether the repo uses flat config or legacy ESLint config
-- whether `typescript` is direct or transitive
-- whether `tsc` is used as a real gate
-- whether `prettier` is standalone, inside ESLint, or split by file type
+- whether Biome is already installed, and whether `@biomejs/biome` is pinned exactly (no `^`/`~`)
+- whether `biome.json` matches the installed Biome version (the `$schema` URL carries the version)
+- whether formatter, linter, and assist are all enabled, and which import sorting is active
+- whether the repo still runs ESLint and/or Prettier, and in which scripts
+- whether `typescript` is direct or transitive, and whether `tsc` is used as a real gate
 - whether commit hooks validate the whole repo or only staged files
 - whether CI enforces the same checks as local hooks
-- how import sorting is handled (Prettier plugin, ESLint plugin, VS Code, or not at all)
-- whether VS Code `source.organizeImports` could conflict with other import sorting
+- whether VS Code `source.organizeImports` could conflict with Biome's import organizer
 
 ### 2. Classify the current architecture
 
 Choose the current model before editing anything:
 
-- **Model A - Separate responsibilities**: ESLint for code quality; Prettier for formatting; `prettier --check` used directly; `eslint-config-prettier` avoids rule conflicts.
-- **Model B - ESLint also enforces Prettier in TypeScript**: `eslint-plugin-prettier` runs formatting checks inside ESLint, often paired with a separate Prettier CLI check for non-TS files.
-- **Model C - Mixed or inconsistent**: scripts overlap, responsibilities are unclear, TS formatting may be checked twice or not clearly at all.
+- **Model A - Biome-native**: one `biome.json` covers linting, formatting, and import organization; `tsc` covers types. The target state.
+- **Model B - Legacy split**: ESLint for code quality, Prettier for formatting, an import-sort plugin on either side. A migration candidate - go to step 6.
+- **Model C - Mixed or inconsistent**: Biome for some checks but ESLint still configured, overlapping scripts, or unclear responsibilities. Consolidate on Biome and remove the leftovers.
 
 When possible, make the final state explicit in docs so the split is understandable.
 
-### 3. Normalize dependency expectations
+### 3. Install and configure Biome
 
 For TypeScript repositories, prefer these principles:
 
-- if the repo runs `tsc`, add `typescript` directly in `devDependencies`
-- if ESLint is used, make the config style explicit and modern (flat config)
-- if `typescript-eslint` is installed, ensure versions are compatible with ESLint and TypeScript
+- install exactly pinned: `npm install -D -E @biomejs/biome`
+- if no `biome.json` exists, create one with `npx biome init` (generates the config with `$schema`, recommended linter preset, formatter, and assist actions enabled)
+- keep formatter, linter, and assist enabled; organizeImports belongs to `assist.actions.source.organizeImports`
+- enable VCS integration so Biome reuses `.gitignore`:
+
+```json
+{
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true,
+    "defaultBranch": "main"
+  }
+}
+```
+
+  Set `defaultBranch` to the repo's real default branch when using `--changed` in step 8 or CI.
+
 - if tooling requires newer Node versions, declare them in `package.json#engines`
+- ignore generated artifacts such as `playwright-report/**` and `test-results/**` (in `biome.json` overrides or the existing `.gitignore` when `useIgnoreFile` covers them)
 
-Typical direct dev dependencies: `eslint`, `@eslint/js`, `typescript-eslint`, `typescript`, `prettier`, `eslint-config-prettier`, `eslint-plugin-simple-import-sort`, `globals`, `husky`, `lint-staged`, optionally `eslint-plugin-prettier` and repo-specific plugins such as `eslint-plugin-playwright`.
+Typical direct dev dependencies: `@biomejs/biome`, `typescript`, `husky`, and optionally `lint-staged`.
 
-If the repository contains Playwright tests, strongly consider:
+### 4. Assess import organization
 
-- `eslint-plugin-playwright`
-- Playwright-specific rule tuning in ESLint
-- ignoring generated Playwright artifacts such as `playwright-report/**` and `test-results/**`
+- **No sorting** → leave assist `organizeImports` on (the `npx biome init` default)
+- **Biome assist** → already optimal
+- **`eslint-plugin-simple-import-sort` / `eslint-plugin-perfectionist`** → removed with the ESLint migration (step 6); Biome's organizer replaces them
+- **`@trivago/prettier-plugin-sort-imports` / `@ianvs/prettier-plugin-sort-imports`** → removed with the Prettier migration (step 6); their custom grouping is not carried over, accept Biome's ordering
+- **VS Code `source.organizeImports`** → remove if Biome's organizer is active; it conflicts
 
-### 4. Assess import sorting
+Rationale and VS Code settings are in `./resources/import-sorting.md`.
 
-Check how imports are currently sorted:
-
-- **No sorting** → add `eslint-plugin-simple-import-sort`
-- **`@trivago/prettier-plugin-sort-imports`** → migrate to `eslint-plugin-simple-import-sort` (Babel parser, no Prettier 4 support)
-- **`@ianvs/prettier-plugin-sort-imports`** → consider migrating for cleaner separation
-- **`eslint-plugin-simple-import-sort`** → already optimal
-- **`eslint-plugin-perfectionist`** → acceptable if broader sorting rules are wanted
-- **VS Code `source.organizeImports`** → remove if any other import sorting tool is active; it conflicts
-
-Rationale, decision tree, and step-by-step migrations are in `./resources/import-sorting.md`.
-
-After migration, run `npx eslint . --fix` to normalize all imports, then verify with `npx eslint . --max-warnings=0`.
+After the migration, run `npx biome check --write .` once to normalize all imports and formatting, then verify with a clean `npx biome check .`.
 
 ### 5. Normalize script naming in `package.json`
 
 Prefer predictable script names:
 
-- `lint` → runs ESLint in non-fix mode and should fail on warnings if that is the chosen policy
-- `format` → mutating formatter run, usually `prettier --write`
-- `format:check` → non-mutating formatting validation
+- `check` → local aggregate: `biome check --write .` plus `tsc` (mutates files)
+- `check:ci` → CI aggregate: `biome ci .` plus `tsc --noEmit` (cannot mutate)
+- `lint` → lint only, non-mutating: `biome lint .`
+- `format` → mutating formatter run: `biome format --write .`
+- `format:check` → non-mutating formatting validation: `biome format .`
 - `tsc:check` → `tsc --noEmit`
-- `check` → aggregate quality command (local, may mutate)
-- `check:ci` → aggregate quality command (CI, non-mutating)
 - `lint-staged` → entrypoint for staged-file validation
 
 Guidelines:
 
-- commands used in CI should not mutate files
-- provide both `check` (local, with `--write`) and `check:ci` (CI, with `--check`)
-- if the repo intentionally splits non-TS and TS formatting, make that explicit with names such as `format:check` and `format:check:non-ts`
+- `biome ci` and the `biome lint`/`biome format` commands without `--write` never mutate files - use exactly those in CI
+- provide both `check` (local, with `--write`) and `check:ci` (CI, via `biome ci`)
+- running the npm script (`npm run check:ci`) in CI uses the same exact-pinned Biome version as local runs
 
-### 6. Decide how formatting should work
+### 6. Migrate away from ESLint and Prettier (when a legacy setup exists)
 
-Make one of the following explicit:
+When the repo still has ESLint and/or Prettier:
 
-- **Preferred modern baseline**: Prettier CLI validates formatting; ESLint handles code-quality rules; `eslint-config-prettier` disables formatting-conflicting lint rules.
-- **Acceptable intentional split**: TypeScript files are checked via ESLint + `eslint-plugin-prettier`; non-TypeScript files are checked by `prettier --check`; docs clearly explain the split.
+1. `npx biome init` if no `biome.json` exists yet
+2. `npx biome migrate eslint --write` - ports the ESLint config (flat or legacy, including `extends` and plugins; needs Node to resolve them; YAML configs are not supported) and `.eslintignore`
+3. `npx biome migrate prettier --write` - ports `.prettierrc` and `.prettierignore`
+4. Review the ported rules in `biome.json` (Biome ports identical rules by default; pass `--include-inspired` / `--include-nursery` deliberately, not by reflex)
+5. Run `npx biome check --write .` once and commit the reformat
+6. Remove `eslint`, `prettier`, their plugins and configs, their editor extensions, and the `eslint`/`prettier` scripts
 
-Avoid leaving the repo in a state where it is unclear whether `*.ts` files are checked by Prettier CLI, by ESLint, twice, or not consistently at all.
+Full walkthrough, caveats, and the rule-compatibility notes: `./resources/biome-migration.md`.
 
 ### 7. Validate TypeScript configuration
 
@@ -180,65 +187,58 @@ For `tsconfig.json`, prefer:
 
 If the repo uses path aliases, confirm they are supported consistently by TypeScript, runtime/test tooling, and editor tooling.
 
-### 8. Set up Husky and lint-staged correctly
+**Biome does not replace tsc.** It has no type checker, so `tsc:check` stays a separate, non-negotiable gate.
+
+### 8. Set up Husky and staged checks correctly
 
 Recommended pattern:
 
-- `lint-staged` handles staged-file formatting and fixable lint checks (including import sorting)
-- full-project `tsc:check` may still run in `pre-commit` or `pre-push`, depending on repo size and tolerance for slower hooks
-
-Good staged-file mapping examples:
-
-- `*.ts` → `prettier --write`, `eslint --fix` (auto-sorts imports and fixes lint issues)
-- `*.{json,md,yml,yaml,mjs}` → `prettier --write`
+- pre-commit hook runs Biome on staged files only: `npx biome check --staged --write` (or `lint-staged` with a `biome check --write` entry when the repo already uses it)
+- full-project `tsc:check` may still run in pre-commit or pre-push, depending on repo size and tolerance for slower hooks
 
 Guidelines:
 
-- use `lint-staged` for fast local feedback
-- avoid running whole-repo ESLint in pre-commit if staged-only checks are enough
-- if full `tsc:check` is too slow for pre-commit, move it to `pre-push` or CI
-- review ignored outputs so formatters and linters do not waste time on generated artifacts
+- use staged-file checks for fast local feedback
+- avoid whole-repo runs in pre-commit when staged-only checks are enough
+- if full `tsc:check` is too slow for pre-commit, move it to pre-push or CI
+- on large repos, `npx biome check --changed --write` (against `vcs.defaultBranch`) is an alternative for branch-local runs
 
 ### 9. Define CI quality gates
 
 A minimal CI quality job should:
 
 1. Install dependencies reproducibly (`npm ci`)
-2. `npm run format:check`
-3. `npm run lint`
-4. `npm run tsc:check`
+2. `npm run check:ci` - i.e. `biome ci .` (non-mutating, GitHub-style annotations on GitHub hosts) plus `tsc --noEmit`
 
-**Pipeline discovery: add quality checks to an existing CI workflow before creating a separate one** (reason below).
+**Pipeline discovery: add quality checks to an existing CI workflow before creating a separate one.**
 
 1. **Search for existing workflows** - look in `.github/workflows/` for any existing CI pipeline (e.g. `playwright-e2e-tests.yml`, `ci.yml`, `test.yml`, `build.yml`)
 2. **If a main pipeline exists** - add a `quality` job to that workflow, with the test job depending on it via `needs: quality`
 3. **Only if NO existing pipeline is found** - create a new standalone workflow (example in `./resources/example-configs.md`)
 
-Why integrate rather than separate: a single workflow gives one status check in PRs, shared triggers and concurrency reduce drift, and `needs` ensures tests don't waste CI minutes on code that fails basic quality checks.
-
 CI principles:
 
-- use non-mutating commands only
+- use non-mutating commands only (`biome ci` has no `--write` mode by design)
 - do not rely solely on local hooks - CI is the authoritative gate
 - keep CI aligned with local script names
 - use `permissions: contents: read` for least-privilege
 - cache `npm` dependencies for speed
 - match the CI Node version to `engines.node` from `package.json`
+- prefer running the pinned local Biome through `npm run check:ci`; the first-party `biomejs/setup-biome` GitHub Action is an alternative for jobs that do not install npm dependencies - pin a version instead of `latest` when you use it, or CI may drift from the repo's pin
 
 ### 10. Update documentation
 
 Reflect the final design in docs, so the next person runs the same scripts CI runs. At minimum, update `README.md` (plus audit/report docs and `.vscode/settings.json` recommendations when relevant).
 
-Document clearly: required Node version, what each quality script does, whether TS formatting is checked by ESLint or Prettier CLI, how import sorting works, what Husky runs on commit, what CI runs, and what files are ignored by Prettier/ESLint and why.
+Document clearly: required Node version, what each quality script does, that linting/formatting/import organization all live in `biome.json`, what Husky runs on commit, what CI runs, and which files are ignored and why.
 
 ### 11. Verify and report
 
 After editing, verify:
 
-- `npm run lint` - passes with zero warnings
-- `npm run format:check` - passes
-- `npm run tsc:check` - passes
-- `npm run lint-staged` - exits cleanly (may report nothing staged)
+- `npx biome check .` - exits 0 after one `--write` pass
+- `npm run check:ci` - passes (`biome ci .` plus `tsc`)
+- the hook: `git add` a sample file and commit, then `git reset --soft HEAD~1` - the commit went through the hook cleanly
 
 The final report should distinguish between configuration problems, dependency problems, and code-quality violations in the current codebase.
 
@@ -246,21 +246,21 @@ If verification hits unexpected behavior, consult `./resources/troubleshooting.m
 
 ## Decision Rules
 
-**Prefer adding `typescript` directly when:** `tsc` is invoked from `package.json`; the repo depends on TypeScript version stability; the current install works only because of a transitive dependency.
+**Pin the exact Biome version (`-E`) when:** always - the quick start documents `-E` so contributors and CI run one version; `biome.json` and its `$schema` are version-coupled.
 
-**Prefer adding `engines.node` when:** key tools require a newer Node version; the README requirement is vague or outdated; the project is team-shared or CI-managed.
+**Prefer `vcs.useIgnoreFile` when:** the repo already maintains `.gitignore`; it keeps the ignored set identical to other tooling instead of maintaining a second ignore list.
 
-**Prefer `lint-staged` when:** the repo uses Husky; pre-commit currently runs whole-repo checks that are unnecessarily slow; the user wants local guardrails without painful commit latency.
+**Prefer a separate `tsc:check` gate when:** always - Biome formats and lints but has no type checker; loosen it only if `typescript` is not used at all.
 
-**Prefer `eslint-plugin-simple-import-sort` when:** setting up a new repo; migrating away from `@trivago/prettier-plugin-sort-imports`; the team wants clean separation of concerns; VS Code `source.organizeImports` is causing conflicts.
+**Prefer `biome ci` over `biome check` in CI when:** always in a CI environment - it cannot write, integrates with runner reporting (e.g. GitHub annotations), and supports thread control.
 
-**Allow `@ianvs/prettier-plugin-sort-imports` when:** the repo already uses it and it works well; the team prefers regex-based import grouping; complex import order requirements benefit from explicit regex patterns.
+**Prefer `--staged` in the pre-commit hook when:** the hook only needs to guard what is being committed; whole-repo checks belong in CI.
 
-**Avoid `@trivago/prettier-plugin-sort-imports` in new projects because:** it uses a Babel-based parser (slower, less TypeScript-aware); it has no Prettier 4 support; it conflicts with VS Code's `source.organizeImports`; `@ianvs/prettier-plugin-sort-imports` is a strictly better fork.
+**Prefer `--changed` on large repos when:** full-project checks get slow locally; set `vcs.defaultBranch` first. Note it flags any touched file without re-linting downstream importers - full CI runs still cover the whole repo.
 
-**Prefer separate Prettier CLI over eslint-plugin-prettier when:** setting up a new repo; performance and simplicity matter; the team wants the current mainstream recommendation from Prettier docs.
+**Enable nursery rules when:** one specific rule is needed and documented - e.g. `lint/nursery/noFloatingPromises` in a Playwright suite, where a missing `await` lets an assertion run after the test has already passed. Nursery rules can change behavior between releases, so name the rule and the reason in `biome.json`.
 
-**Allow `eslint-plugin-prettier` when:** the repo already uses it intentionally; it is part of a documented TS/non-TS split; changing the model would create unnecessary churn right now.
+**Prefer `lint-staged` when:** the repo already uses it or needs partial-staging behaviour; a plain `biome check --staged --write` hook is enough otherwise.
 
 **Prefer a CI workflow when:** the repo is team-shared; quality enforcement should not depend on individual developer hooks; the project uses pull requests; even for solo projects, CI catches hook-bypass scenarios (`--no-verify`).
 
@@ -273,29 +273,31 @@ For setting up a new Playwright + TypeScript project with full static analysis:
 npm init -y
 npm install -D @playwright/test typescript
 
-# 2. Install static analysis tools (latest stable versions)
-npm install -D eslint @eslint/js typescript-eslint globals
-npm install -D prettier eslint-config-prettier   # Model A; add eslint-plugin-prettier only for Model B
-npm install -D eslint-plugin-simple-import-sort
-npm install -D eslint-plugin-playwright
+# 2. Install Biome (exact-pinned) and hooks
+npm install -D -E @biomejs/biome
 npm install -D husky lint-staged
 
-# 3. Initialize Husky
+# 3. Create biome.json (formatter + linter + assist, recommended preset)
+npx biome init
+# then enable the vcs block - see ./resources/example-configs.md
+
+# 4. Initialize Husky
 npx husky init
+# set .husky/pre-commit to run: npx biome check --staged --write
 
-# 4. Create config files using ./resources/example-configs.md:
-#    eslint.config.mjs, .prettierrc.json, .prettierignore, tsconfig.json,
-#    .husky/pre-commit, .vscode/settings.json, .vscode/extensions.json
+# 5. Create tsconfig.json and add quality scripts to package.json
+#    (see ./resources/example-configs.md)
 
-# 5. Add quality scripts to package.json (see ./resources/example-configs.md)
+# 6. For a Playwright suite, consider lint/nursery/noFloatingPromises
+#    (see ./resources/example-configs.md)
 
-# 6. CI quality gate:
+# 7. CI quality gate:
 #    - If .github/workflows/ already has a CI pipeline → add a quality job there
 #    - If no pipeline exists → create a standalone quality workflow
 
-# 7. Verify
-npm run lint
-npm run format:check
+# 8. Verify
+npx biome check --write .   # one-time normalization, then commit
+npx biome check .           # exits 0
 npm run tsc:check
 ```
 
@@ -303,23 +305,23 @@ npm run tsc:check
 
 A task using this skill is complete when:
 
-- [ ] Dependency declarations are explicit (no transitive reliance)
-- [ ] Script names are clear and consistent
-- [ ] `check:ci` exists as a non-mutating aggregate command
-- [ ] Formatting responsibility is understandable and documented
-- [ ] Import sorting is handled by ESLint, not Prettier plugins
-- [ ] `typescript` and Node requirements are documented in `engines`
-- [ ] Husky and `lint-staged` are aligned
-- [ ] A CI quality job exists (integrated into an existing workflow, or standalone only when none exists)
-- [ ] `.vscode/settings.json` does not have `source.organizeImports` conflicting with ESLint import sorting
+- [ ] `@biomejs/biome` is a direct dev dependency, pinned exactly
+- [ ] `biome.json` exists with formatter, linter, and assist `organizeImports` enabled, and a VCS block with `useIgnoreFile`
+- [ ] No ESLint/Prettier configs, dependencies, scripts, or editor extensions remain (or the migration is explicitly scheduled)
+- [ ] Script names are clear and consistent, with `check:ci` as a non-mutating aggregate
+- [ ] `tsc:check` still runs and passes - Biome does not type-check
+- [ ] Husky (and `lint-staged` if used) run `biome check --staged --write`
+- [ ] A CI quality job exists (integrated into an existing workflow, or standalone only when none exists) and runs `biome ci`
+- [ ] `.vscode/settings.json` uses the Biome extension as formatter and does not keep `source.organizeImports` on built-in ordering
 - [ ] Docs (`README.md`) match the actual setup
-- [ ] Verification results are recorded (`lint`, `format:check`, `tsc:check` all pass)
+- [ ] Verification results are recorded (`biome check`, `check:ci`, `tsc:check` all pass)
 
 ## Resource Map
 
-- `./resources/example-configs.md` - baseline eslint.config.mjs, package.json scripts, tsconfig, Prettier, Husky, VS Code, and CI workflow examples
-- `./resources/import-sorting.md` - import sorting rationale, decision tree, and migration guides
-- `./resources/troubleshooting.md` - symptoms, causes, and fixes for common setup problems
+- `./resources/example-configs.md` - read when implementing: baseline biome.json, package.json scripts, tsconfig, Husky hook, lint-staged config, VS Code settings, and CI workflow examples
+- `./resources/biome-migration.md` - read when the repo still has an ESLint and/or Prettier setup to migrate
+- `./resources/import-sorting.md` - read when import order churns on save or an old import-sort plugin is still configured
+- `./resources/troubleshooting.md` - read when a check fails and the cause is not obvious
 
 ## Related Skills
 
@@ -333,18 +335,19 @@ This skill is complete when:
 
 - the current architecture is classified (Model A/B/C) before any edits
 - dependencies, scripts, tsconfig, hooks, and CI follow the decision rules above
-- import sorting is ESLint-based or an intentional documented exception
+- linting, formatting, and import organization all live in one `biome.json`
+- a legacy ESLint/Prettier setup is fully migrated away (step 6) or an explicit, dated migration is scheduled
 - all verification commands pass and results are reported
 - documentation matches the final setup
 
 ## Example prompts
 
-- `/static-code-analysis-typescript review this repo and standardize eslint, typescript, husky, lint-staged, and CI scripts`
+- `/static-code-analysis-typescript review this repo and standardize Biome, TypeScript, Husky, and CI scripts`
 - `/static-code-analysis-typescript create a modern static analysis setup for a Node + TypeScript test repository`
-- `/static-code-analysis-typescript explain whether TS formatting should be handled by eslint-plugin-prettier or prettier --check in this project`
-- `/static-code-analysis-typescript migrate from @trivago/prettier-plugin-sort-imports to eslint-plugin-simple-import-sort`
+- `/static-code-analysis-typescript migrate this repo from ESLint and Prettier to Biome`
+- `/static-code-analysis-typescript set up Biome for a Playwright project and catch missing awaits`
 - `/static-code-analysis-typescript add a CI quality gate workflow for GitHub Actions`
-- `/static-code-analysis-typescript set up import sorting for a Playwright project`
+- `/static-code-analysis-typescript audit our biome.json and explain what is missing`
 ---
 
 ## 🎨 Emoji in output

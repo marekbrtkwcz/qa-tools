@@ -58,7 +58,7 @@ waivers:
 Every in-code suppression points at its register entry, so the two never drift:
 
 ```ts
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- W-006
+// biome-ignore lint/suspicious/noExplicitAny: W-006
 test.skip('checkout with expired token', ...); // W-004: clock skew, expires 2026-09-10
 ```
 
@@ -103,7 +103,7 @@ A diff that adds a suppression must add a register entry in the same change. Enf
 - name: New suppressions must be registered
   run: |
     added=$(git diff origin/${{ github.base_ref }}...HEAD -U0 \
-      | grep -E '^\+.*(eslint-disable|@ts-expect-error|\.skip\(|continue-on-error|istanbul ignore|v8 ignore)' \
+      | grep -E '^\+.*(eslint-disable|biome-ignore|@ts-expect-error|\.skip\(|continue-on-error|istanbul ignore|v8 ignore)' \
       | grep -vE 'W-[0-9]+' || true)
     if [ -n "$added" ]; then
       echo "Unregistered suppressions added:"; echo "$added"; exit 1
