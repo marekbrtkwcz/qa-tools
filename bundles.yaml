@@ -30,6 +30,7 @@ qa-core:
     - reporting-bugs
     - requirements-test-coverage-mapper
     - review-requirements
+    - standardizing-test-records
     - test-management-integration
     - test-plan-basic
     - testing-documentation
