@@ -15,7 +15,7 @@ Repozytorium inspirowane ideą i strukturą projektu **[awesome-agents-for-quali
 | `ai-quality` 🧠 | 7 | 1 | 1 | — | testowanie funkcji LLM, guardrails, groundedness |
 | `quality-gates` 🚦 | 17 | 4 | 1 | — | quality contracts, change gates, release readiness |
 | `authoring` 🛠️ | 9 | 1 | — | — | tworzenie skilli/agentów/pluginów/hooków |
-| `qa-mcp` 🎭 | — | — | — | — | serwer Playwright MCP (przypięty `0.0.86`); instaluj **raz**, obok dowolnego bundla automatyzującego |
+| `qa-mcp` 🎭 | — | — | — | — | serwer Playwright MCP (globalny binarny, pływające `@latest`); instaluj **raz**, obok dowolnego bundla automatyzującego |
 | `mobile-testing` 📱 | 1 | 1 | — | — | mobile: Maestro-first (Appium jako świadomy fallback), selektory accessibility-id, deterministyczne urządzenia, matryce CI |
 | `orchestration-basics` 🎼 | 1 | 3 | 1 | — | paczka: orchestrator + planner/explorer/analyst (start tutaj) |
 | `plan-explore-review-commit` 🔄 | 1 | 9 | 1 | — | paczka: pełny pipeline dostarczania z review i commitem |
@@ -44,10 +44,10 @@ cp -r plugins/qa-core <projekt>/.vibe/plugins/qa-core
 Serwer działa na **globalnym binarnym** `playwright-mcp` (nie na `npx`), więc wymaga jednorazowej instalacji:
 
 ```
-npm i -g @playwright/mcp@0.0.86
+npm i -g @playwright/mcp@latest
 ```
 
-Wersja (`@playwright/mcp@0.0.86`) jest przypięta w **`bundles.yaml`** (`mcp-pins:` w bundle `qa-mcp`) — to jedyne źródło pinu; build czyta je stamtąd i wymusza (`checkPlaywrightInstallDoc`), że linia `npm i -g` powyżej zawiera dokładnie tę wersję, więc bump bez edycji README wywala build (nigdy `@latest`). Manifest w artefakcie nie niesie wersji — binarny startuje od razu, bez resolvingu npm. Bump: `npm view @playwright/mcp version` → edytuj `mcp-pins` **i linię `npm i -g` powyżej** → `npm run build` → wpis w CHANGELOG.
+Wersja **celowo pływająca** (`@latest`): manifest pluginu niesie tylko nazwę komendy, więc wersja i tak żyje w globalnym installu użytkownika — współdzielonym z innymi narzędziami — a przypinanie wymuszałoby downgrade komuś, kto już ma nowszy binarny. Repo nie trzyma pina; jedyny wymóg pilnowany przez build (`checkPlaywrightInstallDoc`) to, żeby ta linia `npm i -g` nie zginęła z README — bez niej serwer wypada błędem spawn na każdej maszynie.
 
 ⚠️ **Dlaczego binarny, nie npx**: Vibe daje MCP-om z pluginów twardy budżet 10 s na handshake `initialize`, a schemat pluginowego `mcp.json` nie ma pola timeout. `npx` na Windows (shim `.cmd` + resolving npm + cache/rejestr) potrafił ten budżet przekraczać → `Request 'initialize' timed out`; globalny binarny startuje w ułamku sekundy, więc ta klasa awarii znika. Brak zainstalowanego binarnego objawia się od razu czytelnym błędem spawn przy starcie sesji. Gdybyś kiedyś mimo to potrzebował dłuższego budżetu: `startup_timeout_sec` działa tylko w `[[mcp_servers]]` w `config.toml` (user-config), a serwer pluginu o tej samej nazwie (`playwright`) zostaje przez taki wpis automatycznie wywalony (shadow).
 

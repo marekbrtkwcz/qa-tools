@@ -284,34 +284,29 @@ function titleFromDescription(text) {
  */
 /*
  * The playwright MCP server runs the global `playwright-mcp` binary, so the
- * version pin can no longer live in the generated manifest (the mcp.json
- * schema carries only the command). The pinned `npm i -g` install line in
- * README.md is therefore the only thing pinning the version users install.
- * This check keeps that guarantee mechanical: it reads mcp-pins from
- * bundles.yaml and fails the build when the README line does not name the
- * same version - a bump without the README edit is caught here, not on a
- * user's machine. Read-only and cheap; runs in every mode, like
- * checkMembership. A bundle without a pin stays quiet here: buildBundle
- * owns the "no version pin" error.
+ * manifest cannot carry a version; what users run is their own
+ * npm i -g install, shared with every other tool on the machine. The
+ * README therefore ships a floating @latest install line - pinning it
+ * would force users to downgrade a binary other tools also use. All this
+ * check enforces is that the prerequisite stays documented: the plugin
+ * spawns a bare command, so a README that loses the install line ships a
+ * server that fails with a spawn error nobody was told to prevent. A
+ * pinned version in the line is rejected too - it reads as a forgotten
+ * pre-policy-change README. Read-only and cheap; runs in every mode,
+ * like checkMembership.
  */
-function checkPlaywrightInstallDoc(bundles, docRoot = ROOT) {
+function checkPlaywrightInstallDoc(docRoot = ROOT) {
   const errors = [];
-  const qa = bundles['qa-mcp'];
-  const pin = (qa && (qa['mcp-pins'] || []).find((p) => /^playwright=/.test(String(p)))) || null;
-  if (!pin) return errors;
-  const version = String(pin).split('=').pop();
-  const wanted = `npm i -g @playwright/mcp@${version}`;
+  const wanted = 'npm i -g @playwright/mcp@latest';
   let readme = '';
   try {
     readme = fs.readFileSync(path.join(docRoot, 'README.md'), 'utf8');
   } catch {
-    return [
-      `Bundle qa-mcp: README.md is missing, so the pinned playwright MCP install command ("${wanted}") cannot be verified`,
-    ];
+    return [`Bundle qa-mcp: README.md is missing, so the playwright MCP install prerequisite ("${wanted}") cannot be verified`];
   }
   if (!readme.includes(wanted)) {
     errors.push(
-      `Bundle qa-mcp: README.md does not contain the pinned install command "${wanted}" - the plugin runs the global playwright-mcp binary, so the README line is the only thing pinning the version users install; update it with the version from mcp-pins`
+      `Bundle qa-mcp: README.md does not contain the install prerequisite "${wanted}" - the plugin runs the global playwright-mcp binary, so without a documented npm i -g line the server fails with a spawn error on every machine; keep the line (floating @latest on purpose)`
     );
   }
   return errors;
@@ -548,32 +543,23 @@ function buildBundle(name, bundle, outDir, checkOnly) {
   // 5. mcp.json (Vibe requires $schema and type fields)
   // Only in bundles that declare mcp: — no empty mcpServers:{} manifests
   // in the other bundles (the same rule hooks follow below).
-  // Server version pins come from bundles.yaml (mcp-pins: name=version):
-  // the config file is the single source; a server without a pin is a
-  // build error, so nobody can silently ship an unpinned (floating @latest)
-  // server. The committed plugins/ artifact must be reproducible.
+  // No version pins by design: the plugin manifest schema carries only the
+  // command, so the version lives in the user's global install (README
+  // ships a floating @latest npm i -g line; checkPlaywrightInstallDoc only
+  // enforces that the line stays documented).
   if ((bundle.mcp || []).length) {
-    const pins = new Map();
-    for (const pin of bundle['mcp-pins'] || []) {
-      const m = String(pin).match(/^([\w-]+)=\S+$/);
-      if (m) pins.set(m[1], String(pin).slice(m[1].length + 1));
-    }
     const mcp = { $schema: 'https://agent-plugins.org/schemas/1.0.0/mcp.schema.json', mcpServers: {} };
     for (const server of bundle.mcp) {
       if (server === 'playwright') {
-        const version = pins.get('playwright');
-        if (!version) {
-          errors.push('Bundle qa-mcp: playwright MCP has no version pin - add "playwright=<version>" to mcp-pins in bundles.yaml (pinned, never @latest)');
-          continue;
-        }
-        // The server runs the global binary (npm i -g, pinned install line in
-        // README.md, enforced by checkPlaywrightInstallDoc). A direct spawn
-        // starts in well under Vibe's fixed 10 s plugin-MCP startup budget,
-        // where npx (shim + resolver + cache/registry) could exceed it on
-        // Windows. The version pin can no longer live in this manifest - the
-        // schema carries only the command - so the README install command
-        // is the only thing pinning what users run; the build fails when
-        // it drifts from mcp-pins.
+        // The server runs the global binary (npm i -g, prerequisite
+        // documented in README.md, enforced by checkPlaywrightInstallDoc).
+        // A direct spawn starts in well under Vibe's fixed 10 s plugin-MCP
+        // startup budget, where npx (shim + resolver + cache/registry)
+        // could exceed it on Windows. No version pin here on purpose: the
+        // manifest schema carries only the command, the version lives in
+        // the user's shared global install, and the README line ships
+        // floating @latest so nobody is forced to downgrade a binary other
+        // tools also use.
         mcp.mcpServers[server] = { type: 'stdio', command: 'playwright-mcp' };
       } else {
         mcp.mcpServers[server] = { type: 'stdio', command: server };
@@ -796,7 +782,7 @@ function main() {
   }
 
   let allErrors = checkMembership(bundles);
-  allErrors = allErrors.concat(checkPlaywrightInstallDoc(bundles));
+  allErrors = allErrors.concat(checkPlaywrightInstallDoc());
   const fm = validateFrontmatter(bundles);
   allErrors = allErrors.concat(fm.errors);
   if (fm.warnings.length) {

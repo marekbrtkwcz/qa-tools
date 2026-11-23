@@ -104,9 +104,12 @@ test('buildBundle: Codex trigger folder (agents/openai.yaml) is not shipped in t
   );
 });
 
-test('buildBundle: no dead mcp.json for bundles without mcp; qa-mcp ships a pinned server', () => {
+test('buildBundle: no dead mcp.json for bundles without mcp; qa-mcp ships the global-binary server', () => {
   // A bundle that does not declare mcp: must not ship an placeholder
-  // mcpServers:{} manifest; the one that does must pin an exact version.
+  // mcpServers:{} manifest; the one that does runs the global binary.
+  // No version pin anywhere on purpose: the manifest schema carries only
+  // the command, the version lives in the user's npm i -g install (README
+  // ships floating @latest), so the manifest is identical across versions.
   const out = tmpDir();
   const noErrors = buildBundle('authoring', { skills: ['create-skill'] }, out);
   assert.deepEqual(noErrors, []);
@@ -115,59 +118,34 @@ test('buildBundle: no dead mcp.json for bundles without mcp; qa-mcp ships a pinn
     'bundle without mcp: must not ship an empty mcp.json'
   );
 
-  // The pin comes from the bundle config (bundles.yaml mcp-pins), never
-  // from a constant in build.js. The manifest runs the global binary:
-  // a bare command (Vibe allows exactly that), no args, no version —
-  // the version reaches users through the pinned README install line
-  // (checkPlaywrightInstallDoc below), so the manifest itself stays
-  // version-free and identical across bumps.
-  const pinned = buildBundle('qa-mcp', { mcp: ['playwright'], 'mcp-pins': ['playwright=0.0.86'] }, out);
-  assert.deepEqual(pinned, []);
+  const built = buildBundle('qa-mcp', { mcp: ['playwright'] }, out);
+  assert.deepEqual(built, [], 'a playwright server needs no pin: install versions float by design');
   const manifest = JSON.parse(fs.readFileSync(path.join(out, 'qa-mcp', 'mcp.json'), 'utf8'));
   assert.deepEqual(Object.keys(manifest.mcpServers), ['playwright']);
   assert.equal(manifest.mcpServers.playwright.command, 'playwright-mcp');
-  assert.ok(!('args' in manifest.mcpServers.playwright), 'bare executable: no npx args, no version in the manifest');
+  assert.ok(!('args' in manifest.mcpServers.playwright), 'bare executable: no args, no version in the manifest');
 });
 
-test('buildBundle: the MCP pin is version-controlled config — a playwright server without a pin is a build error', () => {
+test('checkPlaywrightInstallDoc: the README must document the floating @latest install line', () => {
+  // The plugin runs the global playwright-mcp binary, so without a
+  // documented npm i -g prerequisite the server fails with a spawn error
+  // on every machine. The gate keeps the line present - and rejects a
+  // pinned version, which reads as a pre-policy-change README.
   const out = tmpDir();
-  const errors = buildBundle('qa-mcp', { mcp: ['playwright'] }, out);
-  assert.equal(errors.length, 1);
-  assert.ok(errors[0].includes('no version pin'), errors[0]);
-  assert.ok(
-    !fs.existsSync(path.join(out, 'qa-mcp', 'mcp.json')),
-    'an unpinned server must not produce a manifest at all'
-  );
-});
 
-test('checkPlaywrightInstallDoc: the README install line must name the exact pinned version', () => {
-  // The plugin runs the global playwright-mcp binary, so the version pin
-  // reaches users only through the README install command; the build
-  // must fail when that line drifts from mcp-pins.
-  const out = tmpDir();
-  const bundles = { 'qa-mcp': { mcp: ['playwright'], 'mcp-pins': ['playwright=1.2.3'] } };
-
-  // no README at all: one error naming the pinned install command
-  const missing = checkPlaywrightInstallDoc(bundles, out);
+  // no README at all: one error naming the required install line
+  const missing = checkPlaywrightInstallDoc(out);
   assert.equal(missing.length, 1);
-  assert.ok(missing[0].includes('npm i -g @playwright/mcp@1.2.3'), missing[0]);
+  assert.ok(missing[0].includes('npm i -g @playwright/mcp@latest'), missing[0]);
 
-  // README with a stale version: drift error pointing at mcp-pins
+  // a pinned version (the old policy) must also fail, not pass silently
   fs.writeFileSync(path.join(out, 'README.md'), 'npm i -g @playwright/mcp@0.0.86\n');
-  const drift = checkPlaywrightInstallDoc(bundles, out);
-  assert.equal(drift.length, 1);
-  assert.ok(drift[0].includes('does not contain the pinned install command'), drift[0]);
+  const stale = checkPlaywrightInstallDoc(out);
+  assert.equal(stale.length, 1, 'a pinned install line must fail the gate');
 
-  // README with the exact pinned line: no errors
-  fs.writeFileSync(path.join(out, 'README.md'), 'Instalacja globalna:\n\nnpm i -g @playwright/mcp@1.2.3\n');
-  assert.deepEqual(checkPlaywrightInstallDoc(bundles, out), []);
-
-  // a bundle without a pin stays quiet here — buildBundle owns that error
-  assert.deepEqual(
-    checkPlaywrightInstallDoc({ 'qa-mcp': { mcp: ['playwright'] } }, out),
-    [],
-    'no pin in config: the doc check must not double-report'
-  );
+  // the floating line, anywhere in the README: no errors
+  fs.writeFileSync(path.join(out, 'README.md'), 'Instalacja globalna:\n\nnpm i -g @playwright/mcp@latest\n');
+  assert.deepEqual(checkPlaywrightInstallDoc(out), []);
 });
 
 /* ---------- parseBundles (minimal YAML subset) ---------- */
