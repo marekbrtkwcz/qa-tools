@@ -182,17 +182,21 @@ authoring:
 
 qa-mcp:
   icon: 🎭
-  description: "Playwright MCP server for qa-tools: install once alongside any automation bundle (test-automation, non-functional-testing, ui-api-automation, ui-api-automation-minimal) so browser control is never duplicated by multiple bundles."
+  description: "Browser-control MCP servers for qa-tools (Playwright MCP + Chrome DevTools MCP): install once alongside any automation bundle (test-automation, non-functional-testing, ui-api-automation, ui-api-automation-minimal) so browser control is never duplicated by multiple bundles."
   version: "0.3.0"
-  # The server runs the global playwright-mcp binary; the npm i -g line in
-  # README.md ships floating @latest (version-controlled pins were dropped:
-  # the plugin manifest carries only a bare command, so the version lives
-  # in the user's shared global install anyway - pinning it forced a
+  # Both servers spawn global binaries (playwright-mcp, chrome-devtools-mcp);
+  # the npm i -g lines in README.md ship floating @latest (version-controlled
+  # pins were dropped: the plugin manifest carries only a bare command, so the
+  # version lives in the user's shared global install anyway - pinning forced a
   # downgrade on machines that already run a newer binary). Build only
-  # enforces that the README keeps documenting the install prerequisite
-  # (checkPlaywrightInstallDoc).
+  # enforces that the README keeps documenting the install prerequisites
+  # (checkGlobalBinaryInstallDoc). The chrome-devtools-mcp server name matches
+  # the binary on purpose: a user-level [[mcp_servers]] entry with the same
+  # name shadows the plugin copy (custom flags, longer timeouts) instead of
+  # spawning a second Chrome instance.
   mcp:
     - playwright
+    - chrome-devtools-mcp
 
 mobile-testing:
   icon: 📱

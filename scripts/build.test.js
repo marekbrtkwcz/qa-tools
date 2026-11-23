@@ -31,7 +31,7 @@ const {
   listFiles,
   diffTrees,
   checkMembership,
-  checkPlaywrightInstallDoc,
+  checkGlobalBinaryInstallDoc,
   validateFrontmatter,
   orphanPluginDirs,
   swapStagedBundles,
@@ -104,9 +104,9 @@ test('buildBundle: Codex trigger folder (agents/openai.yaml) is not shipped in t
   );
 });
 
-test('buildBundle: no dead mcp.json for bundles without mcp; qa-mcp ships the global-binary server', () => {
+test('buildBundle: no dead mcp.json for bundles without mcp; qa-mcp ships the global-binary servers', () => {
   // A bundle that does not declare mcp: must not ship an placeholder
-  // mcpServers:{} manifest; the one that does runs the global binary.
+  // mcpServers:{} manifest; the one that does runs the global binaries.
   // No version pin anywhere on purpose: the manifest schema carries only
   // the command, the version lives in the user's npm i -g install (README
   // ships floating @latest), so the manifest is identical across versions.
@@ -118,34 +118,52 @@ test('buildBundle: no dead mcp.json for bundles without mcp; qa-mcp ships the gl
     'bundle without mcp: must not ship an empty mcp.json'
   );
 
-  const built = buildBundle('qa-mcp', { mcp: ['playwright'] }, out);
-  assert.deepEqual(built, [], 'a playwright server needs no pin: install versions float by design');
+  const built = buildBundle('qa-mcp', { mcp: ['playwright', 'chrome-devtools-mcp'] }, out);
+  assert.deepEqual(built, [], 'the servers need no pin: install versions float by design');
   const manifest = JSON.parse(fs.readFileSync(path.join(out, 'qa-mcp', 'mcp.json'), 'utf8'));
-  assert.deepEqual(Object.keys(manifest.mcpServers), ['playwright']);
+  assert.deepEqual(Object.keys(manifest.mcpServers), ['playwright', 'chrome-devtools-mcp']);
   assert.equal(manifest.mcpServers.playwright.command, 'playwright-mcp');
+  // chrome-devtools-mcp keeps the server name identical to the binary, so a
+  // user-level [[mcp_servers]] entry with the same name shadows the plugin
+  // copy instead of spawning a second Chrome instance.
+  assert.equal(manifest.mcpServers['chrome-devtools-mcp'].command, 'chrome-devtools-mcp');
   assert.ok(!('args' in manifest.mcpServers.playwright), 'bare executable: no args, no version in the manifest');
+  assert.ok(!('args' in manifest.mcpServers['chrome-devtools-mcp']), 'bare executable: no args, no version in the manifest');
 });
 
-test('checkPlaywrightInstallDoc: the README must document the floating @latest install line', () => {
-  // The plugin runs the global playwright-mcp binary, so without a
-  // documented npm i -g prerequisite the server fails with a spawn error
-  // on every machine. The gate keeps the line present - and rejects a
-  // pinned version, which reads as a pre-policy-change README.
+test('checkGlobalBinaryInstallDoc: the README must document both floating @latest install lines', () => {
+  // The plugin runs the global playwright-mcp and chrome-devtools-mcp
+  // binaries, so without a documented npm i -g prerequisite each server
+  // fails with a spawn error on every machine. The gate keeps every line
+  // present - and rejects a pinned version, which reads as a
+  // pre-policy-change README.
   const out = tmpDir();
 
-  // no README at all: one error naming the required install line
-  const missing = checkPlaywrightInstallDoc(out);
+  // no README at all: one error naming both required install lines
+  const missing = checkGlobalBinaryInstallDoc(out);
   assert.equal(missing.length, 1);
   assert.ok(missing[0].includes('npm i -g @playwright/mcp@latest'), missing[0]);
+  assert.ok(missing[0].includes('npm i -g chrome-devtools-mcp@latest'), missing[0]);
 
   // a pinned version (the old policy) must also fail, not pass silently
   fs.writeFileSync(path.join(out, 'README.md'), 'npm i -g @playwright/mcp@0.0.86\n');
-  const stale = checkPlaywrightInstallDoc(out);
-  assert.equal(stale.length, 1, 'a pinned install line must fail the gate');
+  const stale = checkGlobalBinaryInstallDoc(out);
+  assert.equal(stale.length, 2, 'a pinned install line must fail the gate, and the second prerequisite is missing too');
+  assert.ok(stale.some((e) => e.includes('npm i -g @playwright/mcp@latest')), 'error names the playwright line');
+  assert.ok(stale.some((e) => e.includes('npm i -g chrome-devtools-mcp@latest')), 'error names the chrome-devtools line');
 
-  // the floating line, anywhere in the README: no errors
+  // only the playwright line present: the chrome-devtools line still flagged
   fs.writeFileSync(path.join(out, 'README.md'), 'Instalacja globalna:\n\nnpm i -g @playwright/mcp@latest\n');
-  assert.deepEqual(checkPlaywrightInstallDoc(out), []);
+  const half = checkGlobalBinaryInstallDoc(out);
+  assert.equal(half.length, 1, 'only one prerequisite documented: one error');
+  assert.ok(half[0].includes('chrome-devtools-mcp@latest'), half[0]);
+
+  // both floating lines, anywhere in the README: no errors
+  fs.writeFileSync(
+    path.join(out, 'README.md'),
+    'Instalacja globalna:\n\nnpm i -g @playwright/mcp@latest\nnpm i -g chrome-devtools-mcp@latest\n'
+  );
+  assert.deepEqual(checkGlobalBinaryInstallDoc(out), []);
 });
 
 /* ---------- parseBundles (minimal YAML subset) ---------- */

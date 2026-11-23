@@ -15,7 +15,7 @@ Repozytorium inspirowane ideą i strukturą projektu **[awesome-agents-for-quali
 | `ai-quality` 🧠 | 7 | 1 | 1 | — | testowanie funkcji LLM, guardrails, groundedness |
 | `quality-gates` 🚦 | 17 | 4 | 1 | — | quality contracts, change gates, release readiness |
 | `authoring` 🛠️ | 9 | 1 | — | — | tworzenie skilli/agentów/pluginów/hooków |
-| `qa-mcp` 🎭 | — | — | — | — | serwer Playwright MCP (globalny binarny, pływające `@latest`); instaluj **raz**, obok dowolnego bundla automatyzującego |
+| `qa-mcp` 🎭 | — | — | — | — | serwery **Playwright MCP + Chrome DevTools MCP** (globalne binarne, pływające `@latest`); instaluj **raz**, obok dowolnego bundla automatyzującego |
 | `mobile-testing` 📱 | 1 | 1 | — | — | mobile: Maestro-first (Appium jako świadomy fallback), selektory accessibility-id, deterministyczne urządzenia, matryce CI |
 | `orchestration-basics` 🎼 | 1 | 3 | 1 | — | paczka: orchestrator + planner/explorer/analyst (start tutaj) |
 | `plan-explore-review-commit` 🔄 | 1 | 9 | 1 | — | paczka: pełny pipeline dostarczania z review i commitem |
@@ -39,17 +39,20 @@ cp -r plugins/qa-core ~/.vibe/plugins/qa-core
 cp -r plugins/qa-core <projekt>/.vibe/plugins/qa-core
 ```
 
-⚠️ **MCP bez duplikatów**: serwer Playwright MCP jest tylko w pluginie `qa-mcp`. Jeśli używasz browser automation (test-automation, non-functional-testing, paczki UI/API), doinstaluj `cp -r plugins/qa-mcp ~/.vibe/plugins/` **raz** — same bundle nie deklarują już `mcp:`, więc instalacja kilku nie powiela serwera.
+⚠️ **MCP bez duplikatów**: serwery browser automation są tylko w pluginie `qa-mcp` — **Playwright MCP** (`playwright`) i **Chrome DevTools MCP** (`chrome-devtools-mcp`). Jeśli używasz browser automation (test-automation, non-functional-testing, paczki UI/API), doinstaluj `cp -r plugins/qa-mcp ~/.vibe/plugins/` **raz** — same bundle nie deklarują już `mcp:`, więc instalacja kilku nie powiela serwerów.
 
-Serwer działa na **globalnym binarnym** `playwright-mcp` (nie na `npx`), więc wymaga jednorazowej instalacji:
+Oba serwery działają na **globalnych binarnych** (`playwright-mcp`, `chrome-devtools-mcp` — nie na `npx`), więc wymagają jednorazowej instalacji:
 
 ```
 npm i -g @playwright/mcp@latest
+npm i -g chrome-devtools-mcp@latest
 ```
 
-Wersja **celowo pływająca** (`@latest`): manifest pluginu niesie tylko nazwę komendy, więc wersja i tak żyje w globalnym installu użytkownika — współdzielonym z innymi narzędziami — a przypinanie wymuszałoby downgrade komuś, kto już ma nowszy binarny. Repo nie trzyma pina; jedyny wymóg pilnowany przez build (`checkPlaywrightInstallDoc`) to, żeby ta linia `npm i -g` nie zginęła z README — bez niej serwer wypada błędem spawn na każdej maszynie.
+Wersje **celowo pływające** (`@latest`): manifest pluginu niesie tylko nazwy komend, więc wersja i tak żyje w globalnym installu użytkownika — współdzielonym z innymi narzędziami — a przypinanie wymuszałoby downgrade komuś, kto już ma nowszy binarny. Repo nie trzyma pinów; jedyny wymóg pilnowany przez build (`checkGlobalBinaryInstallDoc`) to, żeby te linie `npm i -g` nie zginęły z README — bez nich serwery wypadają błędem spawn na każdej maszynie.
 
-⚠️ **Dlaczego binarny, nie npx**: Vibe daje MCP-om z pluginów twardy budżet 10 s na handshake `initialize`, a schemat pluginowego `mcp.json` nie ma pola timeout. `npx` na Windows (shim `.cmd` + resolving npm + cache/rejestr) potrafił ten budżet przekraczać → `Request 'initialize' timed out`; globalny binarny startuje w ułamku sekundy, więc ta klasa awarii znika. Brak zainstalowanego binarnego objawia się od razu czytelnym błędem spawn przy starcie sesji. Gdybyś kiedyś mimo to potrzebował dłuższego budżetu: `startup_timeout_sec` działa tylko w `[[mcp_servers]]` w `config.toml` (user-config), a serwer pluginu o tej samej nazwie (`playwright`) zostaje przez taki wpis automatycznie wywalony (shadow).
+⚠️ **Dlaczego binarny, nie npx**: Vibe daje MCP-om z pluginów twardy budżet 10 s na handshake `initialize`, a schemat pluginowego `mcp.json` nie ma pola timeout. `npx` na Windows (shim `.cmd` + resolving npm + cache/rejestr) potrafił ten budżet przekraczać → `Request 'initialize' timed out`; globalny binarny startuje w ułamku sekundy, więc ta klasa awarii znika. Brak zainstalowanego binarnego objawia się od razu czytelnym błędem spawn przy starcie sesji. Gdybyś kiedyś mimo to potrzebował dłuższego budżetu: `startup_timeout_sec` działa tylko w `[[mcp_servers]]` w `config.toml` (user-config), a serwer pluginu o tej samej nazwie (`playwright`, `chrome-devtools-mcp`) zostaje przez taki wpis automatycznie wywalony (shadow).
+
+⚠️ **Nazwa `chrome-devtools-mcp` celowo identyczna z binarką**: dzięki temu Twój własny wpis `[[mcp_servers]]` o tej nazwie (np. z kategoriami eksperymentalnymi czy dłuższym `tool_timeout_sec`) **shadowuje** kopię pluginu zamiast odpalać obok niej drugą instancję Chrome. Kopia pluginu startuje bez flag — wystarcza do sterowania przeglądarką; własne flagi konfigurujesz zawsze u siebie w `config.toml`.
 
 Potem w sesji Vibe: `/reload`.
 

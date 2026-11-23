@@ -283,31 +283,39 @@ function titleFromDescription(text) {
  * Runs in every mode (--check, build, --verify): it is read-only and cheap.
  */
 /*
- * The playwright MCP server runs the global `playwright-mcp` binary, so the
- * manifest cannot carry a version; what users run is their own
- * npm i -g install, shared with every other tool on the machine. The
- * README therefore ships a floating @latest install line - pinning it
- * would force users to downgrade a binary other tools also use. All this
- * check enforces is that the prerequisite stays documented: the plugin
- * spawns a bare command, so a README that loses the install line ships a
- * server that fails with a spawn error nobody was told to prevent. A
- * pinned version in the line is rejected too - it reads as a forgotten
+ * Both MCP servers (playwright -> playwright-mcp, chrome-devtools-mcp) run
+ * global binaries, so the manifest cannot carry a version; what users run is
+ * their own npm i -g install, shared with every other tool on the machine.
+ * The README therefore ships a floating @latest install line for each binary
+ * - pinning would force users to downgrade a binary other tools also use.
+ * All this check enforces is that every prerequisite stays documented: the
+ * plugin spawns a bare command, so a README that loses an install line ships
+ * a server that fails with a spawn error nobody was told to prevent. A
+ * pinned version in a line is rejected too - it reads as a forgotten
  * pre-policy-change README. Read-only and cheap; runs in every mode,
  * like checkMembership.
  */
-function checkPlaywrightInstallDoc(docRoot = ROOT) {
+const GLOBAL_BINARY_SERVERS = [
+  { name: 'playwright', binary: 'playwright-mcp', line: 'npm i -g @playwright/mcp@latest' },
+  { name: 'chrome-devtools-mcp', binary: 'chrome-devtools-mcp', line: 'npm i -g chrome-devtools-mcp@latest' },
+];
+
+function checkGlobalBinaryInstallDoc(docRoot = ROOT) {
   const errors = [];
-  const wanted = 'npm i -g @playwright/mcp@latest';
   let readme = '';
   try {
     readme = fs.readFileSync(path.join(docRoot, 'README.md'), 'utf8');
   } catch {
-    return [`Bundle qa-mcp: README.md is missing, so the playwright MCP install prerequisite ("${wanted}") cannot be verified`];
+    return [
+      `Bundle qa-mcp: README.md is missing, so the MCP install prerequisites (${GLOBAL_BINARY_SERVERS.map((s) => `"${s.line}"`).join(', ')}) cannot be verified`,
+    ];
   }
-  if (!readme.includes(wanted)) {
-    errors.push(
-      `Bundle qa-mcp: README.md does not contain the install prerequisite "${wanted}" - the plugin runs the global playwright-mcp binary, so without a documented npm i -g line the server fails with a spawn error on every machine; keep the line (floating @latest on purpose)`
-    );
+  for (const server of GLOBAL_BINARY_SERVERS) {
+    if (!readme.includes(server.line)) {
+      errors.push(
+        `Bundle qa-mcp: README.md does not contain the install prerequisite "${server.line}" - the plugin runs the global ${server.binary} binary, so without a documented npm i -g line the server fails with a spawn error on every machine; keep the line (floating @latest on purpose)`
+      );
+    }
   }
   return errors;
 }
@@ -545,14 +553,15 @@ function buildBundle(name, bundle, outDir, checkOnly) {
   // in the other bundles (the same rule hooks follow below).
   // No version pins by design: the plugin manifest schema carries only the
   // command, so the version lives in the user's global install (README
-  // ships a floating @latest npm i -g line; checkPlaywrightInstallDoc only
-  // enforces that the line stays documented).
+  // ships a floating @latest npm i -g line per binary;
+  // checkGlobalBinaryInstallDoc only enforces that the lines stay
+  // documented).
   if ((bundle.mcp || []).length) {
     const mcp = { $schema: 'https://agent-plugins.org/schemas/1.0.0/mcp.schema.json', mcpServers: {} };
     for (const server of bundle.mcp) {
       if (server === 'playwright') {
         // The server runs the global binary (npm i -g, prerequisite
-        // documented in README.md, enforced by checkPlaywrightInstallDoc).
+        // documented in README.md, enforced by checkGlobalBinaryInstallDoc).
         // A direct spawn starts in well under Vibe's fixed 10 s plugin-MCP
         // startup budget, where npx (shim + resolver + cache/registry)
         // could exceed it on Windows. No version pin here on purpose: the
@@ -562,6 +571,13 @@ function buildBundle(name, bundle, outDir, checkOnly) {
         // tools also use.
         mcp.mcpServers[server] = { type: 'stdio', command: 'playwright-mcp' };
       } else {
+        // Same global-binary rule for every other declared server; today
+        // that is chrome-devtools-mcp, whose binary is named exactly like
+        // the server. Keeping the server name identical to the binary keeps
+        // it identical to the user-level [[mcp_servers]] entry too, so a
+        // user config with custom flags/timeouts shadows the plugin copy
+        // (Vibe drops the plugin server on a name clash) instead of
+        // spawning a second Chrome instance.
         mcp.mcpServers[server] = { type: 'stdio', command: server };
       }
     }
@@ -782,7 +798,7 @@ function main() {
   }
 
   let allErrors = checkMembership(bundles);
-  allErrors = allErrors.concat(checkPlaywrightInstallDoc());
+  allErrors = allErrors.concat(checkGlobalBinaryInstallDoc());
   const fm = validateFrontmatter(bundles);
   allErrors = allErrors.concat(fm.errors);
   if (fm.warnings.length) {
@@ -865,7 +881,7 @@ module.exports = {
   listFiles,
   diffTrees,
   checkMembership,
-  checkPlaywrightInstallDoc,
+  checkGlobalBinaryInstallDoc,
   validateFrontmatter,
   orphanPluginDirs,
   swapStagedBundles,
