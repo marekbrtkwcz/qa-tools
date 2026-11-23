@@ -19,6 +19,8 @@ Hand this task to the `test-planner` agent (`test_planner` in Codex). If that ag
 
 # Task
 
+If the `planning-exploratory-testing` skill is installed, load it before starting.
+
 Your goal is to produce session charters a tester can pick up and explore with immediately, instead of a generic "click around" instruction.
 
 Ask only for missing essentials:

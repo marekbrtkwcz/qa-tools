@@ -20,6 +20,8 @@ Hand this task to the `skill-librarian` agent (`skill_librarian` in Codex). If t
 
 # Task
 
+If the `testing-agent-skills` skill is installed, load it before starting.
+
 Audit the customization collection at `<collectionRoot>` as one system and return severity-ranked findings I can act on without asking a follow-up question.
 
 Read the conventions from the collection itself before finding anything. Do not fix anything.

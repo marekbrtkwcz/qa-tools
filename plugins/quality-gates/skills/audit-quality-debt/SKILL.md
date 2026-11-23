@@ -19,6 +19,8 @@ Hand this task to the `quality-debt-auditor` agent (`quality_debt_auditor` in Co
 
 # Task
 
+If the `tech-debt-analysis` skill is installed, load it before starting.
+
 Audit the governance layer of this repository: what it claims to enforce, what it actually enforces, and what it has quietly stopped enforcing.
 
 Use `governing-quality-waivers` for the silent-skip inventory, `recording-change-intent` for the intent pass, and `deriving-a-quality-contract` for the technical gap.

@@ -19,6 +19,8 @@ Hand this task to the `qa-strategist` agent (`qa_strategist` in Codex). If that 
 
 # Task
 
+If the `deriving-a-quality-contract` skill is installed, load it before starting.
+
 Produce a QA strategy for the feature below that names concrete ways it can be abused, broken, or exploited, before any test code is written. Prefer specific scenarios over general advice.
 
 **If any required input is missing, ask for it before proceeding.**

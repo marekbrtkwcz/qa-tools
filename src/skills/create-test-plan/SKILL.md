@@ -24,6 +24,8 @@ Hand this task to the `test-planner` agent (`test_planner` in Codex). If that ag
 
 # Task
 
+If the `designing-functional-tests` skill is installed, load it before starting.
+
 Prepare a risk-prioritized test plan for the website at <baseUrl> and, if given, its API at <apiBaseUrl>.
 
 ## Inputs to collect

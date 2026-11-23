@@ -19,6 +19,8 @@ Hand this task to the `test-planner` agent (`test_planner` in Codex). If that ag
 
 # Task
 
+If the `designing-functional-tests` skill is installed, load it before starting.
+
 Your goal is to produce Gherkin scenarios that read as living documentation, not a UI click script in disguise.
 
 Convert the requirements provided: <requirements>

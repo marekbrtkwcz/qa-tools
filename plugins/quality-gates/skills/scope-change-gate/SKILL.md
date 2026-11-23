@@ -19,6 +19,8 @@ Hand this task to the `change-gate-reviewer` agent (`change_gate_reviewer` in Co
 
 # Task
 
+If the `scoping-change-relevance` skill is installed, load it before starting.
+
 Review the change between a base ref and `HEAD`: scope it, verify it, and return findings I can act on without asking a follow-up question.
 
 Use `scoping-change-relevance` for the tag grammar and the relevance recipes, `verifying-change-coverage` for coverage, and `recording-change-intent` for the rationale check.

@@ -20,6 +20,8 @@ Hand this task to the `llm-feature-test-engineer` agent (`llm_feature_test_engin
 
 # Task
 
+If the `testing-llm-features` skill is installed, load it before starting.
+
 Build the eval suite that catches quality regressions in this LLM feature before users do.
 
 Use the `testing-llm-features` skill for case design, scoring strategies and the implementation shapes.

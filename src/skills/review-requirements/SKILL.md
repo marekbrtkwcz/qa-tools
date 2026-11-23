@@ -19,6 +19,8 @@ Hand this task to the `qa-strategist` agent (`qa_strategist` in Codex). If that 
 
 # Task
 
+If the `requirements-test-coverage-mapper` skill is installed, load it before starting.
+
 Your goal is to find the defects in the requirements before they become defects in the product.
 
 Review the requirements provided: <requirements>

@@ -20,6 +20,8 @@ Hand this task to the `ai-architect` agent (`ai_architect` in Codex). If that ag
 
 # Task
 
+If the `designing-test-data` skill is installed, load it before starting.
+
 Generate Given/When/Then scenarios for <feature> that cover the happy path, negative input, and the edge cases most likely to reach production: boundaries, invalid state transitions, and concurrency.
 
 ## Inputs to collect

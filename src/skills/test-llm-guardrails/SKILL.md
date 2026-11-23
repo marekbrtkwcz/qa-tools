@@ -20,6 +20,8 @@ Hand this task to the `llm-feature-test-engineer` agent (`llm_feature_test_engin
 
 # Task
 
+If the `testing-llm-guardrails` skill is installed, load it before starting.
+
 Test whether this LLM feature holds when the model is manipulated or simply wrong.
 
 Use the `testing-llm-guardrails` skill for the guardrail checks, the adversarial corpus and the indirect-injection scenarios.
