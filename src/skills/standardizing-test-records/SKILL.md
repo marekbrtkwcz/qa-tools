@@ -11,6 +11,13 @@ Use this skill when the way tests are written down has to be one thing instead o
 
 The collection already carries per-activity templates (`manual-test-cases` table, session notes, release checklist, bug report, attestation register). This skill does not replace them; it defines the **invariants every record type must satisfy**, maps the existing templates onto them, audits a sample of live records, and publishes the result as one standard the next onboarding reads instead of asking five people.
 
+## When to Use
+
+- Test records drift between people or teams
+- A tracker import needs stable IDs
+- An audit asks what a record must contain
+- Per-team formats keep multiplying
+
 ## When NOT to Use
 
 - Generating new test cases in the established format - `manual-test-cases` and `designing-functional-tests`.

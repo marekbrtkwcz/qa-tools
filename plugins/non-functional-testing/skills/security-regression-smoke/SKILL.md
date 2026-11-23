@@ -13,6 +13,12 @@ Use this skill to turn the one-off authorization audit into something that runs 
 
 A smoke pack nobody runs after changes is decoration - the whole design below optimizes for "runs in under 10 minutes, everywhere a risky change lands".
 
+## When to Use
+
+- Access control changes merge regularly and the one-off authz audit keeps aging
+- An incident demands evidence the core protection paths were recently rechecked
+- A repeatable, scripted cross-role smoke pass is needed after every auth-touching change
+
 ## When NOT to Use
 
 - The first, full authorization audit of a system - `testing-application-security`; the smoke core is pruned *from* that matrix.

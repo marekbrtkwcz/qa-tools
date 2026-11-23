@@ -11,6 +11,12 @@ Use this skill when a system claims a protective limit - "5 failed logins lock t
 
 Scope honesty first: this is **not** a DoS test. Every method here sends at most what one impatient legitimate user could send; the moment a test needs distributed sources, bandwidth, or enough volume to hurt the system, it has left the tester scope and belongs to capacity engineering (`testing-performance-and-load`). What is in scope is the control's *specification*: does the limit exist, does it trigger where documented, is denial informative, does recovery work, does breaching leave a trail.
 
+## When to Use
+
+- An API introduces or changes rate limits, lockouts, session caps, or quota responses
+- Abuse controls are claimed but never verified against real behavior
+- A review removed a rate limit and nobody can say what it protected
+
 ## When NOT to Use
 
 - Throughput, scalability, saturation - `testing-performance-and-load`; capacity answers "how much until it bends", this skill answers "does the seatbelt buckle".

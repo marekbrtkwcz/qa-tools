@@ -11,6 +11,13 @@ Use this skill when a release has to be validated the way a user or operator wil
 
 Automated gates answer "is the code correct". This skill answers the questions automation structurally cannot: does the installer work on a machine that was never ours, does the upgrade preserve yesterday's data, does rollback really restore a working system, and what does a first-time run look like without our internals knowledge.
 
+## When to Use
+
+- Preparing or gatekeeping a release from a tester standpoint: fresh install, upgrade from supported older versions, rollback, data migration
+- An installer or upgrade path is about to ship untested
+- Rollback must be proven to work before sign-off
+- Configuration drift between environments needs checking
+
 ## When NOT to Use
 
 - The release decision itself (defect risk, exit criteria, go/no-go) - that is `assessing-release-readiness`; this skill is one of its inputs.

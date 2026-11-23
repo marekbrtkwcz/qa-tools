@@ -11,6 +11,13 @@ Use this skill to find the usability problems that block or slow real users, in 
 
 Scope honesty first: a heuristic pass by one tester is not UX research. It reliably finds blockers, friction, and dead ends (things a careful stranger trips over); it does not discover preferences, taste, or what users actually want. Findings that need opinions go to UX as questions, not verdicts.
 
+## When to Use
+
+- A UI feature is about to ship with no UX review
+- Exploratory notes keep mentioning confusion or dead ends
+- A fast is-this-usable check is wanted that is deliberately not an accessibility audit
+- One flow or screen needs a heuristic pass in about an hour
+
 ## When NOT to Use
 
 - WCAG/accessibility conformance (keyboard, screen reader, contrast) - `auditing-accessibility`.

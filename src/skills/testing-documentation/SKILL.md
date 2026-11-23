@@ -11,6 +11,13 @@ Use this skill to test documentation as a product: a new user follows it word fo
 
 Documentation is the highest-leverage manual test surface in most repos: it is the first thing every newcomer executes, it breaks silently on every code change that touches setup, and nobody notices until the next hire loses a day to it. This skill is how that gets noticed before the next hire.
 
+## When to Use
+
+- A repo or product is about to onboard new people and docs must work for them
+- Docs must be re-verified after a big change
+- User-facing docs are suspected to lag behind the product
+- Testing documentation as a product: following it word for word in a clean environment
+
 ## When NOT to Use
 
 - Writing or restructuring docs for a test suite - `documenting-test-suites` owns that deliverable; this skill only verifies what docs claim against reality.
