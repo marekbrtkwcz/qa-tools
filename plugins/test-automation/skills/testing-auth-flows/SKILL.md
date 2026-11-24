@@ -77,6 +77,7 @@ Auth in an automated suite is an engineering problem with a small number of corr
 - `testing-application-security` - when the question is authorization (who may access whose data), not authentication
 - `stabilizing-flaky-tests` - after the auth shape is fixed and nondeterminism remains elsewhere
 - `bootstrap-test-suite` - a bootstrap that ends needing this skill wires `.auth/` and env from day one
+- `handling-sensitive-test-data` (qa-core) - test accounts, secrets and storageState files: synthetic accounts only, no real credentials in the repo or CI logs
 
 ## Definition of Done
 

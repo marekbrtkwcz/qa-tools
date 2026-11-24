@@ -114,6 +114,7 @@ test('user sees order in list after placing it', async ({ page, request }) => {
 - `testing-auth-flows` — API token auth shared between UI and API calls
 - `test-data-factories` — generating seed data via API
 - `mocking-network-and-time` — webhook/mock verification of side effects
+- `api-test-plan-and-tests` (api-testing) — planning the API half of a hybrid suite from the OpenAPI spec when it is larger than the UI journey needs
 
 ## Definition of Done
 

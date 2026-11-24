@@ -161,6 +161,7 @@ Three rules for the gate itself:
 - `deriving-a-quality-contract` - where the diff-coverage threshold for this project is set
 - `governing-quality-waivers` - when an uncovered area needs a recorded, dated exception
 - `analyzing-quality-metrics` - for coverage's caveats as a metric and what to report alongside it
+- `tracing-requirements-to-code` (qa-core) - when "covered by tests" must also mean "traced to a requirement": diff coverage proves execution, the RTM proves intent
 
 ## Definition of Done
 

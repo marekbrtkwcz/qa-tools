@@ -48,3 +48,9 @@ If no scenario is provided, or it does not say what outcome to check, ask for it
 - Run only against apps you are authorized to test, and ask before steps that create real orders, payments, or messages outside a test environment.
 - Never make the test pass by weakening assertions, adding retries, raising timeouts, or skipping steps.
 - Present only executed tests as verified.
+
+## Related Skills
+
+- `designing-functional-tests` (qa-core) - where the scenario to generate comes from: a designed, reviewable case, not an ad-hoc prompt
+- `automation-backlog-planner` (agent, qa-core) - decides whether this scenario belongs in the automated suite at all, and at what priority
+- `test-generator` - the batch form: generates a whole suite from a written plan file such as the approved scenario list
