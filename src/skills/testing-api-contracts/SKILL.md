@@ -1,6 +1,6 @@
 ---
 name: testing-api-contracts
-description: 'Validates API responses against OpenAPI or JSON Schema, detects breaking changes between spec versions, and builds consumer-driven contract checks. Use when an API has a published spec, when a backend change might break a client, when API tests assert only status codes, or when test doubles need a guard against drifting from the real service.'
+description: 'Validates API responses against OpenAPI or JSON Schema, detects breaking changes between spec versions, and builds consumer-driven contract checks. Use when an API has a published spec, when a backend change might break a client, when API tests assert only status codes, or when test doubles need a guard against drifting from the real service. For consumer-driven pact tests between teams with a broker and can-i-deploy gating, use pact-contract-testing.'
 argument-hint: 'OpenAPI or JSON Schema path or URL, the endpoints in scope, consumer or provider side, and the previous spec version if a diff is wanted'
 user-invocable: true
 ---
