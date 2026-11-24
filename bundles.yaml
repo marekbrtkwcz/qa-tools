@@ -170,6 +170,7 @@ pentesting:
   version: "0.6.0"
   skills:
     - pentest-api
+    - pentest-cloud-config
     - pentest-network-infrastructure
     - pentest-recon-attack-surface
     - pentest-report

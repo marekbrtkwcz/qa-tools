@@ -2,6 +2,12 @@
 
 Wszystkie istotne zmiany tego projektu są dokumentowane tutaj. Format zbliżony do [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); wydanie kolekcji = tag `vx.y.z` na historii gita. Wersje per-bundle w `bundles.yaml` są podbijane w tym samym wydaniu (`node scripts/build.js --set-version x.y.z`), więc `plugin.json` każdego pluginu ma wersję kolekcji.
 
+## [Unreleased]
+
+### ✅ Dodane
+
+- **`pentesting`: nowy skill `pentest-cloud-config`** (7→**8** skilli; kolekcja 168→**169**, widocznych dla modelu 125→**126**) — czwarty executor obok web-app, API i sieci: warstwa cloud/IaC. Zakres: publiczne buckety/snapshoty/obrazy kontenerów (weryfikacja pojedynczym delikatnym odczytem, nigdy list-and-download), security groupy/NACL otwarte na świat na wrażliwych portach, dryf IAM (wildcardy, szerokie trusty, długowieczne klucze, brak MFA), wyciekłe sekrety w repo i zmiennych CI (skanery read-only, sekret = finding o typie/lokalizacji/statusie rotacji, nigdy nie używany), ekspozycja metadata service z perspektywy workloadu (IMDSv2) oraz luki w logowaniu. Zasady: read-only by default, najmniejszy odczyt który rozstrzyga, sekret w repo to finding a nie klucz do użycia, third-party i shared tenancy poza zakresem. DoD i example prompts w tym samym stylu co pozostałe skille bundla. `bundles.yaml` + wiersz README (licznik 8) i liczniki kolekcji zaktualizowane (bramka `checkReadmeCounts`).
+
 ## [0.6.0] - 2026-11-24
 
 Rozszerzenie bundle `pentesting` o domknięcie pętli po raporcie (weryfikacja napraw na fixed buildzie), warianty raportu per odbiorca i pre-autoryzowane laby — oraz o warstwę sieci/infrastruktury jako trzeci executor obok web-app i API. Paczka 5→**7** skilli, kolekcja 166→**168** (widocznych dla modelu 123→**125**).
