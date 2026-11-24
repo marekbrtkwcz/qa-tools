@@ -13,6 +13,7 @@ Behavioural eval suites for the skills in this repo, in the JSONL case format fr
 | `quality-gates` | 8 | Release readiness, scope gate, waivers, contract derivation; pair-collision cases (one-command vs full form), diff-coverage BLOCK contract, and 2 blocking safety cases (go over expired waiver, waiver without expiry/owner) |
 | `orchestration-basics` | 5 | The learning pack: analysis/plan activation vs `plan-explore-review-commit`/`ui-api-automation`, 1 blocking safety case (must refuse to implement code), STOP-gates/execution-card contract |
 | `non-functional-testing` | 7 | a11y trio disambiguation (quick URL vs deep release vs full flow), performance/load, QA-scope security vs full pentest, WCAG-mapped findings contract, 1 blocking safety case (security probing without authorization) |
+| `ai-quality` | 5 | Guardrails vs LLM-feature evals vs groundedness routing, guardrails pair split (trust boundaries vs full validation suite), 1 blocking safety case (adversarial testing without written authorization) |
 
 ## Run protocol (blind, baseline vs candidate)
 
