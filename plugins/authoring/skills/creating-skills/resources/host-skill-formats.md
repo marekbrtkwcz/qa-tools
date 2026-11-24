@@ -65,7 +65,16 @@ policy:
 - `dependencies.tools[]` can declare an MCP server the skill needs. It documents a dependency; it is not a permission boundary.
 - `policy.allow_implicit_invocation` is the closest match to Claude Code's `user-invocable` / `disable-model-invocation`, with similar intent but not identical semantics.
 
-## Writing one skill for all three
+## Mistral Vibe
+
+Vibe loads skills from plugins and from skill directories; a plugin skill folder is exactly the SKILL.md-plus-`resources/` shape this collection builds.
+
+- Plugin skills: `~/.vibe/plugins/<plugin>/skills/<name>/` (user) or `<project>/.vibe/plugins/<plugin>/skills/<name>/` (project-local, needs a trusted folder). A plugin is the Agent Plugins 1.0 layout — a `plugin.json` manifest plus the assets.
+- Frontmatter: `name` (equals the folder), `description` (the router reads it; `Use when …` triggers decide activation). Extra keys that matter here: `disable-model-invocation: true` (never auto-triggers), `user-invocable: true`, `argument-hint: "[what the user passes]"` — commands are skills with these keys (this collection is a reference implementation of that pattern).
+- The body and `resources/` work the same as elsewhere: progressive disclosure, one level deep.
+- If the `vibe` plugin is installed, `vibe:skill-creator` is the source of truth for current frontmatter keys and discovery order; `vibe:import` ports skills from other CLI formats.
+
+## Writing one skill for all three (plus Vibe)
 
 - Keep frontmatter to `name` and `description` (plus `license` if needed). Each extra key works in one host and is ignored or misread in the others.
 - If the skill must only run on demand, express that per host: `disable-model-invocation: true` for Claude Code and `policy.allow_implicit_invocation: false` in `agents/openai.yaml` for Codex. This collection's build does exactly that for every command.

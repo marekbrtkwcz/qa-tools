@@ -27,7 +27,7 @@ Create one new skill for <capability>, placed according to <target>. The steps b
 3. **Write the name and description first.** Name: an activity in gerund form, lowercase with hyphens, max 64 characters, equal to the folder name. Description: what it does, `Use when …` with intent categories, and a routing clause for the closest neighbour. Show both to the user and wait for approval before writing files.
 4. **Write the files.** Create `SKILL.md` from the `creating-skills` template: purpose, when not to use, workflow with a checkable criterion per step, output format, resource map with "read when" conditions, Related Skills, Definition of Done. Add at most the supporting files that remove ambiguity (usually one template or checklist).
 5. **Verify.**
-   - This collection: add the skill to exactly one bundle in `bundles.yaml`, run `npm run validate`, and fix every error and every warning about the new skill. Do not run `npm run build` unless the user asks; it rewrites generated files.
+   - This collection: add the skill to exactly one bundle in `bundles.yaml`, run `npm run check`, and fix every error and every warning about the new skill. Do not run `npm run build` unless the user asks; it rewrites generated files.
    - A user's project: check the folder name matches `name`, the body is under 500 lines and every linked file exists. If the project uses Codex and an `agents/openai.yaml` is wanted, write it next to `SKILL.md`.
    - Either way: list three requests that should trigger the skill and two near-misses that should not, and say which wording in the description decides each.
 

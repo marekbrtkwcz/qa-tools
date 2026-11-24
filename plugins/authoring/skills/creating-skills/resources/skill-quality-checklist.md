@@ -38,7 +38,7 @@ Run this before handing off a skill. Every box should be provable from the files
 ## Host fit
 
 - [ ] Frontmatter holds only `name`, `description` and keys every target host accepts; host-only keys appear only when that host is the sole target.
-- [ ] **This collection:** keys are within `CONTRIBUTING.md`, the skill is in exactly one bundle in `bundles.yaml`, the body names no host unless the skill is about hosts, and `npm run validate` passes. No file under `plugins/` was edited.
+- [ ] **This collection:** keys are within `CONTRIBUTING.md`, the skill is in exactly one bundle in `bundles.yaml`, the body names no host unless the skill is about hosts, and `npm run check` passes. No file under `plugins/` was edited.
 - [ ] **A user's project:** the folder sits in the host's skill location; for Codex, `agents/openai.yaml` matches the skill if present.
 
 ## Smells that call for a rewrite

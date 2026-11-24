@@ -26,7 +26,7 @@ Route elsewhere:
 
 | Writing for | Source | Tools are declared as | Check |
 | --- | --- | --- | --- |
-| **This collection** | `src/agents/<name>.md` with `name`, `title`, `description`, `capabilities`, `mcp` (see the repository's `CONTRIBUTING.md`, "Agent frontmatter") | Host-neutral `capabilities`; the build writes each host's file | Add it to one bundle in `bundles.yaml`; `npm run validate` |
+| **This collection** | `src/agents/<name>.md` with `name`, `title`, `description`, `capabilities`, `mcp` (see the repository's `CONTRIBUTING.md`, "Agent frontmatter") | Host-neutral `capabilities`; the build writes each host's file | Add it to one bundle in `bundles.yaml`; `npm run check` |
 | **A user's project** | The host's agent folder, see [Per-host summary](#per-host-summary) | That host's tool names | Run the agent on one real task |
 
 In this collection, never pin a model and never name a host in the body; the build handles hosts.
@@ -74,7 +74,7 @@ The body is the same everywhere. Wrap it in the target's format: this collection
 ### 4. Validate
 
 - Run [`resources/custom-agent-quality-checklist.md`](resources/custom-agent-quality-checklist.md).
-- This collection: `npm run validate` passes; the agent is in one bundle; any command that names it with `agent:` is in the same bundle.
+- This collection: `npm run check` passes; the agent is listed in exactly one bundle's `agents:` entry in `bundles.yaml`.
 - A user's project: invoke the agent on one real task and check that it stayed in scope, used only its tools and returned the contract.
 
 ## Per-host summary
@@ -131,7 +131,7 @@ This collection's capability mapping (from `scripts/lib/hosts.js`):
 - Every granted tool or capability is used by the workflow; reviewers have no edit.
 - The body has stop conditions with a cap and an exact output contract.
 - No model is pinned in this collection's source; in a user's project, a model is set only when the user asked.
-- This collection: the agent is in one bundle and `npm run validate` passes. A user's project: the file sits in the host's agent folder and handled one real task within scope.
+- This collection: the agent is in one bundle and `npm run check` passes. A user's project: the file sits in the host's agent folder and handled one real task within scope.
 ---
 
 ## 🎨 Emoji in output

@@ -153,5 +153,5 @@ Agent file formats per host: `creating-custom-agents` (`resources/host-agent-for
 
 ## Before shipping
 
-- This collection: `npm run validate` (titles unique, every `copilot.agents` and `copilot.handoffs[].agent` resolves to a title in the pack, names unique across the collection).
+- This collection: `npm run check` (titles unique, every reference resolves inside the pack, names unique across the collection).
 - Then run the pack on a real task in each target host. Validation proves the wiring resolves; only a live run shows whether the roles were cut in the right places.

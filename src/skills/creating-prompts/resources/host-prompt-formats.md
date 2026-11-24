@@ -2,26 +2,25 @@
 
 Read this when a command goes into a user's own project. The same command is shown in each format: review a draft test plan and hand it to a planning agent.
 
-## This collection (source): `src/commands/<name>.md`
+## This collection (source): `src/skills/<name>/SKILL.md`
+
+In this collection a command is a skill that never auto-triggers — the same source shape as every other skill, distinguished only by frontmatter:
 
 ```markdown
 ---
 name: review-test-plan-gaps
-title: Review test plan gaps
 description: Reviews a draft test plan for missing risks and untested integrations before implementation. Use when a plan is drafted but not yet challenged.
-agent: test-planner
-inputs:
-  draftPlan: the plan text or a path to it
-  constraints: "environments, deadlines or out-of-scope areas (default: none)"
+argument-hint: "[draft plan path] [constraints]"
+disable-model-invocation: true
 ---
 
-Review {{draftPlan}} against {{constraints}}. ...
+Review the draft test plan against the stated constraints. ...
+<!-- ask for anything missing instead of guessing; hand off to `test-planner` by name -->
 ```
 
-- Allowed keys: `name`, `title`, `description`, `agent`, `mcp`, `inputs` (see `CONTRIBUTING.md`).
-- `{{name}}` refers to an input; `{{selection}}` and `{{file}}` need no declaration.
-- The build writes a skill folder per host with `disable-model-invocation: true`, an "Inputs" section asking for anything missing, a hand-off to `agent` (with a fallback when that agent is not installed), and `agents/openai.yaml` with `policy.allow_implicit_invocation: false`.
-- Keep the agent in the same bundle as the command.
+- A command declares `disable-model-invocation: true` (only the user starts it), an `argument-hint`, and a description addressed to the user.
+- Hand-offs name agents and skills by name in the body; the named agent stays in the same bundle (`npm run check` guards bundle membership).
+- The build publishes it as a regular skill folder inside the plugin, so the `SKILL.md` body is the command body — no separate prompt file per host.
 
 ## GitHub Copilot: `.github/prompts/<name>.prompt.md`
 
@@ -92,6 +91,15 @@ policy:
 - There is no input placeholder syntax; tell the agent to take inputs from the user's message and ask for missing ones.
 - There is no per-command tool limit.
 - To hand off, name the Codex agent to spawn (Codex agent names use underscores in this collection: `test_planner`).
+
+## Mistral Vibe
+
+Vibe has no separate prompt-file format: a command **is** a skill with `disable-model-invocation: true`. The user starts it; the model never races to trigger it.
+
+- Location: any skill directory (see `creating-skills`, `resources/host-skill-formats.md` → Mistral Vibe).
+- Frontmatter: `name`, `description` (addressed to the user — it lands in the help surface), `argument-hint: "[what the user passes]"`, `disable-model-invocation: true`, and `user-invocable: true` when it should appear in the command menu.
+- Inputs are not declared as a map: the body says what it takes, asks when something is missing, and reads what the user typed after the command.
+- Subagent hand-offs go through the orchestrator by `config_name`, not through a frontmatter `agent:` key.
 
 ## One command for every host
 

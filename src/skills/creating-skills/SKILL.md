@@ -27,7 +27,7 @@ Decide this first, because it changes the folder, the allowed frontmatter and th
 
 | Writing for | Source location | Frontmatter | Check |
 | --- | --- | --- | --- |
-| **This collection** | `src/skills/<name>/SKILL.md`, supporting files in `resources/` | Only the keys listed in the repository's `CONTRIBUTING.md` ("Skill frontmatter"); anything else fails validation | Add it to one bundle in `bundles.yaml`, then `npm run validate` |
+| **This collection** | `src/skills/<name>/SKILL.md`, supporting files in `resources/` | Only the keys listed in the repository's `CONTRIBUTING.md` ("Skill frontmatter"); anything else fails validation | Add it to one bundle in `bundles.yaml`, then `npm run check` |
 | **A user's own project** | The host's skill folder, see [Per-host summary](#per-host-summary) | `name` + `description`, plus host-specific keys only when that host is the only target | The host's own validator if it has one, then a live trigger test |
 
 In this collection a skill must work in every host, so its body names no host unless the skill is about hosts (the validator warns otherwise). Never edit the copies under `plugins/`: `npm run build` regenerates them.
@@ -92,7 +92,7 @@ A "When to Use" list in the body does nothing once the skill has triggered; put 
 ### 5. Validate
 
 - Run the checklist: [`resources/skill-quality-checklist.md`](resources/skill-quality-checklist.md).
-- In this collection: `npm run validate` passes with no warning for the new skill.
+- In this collection: `npm run check` passes with no warning for the new skill.
 - In a user's project: run the host's validator where one exists (see the host reference), then try three triggering requests and two near-misses in a fresh session.
 - For behaviour that must not regress, hand off to `testing-agent-skills`.
 
@@ -141,4 +141,4 @@ All three also load skills from installed plugins (`creating-plugins`). Install 
 - The description states what and when, routes the nearest neighbour, and summarises no workflow.
 - The body is under 500 lines, every step ends in a checkable criterion, and every supporting file is linked with a "read when" condition, one level deep.
 - At least one template or checklist exists where the output shape matters.
-- In this collection: the skill is in one bundle, the body names no host (unless it is about hosts), and `npm run validate` passes. In a user's project: the folder sits in the host's skill location and triggered on the test requests in a fresh session.
+- In this collection: the skill is in one bundle, the body names no host (unless it is about hosts), and `npm run check` passes. In a user's project: the folder sits in the host's skill location and triggered on the test requests in a fresh session.

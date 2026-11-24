@@ -23,10 +23,12 @@ Route elsewhere:
 
 | Writing for | Source | Check |
 | --- | --- | --- |
-| **This collection** | `src/hooks/<name>/` with `hook.yaml` (`name`, `title`, `description`, `hosts: [copilot, claude]`), a `copilot/` and a `claude/` implementation, and optional shared config (see the repository's `CONTRIBUTING.md`, "Hooks") | `npm run validate`; pipe a sample event into the Claude Code script; run the Copilot script with a sample payload |
+| **This collection** | `scripts/assets/<name>.js` — a plain Node CJS script, no dependencies, `'use strict'`, unit-tested in `<name>.test.js` (`node:test`) — declared under `hooks:` in the bundle's `bundles.yaml` entry (see the repository's `CONTRIBUTING.md`, "Hooks") | `npm run check`; `npm test` (the unit tests are the sample payloads: allow, warn and deny all covered) |
 | **A user's project** | The host's hook location, see [Per-host summary](#per-host-summary) | Trigger the event once with an allowed and once with a denied input |
 
-This collection publishes each Claude Code hook as its own opt-in plugin (scripts run with `node` and `${CLAUDE_PLUGIN_ROOT}`, so no shell or `jq` is needed) and each Copilot hook as a folder to copy into `.github/hooks/<name>/`. It ships no Codex hooks.
+This collection is Vibe-native: the build emits `ai.mistral.vibe/hooks.toml` from the `hooks:` list — one `[[hooks]]` block per matcher (`type = "pre_tool"` and a `match` on `file_system.write_file` / `file_system.edit` / `file_system.bash`, `command = "node vibe-hooks/<name>.js"`, `strict = false`), and copies the script into the plugin's `vibe-hooks/`. One implementation, one policy, tested in `node:test` — no per-host folders. A hook decides in the Vibe wire protocol: a denial is a structured JSON on stdout (`{"decision": "deny", "reason": "…"}`) with exit code 0; a warning is `{"decision": "allow", "system_message": "…"}`; everything is appended to the hook's log under `$PLUGIN_DATA`. A hook that crashes fails open (`strict = false`): the host prints a warning and the gated action proceeds.
+
+In this collection there is exactly one implementation per hook (Node, no host-specific folders), because the only consumer is the Vibe host; the unit tests in `scripts/assets/<name>.test.js` double as the sample-payload checks the per-host summary describes.
 
 ## Decide that a hook is right
 
@@ -65,7 +67,7 @@ Start from [`resources/hook-template-pack.md`](resources/hook-template-pack.md) 
 
 ### 5. Validate
 
-Run [`resources/hook-quality-checklist.md`](resources/hook-quality-checklist.md). In this collection, `npm run validate` passes.
+Run [`resources/hook-quality-checklist.md`](resources/hook-quality-checklist.md). In this collection, `npm run check` passes and `npm test` covers the script's allow/warn/deny paths.
 
 ## Per-host summary
 
@@ -111,7 +113,7 @@ The Codex column comes from OpenAI's Claude-to-Codex migration reference (checke
 - Allow, warn and deny outputs and messages are defined and tested with sample payloads.
 - Malformed input exits 0 and allows; the script finishes well under its timeout.
 - Configuration, scripts and README agree on event, mode, timeout and prerequisites.
-- This collection: `src/hooks/<name>/` has `hook.yaml` and one folder per host listed in `hosts`, and `npm run validate` passes. A user's project: the hook fired once in the real host with the expected result.
+- This collection: the hook script and its unit tests live in `scripts/assets/`, the hook name is under `hooks:` in the bundle's `bundles.yaml` entry, `npm run check` passes and `npm test` covers allow, warn and deny. A user's project: the hook fired once in the real host with the expected result.
 ---
 
 ## 🎨 Emoji in output

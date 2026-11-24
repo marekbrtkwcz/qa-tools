@@ -13,7 +13,7 @@ A prompt file (Copilot) or command (Claude Code, this collection) is a task the 
 
 | Writing for | Source | Inputs | Check |
 | --- | --- | --- | --- |
-| **This collection** | `src/commands/<name>.md` with `name`, `title`, `description`, optional `agent`, `mcp`, `inputs` (see the repository's `CONTRIBUTING.md`, "Command frontmatter") | `inputs:` map of name → hint; `{{name}}` in the body, plus `{{selection}}` and `{{file}}` | Add it to one bundle; `npm run validate` (fails on undeclared placeholders, warns on unused inputs) |
+| **This collection** | `src/skills/<name>/SKILL.md` — a command is a skill with `disable-model-invocation: true` (never auto-triggers), an `argument-hint: "[what the user passes]"` and a description that speaks to the user, not the router | The command-specific placeholders the body uses, spelled out in the body's first lines | Add it to one bundle in `bundles.yaml`; `npm run check` |
 | **A user's project** | The host's format, see [Per-host summary](#per-host-summary) | The host's own placeholder syntax | Run it once with inputs and once without |
 
 The build turns each command in this collection into a skill folder per host, sets `disable-model-invocation: true`, and adds `agents/openai.yaml` with `policy.allow_implicit_invocation: false` for Codex, so commands never compete with real skills for automatic triggering.
@@ -47,7 +47,7 @@ Start from [`resources/prompt.template.prompt.md`](resources/prompt.template.pro
 ### 4. Validate
 
 - Run [`resources/prompt-quality-checklist.md`](resources/prompt-quality-checklist.md).
-- This collection: `npm run validate` passes; if the command sets `agent:`, that agent is in the same bundle.
+- This collection: `npm run check` passes; any agent the command names by name is in the same bundle.
 - A user's project: run the command once with every input and once with none; the second run must ask, not guess.
 
 ## Per-host summary
@@ -92,4 +92,4 @@ For Codex, OpenAI's own migration guide turns Claude Code commands into skills, 
 - Steps are numbered, the result is verified, and loops have a cap.
 - Guardrails cover every edit, delete or bulk write.
 - It routes to agents and skills by exact name instead of copying them.
-- This collection: `npm run validate` passes with no placeholder warnings. A user's project: the file is where the host reads it, and a run without inputs asked for them.
+- This collection: `npm run check` passes with no warning for the command. A user's project: the file is where the host reads it, and a run without inputs asked for them.

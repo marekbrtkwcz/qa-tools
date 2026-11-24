@@ -22,16 +22,16 @@ Route elsewhere:
 
 ## Where you are writing
 
-**This collection.** Plugins are generated; never edit `plugins/`, the three marketplace files or the README tables by hand.
+**This collection.** Plugins are generated; never edit `plugins/` by hand — and never hand-fix the README's bundle-table numbers, they are gated against `bundles.yaml` by the build (`checkReadmeCounts`).
 
 | You change | Effect |
 | --- | --- |
-| `bundles.yaml`: a bundle with `icon`, `description`, `skills`, `commands`, `agents`, optional `guides`, `mcp` | One plugin per bundle, for every host |
-| `src/packs/<name>/` | One plugin per orchestration pack (`creating-orchestration-packs`) |
-| `src/hooks/<name>/` | One opt-in Claude Code plugin per hook, plus a Copilot copy-in folder (`creating-hooks`) |
-| `package.json` `version` | The version of every plugin and marketplace entry |
+| `bundles.yaml`: a bundle with `icon`, `description`, `version`, `skills`, `agents`, optional `knowledge`, `hooks`, `mcp` | One **native Vibe plugin per bundle** (Agent Plugins 1.0) in `plugins/<name>/` |
+| `bundles.yaml`: a bundle with `pack: true` | An orchestration-pack plugin (`creating-orchestration-packs`): the driver skill, the agents and the GUIDE (as knowledge) |
+| `bundles.yaml`: hook names under `hooks:` + the script in `scripts/assets/` | `ai.mistral.vibe/hooks.toml` and `vibe-hooks/` in the plugin (`creating-hooks`) |
+| `package.json` `version` | Nothing alone — one release bumps every bundle via `node scripts/build.js --set-version x.y.z` |
 
-Every skill, command and agent belongs to exactly one bundle. Then run `npm run validate`, `npm run build`, `npm run check`, and commit the sources and the regenerated files together; CI runs `npm run lint` and fails if they differ. What the build writes per bundle is in [`resources/plugin-manifest.template.md`](resources/plugin-manifest.template.md).
+Users install by copying: `cp -r plugins/<name> ~/.vibe/plugins/<name>` (or `<project>/.vibe/plugins/<name>`). Every skill, command and agent belongs to exactly one bundle. Then run `npm run check`, `npm run build` and `npm run verify` (the drift gate: committed `plugins/` must match a fresh build), and commit the sources and the regenerated files together; CI re-runs all gates on ubuntu and windows and fails on drift. What the build writes per bundle is in [`resources/plugin-manifest.template.md`](resources/plugin-manifest.template.md).
 
 **A user's own repository.** Write the manifests and marketplace files yourself, per target host, from [`resources/plugin-manifest.template.md`](resources/plugin-manifest.template.md). Keep one source for each skill and copy it into the plugin with a script, so the copies cannot drift.
 
@@ -47,7 +47,7 @@ A plugin ships one capability or a small group a user reaches for together.
 
 Grouping by topic is not a reason. "All the testing skills" installs fifteen descriptions that compete for the same requests, and the agent picks worse than it would from three. Before bundling, check that the skills' descriptions do not overlap; inside one plugin they collide harder, because the user installed both on purpose.
 
-Keep a command and the agent it names with `agent:` in the same bundle; otherwise the command's hand-off fails when only one plugin is installed.
+Keep a command and any agent it names (in this collection: by agent name in the command's body, in a user's repository: via the host's `agent:` key) in the same bundle; otherwise the command's hand-off fails when only one plugin is installed.
 
 ## Write the description
 
@@ -80,7 +80,7 @@ Apply the table above. Done when every asset has one home and no two skills in t
 
 ### 3. Write or generate the manifests
 
-- This collection: edit `bundles.yaml` only, then `npm run validate` and `npm run build`.
+- This collection: edit `bundles.yaml` only, then `npm run check` and `npm run build`.
 - A user's repository: write the manifest and marketplace entry for each target host from the template. The plugin `name` equals its folder name and its marketplace entry name.
 
 ### 4. Write the README
@@ -89,14 +89,24 @@ In this collection the plugin README is generated from the bundle. In a user's r
 
 ### 5. Verify
 
-- This collection: `npm run validate`, `npm run build`, `npm run check` all pass.
+- This collection: `npm run check`, `npm run build`, `npm run verify` all pass.
 - Any repository: add the marketplace from a local path or the repository in each target host, install the plugin, start a new session, and confirm that one skill triggers and one command runs.
+
+## MCP servers in a plugin
+
+A plugin can ship the MCP servers its skills need. The risky part is not the manifest — it is process startup, version pinning and duplicate servers. Rules learned the hard way in this collection's `qa-mcp` bundle:
+
+- **Run the global binary, never `npx`.** The host gives a plugin MCP server a hard startup budget (~10 s for the `initialize` handshake). `npx` can exceed it on a cache miss — and its install prompt eats the handshake — while a pre-installed global binary starts in a fraction of a second. Fail fast beats fail slow: a missing binary gives a clear spawn error instead of a hang.
+- **Name the server by product, not by binary.** An entry in the user's config with the **same short name** as the plugin's server shadows the plugin copy (custom flags, longer timeouts) instead of spawning a second instance. Deliberately short, product-style names (`playwright`, `chrome-devtools`, `k6`) make that shadowing workable; name-equals-binary (`k6`) is the exception, only when the MCP is a subcommand of the tool itself (`k6 x mcp`).
+- **Ship flags in the manifest, keep timeouts user-level.** The plugin manifest carries the server `command` and `args` (the flag set that makes the server useful out of the box), but startup/tool timeouts live only in the user-level entry — a long-running tool (a load test) must not inherit a short default with no override path.
+- **Float versions (`@latest`), and document the one-line install.** The manifest carries a bare command, so the version lives in the user's shared global install; pinning forces a downgrade on machines that already run a newer binary. In exchange the host README must keep the install lines — this collection's build even gates them (`checkGlobalBinaryInstallDoc`).
+- **One MCP plugin, not one per bundle.** If several bundles need browser control or load testing, they declare nothing individually; a single `qa-mcp`-style bundle ships the servers once, and the other bundles' skills simply reference them.
 
 ## Common Failure Modes
 
 - editing a generated file under `plugins/` in this collection; the next build overwrites it and CI fails until then
 - bundling by topic, so one plugin ships a dozen competing descriptions
-- a command whose `agent:` lives in another bundle
+- a command whose agent hand-off lives in another bundle
 - a description that names the topic but not what is inside or when to install
 - expecting Codex to load agents, or Copilot to start MCP servers, from a plugin
 - symlinked skill folders that vanish in Codex
@@ -121,7 +131,7 @@ In this collection the plugin README is generated from the bundle. In a user's r
 ## Definition of Done
 
 - The bundle is one capability or a group used together; grouping by topic was rejected.
-- Every command's `agent:` target is in the same plugin.
+- Every command's agent hand-off target is in the same plugin (via `agent:` where the host supports it, or by name in the command body).
 - The description says what is inside and when to install it.
-- This collection: only `bundles.yaml` and `src/` were edited, every asset is in exactly one bundle, and `npm run validate`, `npm run build` and `npm run check` pass.
+- This collection: only `bundles.yaml` and `src/` were edited, every asset is in exactly one bundle, and `npm run check`, `npm run build` and `npm run verify` pass.
 - A user's repository: each target host has a manifest and marketplace entry with matching name and version, skill folders are real files, and the plugin installed in a fresh session with one skill triggering and one command running.

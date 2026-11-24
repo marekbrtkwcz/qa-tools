@@ -32,7 +32,7 @@ Run this before handing off an instructions file or rule.
 
 ## Host fit
 
-- [ ] **This collection:** `src/rules/<name>.md` has only `description` and an `applyTo` list, and `npm run validate` passes without an `applyTo` warning.
+- [ ] **This collection:** not applicable — this collection ships no repository-rule assets (rules encode one repo's conventions; write them for the repository you are in).
 - [ ] **A user's project:** frontmatter matches the host (`applyTo` string for Copilot, `paths` list for Claude Code, none for Codex), and a test edit to a matching file picked the rule up.
 
 ## Smells that call for a rewrite

@@ -2,7 +2,7 @@
 
 Starting point for one hook with a Copilot and a Claude Code implementation. Replace placeholders, delete the host you do not target, and keep the policy as small as possible. Event names, payloads and outputs per host: `host-hook-formats.md`. Codex uses `.codex/hooks.json` and supports fewer events; adapt from the Claude Code version and re-check the Codex docs.
 
-In this collection the same files go in `src/hooks/<name>/`: `hook.yaml`, `copilot/` (the `hooks.json` and scripts below) and `claude/` (`hooks.json` and the `.cjs` script). See the repository's `CONTRIBUTING.md`.
+In this collection the hook is one Node script in `scripts/assets/<name>.js` plus its unit tests, declared under `hooks:` in the bundle's `bundles.yaml` entry; the build emits `ai.mistral.vibe/hooks.toml` and copies the script into the plugin. See the repository's `CONTRIBUTING.md`.
 
 ## `README.md`
 

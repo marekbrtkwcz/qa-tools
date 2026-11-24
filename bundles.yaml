@@ -225,6 +225,7 @@ authoring:
     - creating-custom-agents
     - creating-hooks
     - creating-instructions
+    - creating-knowledge-folders
     - creating-orchestration-packs
     - creating-plugins
     - creating-prompts

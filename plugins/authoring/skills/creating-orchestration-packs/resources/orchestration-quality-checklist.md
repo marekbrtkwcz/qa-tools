@@ -54,10 +54,9 @@ Run before shipping a pack.
 
 ## Repository checks (this collection)
 
-- [ ] `pack.yaml` has `name` (equal to the folder), `title`, `description` and an `orchestrator` that exists in `agents/`.
-- [ ] `copilot:` blocks use only `handoffs`, `agents`, `user-invocable`, `argument-hint`, `target`, `mcp-servers`.
-- [ ] The pack name is not also a bundle name in `bundles.yaml`.
-- [ ] `npm run validate` passes.
+- [ ] The `bundles.yaml` entry has `pack: true`, exactly one driver skill, its agents and the GUIDE as `knowledge:`.
+- [ ] Every agent in the pack has a unique `title`, and agent names share the collection-wide namespace with a short pack prefix.
+- [ ] `npm run check` passes.
 
 ## The live run
 

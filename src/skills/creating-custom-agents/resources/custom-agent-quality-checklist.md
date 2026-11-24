@@ -28,7 +28,7 @@ Run this before handing off an agent.
 - [ ] No model is pinned unless the user asked for one.
 - [ ] The body names capabilities, not one host's tool names.
 - [ ] The body does not ask the agent to start other agents unless the only target is Copilot.
-- [ ] **This collection:** `src/agents/<name>.md` uses only the keys in `CONTRIBUTING.md`, is in one bundle, and `npm run validate` passes.
+- [ ] **This collection:** `src/agents/<name>.md` uses only the keys in `CONTRIBUTING.md`, is in one bundle, and `npm run check` passes.
 - [ ] **A user's project:** the file is in the host's agent folder (`.github/agents/`, `.claude/agents/`, `.codex/agents/`), and for Codex the edit and shell limits are set.
 
 ## Smells that call for a rewrite

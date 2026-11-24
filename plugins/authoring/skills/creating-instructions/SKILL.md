@@ -27,8 +27,10 @@ Route elsewhere:
 
 | Writing for | Source | Scope | Check |
 | --- | --- | --- | --- |
-| **This collection** | `src/rules/<name>.md` with `description` and an `applyTo` list (see the repository's `CONTRIBUTING.md`, "Rule frontmatter") | `applyTo` globs; the validator warns on `**` | `npm run validate`. Rules belong to no bundle; the build publishes each one under `rules/<host>/` |
+| **This collection** | — | — | — |
 | **A user's project** | The host's files, see [Per-host summary](#per-host-summary) | The host's mechanism | Edit a matching file and confirm the rule was applied |
+
+This collection ships no repository-rule assets on purpose: a rule encodes one repository's conventions, not a reusable collection — write rules for the repository you are in, and put reusable know-how into a skill (`creating-skills`) instead. A running-instance example lives in this repo's own body of rules: the build scripts (`scripts/build.js`) enforce mechanically what could otherwise only be prose.
 
 ## What makes a good rule
 
@@ -65,7 +67,7 @@ Use the templates in the resource map. Keep each rule to one or two lines; add a
 ### 5. Validate
 
 - Run [`resources/instructions-quality-checklist.md`](resources/instructions-quality-checklist.md).
-- This collection: `npm run validate` passes with no `applyTo` warning.
+- This collection: not applicable — this collection ships no rule assets; reusable know-how goes into a skill instead (`creating-skills`).
 - A user's project: open or edit one matching and one non-matching file, and confirm the rule applied to the first only. In Codex, confirm the agent followed the index to the rule file.
 
 ## Per-host summary
@@ -112,7 +114,7 @@ Formats, examples and sources: [`resources/host-instruction-formats.md`](resourc
 - Every scoped rule matches only the files it is about.
 - Every bullet is imperative and checkable; surprising rules carry a reason.
 - Nothing restates lint or formatter behaviour or another rule file.
-- This collection: `src/rules/<name>.md` has `description` and a narrow `applyTo` list, and `npm run validate` passes. A user's project: files sit where each target host reads them, and a matching edit picked up the rule.
+- This collection: not applicable (this collection ships no rule assets — rules encode one repository's conventions, not a collection's). A user's project: files sit where each target host reads them, and a matching edit picked up the rule.
 ---
 
 ## 🎨 Emoji in output

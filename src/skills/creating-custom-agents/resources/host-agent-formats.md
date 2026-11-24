@@ -84,6 +84,15 @@ shell_tool = false
 - This collection writes Codex names with underscores (`scenario_risk_reviewer`).
 - A subagent cannot start another subagent.
 
+## Mistral Vibe
+
+Vibe agents ship inside plugins and spawn through the orchestrator runtime, not by shell lookup.
+
+- Plugin agents: `~/.vibe/plugins/<plugin>/ai.mistral.vibe/agents/*.toml` or `<project>/.vibe/plugins/…`. Keys: `schema_version` (1), `agent_type` (`"subagent"`), `display_name`, `description` (**keep under 300 chars** — longer ones are truncated silently), `safety` (`safe` / `neutral` / `unsafe` by whether the role mutates state), `instructions` (the whole persona and workflow) and `enabled_tools` (the allowlist, Vibe tool names).
+- The parent session spawns them with `tools.agents` and `config_name` (`<plugin>:<agent>`, e.g. `qa-core:test-planner`; a pack's `config_name` table in the driver skill lists them).
+- User-level agents and configs live under `~/.vibe/` (project-local `.vibe/`); if the `vibe` plugin is installed, `vibe:vibe` is the source of truth for the current config layout.
+- A subagent reports back to its parent; chaining deeper is the orchestrator's job, not the file's.
+
 ## Porting checklist
 
 - [ ] The body names capabilities, not one host's tool names, so it reads correctly in every wrapper.

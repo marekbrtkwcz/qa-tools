@@ -112,6 +112,16 @@ Test by piping a sample event: `echo '{"cwd":"/repo","tool_name":"Bash","tool_in
 - No equivalent for `PermissionRequest`, `SubagentStart`, `SubagentStop`, `PreCompact`, `SessionEnd` and similar events.
 - Codex reads hooks from its config layers, not from skills, agents or plugins.
 
+## Mistral Vibe
+
+This collection's hooks are Vibe-native: one Node script per hook, wired by a generated `ai.mistral.vibe/hooks.toml` inside the plugin.
+
+- **Location.** `hooks.toml` in the plugin's `ai.mistral.vibe/` dir; the script is copied to the plugin's `vibe-hooks/` and started with `node vibe-hooks/<name>.js`.
+- **Registration.** One `[[hooks]]` block per matcher: `name`, `type` (`pre_tool`, also `post_agent` on agent turn ends), `match` (e.g. `file_system.write_file`, `file_system.edit`, `file_system.bash`), `command`, `strict = false`.
+- **Decision protocol.** The script reads the tool call on stdin and answers on stdout as JSON with exit code 0: `{"decision": "deny", "reason": "…"}` blocks (the reason reaches the model), `{"decision": "allow", "system_message": "…"}` warns without blocking; plain allow is silence. Everything is appended to the hook's log under `$PLUGIN_DATA`.
+- **Fail-open is required.** `strict = false` plus exit-0-on-crash: a broken hook must never block someone's edit.
+- The payload carries the tool call (name and arguments); filter by tool name and file path in the first lines of the script — it runs on every matched call.
+
 ## Porting a hook
 
 1. Write the policy once: condition, mode, messages, fail-open rule.

@@ -29,7 +29,7 @@ Run this before handing off a prompt file or command.
 ## Host fit
 
 - [ ] A command meant for several hosts uses no host-only placeholder (`${input:…}`, `$ARGUMENTS`).
-- [ ] **This collection:** `src/commands/<name>.md` uses only the keys in `CONTRIBUTING.md`; every `{{placeholder}}` is declared under `inputs` or is `selection`/`file`; an `agent:` target is in the same bundle; `npm run validate` passes.
+- [ ] **This collection:** `src/skills/<name>/SKILL.md` carries `disable-model-invocation: true`, an `argument-hint`, a description ending with a period and `name` equal to the folder; any agent it names is in the same bundle; `npm run check` passes.
 - [ ] **A user's project:** the file is where the host reads it (`.github/prompts/`, `.claude/skills/` or `.claude/commands/`, `.agents/skills/` with `agents/openai.yaml`), and the model cannot start it on its own in Claude Code and Codex.
 
 ## Smells that call for a rewrite

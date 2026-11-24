@@ -36,19 +36,19 @@ So write orchestrator instructions that delegate **by role name** ("ask the Test
 
 ## Where you are writing
 
-**This collection** (see the repository's `CONTRIBUTING.md`, "Orchestration packs"):
+**This collection** (see the repository's `CONTRIBUTING.md`): a pack is a bundle in `bundles.yaml` with `pack: true` —
 
 ```
-src/packs/<pack>/
-├── pack.yaml          name, title, description, orchestrator: <agent name>
-├── GUIDE.md           optional: how the workflow runs, step by step
-└── agents/<agent>.md  agent frontmatter + required `title` + optional `copilot:` block
+bundles.yaml: <pack-name>          pack: true; skills: [<driver skill>]; agents: [<subagents>]; knowledge: [<GUIDE>]
+src/skills/<driver>/SKILL.md       the user-invocable driver skill that runs the orchestration
+src/agents/<agent>.md              agent frontmatter + required `title`
+src/knowledge/<GUIDE>.md           how the workflow runs, step by step (shipped as knowledge)
 ```
 
-- `title` is the agent's display name in Copilot and must be unique in the pack. `copilot.handoffs[].agent` and `copilot.agents` refer to titles and must resolve inside the pack (`npm run validate` fails otherwise; `agents: ["*"]` is allowed).
-- `copilot:` may hold only `handoffs`, `agents`, `user-invocable`, `argument-hint`, `target`, `mcp-servers`.
-- Agent names share one namespace with every other agent in the collection, because Codex keeps all agents in one folder. Prefix them with a short pack name (`uiapi-test-planner`).
-- The build publishes one plugin per pack: Copilot gets every agent including the orchestrator; Claude Code and Codex get the helpers as agents and the orchestrator as a command named after the pack, with a table mapping each title to the agent name to call.
+- `title` is the agent's display name and must be unique in the pack; the build rewrites the host-instruction tables in the driver (`rewritePackSkill`) so each host spawns the same roles.
+- The driver delegates each step to a subagent by `config_name` — in Vibe: `tools.agents` with `config_name` `<bundle>:<agent>` (e.g. `plan-explore-review-commit:perc-implementer`).
+- Agent names share one namespace with every other agent in the collection, because every plugin agent spawns through one mechanism. Prefix them with a short pack name (`uiapi-test-planner`).
+- The build publishes one native Vibe plugin per pack: the driver skill (user-invocable) leads the orchestration and delegates each step to a subagent by `config_name`; the GUIDE ships as the plugin's knowledge.
 
 **A user's project:** write the files yourself per host, from [`resources/orchestration-pack.template.md`](resources/orchestration-pack.template.md). For Claude Code and Codex, the orchestrator is a user-run skill (`creating-prompts`), not an agent.
 
@@ -100,7 +100,7 @@ Start from [`resources/orchestration-pack.template.md`](resources/orchestration-
 
 ### 5. Validate
 
-- This collection: `npm run validate` passes (titles, references, names unique across the collection). Add a `GUIDE.md` if the flow is not obvious.
+- This collection: `npm run check` passes (titles, references, names unique across the collection). Declare the GUIDE as the bundle's `knowledge:` entry if the flow is not obvious.
 - Run [`resources/orchestration-quality-checklist.md`](resources/orchestration-quality-checklist.md).
 - Run the pack on one real task in each target host. Watch for an orchestrator that starts implementing, a subagent missing a tool that reports success anyway, vague handoff prompts, two agents doing the same work, and a `Gaps` section that is always empty.
 
@@ -138,5 +138,5 @@ Start from [`resources/orchestration-pack.template.md`](resources/orchestration-
 - No subagent depends on calling another subagent.
 - Capabilities are minimal per role; agents that run commands have `execute`, read-only roles have no `edit`.
 - Every subagent returns the same packet shape, including `Gaps`; artifacts go to one agreed folder.
-- This collection: `pack.yaml` names the orchestrator, every agent has a unique `title`, every Copilot reference resolves, agent names are prefixed and unique, and `npm run validate` passes.
+- This collection: the `bundles.yaml` entry has `pack: true`, one driver skill, its agents and the GUIDE as `knowledge:`, every agent has a unique `title`, agent names are prefixed and unique, and `npm run check` passes.
 - The pack ran on one real task in each target host.

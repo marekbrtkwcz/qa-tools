@@ -13,8 +13,9 @@
 - [ ] Only `bundles.yaml` and `src/` were edited; nothing under `plugins/`, `rules/`, `hooks/`, `catalog/`, the marketplace files or the README tables.
 - [ ] Every skill, command and agent is in exactly one bundle.
 - [ ] The bundle `description` says what is inside and when to install it.
-- [ ] Any `guides:` entry names a file in `src/guides/` whose links resolve from the plugin's `guides/` folder.
-- [ ] `npm run validate`, `npm run build` and `npm run check` pass, and the regenerated files are committed with the source change.
+- [ ] Any `knowledge:` entry names a file in `src/knowledge/`; its first paragraph is under 297 characters (the build's description slice point).
+- [ ] `npm run check`, `npm run build` and `npm run verify` pass, and the regenerated files are committed with the source change (CI re-runs the gates on ubuntu and windows).
+- [ ] Every declared MCP server runs a pre-installed **global binary** (never `npx`), carries a short product-style name the user can shadow, and its install line stays documented in the host README.
 
 ## A user's repository
 
@@ -37,7 +38,7 @@
 | Symptom | Likely cause | Fix |
 | --- | --- | --- |
 | `npm run check` reports files out of date | `src/` or `bundles.yaml` changed without a rebuild, or a generated file was edited | Edit the source, run `npm run build`, commit both |
-| `npm run validate`: asset not in any bundle | New skill, command or agent not added to `bundles.yaml` | Add it to exactly one bundle |
+| `npm run check`: asset not in any bundle | New skill, command or agent not added to `bundles.yaml` (membership gate) | Add it to exactly one bundle |
 | Command runs but the hand-off fails | The `agent:` target is in another plugin | Move the command or the agent so they share a bundle |
 | Skill missing in Codex after install | Symlinked folder, or no new session | Use real files; start a new session |
 | Agents missing in Codex | Codex does not load agents from plugins | Copy `codex/agents/*.toml` into `.codex/agents/` |

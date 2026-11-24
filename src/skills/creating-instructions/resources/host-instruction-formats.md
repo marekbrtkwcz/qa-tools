@@ -2,7 +2,9 @@
 
 Read this when rules go into a user's own project, or when porting rules between tools. The same scoped rule is shown in each format.
 
-## This collection (source): `src/rules/<name>.md`
+## This collection: no rule assets
+
+This collection deliberately ships no repository-rule assets: a rule encodes one repository's conventions, not a reusable collection, and exporting rules to users would push conventions onto repos that never agreed to them. Reusable know-how goes into a skill (`creating-skills`); what must hold mechanically goes into a hook (`creating-hooks`). The section below shows the source-collection `src/rules/` format for reference when porting from it.
 
 ```markdown
 ---
@@ -16,7 +18,7 @@ applyTo:
 - ...
 ```
 
-The build (`scripts/lib/hosts.js`) writes it three ways under `rules/`: `copilot/.github/instructions/<name>.instructions.md`, `claude/.claude/rules/<name>.md`, and `codex/.agents/rules/<name>.md` plus an `AGENTS.md` index. Users copy the folder for their tool into their project.
+The upstream multi-host layout (source collection) writes one rule three ways under `rules/`: `copilot/.github/instructions/<name>.instructions.md`, `claude/.claude/rules/<name>.md`, and `codex/.agents/rules/<name>.md` plus an `AGENTS.md` index. Users copy the folder for their tool into their project.
 
 ## GitHub Copilot
 
@@ -63,6 +65,14 @@ Codex has no glob-scoped rules. Two options:
 2. **Indexed rule files** (what this collection publishes). Put the rule body, without frontmatter, in `.agents/rules/<name>.md`, and add an index to `AGENTS.md`:
 
 ```markdown
+## Mistral Vibe
+
+Vibe reads guidance through plugins and project/user config, not a dedicated rules-with-globs format.
+
+- Plugin instructions and knowledge land with the plugin (always loaded or loaded on demand — `creating-knowledge-folders` for the on-demand kind); project conventions live in plain files the repo already has (`AGENTS.md`-style) plus `.vibe/` project config, user config under `~/.vibe/`.
+- There is no per-glob rule file: scope by putting the convention in the file the relevant work reads, or gate it mechanically with a pre-tool hook (`creating-hooks`).
+- If the `vibe` plugin is installed, `vibe:vibe` is the source of truth for what current Vibe loads and from where; `vibe:import` ports instruction files from other CLIs.
+
 ## Quality rules
 
 Before you create or edit a file that matches a pattern below, read the linked rule file and follow it.

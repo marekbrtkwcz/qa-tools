@@ -25,7 +25,7 @@ Run this before handing off a hook.
 
 ## Host fit
 
-- [ ] **This collection:** `src/hooks/<name>/hook.yaml` lists `hosts`, there is one folder per listed host, the Claude Code script runs as `node` with `${CLAUDE_PLUGIN_ROOT}`, and `npm run validate` passes.
+- [ ] **This collection:** `scripts/assets/<name>.js` is plain Node CJS with no dependencies and `'use strict'`, `<name>.test.js` covers the allow, warn and deny paths, the hook name is listed under `hooks:` in the bundle's `bundles.yaml` entry, and `npm run check` plus `npm test` pass.
 - [ ] **A user's project:** the config sits where the host reads it (`.github/hooks/`, `.claude/settings.json` or a plugin's `hooks/hooks.json`, `.codex/hooks.json` with the feature flag on).
 
 ## Smells that call for a rewrite
