@@ -19,18 +19,14 @@
     "lint": "biome check scripts && node scripts/lint-all-packs.js",
     "test": "node --test scripts/build.test.js scripts/assets/test-file-guard.test.js scripts/assets/red-test-deletion-guard.test.js",
     "ci": "npm run check && npm run validate-manifests && npm run lint && npm run verify && npm test",
-    "build": "node scripts/build.js",
-    "check": "node scripts/build.js --check && node scripts/lint-all-packs.js && node scripts/check-changelog.js && node scripts/check-bundles-duplicates.js",
-    "verify": "node scripts/build.js --verify",
-    "validate-manifests": "node scripts/validate-manifests.js",
-    "lint": "biome check scripts && node scripts/lint-all-packs.js",
-    "test": "node --test scripts/build.test.js scripts/assets/test-file-guard.test.js scripts/assets/red-test-deletion-guard.test.js",
-    "ci": "npm run check && npm run validate-manifests && npm run lint && npm run verify && npm test",
     "changelog": "node scripts/generate-changelog.js",
     "changelog:check": "node scripts/generate-changelog.js --dry-run",
     "readme:stats": "node scripts/update-readme-stats.js",
     "readme:stats:check": "node scripts/update-readme-stats.js --check",
-    "p2": "npm run changelog:check && npm run readme:stats:check"
+    "links": "node scripts/validate-links.js",
+    "links:check": "node scripts/validate-links.js --check",
+    "p2": "npm run changelog:check && npm run readme:stats:check && npm run links:check",
+    "p2:all": "npm run changelog && npm run readme:stats && npm run links"
   },
   "devDependencies": {
     "@biomejs/biome": "2.6.8",
