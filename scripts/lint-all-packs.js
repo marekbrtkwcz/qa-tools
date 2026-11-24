@@ -8,6 +8,7 @@
  *   - lint-uiapi-pack.js        (ui-api packs: Handoff Packet + prod guard)
  *   - lint-perc-pack.js         (plan-explore-review-commit: Deliverable + commit gate)
  *   - lint-quality-gates.js     (quality-gates: NO-GO, waiver expiry/owner, pair links)
+ *   - lint-basics-pack.js       (orchestration-basics: Deliverable + STOP gates + no-code boundary)
  *
  * Usage: node scripts/lint-all-packs.js
  * Exit 0 = all pass, 1 = first failing lint stops the run (its own output
@@ -21,6 +22,7 @@ const LINTS = [
   'lint-uiapi-pack.js',
   'lint-perc-pack.js',
   'lint-quality-gates.js',
+  'lint-basics-pack.js',
 ];
 
 for (const lint of LINTS) {
