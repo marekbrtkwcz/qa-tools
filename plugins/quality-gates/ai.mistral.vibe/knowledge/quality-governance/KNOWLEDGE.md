@@ -58,6 +58,17 @@ The one that matters most for AI-assisted teams: **intent debt is the debt an ag
 
 **Per cadence:** re-derive the contract, re-run the audit, and write the trend report with `tracking-quality-trends`. Read the previous trend report first - a trend report that does not reference its predecessor is a snapshot with a date on it.
 
+## Waiver lifecycle
+
+Every waiver moves through one path: **issued** (reason, owner, expiry date) → **expiring** (approaching its date, surfaced in trend reports) → **expired** (reported as a finding, never a standing exception). `assessing-release-readiness` treats an expired waiver on a release-scope practice as an automatic not-met criterion.
+
+## What this bundle does not do
+
+- functional test design or test automation - that is the `qa-core` / `test-automation` / `ui-api-automation` bundles
+- authorized penetration testing - the `pentesting` bundle, with its own charter gate
+- accessibility, performance/load or security testing of a feature - the `non-functional-testing` bundle
+- delivery orchestration with commit gates - the `plan-explore-review-commit` pack, which hands its Quality Gates step back to this bundle
+
 ## What this will not do for you
 
 - It will not decide how critical your system is. It asks; a human answers.
