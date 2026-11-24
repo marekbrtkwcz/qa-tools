@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "mobile-testing",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "Mobile app test automation: Maestro-first flows with Appium as the deliberate fallback, stable selectors, deterministic device setup and CI device matrices.",
   "author": {
     "name": "qa-tools contributors",
