@@ -18,6 +18,7 @@ The design stage ships in the `qa-core` plugin; the code stage uses the `test-au
 | --- | --- | --- |
 | [`/edge-case-scenario-generator`](../skills/edge-case-scenario-generator/SKILL.md) | Command | Stage 1: turns a user story and its application states into BDD scenarios (happy path, negative, boundary, concurrency, invalid state transitions), saved to `spec/edge-cases.md` |
 | [`ai-architect`](../agents/ai-architect.md) | Agent | Runs the command's work and keeps the two stages apart: design first, code only from approved scenarios |
+| [`automation-backlog-planner`](../agents/automation-backlog-planner.md) | Agent | Stage 1.5: turns the approved scenario list into a prioritized automation backlog - what gets automated first (and why), what stays manual - before any test code is written |
 | [`/generate-gherkin-scenarios`](../skills/generate-gherkin-scenarios/SKILL.md) | Command | Alternative stage 1 when you need formal Gherkin with scenario outlines for a BDD framework |
 | [`/test-generator`](../../test-automation/skills/test-generator/SKILL.md) | Command | Stage 2: generates tests from a written plan file, such as the approved `spec/edge-cases.md` (in `test-automation`) |
 | [`/playwright-generate-test`](../../test-automation/skills/playwright-generate-test/SKILL.md) | Command | Stage 2 for one scenario at a time: runs it live in the browser first, then writes the test (in `test-automation`) |

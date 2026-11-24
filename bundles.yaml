@@ -50,6 +50,7 @@ qa-core:
     - test-planner
     - rubber-duck
     - ai-architect
+    - automation-backlog-planner
   knowledge:
     - beyond-codegen
 

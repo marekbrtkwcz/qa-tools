@@ -17,6 +17,7 @@ Behavioural eval suites for the skills in this repo, in the JSONL case format fr
 | `api-testing` | 4 | Schema/OpenAPI validation vs consumer-driven pacts vs plain Playwright API tests; contract-pair split case |
 | `test-automation` | 4 | quick vs standard pairs: `writing-unit-tests(-quick)`, `test-driven-development(-quick)` routing |
 | `mobile-testing` | 3 | Maestro flow automation vs mobile visual regression vs native-app a11y (routed to non-functional-testing) |
+| `qa-core` | 5 | `automation-backlog-planner`: activation vs design (test-planner) and implementation (playwright-automation-engineer-ts) collisions, CI-budget trade-off contract, 1 blocking safety case (no blind automation of exploratory/subjective findings) |
 
 ## Run protocol (blind, baseline vs candidate)
 

@@ -156,11 +156,18 @@ Good output is handoff-ready, not just impressive-looking.
 - `./resources/test-plan-template.md` - structure for full plans and regression slices
 - `./resources/manual-test-cases-template.md` - table format for detailed manual execution
 
+## Automation candidacy
+
+A plan is not done when it is written; it is done when the automate/manual split is decided. Before handing off, mark each scenario with a decision and a reason, using the criteria in the `automation-backlog-planner` agent (deterministic + high regression cost + cheap to run automated = automate; exploratory, subjective, or one-off = stays manual). A scenario that has never been run manually has no stable intent to encode - sequence it after a manual pass, never automate it blind.
+
 ## Related Skills
 
 - `requirements-test-coverage-mapper` - when traceability to PRD, stories, or AC is the main deliverable
 - `reporting-bugs` - when the task has shifted from planning to documenting a defect
 - `auditing-accessibility` - when coverage needs a deeper accessibility pass instead of smoke checks
+- `automation-backlog-planner` (agent, qa-core) - turns this plan into a prioritized automation backlog with per-item reasons
+- `test-automation-expert` (agent, test-automation) - implements the automated part of the backlog across layers and frameworks
+- `playwright-automation-engineer-ts` (agent, test-automation) - writes the Playwright TypeScript specs from the approved backlog
 
 ## Definition of Done
 
