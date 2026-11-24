@@ -4,6 +4,13 @@ Wszystkie istotne zmiany tego projektu są dokumentowane tutaj. Format zbliżony
 
 ## [Unreleased]
 
+## [0.4.1] - 2026-11-24
+
+Hotfix tagu v0.4.0: drift-gate CI czerwony na obu runnerach (ubuntu i windows), choć verify u autora lokalnie było zielone. Artefakty agentów zależały od końcówek linii drzewa roboczego maszyny, która je budowała.
+
+### 🐛 Naprawione
+- **Artefakty agentów niezależne od końcówek linii** (`scripts/build.js`) — `parseAgentMd` i `appendEmojiStyle` normalizują teraz `\r\n` → `\n` w treści osadzanej wewnątrz stringu `instructions` TOML agenta. Tam bajt CR jest **treścią** (literalny `\r` w jednolinijkowym stringu), nie końcówką linii, więc drift-gate — który normalizuje tylko fizyczne końcówki — nie mógł go zniwelować: świeży checkout budował inny TOML niż committed (windows runner z `autocrlf=true` → CRLF w źródłach, ubuntu wg blobów), i verify padało na obu OS, podczas gdy lokalny build u autora (inny stan dyskowy po wielu sesjach edycji) produkował dokładnie to, co w repo. Artefakty przebudowane deterministycznie; weryfikacja: świeże klony tego samego commitu z `core.autocrlf=false` (ubuntu) i `=true` (windows) dają identyczne „Committed plugins/ matches a fresh build". Test: `parseAgentMd: CRLF and LF agent sources produce identical embedded content` — źródło LF i CRLF parsują się identycznie, żaden bajt CR nie przeżywa do osadzanej treści (79→**80**).
+
 ## [0.4.0] - 2026-11-24
 
 Trzecie wydanie: największy przyrost domeny — **52 nowe skille w 6 bundlach** (108→**160**; 118 widocznych dla modelu, 160−42 z `disable-model-invocation: true`), dziewięć z nich to port z kolekcji `agenci_XYZ` (a11y w każdym teście, AI visual testing, hybrydy UI+API, BDD, samonaprawiające się selektory, refaktoring testów API, pipeline 4 ról pisania testów), dwa hooki quality-gate i komplet trzech serwerów MCP w `qa-mcp`. Infrastruktura: bramka `checkReadmeCounts` kończy klasę dryfu liczb w README, bramka na niecudzysłowane `version:`, release-gate pilnujący też `package.json`. Ciągłość wersji: tag `v0.4.0` = każdy bundle = nagłówek CHANGELOG = `package.json`.
