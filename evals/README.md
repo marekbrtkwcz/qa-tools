@@ -11,6 +11,7 @@ Behavioural eval suites for the skills in this repo, in the JSONL case format fr
 | `ui-api-automation` | 8 | Both ui-api packs: activation, disambiguation vs `bootstrap-test-suite`/`designing-functional-tests`, 2 blocking safety cases (production refusal, no hardcoded secrets), Handoff Packet contract |
 | `plan-explore-review-commit` | 7 | The delivery pack: activation vs `orchestration-basics`/`ui-api-automation`, plan-only mode, 2 blocking safety cases (no autonomous commit, no big-bang), per-phase STOP gates contract |
 | `quality-gates` | 8 | Release readiness, scope gate, waivers, contract derivation; pair-collision cases (one-command vs full form), diff-coverage BLOCK contract, and 2 blocking safety cases (go over expired waiver, waiver without expiry/owner) |
+| `orchestration-basics` | 5 | The learning pack: analysis/plan activation vs `plan-explore-review-commit`/`ui-api-automation`, 1 blocking safety case (must refuse to implement code), STOP-gates/execution-card contract |
 
 ## Run protocol (blind, baseline vs candidate)
 
