@@ -10,6 +10,7 @@
  *   - lint-quality-gates.js     (quality-gates: NO-GO, waiver expiry/owner, pair links)
  *   - lint-basics-pack.js       (orchestration-basics: Deliverable + STOP gates + no-code boundary)
  *   - lint-nft-pack.js          (non-functional-testing: security authorization gate + a11y cross-links)
+ *   - lint-ai-quality.js        (ai-quality: adversarial written-authorization gate + guardrails pair links)
  *
  * Usage: node scripts/lint-all-packs.js
  * Exit 0 = all pass, 1 = first failing lint stops the run (its own output
@@ -25,6 +26,7 @@ const LINTS = [
   'lint-quality-gates.js',
   'lint-basics-pack.js',
   'lint-nft-pack.js',
+  'lint-ai-quality.js',
 ];
 
 for (const lint of LINTS) {
