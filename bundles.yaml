@@ -166,10 +166,11 @@ non-functional-testing:
 
 pentesting:
   icon: 🕵️
-  description: "Authorized web and API penetration testing: rules of engagement, attack-surface mapping, OWASP Top 10 class testing, and a CVSS-rated report."
+  description: "Authorized web, API and infrastructure penetration testing: rules of engagement, attack-surface mapping, OWASP Top 10 class testing, network/service exposure triage, and a CVSS-rated report."
   version: "0.5.0"
   skills:
     - pentest-api
+    - pentest-network-infrastructure
     - pentest-recon-attack-surface
     - pentest-report
     - pentest-retest-verification
