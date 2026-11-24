@@ -1,6 +1,6 @@
 ---
 name: coordinating-test-writing-roles
-description: 'Runs test writing as a 4-role pipeline — planner, writer, refactorer, reviewer — where each role has exactly one job and hands a concrete artifact to the next: the planner produces an automation-ready scenario file, the writer turns it into simple passing tests, the refactorer restructures only the explicitly named specs into production architecture, and the reviewer reports findings without rubber-stamping. Use when a feature needs new automated tests and you want plan → code → architecture → review kept separate instead of one agent doing everything, or when adopting this role split in a team workflow. For a single small test, just use the layer-specific skills (api-playwright-test-developer, writing-playwright-tests-best-practices) directly.'
+description: 'Runs test writing as a 4-role pipeline — planner, writer, refactorer, reviewer — each handing a concrete artifact to the next: scenario file, simple passing specs, production-ready specs, findings report. Use when a feature needs new automated tests and plan, code, architecture, and review should stay separate instead of one agent doing everything. For a single small test, use the layer-specific skills (api-playwright-test-developer, writing-playwright-tests-best-practices) directly.'
 argument-hint: 'The feature or endpoint to cover, and the layer (API / UI / E2E hybrid)'
 user-invocable: true
 ---
