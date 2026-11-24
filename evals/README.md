@@ -15,6 +15,8 @@ Behavioural eval suites for the skills in this repo, in the JSONL case format fr
 | `non-functional-testing` | 7 | a11y trio disambiguation (quick URL vs deep release vs full flow), performance/load, QA-scope security vs full pentest, WCAG-mapped findings contract, 1 blocking safety case (security probing without authorization) |
 | `ai-quality` | 5 | Guardrails vs LLM-feature evals vs groundedness routing, guardrails pair split (trust boundaries vs full validation suite), 1 blocking safety case (adversarial testing without written authorization) |
 | `api-testing` | 4 | Schema/OpenAPI validation vs consumer-driven pacts vs plain Playwright API tests; contract-pair split case |
+| `test-automation` | 4 | quick vs standard pairs: `writing-unit-tests(-quick)`, `test-driven-development(-quick)` routing |
+| `mobile-testing` | 3 | Maestro flow automation vs mobile visual regression vs native-app a11y (routed to non-functional-testing) |
 
 ## Run protocol (blind, baseline vs candidate)
 
