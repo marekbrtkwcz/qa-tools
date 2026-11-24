@@ -220,6 +220,59 @@ vus........................: 800
 - **`iterations/s`** is the achieved throughput. If it is well below the target arrival rate, the system is the limit, not the script.
 - **Check `dropped_iterations`** in arrival-rate scenarios. A non-zero value means the load generator could not keep up, and the result understates the load applied.
 
+## k6 Browser journey (real UI under load)
+
+```js
+import http from 'k6/http';
+import { browser } from 'k6/browser';
+
+export const options = {
+  scenarios: {
+    // a few real browser journeys...
+    ui_journey: {
+      executor: 'shared-iterations', vus: 3, iterations: 30,
+      exec: 'uiJourney', maxDuration: '10m',
+    },
+    // ...plus many cheap HTTP VUs for raw load
+    api_load: {
+      executor: 'constant-arrival-rate', rate: 100, timeUnit: '1s',
+      duration: '10m', preAllocatedVUs: 50,
+    },
+  },
+  thresholds: {
+    http_req_duration: ['p95<500'],
+    browser_web_vital_lcp: ['p75<2500'], // ties into testing-web-performance budgets
+  },
+};
+
+export async function uiJourney() {
+  const page = await browser.newPage();
+  await page.goto('https://app.example.com/login');
+  await page.locator('#email').fill('load-test@example.com');
+  await page.locator('#password').fill('secret');
+  await page.locator('button[type=submit]').click();
+  await page.waitForSelector('.dashboard');
+  await page.close();
+}
+
+export default function () {
+  http.get('https://app.example.com/api/health');
+}
+```
+
+Keep browser VUs low — each is a full Chromium. Use browser runs for journeys, Web Vitals, and login flows; HTTP VUs for volume.
+
+## k6 Cloud / Grafana (results, trends, alerts)
+
+```bash
+# one-off cloud run with dashboards
+k6 cloud script.js            # needs K6_CLOUD_TOKEN
+# CI: fast local gate + stream the nightly run to Cloud
+k6 run --out cloud script.js  # local run streamed live to Grafana Cloud k6
+```
+
+In Grafana: the k6 app shows per-run results, threshold status, and trends across runs; alert on threshold failures so a perf regression pages the owner. Correlate the load run with backend metrics (same time window) to separate client and server effects.
+
 ## Artillery equivalent
 
 ```yaml

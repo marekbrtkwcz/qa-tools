@@ -135,6 +135,14 @@ Use `./resources/perf-report-template.md`. It requires:
 
 Add a lightweight CI check when there is something worth protecting: a short run at modest load, thresholds set generously enough not to be flaky, and a comparison against the last release. Recipes in `./resources/k6-recipes.md`. Its job is catching an order-of-magnitude regression, not measuring capacity.
 
+## k6 Browser and k6 Cloud (Grafana)
+
+Two extensions matter when the load test must include what a real browser does, or when results must be visible to the whole team:
+
+- **k6 Browser** (`k6/x/browser`, Chromium inside the k6 test) — use when the scenario needs real page rendering, login through the UI, or Web Vitals during load, not just HTTP calls. Keep browser VUs low (they are expensive): a few browser VUs driving full user journeys plus many HTTP VUs for the raw load. Browser metrics (LCP, INP, CLS per iteration) come from the same run and feed `testing-web-performance` budgets.
+- **k6 Cloud / Grafana Cloud k6** — push runs to the cloud (`k6 cloud script.js` or CI with a token) for long runs, distributed execution, and dashboards: results, thresholds, and alerts visualized in Grafana next to the app's metrics, so a load run can be correlated with backend telemetry. CI pattern: run locally for the fast gate, stream the nightly/long run to Cloud for trends and alerting (`automating-ci-test-pipelines`).
+- The k6 MCP server (see the `qa-mcp` bundle) covers writing, validating, and running scripts from the agent — use it instead of hand-writing boilerplate.
+
 ## Common Failure Modes
 
 - reporting the average, which describes nobody and hides the tail
@@ -160,7 +168,7 @@ The load tool is the instrument; without it there are no load numbers, and none 
 
 - `./resources/workload-model.md` - deriving the endpoint mix, concurrency, think time, and data distribution from real traffic, with a worked example
 - `./resources/thresholds-and-slos.md` - deriving thresholds from SLOs, percentile choice, error budgets, and per-endpoint targets
-- `./resources/k6-recipes.md` - k6 scripts for load, stress, spike, and soak shapes, plus the CI regression check and an Artillery equivalent
+- `./resources/k6-recipes.md` - k6 scripts for load, stress, spike, and soak shapes, plus the CI regression check, a k6 Browser journey example, k6 Cloud streaming, and an Artillery equivalent
 - `./resources/perf-report-template.md` - report structure, the four curve shapes and what each means, and a worked example
 
 ## Related Skills
