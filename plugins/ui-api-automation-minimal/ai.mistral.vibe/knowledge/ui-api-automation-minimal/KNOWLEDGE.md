@@ -24,7 +24,7 @@ Pick this pack for a first batch of tests or a project without a test framework.
 2. **Plan**: the plan goes to `.ai-outputs/`; the orchestrator shows you the P0 list before any code is written.
 3. **Set up** (only if needed).
 4. **Implement**: UI and API tasks in parallel runs. The coder makes at most three fix attempts per test and marks application bugs `test.fixme('BUG: …')` instead of weakening assertions.
-5. **Summary**: a new `.ai-outputs/AUTOMATION_SUMMARY-<timestamp>.md` per run; earlier ones are kept.
+5. **Summary**: a new `.ai-outputs/uiapi-min-AUTOMATION_SUMMARY-<timestamp>.md` per run; earlier ones are kept.
 
 The orchestrator stops and asks when the app URL, the spec, credentials or the scope are missing, and stops and reports when an agent hits a blocker.
 

@@ -23,7 +23,7 @@ If the spec cannot be found or does not parse, stop and say so in Gaps / TODO. D
 
 ## Deliverable
 
-Write `.ai-outputs/api-summary-<YYYYMMDD-HHmm>.md` with these sections:
+Write `.ai-outputs/uiapi-api-summary-<YYYYMMDD-HHmm>.md` with these sections:
 
 - **API Inventory**: table of method · path · auth · tags · notes.
 - **BE Test Matrix**: test ideas with priority (P0/P1/P2).

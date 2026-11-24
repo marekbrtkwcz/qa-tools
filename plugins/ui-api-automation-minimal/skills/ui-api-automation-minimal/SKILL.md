@@ -42,7 +42,7 @@ Ask the user for whatever is missing:
 2. **Plan**: give the **Test Planner (Minimal)** the exploration packets and summary paths. Show the user the P0 list before implementation.
 3. **Set up**, only when needed: if no test framework exists, or the existing one cannot run the planned tests, ask the **Test Framework Starter Agent (Minimal)** to set one up. Otherwise skip this step.
 4. **Implement**: ask the **Test Coder Agent (Minimal)** to implement the plan's tasks. Split UI and API tasks into parallel runs when both are in scope, and give each run the plan path and its task ids.
-5. **Summarise**: write `.ai-outputs/AUTOMATION_SUMMARY-<YYYYMMDD-HHmm>.md` (format below) and show it to the user. Never overwrite or delete earlier summaries or the agents' files in `.ai-outputs/`.
+5. **Summarise**: write `.ai-outputs/uiapi-min-AUTOMATION_SUMMARY-<YYYYMMDD-HHmm>.md` (format below) and show it to the user. Never overwrite or delete earlier summaries or the agents' files in `.ai-outputs/`.
 
 Pass the Handoff Packet template below in every delegation, together with the paths of the files the agent needs.
 

@@ -21,6 +21,6 @@ Never write tokens, cookies, passwords or personal data you observe (in response
 
 ## Deliverable
 
-Write `.ai-outputs/<api|ui>-summary-<YYYYMMDD-HHmm>.md` with the points above.
+Write `.ai-outputs/uiapi-min-<api|ui>-summary-<YYYYMMDD-HHmm>.md` with the points above.
 
 Return a **Handoff Packet** with these fields, in this order: Objective · Inputs used (files, URLs, commands) · Findings · Decisions / Assumptions · Artifacts produced (file paths) · Gaps / TODO · Risks (flakiness, environment, data, auth) · Recommended next action. Put the summary path under Artifacts produced and the recommended P0 tests under Findings.

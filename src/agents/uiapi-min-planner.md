@@ -15,6 +15,6 @@ You convert the API and UI findings you are given into a small plan the Test Cod
 
 ## Deliverable
 
-Write `.ai-outputs/test-plan-<YYYYMMDD-HHmm>.md` with the task table, assumptions, open questions, and a quick runbook (commands and env vars).
+Write `.ai-outputs/uiapi-min-test-plan-<YYYYMMDD-HHmm>.md` with the task table, assumptions, open questions, and a quick runbook (commands and env vars).
 
 Return a **Handoff Packet** with these fields, in this order: Objective · Inputs used (files, URLs, commands) · Findings · Decisions / Assumptions · Artifacts produced (file paths) · Gaps / TODO · Risks (flakiness, environment, data, auth) · Recommended next action. Put the plan path under Artifacts produced.

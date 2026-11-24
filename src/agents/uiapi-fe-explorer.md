@@ -20,7 +20,7 @@ If the app is unreachable, login fails, or the MCP browser tools are not availab
 
 ## Deliverable
 
-Write `.ai-outputs/ui-summary-<YYYYMMDD-HHmm>.md` with these sections:
+Write `.ai-outputs/uiapi-ui-summary-<YYYYMMDD-HHmm>.md` with these sections:
 
 - **UI Flow Map**: pages/routes and the journeys between them.
 - **Proposed FE Test Cases**: P0/P1/P2, each with the user outcome it verifies.

@@ -16,7 +16,7 @@ You turn the exploration summaries you are given into a plan the two implementer
 
 ## Plan contents
 
-Write `.ai-outputs/test-plan-<YYYYMMDD-HHmm>.md` with:
+Write `.ai-outputs/uiapi-test-plan-<YYYYMMDD-HHmm>.md` with:
 
 - **Allocation**: which behaviours are UI, API, contract or smoke tests, and why.
 - **Tasks**: table of id · test case · level · priority · owner · target file.
