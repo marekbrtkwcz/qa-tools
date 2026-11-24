@@ -52,7 +52,7 @@ for (const skill of PAIR) {
 
 if (violations.length) {
   console.error('⛔ ai-quality lint FAILED:');
-  for (const v of violations) console.error('  - ' + v);
+  for (const v of violations) console.error(`  - ${v}`);
   process.exit(1);
 }
 console.log(

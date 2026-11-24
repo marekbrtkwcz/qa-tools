@@ -72,7 +72,7 @@ for (const skill of PACK_SKILLS) {
 
 if (violations.length) {
   console.error('⛔ ui-api pack lint FAILED:');
-  for (const v of violations) console.error('  - ' + v);
+  for (const v of violations) console.error(`  - ${v}`);
   process.exit(1);
 }
 console.log(

@@ -52,7 +52,7 @@ if (!fs.existsSync(PACK_SKILL)) {
 
 if (violations.length) {
   console.error('⛔ basics pack lint FAILED:');
-  for (const v of violations) console.error('  - ' + v);
+  for (const v of violations) console.error(`  - ${v}`);
   process.exit(1);
 }
 console.log(

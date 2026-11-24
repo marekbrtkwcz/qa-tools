@@ -59,7 +59,7 @@ for (const [skill, refs] of Object.entries(A11Y)) {
 
 if (violations.length) {
   console.error('⛔ non-functional-testing lint FAILED:');
-  for (const v of violations) console.error('  - ' + v);
+  for (const v of violations) console.error(`  - ${v}`);
   process.exit(1);
 }
 console.log(

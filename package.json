@@ -13,7 +13,7 @@
   },
   "scripts": {
     "build": "node scripts/build.js",
-    "check": "node scripts/build.js --check && node scripts/lint-all-packs.js",
+    "check": "node scripts/build.js --check && node scripts/lint-all-packs.js && node scripts/check-changelog.js && node scripts/check-bundles-duplicates.js",
     "verify": "node scripts/build.js --verify",
     "validate-manifests": "node scripts/validate-manifests.js",
     "lint": "biome check scripts && node scripts/lint-all-packs.js",

@@ -71,7 +71,7 @@ for (const [short, long] of PAIRS) {
 
 if (violations.length) {
   console.error('⛔ quality-gates lint FAILED:');
-  for (const v of violations) console.error('  - ' + v);
+  for (const v of violations) console.error(`  - ${v}`);
   process.exit(1);
 }
 console.log(
