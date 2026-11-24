@@ -74,6 +74,24 @@ vibe -p "List your plugins" --max-turns 1
 vibe -p "Spawn child 'duck' from config 'qa-core:rubber-duck' with message 'hi'"
 ```
 
+## 🗺️ Mapa dokumentacji
+
+```
+README.md                 ← ten plik: kolekcja, instalacja, struktura, build, roadmapa
+CONTRIBUTING.md           ← jak dodawać assety (frontmatter, bramki check, releasy)
+CHANGELOG.md              ← co weszło w każdym wydaniu, per bundle (Keep a Changelog)
+evals/README.md           ← suity evali: tabela, protokół runu blind baseline-vs-candidate
+src/knowledge/*.md        ← przewodniki per bundle (routing, "czego NIE robi", evidence)
+                              → buildowane do plugins/<bundle>/.../knowledge/<name>/KNOWLEDGE.md
+src/skills/*/SKILL.md     ← dokumentacja każdego skilla: when / principles / workflow / DoD
+src/skills/*/resources/   ← szablony, checklisty, worked examples używane przez skill
+src/agents/*.md           ← kontrakty agentów: scope, hands-off, deliverable, DoD
+.qa/                      ← audyty kolekcji (commitowane, patrz collection-audit-2026.md)
+```
+
+**Zasada:** dokumentacja mieszka przy assetcie, który opisuje — nie w osobnym `docs/`.
+Nowy bundle bez `knowledge/` nie przechodzi `npm run check`.
+
 ## 🗂️ Struktura
 
 ```

@@ -14,6 +14,15 @@ This collection is a set of **native Mistral Vibe CLI plugins** (Agent Plugins 1
 
 Every asset belongs to **exactly one bundle** — the lists in `bundles.yaml`, alphabetical. Every bundle `version:` is **quoted** (`"0.4.1"`); `--set-version` refuses to rewrite bare values, and `checkVersionQuoting` fails on them.
 
+## Documentation
+
+Documentation lives next to the asset it describes — there is no separate `docs/`:
+
+- a **bundle** documents itself in `src/knowledge/<bundle>.md` (routing table, "what this bundle does not do", evidence) — required, `npm run check` enforces it;
+- a **skill** documents itself in its `SKILL.md` (When to Use / Workflow / Definition of Done) plus `resources/` for templates and worked examples;
+- a **user-facing change** gets a `CHANGELOG.md` entry under the current version;
+- the **README table** counts are updated in the same commit as `bundles.yaml` (build gate fails otherwise).
+
 ## Frontmatter rules (enforced by `npm run check`)
 
 **Skill `SKILL.md`:**
