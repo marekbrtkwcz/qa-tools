@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "test-automation",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Unit tests, TDD, Playwright, mocking, visual regression, migration and test code review, with a quality-gate hook against test anti-patterns.",
   "author": {
     "name": "qa-tools contributors",
