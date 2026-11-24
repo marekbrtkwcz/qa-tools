@@ -116,6 +116,7 @@ api-testing:
     - testing-microservices
     - testing-webhooks
     - testing-api-contracts
+    - testing-file-uploads-and-exports
     - testing-graphql-apis
     - testing-grpc-apis
   agents:
