@@ -66,6 +66,7 @@ test-automation:
     - code-review
     - code-review-advanced
     - component-testing-vitest-rtl
+    - coordinating-test-writing-roles
     - designing-test-automation-architecture
     - diagnosing-test-failures
     - ensuring-test-isolation
