@@ -78,6 +78,8 @@ Bold marks the expected allow. Every other cell is a deny that must be verified 
 
 Check each cell **at the API**, with the session or token for that role, bypassing the UI entirely. A cell verified by "the button is not visible" is not verified.
 
+Keep the matrix **executable**: `./resources/authz-matrix-template.md` has a Playwright `request`-context recipe that turns each cell into a regression test per role (see `api-playwright-test-developer` for the surrounding API-test setup). A matrix that runs as a suite catches permission-model changes on every CI run; a spreadsheet audit does not.
+
 The cases that produce findings:
 
 - **IDOR**: swap an identifier for one belonging to another user or tenant
@@ -102,6 +104,8 @@ Verifiable at a tester's depth, from `./resources/owasp-test-angles.md`:
 - password reset tokens: single use, short lived, invalidated after use
 - registration and reset responses that do not disclose whether an account exists
 - multi-factor enforced where claimed, including on API paths
+- state-changing requests carry an anti-CSRF token, or `SameSite=Strict` cookies where a token is not feasible — `SameSite` is a mitigation, not a substitute for a token on sensitive operations
+- JWTs specifically: `alg: none` rejected, signature verified server-side, `exp`/`nbf` honoured, and the `kid` header not used to select an unverified key
 
 ### Phase 4: Input handling, observed not exploited
 
@@ -113,6 +117,8 @@ Send inputs a validator should reject and **observe the response**. The goal is 
 - file upload: type checks, size limits, and whether the stored name is used in a path
 - redirect parameters accepting external hosts
 - content type confusion, and whether the response's `Content-Type` matches what it returns
+- input that is **stored** and later rendered to other users (comments, profiles, shared or admin views) - stored payloads persist where reflected ones do not
+- any feature that fetches a user-supplied URL (webhooks, imports, link previews, avatar-by-URL): SSRF candidates, see A10 in `./resources/owasp-test-angles.md` - observe only whether internal addresses are accepted, never what they return
 
 When a response indicates a real injection path, **stop and report**. Confirming a vulnerability class is a tester's job; developing it into an exploit is not, and going further can cause damage the authorization did not cover.
 
@@ -125,6 +131,7 @@ When a response indicates a real injection path, **stop and report**. Confirming
 - security headers present: `Content-Security-Policy`, `Strict-Transport-Security`, `X-Content-Type-Options`
 - caching headers on authenticated responses
 - source maps, `.git` directories, and backup files reachable in the deployed environment
+- security-relevant actions are logged and visible to someone who acts on them: permission and role changes, failed logins, denial bursts - see A09 in `./resources/owasp-test-angles.md`
 
 ### Phase 6: Report
 
@@ -171,6 +178,10 @@ State the stopping point explicitly. "Confirmed that user A can read user B's or
 - `analyzing-regression-scope` - when a permission model change needs its blast radius mapped
 - `assessing-release-readiness` - when a security finding bears on a go/no-go decision
 - `auditing-accessibility` - a different systematic audit over the same surface
+- `api-playwright-test-developer` - to automate the authorization matrix as a runnable regression suite
+- `security-regression-smoke` - the repeatable post-change security check in CI
+- `testing-abuse-limits` - rate limiting and abuse ceilings beyond the login endpoint
+- `pentest-rules-of-engagement` - when the work becomes a full authorized pentest, start there, not here
 
 ## Definition of Done
 

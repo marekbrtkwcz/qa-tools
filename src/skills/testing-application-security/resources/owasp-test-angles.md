@@ -14,6 +14,9 @@ The most common serious defect class, and the most testable by ordinary thorough
 
 **Checks**: the full authorization matrix. See `authz-matrix-template.md`.
 
+- state-changing endpoints (POST/PUT/PATCH/DELETE) require an anti-CSRF token, or `SameSite=Strict` cookies where a token is not feasible. `SameSite=Lax` still allows top-level navigation POSTs; treat it as a mitigation, not a control, on sensitive operations
+- a cross-site form POST to a state-changing endpoint without a valid token is rejected with 403, not processed
+
 **Stop at**: one demonstration per finding. Reading a single record you should not see proves it; enumerating the table does not add evidence and does add harm.
 
 ---
@@ -41,6 +44,7 @@ The most common serious defect class, and the most testable by ordinary thorough
 - input containing SQL-ish, template-ish, or shell-ish characters, submitted as ordinary data, with the **response observed**
 - error responses examined for stack traces, SQL fragments, or internal paths
 - input reflected into the page, observed for whether it is encoded
+- input that is **stored** and later rendered to other users: comments, display names, shared documents, admin review views. A stored payload persists and fires for every viewer, where a reflected one fires once
 - search, filter, and sort parameters, which are frequently concatenated into queries
 - file upload names used in a path
 
@@ -121,6 +125,7 @@ This one belongs in the pipeline rather than in a manual session, run on every b
 - password reset token: single use, short lived, invalidated after use, not reusable after a new one is issued
 - multi-factor enforced on API paths, not only in the UI
 - remember-me tokens invalidated on logout
+- JWTs: a token with `alg: none` is rejected; the signature verifies against a pinned algorithm and key; `exp` and `nbf` are enforced; the `kid` claim does not select an unverified key; claims embedded in the token are not trusted after a role change without re-checking
 
 ```
 1. Log in, capture the session cookie.

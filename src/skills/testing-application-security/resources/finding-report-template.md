@@ -129,6 +129,8 @@ Adjust for:
 
 When two severities are arguable, take the higher and say why. A triage that downgrades is cheap; one that misses a serious finding is not.
 
+**Optional CVSS.** If the team's disclosure path expects a CVSS rating (the pentesting bundle's `pentest-report` rates findings with CVSS v3.1/v4.0), add the vector alongside the severity above - e.g. `CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N` (7.5 High). Keep the severity table as the primary rating here; CVSS is a supplement, and the two can disagree, in which case say so in one line rather than picking silently.
+
 ## Reporting several findings
 
 One report per finding, not one report listing twelve. They get fixed, triaged, and verified separately.
