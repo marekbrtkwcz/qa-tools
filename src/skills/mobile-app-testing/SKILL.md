@@ -1,6 +1,6 @@
 ---
 name: mobile-app-testing
-description: 'Automates mobile app testing with Maestro first and Appium where grids or existing suites demand it: flow files as the coverage unit, accessibility-id selectors over XPath, emulator and simulator setup (iOS needs macOS), device-lab CI (Firebase Test Lab, BrowserStack, Sauce), and animations-off, permission-dialog discipline that keeps device runs deterministic. Use when an Android or iOS app has no automated coverage, when device runs are flaky around system dialogs, or when choosing between Maestro and Appium. For product-level test plans use designing-functional-tests.'
+description: "Automates mobile app testing Maestro-first, Appium as deliberate fallback: flow files as coverage unit, accessibility-id selectors, deterministic device setup, CI matrices. Use when an Android/iOS app has no coverage or runs flake on dialogs. For screenshot baselines use visual-regression-mobile; for native-app a11y use auditing-mobile-accessibility; for product test plans use designing-functional-tests."
 argument-hint: 'The app under test (apk/ipa or workspace), platforms (Android/iOS), available devices or emulators, and whether CI device access exists'
 user-invocable: true
 ---

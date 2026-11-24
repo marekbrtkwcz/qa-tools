@@ -1,6 +1,6 @@
 ---
 name: visual-regression-mobile
-description: 'Runs visual regression testing on mobile apps: screenshot baselines per device, OS version, locale, and orientation; masking of dynamic content; approval workflow for baseline updates; and flaky-proof capture (animations off, deterministic state). Use when mobile UI regressions escape to production, when a new device or OS version joins the test matrix, or when screenshots fail on every device but pass locally.'
+description: 'Runs visual regression testing on mobile apps: screenshot baselines per device, OS version, locale, and orientation; masking of dynamic content; approval workflow for baseline updates; and flaky-proof capture (animations off, deterministic state). Use when mobile UI regressions escape to production, when a new device or OS version joins the test matrix, or when screenshots fail on every device but pass locally. For functional flow automation (Maestro/Appium) use mobile-app-testing; for native-app accessibility use auditing-mobile-accessibility.'
 argument-hint: 'The app under test, the device matrix (models, OS versions), locales and orientations in scope, and where baselines are stored'
 user-invocable: true
 ---
