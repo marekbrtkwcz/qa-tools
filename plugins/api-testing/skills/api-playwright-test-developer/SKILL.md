@@ -173,6 +173,7 @@ The test asserts on data it created, so it would fail if the endpoint returned t
 
 - `testing-api-contracts` - when responses must be validated against an OpenAPI or JSON Schema, or spec versions compared for breaking changes
 - `designing-test-data` - when the test data strategy needs dedicated design
+- `handling-sensitive-test-data` - when fixtures or environments carry real-looking personal data or secrets; never commit credentials into API test files
 - `mocking-network-and-time` - when a UI test should stub an API instead of calling it
 - `verifying-acceptance-criteria` - when API behavior must be checked against stated acceptance criteria
 - `code-review-advanced` - when an existing API suite needs a structured review

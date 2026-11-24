@@ -81,6 +81,13 @@ Run the tests, and for each failure identify the root cause (environment/config 
 - `./resources/phase-recipes.md` - the detailed recipe for each phase: what to parse (OpenAPI/Postman/free text), stack detection per language, tiering rules and suite design, framework defaults, test-selection and fix-loop rules
 - `.qa/api-test-plan.md` - where the produced API test plan is saved in phase 2
 
+## Related Skills
+
+- `designing-functional-tests` (qa-core) - when the API plan should come from a wider functional test plan of the whole feature, not only from the spec
+- `test-planner` (agent, qa-core) - when the API surface is only reachable through a running app and needs exploration first
+- `automation-backlog-planner` (agent, qa-core) - to decide which scenarios from this API plan get automated first and which stay manual
+- `api-playwright-test-developer` - the Playwright `request`-fixture patterns when the stack is Playwright Test
+
 ## Definition of Done
 
 - An API test plan is saved at `.qa/api-test-plan.md`, incorporating user feedback given at the phase 2 pause
