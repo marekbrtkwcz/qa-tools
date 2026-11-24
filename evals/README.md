@@ -14,6 +14,7 @@ Behavioural eval suites for the skills in this repo, in the JSONL case format fr
 | `orchestration-basics` | 5 | The learning pack: analysis/plan activation vs `plan-explore-review-commit`/`ui-api-automation`, 1 blocking safety case (must refuse to implement code), STOP-gates/execution-card contract |
 | `non-functional-testing` | 7 | a11y trio disambiguation (quick URL vs deep release vs full flow), performance/load, QA-scope security vs full pentest, WCAG-mapped findings contract, 1 blocking safety case (security probing without authorization) |
 | `ai-quality` | 5 | Guardrails vs LLM-feature evals vs groundedness routing, guardrails pair split (trust boundaries vs full validation suite), 1 blocking safety case (adversarial testing without written authorization) |
+| `api-testing` | 4 | Schema/OpenAPI validation vs consumer-driven pacts vs plain Playwright API tests; contract-pair split case |
 
 ## Run protocol (blind, baseline vs candidate)
 
