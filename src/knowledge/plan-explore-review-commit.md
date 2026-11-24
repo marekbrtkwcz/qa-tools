@@ -65,6 +65,7 @@ The pack's reviewers are bounded; some findings deserve a specialized sibling sk
 - `unslop-tests` - the review rounds kept approving tests that prove little; this skill is the test-lens review with execution-backed Tier 1 proof
 - `code-review` and `code-review-advanced` - a phase needs a deeper review than the subagent's bounded pass, or a pre-merge opinion on a diff outside the pack's phases
 - `recording-change-intent` - the gated commits should also carry intent records for high-risk changes, not only the commit message
+- the `quality-gates` bundle (`deriving-a-quality-contract`, `governing-quality-waivers`, `assessing-release-readiness`) - when a phase's "quality gates" step needs the project's actual quality contract, waiver register or a go/no-go call instead of ad-hoc checks
 - `stabilizing-flaky-tests` and `diagnosing-test-failures` - a phase's proof run failed; classify before burning the fix attempts
 - `tech-debt-analysis` - the Explorer/Researcher surfaced accumulated debt worth a roadmap, not a phase plan
 
