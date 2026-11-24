@@ -1,6 +1,6 @@
 # Test automation
 
-Unit/component/E2E test automation for JS/TS: TDD loops, Playwright suites, mocking, visual regression, flaky-test stabilization, CI pipelines, reports and migration from legacy runners. This bundle writes and maintains tests; it does not design product requirements (`qa-core` for test design, `quality-gates` for contracts and gates).
+Unit/component/E2E test automation for JS/TS: TDD, Playwright, mocking, visual regression, flaky tests, CI pipelines, migration. This bundle writes tests; test design lives in `qa-core`, contracts and gates in `quality-gates`.
 
 ## Conventions
 
