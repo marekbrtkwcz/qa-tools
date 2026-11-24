@@ -48,5 +48,6 @@ The pack gets you to an implemented, reviewed, run suite; deeper failure work be
 - `diagnosing-test-failures` - the verifier's classification is a first pass; a persistent red needs root-cause work, not a third fix round
 - `stabilizing-flaky-tests` - a suite that went green on retry hands an open defect to this skill, with the flake history the verifier produced
 - `test-reports-and-artifacts` - the runs should leave traces and one merged report behind; configure it rather than relying on terminal scrollback
+- `automating-ci-test-pipelines` - the plan's CI notes (retries, traces, sharding) become a real pipeline here; this is the optional final step when the user wants the suite in CI
 - `reporting-bugs` - application bugs found during verification become tracker tickets with evidence, not only a `test.fixme('BUG: …')` marker in the suite
 - `mocking-network-and-time` - tests that depend on a live third party or the wall clock need the boundary mocked, with a drift guard

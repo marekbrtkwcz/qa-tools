@@ -48,7 +48,8 @@ If the user wants only one side, skip the other side's explorer and implementer.
 3. **Implement**, in parallel: the **FE Test Implementer** gets the plan path and its FE tasks; the **BE Test Implementer** gets the plan path and its BE tasks.
 4. **Review**: give the **Solution Reviewer** the plan path and the files the implementers changed. Send Must-fix findings back to the implementer that owns the file, once. Report anything still open after that round.
 5. **Verify**: ask the **Test Runner & Verifier** to run the new and affected tests. Send failures caused by test code back to the owning implementer; send it back at most twice. A failure the runner traces to an application bug stays red: the implementer marks the test `test.fixme('BUG: <summary>')` with the evidence, and the assertion is never weakened.
-6. **Summarise** for the user (format below).
+6. **Wire CI** (optional, only when the user asks): hand the finished suite to the `automating-ci-test-pipelines` skill so the plan's CI notes become a real pipeline (suite per trigger, traces and report artifacts, CI-only retries). Skip this step by default.
+7. **Summarise** for the user (format below).
 
 Pass the Handoff Packet template below in every delegation, together with the paths of the files the agent needs. Agents do not see each other's output unless you pass it on.
 
@@ -98,6 +99,7 @@ Every agent returns exactly this structure:
 - `handling-sensitive-test-data` - keeping real personal data and secrets out of fixtures, traces and CI logs
 - `stabilizing-flaky-tests` - when the test runner phase reports intermittent failures
 - `test-reports-and-artifacts` - wiring trace/video/screenshot evidence and merged reports into CI
+- `automating-ci-test-pipelines` - turning the plan's CI notes into a real pipeline when the user wants the suite in CI
 ---
 
 ## 🎨 Emoji in output
