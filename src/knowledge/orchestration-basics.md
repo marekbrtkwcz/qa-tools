@@ -2,7 +2,19 @@
 
 A small, readable example of multi-agent coordination: one orchestrator and three read-mostly helpers (Planner, Explorer, Analyst) for analysis, planning and documentation work. Start here to learn the pattern before adopting a larger pack.
 
-Pick this pack to understand a codebase, assess risks or tech debt, or produce a phased plan. It does not implement code. For a pipeline that also implements, reviews and commits, use [`plan-explore-review-commit`](../plan-explore-review-commit/); for test automation, use [`ui-api-automation`](../ui-api-automation/).
+Pick this pack to understand a codebase, assess risks or tech debt, or produce a phased plan. It does not implement code.
+
+## What this pack does not do
+
+- implement, review or commit code → [`plan-explore-review-commit`](../plan-explore-review-commit/)
+- automated UI + API test suites → [`ui-api-automation`](../ui-api-automation/) / [`ui-api-automation-minimal`](../ui-api-automation-minimal/)
+- authorized penetration testing → the `pentesting` bundle (charter gate first)
+- quality contracts, waivers, release readiness → the `quality-gates` bundle
+- accessibility, performance/load, security testing of a feature → the `non-functional-testing` bundle
+
+## Evidence and enforcement
+
+This pack's boundaries are pinned by the repo's eval suite (`evals/orchestration-basics.cases.jsonl` — activation routing plus a blocking no-implementation safety case) and by `scripts/lint-basics-pack.js` (run via `lint-all-packs.js` in `npm run check`), which keeps the Deliverable contracts, STOP gates and the no-code rule in place.
 
 ## Architecture
 
