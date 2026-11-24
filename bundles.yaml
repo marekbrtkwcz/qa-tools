@@ -8,8 +8,12 @@ qa-core:
   version: "0.3.0"
   skills:
     - bug-report
+    - checklist-based-testing
     - communicating-quality-findings
+    - compatibility-matrix-testing
     - create-test-plan
+    - defect-triage
+    - designing-smoke-and-sanity-suites
     - derive-test-cases-from-code
     - designing-functional-tests
     - designing-test-data
@@ -32,6 +36,7 @@ qa-core:
     - review-requirements
     - standardizing-test-records
     - test-management-integration
+    - test-estimation
     - test-plan-basic
     - testing-database-state
     - testing-documentation
