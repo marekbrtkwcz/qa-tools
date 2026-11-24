@@ -39,6 +39,14 @@ See the plugin README: pick **QA Orchestrator** in Copilot's agent dropdown, run
 
 Every subagent returns the same **Handoff Packet**: objective, inputs used, findings, decisions/assumptions, artifacts produced, gaps/TODO, risks, recommended next action. The orchestrator passes the template in each delegation and merges the packets into the final summary.
 
+## What this pack does not do
+
+Functional UI + API automation only. When the goal is one of these, leave the pack and use the `non-functional-testing` bundle instead:
+
+- visual regression (`running-visual-regression-tests`) - screenshot baselines, not behaviour assertions
+- performance and load (`testing-performance-and-load`) - latency and throughput numbers, not request/response correctness
+- application security (`testing-application-security`) - authorized security checks within a tester scope; an authorized engagement belongs to the `pentesting` bundle, not here
+
 ## Handing off to the operational skills
 
 The pack gets you to an implemented, reviewed, run suite; deeper failure work belongs to sibling skills by name (install their bundle the same way this plugin was installed, or keep the reference in the handoff packet):
