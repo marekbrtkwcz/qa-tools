@@ -1,6 +1,6 @@
 ---
 name: a11y-webpage-audit
-description: Audits one webpage for accessibility, maps each issue to WCAG 2.1/2.2 AA, and gives reproduction steps, fixes, and retest steps. Use when a single page, component, or pull-request preview needs a quick accessibility check before merge or release. For multi-page journeys, template sampling, or stakeholder-ready reporting, use the a11y-audit-deep-dive command.
+description: Audits one webpage for accessibility, maps each issue to WCAG 2.1/2.2 AA, and gives reproduction steps, fixes, and retest steps. Use when a single page, component, or pull-request preview needs a quick accessibility check before merge or release. For multi-page journeys, template sampling, or stakeholder-ready reporting, use the a11y-audit-deep-dive command. For the full flow audit with axe-core plus manual keyboard/screen-reader passes, use auditing-accessibility.
 argument-hint: "[url]"
 disable-model-invocation: true
 ---

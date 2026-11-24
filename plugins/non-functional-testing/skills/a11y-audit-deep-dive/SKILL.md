@@ -1,6 +1,6 @@
 ---
 name: a11y-audit-deep-dive
-description: Runs a structured accessibility audit of a page, a sampled set of templates, or a user journey, with findings mapped to WCAG 2.2 criteria, manual retest guidance, and technical or stakeholder-ready output. Use when a release, compliance review, or redesign needs more than a scanner pass, or when keyboard, focus, and dynamic-state behaviour across a flow must be checked. For a quick check of one URL, use the a11y-webpage-audit command.
+description: Runs a structured accessibility audit of a page, a sampled set of templates, or a user journey, with findings mapped to WCAG 2.2 criteria, manual retest guidance, and technical or stakeholder-ready output. Use when a release, compliance review, or redesign needs more than a scanner pass, or when keyboard, focus, and dynamic-state behaviour across a flow must be checked. For a quick check of one URL, use the a11y-webpage-audit command. For the full stakeholder-ready flow audit with axe-core plus manual passes, use auditing-accessibility.
 disable-model-invocation: true
 ---
 

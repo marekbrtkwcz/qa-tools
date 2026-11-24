@@ -1,6 +1,6 @@
 ---
 name: auditing-accessibility
-description: 'Performs webpage and user-flow accessibility audits against WCAG 2.2: an automated axe-core pass, manual keyboard, screen-reader and visual checks, findings mapped to exact success criteria, prioritized remediation, and stakeholder-ready summaries. Use when auditing accessibility on a URL or flow, triaging suspected a11y issues, or producing technical findings with practical next steps. For a sign-off record of a pass already done, use attesting-manual-verification.'
+description: 'Performs webpage and user-flow accessibility audits against WCAG 2.2: an automated axe-core pass, manual keyboard, screen-reader and visual checks, findings mapped to exact success criteria, prioritized remediation, and stakeholder-ready summaries. Use when auditing accessibility on a URL or flow, triaging suspected a11y issues, or producing technical findings with practical next steps. For a sign-off record of a pass already done, use attesting-manual-verification. For a quick single-URL check use a11y-webpage-audit; for a deep multi-page journey or release audit use a11y-audit-deep-dive; for native mobile apps use auditing-mobile-accessibility.'
 argument-hint: 'URL or flow, scope mode, auth context if needed, and whether you want quick triage or a full audit'
 user-invocable: true
 ---
