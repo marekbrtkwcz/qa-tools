@@ -12,6 +12,8 @@ Wszystkie istotne zmiany tego projektu są dokumentowane tutaj. Format zbliżony
 
 - **`pentest-report`: współdzielony szablon findingu** — nowy `resources/finding-template.md`: kontrakt jednego rekordu (ID `PENT-<year>-<seq>`, klasa, severity CVSS + impact, confidence, zredagowany evidence, repro, remediation z checkable acceptance criteria, flagi retestu/smoke, status). Wszystkie executory bundla piszą recordy w tym formacie, `pentest-report` je konsumuje, `pentest-retest-verification` odtwarza po ID — oba skille dostały referencję do szablonu.
 
+- **`pentesting`: rozszerzone example prompts** — `pentest-recon-attack-surface`, `pentest-web-application` i `pentest-api` dostały po 2 dodatkowe przykłady wywołania (out-of-scope jako note, dwa vantage pointy; SSO callback i file upload; GraphQL BOLA i weryfikacja podpisu webhooka).
+
 ## [0.6.0] - 2026-11-24
 
 Rozszerzenie bundle `pentesting` o domknięcie pętli po raporcie (weryfikacja napraw na fixed buildzie), warianty raportu per odbiorca i pre-autoryzowane laby — oraz o warstwę sieci/infrastruktury jako trzeci executor obok web-app i API. Paczka 5→**7** skilli, kolekcja 166→**168** (widocznych dla modelu 123→**125**).
