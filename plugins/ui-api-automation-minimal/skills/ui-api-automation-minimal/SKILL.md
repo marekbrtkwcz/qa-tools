@@ -33,7 +33,8 @@ Ask the user for whatever is missing:
 
 - scope: UI tests, API tests, or both (skip the other side's exploration when only one is wanted);
 - for UI: the URL of a running app in a test environment, plus test credentials if login is needed;
-- for API: the OpenAPI spec as a file path or URL, plus how to authenticate.
+- for API: the OpenAPI spec as a file path or URL, plus how to authenticate;
+- the target environment. Never point the pack at production.
 
 ## Workflow
 

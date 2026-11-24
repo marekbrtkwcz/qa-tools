@@ -13,10 +13,10 @@
   },
   "scripts": {
     "build": "node scripts/build.js",
-    "check": "node scripts/build.js --check && node scripts/lint-pentest-charter.js",
+    "check": "node scripts/build.js --check && node scripts/lint-pentest-charter.js && node scripts/lint-uiapi-pack.js",
     "verify": "node scripts/build.js --verify",
     "validate-manifests": "node scripts/validate-manifests.js",
-    "lint": "biome check scripts && node scripts/lint-pentest-charter.js",
+    "lint": "biome check scripts && node scripts/lint-pentest-charter.js && node scripts/lint-uiapi-pack.js",
     "test": "node --test scripts/build.test.js scripts/assets/test-file-guard.test.js scripts/assets/red-test-deletion-guard.test.js",
     "ci": "npm run check && npm run validate-manifests && npm run lint && npm run verify && npm test"
   },
