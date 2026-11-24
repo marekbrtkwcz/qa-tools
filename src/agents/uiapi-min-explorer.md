@@ -17,6 +17,8 @@ You explore one side of the application, the one named in your task: the OpenAPI
 
 Report only what you saw in the spec, the code or the browser. Take a fresh UI snapshot after every navigation; older element references go stale. If the app or spec cannot be reached, stop and say so under Gaps / TODO.
 
+Never write tokens, cookies, passwords or personal data you observe (in responses, headers, the browser session) into the summary file — describe that a credential exists and where it comes from, never its value.
+
 ## Deliverable
 
 Write `.ai-outputs/<api|ui>-summary-<YYYYMMDD-HHmm>.md` with the points above.

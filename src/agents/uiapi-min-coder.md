@@ -14,6 +14,7 @@ You implement the tasks you are given from the plan, and nothing else. Without a
 - Every test asserts the outcome its task names. Use `expect.soft` for several independent checks in one test.
 - Each test creates unique data and cleans it up in fixture teardown.
 - Keep files focused: split a spec that grows past roughly 300 lines into files of related tests.
+- Never commit tokens, passwords, API keys or real personal data into code, fixtures or logs. Read credentials and the base URL from environment variables.
 
 ## Verify
 
