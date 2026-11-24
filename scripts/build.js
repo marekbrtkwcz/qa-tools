@@ -429,6 +429,118 @@ function checkVersionQuoting(bundlesFile = path.join(ROOT, 'bundles.yaml')) {
   return errors;
 }
 
+/**
+ * README count gate. The audit (INF-1) predicted that the README bundle
+ * table and the totals drift with every added skill - and they did,
+ * twice (104->108 documented, then 115 while the collection was at
+ * 160). This turns that drift into a build failure instead of a stale
+ * README: for every bundle in bundles.yaml, the table row must carry
+ * exactly the declared counts (skills/agents/knowledge; "—" when the
+ * bundle declares none, every named hook otherwise), the "Razem:" line
+ * must carry the collection totals, and the model-visible line must
+ * carry total minus the frontmatter `disable-model-invocation: true`
+ * skills. Wording around the numbers stays free, so the table can
+ * remain human. Runs in every mode (check/build/verify) like
+ * checkMembership.
+ */
+function checkReadmeCounts(bundles, docRoot = ROOT, srcRoot = SRC) {
+  const errors = [];
+  let readme = '';
+  try {
+    readme = fs.readFileSync(path.join(docRoot, 'README.md'), 'utf8');
+  } catch {
+    return ['README.md is missing, so the bundle table and the totals cannot be verified against bundles.yaml'];
+  }
+  const lines = readme.split(/\r?\n/);
+  const sum = (key) => Object.values(bundles).reduce((n, b) => n + (b[key] || []).length, 0);
+  const totalSkills = sum('skills');
+
+  // Bundle table: | `name` icon | skills | agents | knowledge | hooks | scope |
+  for (const [name, bundle] of Object.entries(bundles)) {
+    const row = lines.find((l) => l.startsWith(`| \`${name}\``));
+    if (!row) {
+      errors.push(`README: no table row for bundle "${name}" - expected "| \`${name}\` …"`);
+      continue;
+    }
+    const cells = row.split('|').map((c) => c.trim());
+    const expected = [
+      ['skills', 2],
+      ['agents', 3],
+      ['knowledge', 4],
+    ];
+    for (const [key, cellIdx] of expected) {
+      const declared = (bundle[key] || []).length;
+      const cell = cells[cellIdx] || '';
+      if (declared ? cell !== String(declared) : cell !== '—') {
+        errors.push(
+          `README: table row for "${name}" says ${cell === '—' ? '"—"' : `"${cell}"`} in the ${key} column, but bundles.yaml declares ${declared}; keep the table numbers equal to bundles.yaml (this gate exists because they drifted before)`,
+        );
+      }
+    }
+    const hookCell = cells[5] || '';
+    const hooks = bundle.hooks || [];
+    if (!hooks.length) {
+      if (hookCell !== '—') {
+        errors.push(
+          `README: table row for "${name}" names hooks ("${hookCell}") while bundles.yaml declares none - write "—"`,
+        );
+      }
+    } else {
+      for (const hook of hooks) {
+        if (!hookCell.includes(hook)) {
+          errors.push(`README: table row for "${name}" does not name the declared hook "${hook}" in the Hook column`);
+        }
+      }
+    }
+  }
+
+  // "Razem:" totals line: plugins, skills, agents, knowledge, hooks.
+  const razem = lines.find((l) => l.startsWith('Razem:'));
+  if (!razem) {
+    errors.push('README: missing "Razem: **N pluginów**, …" totals line to compare against bundles.yaml');
+  } else {
+    const totals = [
+      [Object.keys(bundles).length, 'pluginów'],
+      [totalSkills, 'skilli'],
+      [sum('agents'), 'subagentów'],
+      [sum('knowledge'), 'knowledge'],
+      [sum('hooks'), 'quality-gate hooki'],
+    ];
+    for (const [count, label] of totals) {
+      if (!razem.includes(`**${count} ${label}**`)) {
+        errors.push(
+          `README: the "Razem:" line does not say "**${count} ${label}**" - that is what bundles.yaml declares`,
+        );
+      }
+    }
+  }
+
+  // Model-visible line: total minus skills disabled for model invocation.
+  let disabled = 0;
+  for (const bundle of Object.values(bundles)) {
+    for (const skill of bundle.skills || []) {
+      const text = readIfExists(path.join(srcRoot, 'skills', skill, 'SKILL.md'));
+      if (text && /^disable-model-invocation:\s*true\s*$/m.test(text)) disabled += 1;
+    }
+  }
+  const visible = totalSkills - disabled;
+  const visibleLine = readme.match(/(\d+) skilli widocznych dla modelu \((\d+)\s*[−-]\s*(\d+)/);
+  if (!visibleLine) {
+    errors.push(
+      `README: missing "N skilli widocznych dla modelu (X − D z \`disable-model-invocation: true\`; …)" line - expected ${visible} visible (${totalSkills} − ${disabled})`,
+    );
+  } else if (
+    Number(visibleLine[1]) !== visible ||
+    Number(visibleLine[2]) !== totalSkills ||
+    Number(visibleLine[3]) !== disabled
+  ) {
+    errors.push(
+      `README: visible-skills line says ${visibleLine[1]} (${visibleLine[2]} − ${visibleLine[3]}), but the frontmatters give ${visible} (${totalSkills} − ${disabled} with \`disable-model-invocation: true\`)`,
+    );
+  }
+  return errors;
+}
+
 function checkMembership(bundles, srcRoot = SRC) {
   const errors = [];
   const kinds = [
@@ -938,6 +1050,7 @@ function main() {
   let allErrors = checkMembership(bundles);
   allErrors = allErrors.concat(checkGlobalBinaryInstallDoc());
   allErrors = allErrors.concat(checkVersionQuoting());
+  allErrors = allErrors.concat(checkReadmeCounts(bundles));
   const fm = validateFrontmatter(bundles);
   allErrors = allErrors.concat(fm.errors);
   if (fm.warnings.length) {
@@ -1018,6 +1131,7 @@ module.exports = {
   checkMembership,
   checkGlobalBinaryInstallDoc,
   checkVersionQuoting,
+  checkReadmeCounts,
   validateFrontmatter,
   orphanPluginDirs,
   swapStagedBundles,

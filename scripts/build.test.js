@@ -32,6 +32,7 @@ const {
   checkMembership,
   checkGlobalBinaryInstallDoc,
   checkVersionQuoting,
+  checkReadmeCounts,
   validateFrontmatter,
   orphanPluginDirs,
   swapStagedBundles,
@@ -805,4 +806,119 @@ test('checkRelease CLI: the real repo passes for its current version tag', () =>
   });
   assert.equal(r.status, 0, r.stderr);
   assert.ok(r.stdout.includes('Release gate OK'));
+});
+
+/* ---------- checkReadmeCounts (README table/totals gate) ---------- */
+
+test('checkReadmeCounts: the real README matches bundles.yaml (table, Razem, visible line)', () => {
+  // The audit (INF-1) predicted the README counts drift with every added
+  // skill - and they did, twice (115 documented while the collection was
+  // at 160). The gate compares the README bundle table, the "Razem:" line
+  // and the model-visible line straight against bundles.yaml and the
+  // src/skills frontmatters, so the drift fails the build instead.
+  const real = parseBundles(path.join(REPO_ROOT, 'bundles.yaml'));
+  assert.deepEqual(
+    checkReadmeCounts(real, REPO_ROOT, path.join(REPO_ROOT, 'src')),
+    [],
+    'the real README must carry the counts bundles.yaml declares',
+  );
+});
+
+test('checkReadmeCounts: missing README, stale table rows, wrong totals and wrong visible line are reported', () => {
+  const dir = tmpDir();
+  // one model-disabled skill, one regular skill
+  fs.mkdirSync(path.join(dir, 'skills', 'one'), { recursive: true });
+  fs.writeFileSync(
+    path.join(dir, 'skills', 'one', 'SKILL.md'),
+    '---\nname: one\ndescription: First skill.\ndisable-model-invocation: true\n---\nBody.\n',
+  );
+  fs.mkdirSync(path.join(dir, 'skills', 'two'), { recursive: true });
+  fs.writeFileSync(
+    path.join(dir, 'skills', 'two', 'SKILL.md'),
+    '---\nname: two\ndescription: Second skill.\n---\nBody.\n',
+  );
+  const bundles = {
+    alpha: { skills: ['one', 'two'], agents: ['a1'], knowledge: [], hooks: ['guard-one'] },
+    mcp: { skills: [], agents: [], knowledge: [], hooks: [] },
+  };
+
+  // no README: one error, no crash
+  const missing = checkReadmeCounts(bundles, dir, dir);
+  assert.equal(missing.length, 1);
+  assert.ok(missing[0].includes('README.md is missing'), missing[0]);
+
+  const staleReadme = [
+    '| Plugin | Skille | Agenci | Knowledge | Hook | Zakres |',
+    '|---|---|---|---|---|---|',
+    '| `alpha` 🧭 | 1 | 2 | — | — | scope |',
+    // no `mcp` row: reported as a missing table row
+    '',
+    'Razem: **1 pluginów**, **3 skilli**, **0 subagentów**, **5 knowledge**, **0 quality-gate hooki**.',
+    '',
+    '- 2 skilli widocznych dla modelu (3 − 1 z `disable-model-invocation: true`; policzone z frontmatterów)',
+  ].join('\n');
+  fs.writeFileSync(path.join(dir, 'README.md'), staleReadme);
+  const stale = checkReadmeCounts(bundles, dir, dir);
+  assert.ok(
+    stale.some((e) => e.startsWith('README: no table row for bundle "mcp"')),
+    stale.join('\n'),
+  );
+  assert.ok(
+    stale.some((e) => e.includes('"1" in the skills column') && e.includes('declares 2')),
+    'stale skills count reported with both numbers',
+    stale.join('\n'),
+  );
+  assert.ok(
+    stale.some((e) => e.includes('"2" in the agents column') && e.includes('declares 1')),
+    'stale agents count reported',
+    stale.join('\n'),
+  );
+  assert.ok(
+    stale.some((e) => e.includes('does not name the declared hook "guard-one"')),
+    'a missing hook name in the Hook column is reported',
+    stale.join('\n'),
+  );
+  for (const [count, label] of [
+    [2, 'pluginów'],
+    [2, 'skilli'],
+    [1, 'subagentów'],
+    [1, 'quality-gate hooki'],
+  ]) {
+    assert.ok(
+      stale.some((e) => e.includes(`**${count} ${label}**`)),
+      `the Razem line must be pushed toward "**${count} ${label}**"`,
+    );
+  }
+  assert.ok(
+    stale.some((e) => e.includes('visible-skills line says 2 (3 − 1)') && e.includes('give 1 (2 − 1 with')),
+    'the visible line is compared against the frontmatters, not just itself',
+    stale.join('\n'),
+  );
+
+  // a README that merely names hooks where the bundle declares none fails too
+  const pretender = [
+    '| Plugin | Skille | Agenci | Knowledge | Hook | Zakres |',
+    '|---|---|---|---|---|---|',
+    '| `alpha` 🧭 | 2 | 1 | — | ✅ guard-one | scope |',
+    '| `mcp` 🎭 | — | — | — | ✅ ghost-hook | mcp |',
+    '',
+    'Razem: **2 pluginów**, **2 skilli**, **1 subagentów**, **0 knowledge**, **1 quality-gate hooki**.',
+    '',
+    '- 1 skilli widocznych dla modelu (2 − 1 z `disable-model-invocation: true`; policzone z frontmatterów `src/skills`)',
+  ].join('\n');
+  fs.writeFileSync(path.join(dir, 'README.md'), pretender);
+  const ghost = checkReadmeCounts(bundles, dir, dir);
+  assert.ok(
+    ghost.some((e) => e.includes('"mcp" names hooks') && e.includes('ghost-hook')),
+    'a hooks column naming hooks the bundle does not declare is reported',
+    ghost.join('\n'),
+  );
+
+  // a fully matching table passes: counts, "—" columns, Razem and visible line
+  const good = pretender.replace(
+    '| `mcp` 🎭 | — | — | — | ✅ ghost-hook | mcp |',
+    '| `mcp` 🎭 | — | — | — | — | mcp |',
+  );
+  fs.writeFileSync(path.join(dir, 'README.md'), good);
+  assert.deepEqual(checkReadmeCounts(bundles, dir, dir), [], 'matching README passes');
 });
