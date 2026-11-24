@@ -178,6 +178,7 @@ pentesting:
     - pentest-retest-verification
     - pentest-rules-of-engagement
     - pentest-web-application
+    - pentest-business-logic
   agents:
     - pentest-expert
   knowledge:
