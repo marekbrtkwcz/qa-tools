@@ -2,7 +2,7 @@
 
 Wszystkie istotne zmiany tego projektu są dokumentowane tutaj. Format zbliżony do [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); wydanie kolekcji = tag `vx.y.z` na historii gita. Wersje per-bundle w `bundles.yaml` są podbijane w tym samym wydaniu (`node scripts/build.js --set-version x.y.z`), więc `plugin.json` każdego pluginu ma wersję kolekcji.
 
-## [Unreleased]
+## [0.7.0] - 2026-11-24
 
 ### ✅ Dodane
 

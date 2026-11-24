@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "plan-explore-review-commit",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Full delivery pipeline: planner and orchestrator drive architect, researcher, explorer, implementer, QA strategy, security, code review and docs subagents through small test-first phases, with a user-approved commit after each.",
   "author": {
     "name": "qa-tools contributors",

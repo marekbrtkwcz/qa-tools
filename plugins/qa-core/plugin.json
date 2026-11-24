@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "qa-core",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Test design, planning, exploratory testing, requirements traceability and bug reporting, packaged natively for Vibe CLI.",
   "author": {
     "name": "qa-tools contributors",
