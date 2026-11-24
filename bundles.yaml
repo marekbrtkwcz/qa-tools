@@ -156,10 +156,14 @@ ai-quality:
   version: "0.3.0"
   skills:
     - design-llm-eval-suite
+    - evaluating-rag-retrieval
+    - monitoring-llm-in-production
     - reviewing-ai-output-groundedness
     - test-llm-guardrails
     - testing-agent-skills
+    - testing-llm-cost-and-latency
     - testing-llm-features
+    - testing-multi-turn-conversations
     - testing-llm-guardrails
     - unslop-answers
   agents:
