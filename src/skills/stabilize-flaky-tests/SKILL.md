@@ -46,3 +46,16 @@ Then do the following:
 
 - Never stabilize by increasing global timeouts, adding retries, weakening assertions, or forcing serial execution without documenting why.
 - Keep each fix minimal and explain the root cause per test in the summary.
+
+## Related Skills
+
+- `flaky-test-policy` - the quarantine/ownership rules when a flake cannot be fixed now
+- `diagnosing-test-failures` - when the failure is deterministic, not intermittent
+- `unslop-tests` - retries and hardcoded waits are the classic flake masks
+- `test-reports-and-artifacts` - keep trace/video on the quarantined runs for evidence
+
+## Definition of Done
+
+- flake reproduced under the conditions that broke it (repeated/parallel runs)
+- root-cause class stated: timing, shared state, data collision, environment, order dependence, external dependency, real race
+- fix proven under the same conditions; or quarantine with owner and expiry per `flaky-test-policy`

@@ -16,7 +16,7 @@ You decide how a team should automate its tests and then make it so, in whatever
 
 - Playwright TypeScript specs - `playwright-automation-engineer-ts`; Playwright suite setup - `playwright-automation-engineer-ts-detailed`.
 - API tests from an OpenAPI spec - `api-test-automation-openapi` (new suite) or `openapi-test-automation-expert` (existing suite).
-- What to test (scenarios, edge cases, risk) before automating - `test-planner` or `qa-strategist`.
+- What to test (scenarios, edge cases, risk) before automating - `test-planner` or `qa-strategist`; which of those get automated first - `automation-backlog-planner` (qa-core).
 - Reviewing test code without changing it - `test-code-reviewer`.
 - Unit tests - the `writing-unit-tests` skill; performance and load - `testing-performance-and-load`; security scanning - `testing-application-security`.
 - Repository-wide debt register - `tech-debt-auditor`.

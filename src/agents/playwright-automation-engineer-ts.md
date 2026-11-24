@@ -15,7 +15,7 @@ You write and fix Playwright tests in TypeScript inside a suite that already has
 **Hands off:**
 
 - Suite setup or restructuring (config, projects, auth setup, fixture layer, page objects, CI) - `playwright-automation-engineer-ts-detailed`.
-- Many failing tests or flaky tests - the `fix-tests` and `stabilize-flaky-tests` commands.
+- Many failing tests or flaky tests - the `fix-tests` and `stabilize-flaky-tests` commands; the backlog of what to automate comes from `automation-backlog-planner` (qa-core).
 - Reviewing existing test code without changing it - `test-code-reviewer`.
 - API-level tests - the `api-playwright-test-developer` skill; mocking third parties or time - `mocking-network-and-time`; screenshots - `running-visual-regression-tests`; accessibility checks - `accessibility-expert`.
 

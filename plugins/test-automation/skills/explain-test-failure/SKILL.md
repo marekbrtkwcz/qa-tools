@@ -53,6 +53,18 @@ Return Markdown only, with:
 
 - Never edit files or "try a fix" - this is a diagnosis, not a repair.
 - Do not guess: separate confirmed facts from hypotheses explicitly.
+
+## Related Skills
+
+- `diagnosing-test-failures` - the full reproduction loop when classification alone is not enough
+- `fix-tests` - when the classification says test bug or app defect and a fix follows
+- `reporting-bugs` (qa-core) - when the classification is a confirmed app defect
+
+## Definition of Done
+
+- root-cause class stated (app defect / test bug / environment / flaky / test data)
+- evidence cited by file:line or quoted log/trace line
+- next step named (fix here, file a bug, quarantine)
 ---
 
 ## 🎨 Emoji in output

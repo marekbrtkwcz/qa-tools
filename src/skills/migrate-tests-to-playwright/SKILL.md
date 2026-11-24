@@ -44,3 +44,15 @@ Then do the following:
 - Do not delete source tests unless I explicitly ask; migration and cleanup are separate steps.
 - Report honestly which migrated tests were executed and which could not run in this environment.
 - Never use `waitForTimeout` as a translation of `cy.wait(ms)` or `sleep`, and never add retries to get a migrated test green.
+
+## Related Skills
+
+- `migrating-tests-to-playwright` - the full staged-migration skill with parity gates; use it for real migrations, this command for a quick start
+- `designing-test-automation-architecture` - layer placement decisions before translating files
+- `bootstrap-test-suite` - when the target repo has no Playwright setup yet
+
+## Definition of Done
+
+- translated tests preserve what each original test verified
+- parity shown: old and new run on the same build, same pass set
+- old files removed only after their slice passed parity

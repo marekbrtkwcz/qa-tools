@@ -55,6 +55,19 @@ Run the generated tests. For each failure, decide whether it is a test bug or an
 - Run tests only against environments you are authorized to use.
 - Never weaken assertions, add retries, raise timeouts, or skip tests to get a green run.
 - Report exactly which tests ran and passed. Never present unexecuted tests as verified.
+
+## Related Skills
+
+- `playwright-generate-test` - one scenario at a time, verified live in the browser first
+- `designing-functional-tests` (qa-core) - where the written plan file comes from
+- `automation-backlog-planner` (agent, qa-core) - deciding which plan cases get generated first
+- `bootstrap-test-suite` - when the repo has no test framework yet
+
+## Definition of Done
+
+- generated tests follow the repo's existing framework and conventions - no second runner or client introduced
+- tests were run and the result is quoted
+- coverage against the plan file is stated: which cases generated, which skipped and why
 ---
 
 ## 🎨 Emoji in output

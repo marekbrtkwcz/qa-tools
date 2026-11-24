@@ -41,6 +41,19 @@ If tests still fail after 3 fix iterations, stop and summarize what you found, w
 - Fix waits by replacing sleeps and hardcoded timeouts with condition-based waiting (web-first assertions, waiting for a specific response or state), not by tuning sleep durations.
 - If the failure indicates a defect in the application code and fixing it is outside the requested scope, stop and report the defect with evidence instead of changing the test to accept the broken behavior.
 - Keep each fix minimal and explain the root cause in your summary.
+
+## Related Skills
+
+- `diagnosing-test-failures` - the red-green reproduction loop per failure
+- `stabilizing-flaky-tests` - when failures are intermittent rather than deterministic
+- `unslop-tests` - review the fix for weakened assertions, retries used as fixes, swallowed errors
+- `reporting-bugs` (qa-core) - when the root cause is an app defect, file it instead of patching around it
+
+## Definition of Done
+
+- every failure in scope has a stated root cause
+- no assertion weakened, no retry or timeout raised as a fix, no app defect masked
+- the affected tests re-run green, output quoted
 ---
 
 ## 🎨 Emoji in output

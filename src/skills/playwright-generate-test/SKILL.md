@@ -54,3 +54,9 @@ If no scenario is provided, or it does not say what outcome to check, ask for it
 - `designing-functional-tests` (qa-core) - where the scenario to generate comes from: a designed, reviewable case, not an ad-hoc prompt
 - `automation-backlog-planner` (agent, qa-core) - decides whether this scenario belongs in the automated suite at all, and at what priority
 - `test-generator` - the batch form: generates a whole suite from a written plan file such as the approved scenario list
+
+## Definition of Done
+
+- the generated test was executed and is green, output quoted
+- assertions were not weakened to make it pass; no retries or raised timeouts added
+- the source scenario is stated (from which plan or exploration note)

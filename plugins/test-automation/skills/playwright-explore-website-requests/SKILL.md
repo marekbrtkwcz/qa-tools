@@ -63,6 +63,18 @@ End with the endpoints that look like the best candidates for API tests or for `
 - Do not replay, fuzz, or load-test the captured endpoints; this command only observes.
 - Redact secrets before writing: replace tokens, cookies, `Authorization` and `Set-Cookie` values, API keys, and personal data with `<redacted>`.
 - Stop after 5 flows, or earlier if the site blocks access, and list what you did not explore.
+
+## Related Skills
+
+- `playwright-explore-website` - the UI-side exploration without network recording
+- `api-test-plan-and-tests` (api-testing) - when the recorded requests should become an API test plan
+- `testing-webhooks` (api-testing) - when flows trigger webhook calls worth testing
+
+## Definition of Done
+
+- per flow: user actions, locators, and the requests/responses they trigger
+- auth pattern (headers, tokens, cookies) recorded
+- flows not explored are listed, not silently omitted
 ---
 
 ## 🎨 Emoji in output

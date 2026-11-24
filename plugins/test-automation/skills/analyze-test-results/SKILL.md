@@ -49,6 +49,18 @@ Return Markdown only, with:
 - Distinguish facts from hypotheses; never present a suspected cause as confirmed.
 - Do not modify tests or code - this is analysis only.
 - If the source cannot be read or parsed (truncated log, unknown format), say what is missing and ask for the raw report file instead of summarizing a fragment.
+
+## Related Skills
+
+- `diagnosing-test-failures` - when one cluster needs a deep single-failure diagnosis
+- `tracking-quality-trends` (quality-gates) - when the clusters should be archived as a trend point
+- `reporting-bugs` (qa-core) - when a cluster is a confirmed app defect to file
+
+## Definition of Done
+
+- raw output parsed into failure clusters with counts
+- each cluster has a likely root-cause group, flakiness suspects flagged separately
+- summary states what was analyzed and what remains unexplained
 ---
 
 ## 🎨 Emoji in output

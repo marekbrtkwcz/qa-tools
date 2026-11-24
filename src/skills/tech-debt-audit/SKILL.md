@@ -48,3 +48,16 @@ End with the findings grouped by when to fix them:
 - Cite a file and line for every finding, and only for code you opened.
 - Mark findings that depend on context you don't have (for example `ignoreHTTPSErrors` for a self-signed test environment) as "check" rather than as defects.
 - If the scope is a whole repository and the user wants a debt register with effort and ROI, stop and load the `tech-debt-analysis` skill instead (or suggest the tech-debt-auditor agent if that is preferred).
+
+## Related Skills
+
+- `tech-debt-analysis` (quality-gates) - the repo-wide debt register this audit feeds
+- `unslop-tests` - the anti-pattern checklist for test code specifically
+- `code-review-advanced` - when findings need a structured PR-level review
+- `governing-quality-waivers` (quality-gates) - accepted debt becomes a dated, owned waiver, not a silent skip
+
+## Definition of Done
+
+- every finding has file:line, severity, and a suggested fix
+- findings grouped into a prioritized register (fix now / schedule / waive)
+- anything consciously left is recorded as a waiver, not left silent

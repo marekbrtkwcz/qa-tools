@@ -73,6 +73,7 @@ test-automation:
     - ensuring-test-isolation
     - explain-test-failure
     - fix-tests
+    - flaky-test-policy
     - hybrid-ui-api-testing
     - implementing-bdd-tests
     - migrate-tests-to-playwright
@@ -88,6 +89,7 @@ test-automation:
     - refactoring-api-tests
     - running-visual-regression-tests
     - self-healing-locators
+    - selector-strategy
     - stabilize-flaky-tests
     - stabilizing-flaky-tests
     - static-code-analysis-typescript

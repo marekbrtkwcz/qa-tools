@@ -48,3 +48,15 @@ If no scope is provided, ask for it and stop until you have it. If the scope has
 - Do not change tested behaviour, add or remove assertions, move assertions into page objects, add waits, or change timeouts during the refactor.
 - If a test cannot be refactored cleanly, leave it working as it was and list it.
 - Do not delete old helpers until no spec in the scope uses them.
+
+## Related Skills
+
+- `writing-playwright-tests-best-practices` - the conventions the page objects should follow
+- `designing-test-automation-architecture` - when the refactor is really a re-layer decision (fixtures vs page objects vs screenplay)
+- `unslop-tests` - review pass after refactor: no tautological assertions introduced
+
+## Definition of Done
+
+- suite green before and after with the same pass set - no behavior changed
+- locators and actions extracted into page/component objects; specs read as intent
+- no duplicated locator left in specs

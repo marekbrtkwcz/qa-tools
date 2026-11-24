@@ -66,6 +66,18 @@ This command's whole output is observed behaviour from a live browser; without t
 - If the MCP tools are not callable (server not installed or not started), **stop and say so** - install this repo's `qa-mcp` bundle (it ships the pinned Playwright MCP server), or [microsoft/playwright-mcp](https://github.com/microsoft/playwright-mcp) directly, and re-run.
 - A write-up produced from the app's docs, a screenshot archive, or prior knowledge is **not** exploration - it may be offered as documentation review, clearly labelled, but it must not fill in the "observed behaviour" fields of the flow documents.
 - Same rule for a blocked site: an auth wall or a bot check is a finding (the flow could not be observed), not a reason to describe the flow from memory.
+
+## Related Skills
+
+- `playwright-explore-website-requests` - the same exploration recording network requests/responses per flow
+- `designing-functional-tests` (qa-core) - turning the proposed test cases into a structured plan
+- `playwright-generate-test` - generating the first test from one explored flow
+
+## Definition of Done
+
+- 3-5 core user flows documented with locators and observed behaviour
+- each flow has proposed test cases
+- exploration notes state what was NOT visited
 ---
 
 ## 🎨 Emoji in output
