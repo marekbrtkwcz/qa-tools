@@ -137,9 +137,13 @@ non-functional-testing:
     - a11y-audit-deep-dive
     - a11y-webpage-audit
     - auditing-accessibility
+    - auditing-mobile-accessibility
+    - disaster-recovery-testing
     - performance-reliability-plan
+    - privacy-compliance-audit
     - resilience-smoke-testing
     - security-regression-smoke
+    - soak-testing
     - testing-abuse-limits
     - testing-api-security
     - testing-application-security
