@@ -163,6 +163,8 @@ non-functional-testing:
     - testing-web-performance
   agents:
     - accessibility-expert
+  knowledge:
+    - non-functional-testing
 
 pentesting:
   icon: 🕵️
