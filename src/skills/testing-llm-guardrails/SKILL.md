@@ -1,6 +1,6 @@
 ---
 name: testing-llm-guardrails
-description: 'Tests the runtime validation around model output - schema conformance, PII leakage, moderation, refusal behaviour, tool-call safety - and the adversarial suite that tries to defeat it: direct prompt injection, jailbreaks, and indirect injection through retrieved documents, tool results and user content. Use when an LLM feature reaches real users, when a model can call tools or read untrusted content, when an AI feature needs a security-style test suite, or when asked whether a chatbot or agent can be manipulated.'
+description: 'Tests the runtime validation around model output - schema conformance, PII leakage, moderation, refusal behaviour, tool-call safety - and the adversarial suite that tries to defeat it: direct prompt injection, jailbreaks, and indirect injection through retrieved documents, tool results and user content. Use when an LLM feature reaches real users, when a model can call tools or read untrusted content, when an AI feature needs a security-style test suite, or when asked whether a chatbot or agent can be manipulated. For the trust-boundary map plus adversarial corpus across content channels, use test-llm-guardrails.'
 argument-hint: 'The LLM surface, its output contract, which tools it can call, what untrusted content it ingests, and written confirmation you are authorized to test it'
 user-invocable: true
 ---
