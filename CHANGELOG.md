@@ -2,6 +2,12 @@
 
 Wszystkie istotne zmiany tego projektu są dokumentowane tutaj. Format zbliżony do [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); wydanie kolekcji = tag `vx.y.z` na historii gita. Wersje per-bundle w `bundles.yaml` są podbijane w tym samym wydaniu (`node scripts/build.js --set-version x.y.z`), więc `plugin.json` każdego pluginu ma wersję kolekcji.
 
+## [Unreleased]
+
+### 🔄 Zmienione
+
+- **Rozszerzone słowniki emotek**: `src/shared/emoji-style.md` rozbudowany z **10 do 64 emotek** w **8 kategoriach** (Core Testing Status, Findings and Issues, Quality & Metrics, Process & Workflow, Automation & Infrastructure, Security & Compliance, Performance & Load, Orchestration and Agents). Każda kategoria zawiera 8–10 emotek z precyzyjnym znaczeniem, ułatwiając spójne oznaczanie statusów, znalezisk, procesów i artefaktów w całej kolekcji. Pełny słownik dostępny w pliku, automatycznie wstrzykiwany do wszystkich SKILL.md i instrukcji agentów. README zaktualizowane o podsumowanie nowych kategorii i reguły użycia.
+
 ## [0.7.0] - 2026-11-24
 
 ### ✅ Dodane

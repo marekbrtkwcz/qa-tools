@@ -148,15 +148,50 @@ Emotki w tej kolekcji **niosą znaczenie, nie ozdobę** — i są wpisane w proj
 - 📋 **generowane raporty** — skille QA użyją jej w nagłówkach, tabelach i statusach,
 - 📖 **dokumentacja** — poniższe słownictwo obowiązuje też w README.
 
-Słownictwo (pełne w `src/shared/emoji-style.md`): ✅ passed · ❌ failed/defekt · ⚠️ ryzyko · 🚧 blocked · 🚢 release go · ⛔ no-go · 🐛 bug · 📊 metryki · 🔍 luka · 🧪 test.
+### Słownictwo (pełne w `src/shared/emoji-style.md`)
 
-Zasady: jedna emotka na nagłówek/komórkę statusu, **nigdy** w nazwach testów, identyfikatorach kodu, plikach, commitach i branchach.
+Słownik podzielony jest na **8 kategorii** (Core Status, Findings, Quality & Metrics, Process & Workflow, Automation & Infra, Security & Compliance, Performance & Load, Orchestration), po **8–10 emotek każda** — razem **64 unikalne znaczenia**.
 
-Słownictwo obowiązuje też w dokumentach i narzędziach repo: nagłówki kategorii CHANGELOG (`✅ Dodane`, `🔄 Zmienione`, `🐛 Naprawione`), roadmapa (✅ zrobione / 🔍 luka) i statusy konsoli builda (`✅` sukces, `⚠️` warning, `❌` błąd — słowa kluczowe `OK`/`WARN`/`ERROR` zostają, bo po nie się klika w logu).
+| Kategoria | Emoji | Znaczenie |
+|---|---|---|
+| Core Status | ✅ | passed / verified / done |
+| | ❌ | failed / confirmed defect |
+| | ⚠️ | risk / warning / needs attention |
+| | 🚧 | blocked / in progress |
+| | 🧪 | test / under test |
+| | ⏳ | waiting / pending |
+| | ➡️ | skipped / not applicable |
+| | 🔄 | rerun / retry |
+| Findings | 🐛 | defect / bug / issue |
+| | 🔍 | gap / missing coverage |
+| | 🎲 | flaky / non-deterministic |
+| | 🔙 | regression / broken |
+| | 💳 | technical debt |
+| | 🚨 | critical / high priority |
+| Quality | 📊 | metrics / measurement |
+| | 📈 | improvement / trend up |
+| | 📉 | degradation / trend down |
+| | 🔬 | analysis / deep dive |
+| | 📋 | checklist / requirements |
+| | 📖 | documentation |
+| | 🎯 | target / goal |
+| | 📌 | pinned / tracked |
 
-Ikonki bundli z `bundles.yaml` (`icon:`) są buildem podłączane tam, gdzie schemat na to pozwala: do `displayName` pluginu (np. `qa-core 🧭 (qa-tools)`) i `display_name` każdego subagenta (np. `Test Planner 🧭`). ⚠️ Identyfikatory (`name`, `config_name`, ścieżki) i `name` w frontmatter pozostają bez emotek — to wymóg walidacji builda i schematu Vibe (Agent Plugins 1.0 nie definiuje top-level `icon` w manifeście; Vibe go ignoruje z ostrzeżeniem).
+Zobacz pełną listę w `src/shared/emoji-style.md`.
 
-Zmiana konwencji = edycja `src/shared/emoji-style.md` + `node scripts/build.js`. 🚫 nie edytuj wygenerowanych `plugins/` ręcznie.
+### Zasady i przykłady użycia
+
+- **Jedna emotka na nagłówek/komórkę statusu**, nigdy dwie pod rząd, nigdy w środku zdania.
+- Emotki należą **tylko do treści i artefaktów** — nigdy w kodzie, nazwach testów, plikach, commitach, branchach.
+- Emotka **musí wskazywać jednoznaczne znaczenie** — jeśli czytelnik musi zadać pytanie, użyj słowa.
+- **Przykład w tabeli**: `✅ Login API`, `🚧 Checkout flow`, `❌ Payment integration`, `♿ Accessibility audit`.
+
+Słownictwo obowiązuje też w dokumentach repo: nagłówki CHANGELOG (`✅ Dodane`, `🔄 Zmienione`, `🐛 Naprawione`), roadmapa (✅ zrobione / 🔍 luka) i statusy konsoli builda (`✅` sukces, `⚠️` warning, `❌` błąd).
+
+Ikonki bundli z `bundles.yaml` (`icon:`) są buildem podłączane tam, gdzie schemat na to pozwala: do `displayName` pluginu (np. `qa-core 🧭`) i `display_name` każdego subagenta (np. `Test Planner 🧭`). ⚠️ **Identyfikatory** (`name`, `config_name`, ścieżki) i `name` w frontmatter **pozostają bez emotek** — to wymóg walidacji builda i schematu Vibe.
+
+> **Zmiana konwencji** = edycja `src/shared/emoji-style.md` + `node scripts/build.js`.
+> 🚫 **Nie edytuj** wygenerowanych `plugins/` ręcznie.
 
 ## 🔄 Konwersja formatów (Vibe ⚠ inne niż Claude/Copilot/Codex)
 
