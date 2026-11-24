@@ -62,6 +62,10 @@ The one that matters most for AI-assisted teams: **intent debt is the debt an ag
 
 Every waiver moves through one path: **issued** (reason, owner, expiry date) → **expiring** (approaching its date, surfaced in trend reports) → **expired** (reported as a finding, never a standing exception). `assessing-release-readiness` treats an expired waiver on a release-scope practice as an automatic not-met criterion.
 
+## Evidence and enforcement
+
+This bundle's own behaviour is pinned by the repo's eval suite (`evals/quality-gates.cases.jsonl` — activation, pair-collision and blocking safety cases for expired waivers) and by a structural lint (`scripts/lint-quality-gates.js`, wired into `npm run check`), which keeps the NO-GO conditions, the waiver expiry/owner requirement and the one-command/full skill cross-links in place. When the delivery pack `plan-explore-review-commit` reaches its Quality Gates phase, it hands off to this bundle by name.
+
 ## What this bundle does not do
 
 - functional test design or test automation - that is the `qa-core` / `test-automation` / `ui-api-automation` bundles
