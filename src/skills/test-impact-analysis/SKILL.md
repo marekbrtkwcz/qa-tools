@@ -1,0 +1,46 @@
+---
+name: test-impact-analysis
+description: "Decides which tests to run for a given change using coverage data: maps changed code to the tests that execute it (diff coverage / static call graph), producing a minimal confidence set instead of running the whole suite. Use when the full suite is too slow for the PR gate, when total coverage looks healthy but the diff is untested, or when scoping a smoke run after a hotfix. For tag-based change classification see scoping-change-relevance."
+argument-hint: "The diff or PR to analyze, the coverage data format available (LCOV/Cobertura), and the suite runtime budget"
+user-invocable: true
+---
+
+# Test Impact Analysis
+
+Running everything on every commit is the reason suites get bypassed. This skill computes the minimal set of tests that can actually catch a regression in the given diff, from coverage data - not from vibes.
+
+## Operating Principles
+
+- **Impact comes from execution, not from file proximity.** A test that never executes the changed lines cannot catch the change; a file-level guess over-runs.
+- **Uncovered changed lines are the finding.** If the diff's risky lines have no executing test, that is a BLOCK, not a smaller test set.
+- **Coverage data must be fresh.** Stale LCOV from last release maps the wrong lines; regenerate or state the age.
+- **The impact set is a floor, not a ceiling.** CI can add the full suite nightly; the PR gate runs the impact set plus the always-run smoke.
+
+## Workflow
+
+1. **Get the diff** (`git diff main...HEAD`) and extract changed line ranges per file.
+2. **Get coverage data** (LCOV/Cobertura from the last full run) and map each changed line to executing tests. Tools: `danger` + coverage, `jest --findRelatedTests`, `pytest --lf` with coverage, or a small script over the LCOV.
+3. **Classify:** changed lines covered -> their tests are the impact set; changed lines uncovered -> list them as gaps; test-only changes -> run those tests.
+4. **Combine with risk tags** from `scoping-change-relevance` (new endpoint, auth change, migration => add the matching smoke/regression set even if coverage is thin).
+5. **Report:** impact set size, estimated runtime vs budget, uncovered risky lines (BLOCK candidates), and what the nightly full run still covers.
+
+## Red Flags
+
+- "the diff touches auth, run everything" - run the auth suite plus impact set, not the world
+- impact set computed from coverage older than the last merge to main
+- a green impact-set run presented as "the change is safe" while risky lines were uncovered
+- PR gate time creeping up because the impact set silently became the full suite
+
+## Related Skills
+
+- `verifying-change-coverage` - the diff-coverage gate that escalates uncovered high-risk changes
+- `scoping-change-relevance` - tag-based classification that complements execution-based impact
+- `automating-ci-test-pipelines` - wiring the impact set as the PR job and full suite as nightly
+- `analyzing-regression-scope` - blast-radius reasoning for what to retest first
+
+## Definition of Done
+
+- impact set computed from current coverage data, with the data's age stated
+- every changed risky line is either covered by a listed test or listed as a gap
+- PR gate runs impact set + smoke within the stated runtime budget
+- nightly full suite still scheduled and green

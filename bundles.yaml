@@ -153,6 +153,7 @@ non-functional-testing:
     - a11y-webpage-audit
     - auditing-accessibility
     - auditing-mobile-accessibility
+    - data-pipeline-testing
     - disaster-recovery-testing
     - performance-reliability-plan
     - privacy-compliance-audit
@@ -165,6 +166,7 @@ non-functional-testing:
     - testing-database-performance
     - testing-mfa-and-credentials
     - testing-oauth2-oidc
+    - testing-observability
     - testing-performance-and-load
     - testing-session-management
     - testing-web-performance
@@ -186,6 +188,7 @@ pentesting:
     - pentest-report
     - pentest-retest-verification
     - pentest-rules-of-engagement
+    - pentest-secrets-and-credentials
     - pentest-web-application
     - pentest-business-logic
   agents:
@@ -231,9 +234,11 @@ quality-gates:
     - governing-quality-waivers
     - record-change-intent
     - recording-change-intent
+    - release-notes-from-diff
     - scope-change-gate
     - scoping-change-relevance
     - tech-debt-analysis
+    - test-impact-analysis
     - tracking-quality-trends
     - verifying-change-coverage
   agents:

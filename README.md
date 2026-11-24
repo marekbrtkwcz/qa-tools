@@ -11,10 +11,10 @@ Repozytorium inspirowane ideą i strukturą projektu **[awesome-agents-for-quali
 | `qa-core` 🧭 | 38 | 5 | 1 | — | planowanie testów, eksploracja, bug reporty, RTM, kryteria akceptacji, integracja trackerów (Xray/TestRail/Jira), manualny release pass (instalacja/upgrade/rollback), usability quick-pass, testowanie dokumentacji, standard zapisu rekordów testowych |
 | `test-automation` 🤖 | 50 | 5 | 1 | ✅ test-file-guard, red-test-deletion-guard | unit testy, TDD, Playwright, mocki, flakiness, review, bootstrap suity, raporty/artefakty CI, mutacja (Stryker), portowanie na pytest/JUnit/NUnit |
 | `api-testing` 🔌 | 12 | 2 | 1 | — | automatyzacja API (Playwright), contract testing: schema/OpenAPI (L25) + Pact (consumer-driven) |
-| `non-functional-testing` ⚡ | 19 | 1 | 1 | — | accessibility, performance/load, security: macierz authz + IDOR, security regression smoke po zmianach auth, limity/lockouty (abuse), API security checklist |
-| `pentesting` 🕵️ | 10 | 1 | 1 | — | pentest web + API + warstwa sieci/infra na autoryzowanych targetach: rules of engagement (charter + gate autoryzacji + pre-autoryzowane laby), recon i mapa powierzchni ataku, testy klas OWASP Top 10 (access control, injection, auth/session, XSS/CSRF, SSRF), triage eksponowanych usług, słabości TLS i konfiguracji cloud/IaC, raport CVSS z wariantami per odbiorca i retest planem, weryfikacja napraw na fixed buildzie |
+| `non-functional-testing` ⚡ | 21 | 1 | 1 | — | accessibility, performance/load, security: macierz authz + IDOR, security regression smoke po zmianach auth, limity/lockouty (abuse), API security checklist |
+| `pentesting` 🕵️ | 11 | 1 | 1 | — | pentest web + API + warstwa sieci/infra na autoryzowanych targetach: rules of engagement (charter + gate autoryzacji + pre-autoryzowane laby), recon i mapa powierzchni ataku, testy klas OWASP Top 10 (access control, injection, auth/session, XSS/CSRF, SSRF), triage eksponowanych usług, słabości TLS i konfiguracji cloud/IaC, raport CVSS z wariantami per odbiorca i retest planem, weryfikacja napraw na fixed buildzie |
 | `ai-quality` 🧠 | 11 | 1 | 1 | — | testowanie funkcji LLM, guardrails, groundedness |
-| `quality-gates` 🚦 | 17 | 4 | 1 | — | quality contracts, change gates, release readiness |
+| `quality-gates` 🚦 | 19 | 4 | 1 | — | quality contracts, change gates, release readiness |
 | `authoring` 🛠️ | 10 | 1 | — | — | tworzenie skilli/agentów/pluginów/hooków |
 | `qa-mcp` 🎭 | — | — | — | — | serwery **Playwright MCP + Chrome DevTools MCP** (browser) i **k6 MCP** (testy obciążeniowe; globalne binarne, pływające wersje); instaluj **raz**, obok dowolnego bundla automatyzującego |
 | `mobile-testing` 📱 | 2 | 1 | 1 | — | mobile: Maestro-first (Appium jako świadomy fallback), selektory accessibility-id, deterministyczne urządzenia, matryce CI |
@@ -23,7 +23,7 @@ Repozytorium inspirowane ideą i strukturą projektu **[awesome-agents-for-quali
 | `ui-api-automation` 🖥️ | 1 | 7 | 1 | — | paczka: pipeline testów UI + API (explorers → plan → implement → run) |
 | `ui-api-automation-minimal` 🧪 | 1 | 4 | 1 | — | paczka: minimalna wersja powyższego |
 
-Razem: **14 pluginów**, **173 skilli**, **44 subagentów**, **12 knowledge**, **2 quality-gate hooki**.
+Razem: **14 pluginów**, **178 skilli**, **44 subagentów**, **12 knowledge**, **2 quality-gate hooki**.
 
 Paczki orkiestracyjne działają jak w źródle: driver-skill (user-invocable) prowadzi orkiestrację, każdy krok delegujesz do subagenta przez `tools.agents` + `config_name` (np. `plan-explore-review-commit:perc-implementer`); GUIDE paczki jest jej knowledge. Build przepisuje instrukcje hostów (Claude Code / Codex) na Vibe: tabela agentów dostaje kolumnę `Vibe` z dokładnie tymi `config_name`, które Vibe potrafi zespawnować.
 
@@ -176,7 +176,7 @@ Konwencje potwierdzone testami (patrz historia commitów): klucze TOML **snake_c
 ## ✅ Co zostało zwalidowane (Vibe headless)
 
 - 13 pluginów ładuje się bez błędów walidacji (`plugin.*.invalid`); `mobile-testing` potwierdzony headless po instalacji 2026-11 (bramki builda i manifestów + walidacja instalacji: parzystość plików `plugins/`↔`~/.vibe/plugins`, wersje manifestów, obecność skilli/agentów + załadowanie w sesji Vibe)
-- 130 skilli widocznych dla modelu (173 − 43 z `disable-model-invocation: true`; policzone z frontmatterów `src/skills`, pilnuje tego bramka `checkReadmeCounts` w buildzie; user-invocable dostępne na wywołanie — w tym 4 driver-skille paczek)
+- 135 skilli widocznych dla modelu (178 − 43 z `disable-model-invocation: true`; policzone z frontmatterów `src/skills`, pilnuje tego bramka `checkReadmeCounts` w buildzie; user-invocable dostępne na wywołanie — w tym 4 driver-skille paczek)
 - spawn subagentów z personami z instrukcji: `qa-core:rubber-duck` 🦆, `quality-gates:change-gate-reviewer`, `test-automation:test-code-reviewer`, `orchestration-basics:basics-analyst`
 - 7 knowledge folders (3 z bundle'ów + 4 GUIDE paczek orkiestracyjnych)
 - hook `pre_tool` test-file-guard (w `test-automation`, 3 wpisy: `write_file`/`edit`/`bash`): **blokuje** zapis `.only()`/`fit()` oraz `.skip()`/`xit()`/`xdescribe()` w plikach testowych (structured `decision: deny`, klasyfikacja po nazwie pliku; świadoma kwarantanna przechodzi — zapis z adnotacją `waiver` (owner + expiry) jest zamieniany na ostrzeżenie), **ostrzega** o `waitForTimeout`, sleepach, tautologiach oraz zapisie pliku testowego przez `bash` (heredoc/tee/sed — omija bramki plikowe; parsowanie komendy jest zawodne, więc bash jest zawsze warn-only); wszystko logowane w `$PLUGIN_DATA`. Awaria hooka = fail-open (ostrzeżenie, edyt przechodzi), reguły w `vibe-hooks/test-file-guard.js`, 16 testów jednostkowych przypina model severity (`scripts/assets/test-file-guard.test.js`; walidacja `.only()`/fit headless — z 0.2.0, rodzina skip i tryb bash — testy jednostkowe, headless w toku)
