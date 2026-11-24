@@ -43,6 +43,8 @@ Every subagent returns the same **Handoff Packet**: objective, inputs used, find
 
 The pack gets you to an implemented, reviewed, run suite; deeper failure work belongs to sibling skills by name (install their bundle the same way this plugin was installed, or keep the reference in the handoff packet):
 
+- `testing-auth-flows` - the plan's auth strategy (storageState, token fixtures) is exactly what this skill operationalizes
+- `test-data-factories` - the plan's data strategy becomes factories with unique values and real teardown here
 - `diagnosing-test-failures` - the verifier's classification is a first pass; a persistent red needs root-cause work, not a third fix round
 - `stabilizing-flaky-tests` - a suite that went green on retry hands an open defect to this skill, with the flake history the verifier produced
 - `test-reports-and-artifacts` - the runs should leave traces and one merged report behind; configure it rather than relying on terminal scrollback

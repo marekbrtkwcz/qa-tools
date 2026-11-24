@@ -93,6 +93,9 @@ Every agent returns exactly this structure:
 - `bootstrap-test-suite` - when the project has no test framework yet and the runner needs one
 - `api-playwright-test-developer` - the standard for writing and reviewing Playwright API tests
 - `testing-api-contracts` - OpenAPI/schema validation and breaking-change detection between spec versions
+- `testing-auth-flows` - login/session setup the plan assumes: storageState for UI, token fixtures for API
+- `test-data-factories` - unique, deterministic test data behind the plan's data strategy
+- `handling-sensitive-test-data` - keeping real personal data and secrets out of fixtures, traces and CI logs
 - `stabilizing-flaky-tests` - when the test runner phase reports intermittent failures
 - `test-reports-and-artifacts` - wiring trace/video/screenshot evidence and merged reports into CI
 ---
