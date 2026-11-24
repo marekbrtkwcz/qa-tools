@@ -112,6 +112,8 @@ test-automation:
     - playwright-automation-engineer-ts-detailed
     - ui-test-automation
     - test-code-reviewer
+  knowledge:
+    - test-automation
   hooks:
     - test-file-guard
     - red-test-deletion-guard
@@ -136,6 +138,8 @@ api-testing:
   agents:
     - api-test-automation-openapi
     - openapi-test-automation-expert
+  knowledge:
+    - api-testing
 
 non-functional-testing:
   icon: ⚡
@@ -294,6 +298,8 @@ mobile-testing:
     - visual-regression-mobile
   agents:
     - mobile-test-automation-expert
+  knowledge:
+    - mobile-testing
 
 orchestration-basics:
   icon: 🎼
