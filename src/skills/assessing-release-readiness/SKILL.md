@@ -48,6 +48,8 @@ If exit criteria exist, take them as written. If they do not, derive a minimum s
 
 For each criterion record: **met**, **not met**, or **unverified**, plus the evidence. A criterion with no evidence is unverified, not met.
 
+Also check the waiver register (`governing-quality-waivers`): any **expired waiver** on a practice in the release scope is an automatic **not met** — an expired waiver is reported as a finding, never treated as a standing exception. A go recommended over an expired waiver is a no-go.
+
 ### Phase 2: Profile the open defects
 
 Not a bug count. For every open defect that touches the release scope:
