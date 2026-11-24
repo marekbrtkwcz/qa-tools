@@ -172,6 +172,7 @@ pentesting:
     - pentest-api
     - pentest-recon-attack-surface
     - pentest-report
+    - pentest-retest-verification
     - pentest-rules-of-engagement
     - pentest-web-application
   agents:
