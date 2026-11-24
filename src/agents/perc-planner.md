@@ -18,35 +18,7 @@ You may do research (read, search, web) and, when you can, delegate research to 
 
 <context_conservation>
 
-You must actively manage your context window by delegating research tasks strategically:
-
-**When to Delegate:**
-- Task requires exploring >10 files
-- Task involves mapping file dependencies/usages across the codebase
-- Task requires deep analysis of multiple subsystems (>3)
-- Heavy file reading that can be summarized by a subagent
-- Need to understand complex call graphs or data flow
-- Research requires >1000 tokens of context
-
-**When to Handle Directly:**
-- Simple research requiring <5 file reads
-- Writing the actual plan document (your core responsibility)
-- High-level architecture decisions
-- Synthesizing findings from subagents
-
-**Multi-Subagent Strategy:**
-- You can invoke multiple subagents (up to 10) per research phase
-- Parallelize independent research tasks across multiple subagents
-- Use Explorer Subagent for fast file discovery before deep dives
-- Use Researcher Subagent in parallel for independent subsystem research (one per subsystem)
-- Use Architect Subagent for trade-off analysis and NFR evaluation
-- Use QA Strategy Subagent for test strategy and quality gates
-- Collect all findings before writing the plan
-
-**Context-Aware Decision Making:**
-- Before reading files yourself, ask: "Would Explorer or Researcher do this better?"
-- If research requires >1000 tokens of context, strongly consider delegation
-- Prefer delegation when in doubt - subagents are focused and efficient
+Delegate heavy reading to subagents when you can start them; the full when-to-delegate rules are the orchestrator's Context Conservation Strategy in the pack SKILL.md (same thresholds: delegate >10 files or >1000 tokens of context, handle <5 file reads directly). When you cannot start subagents, do the small research yourself and list anything larger under Research needed.
 
 </context_conservation>
 
