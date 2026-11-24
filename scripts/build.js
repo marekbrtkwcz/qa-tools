@@ -93,7 +93,13 @@ function copyDir(from, to) {
  */
 const EMOJI_STYLE = (() => {
   const p = path.join(SRC, 'shared', 'emoji-style.md');
-  return fs.existsSync(p) ? fs.readFileSync(p, 'utf8').replace(/\s+$/, '') : '';
+  // LF-normalized on purpose: this text is embedded inside the agent TOML
+  // `instructions` string, where a CR byte becomes literal "\r" content
+  // (not a line ending), so the artifact would depend on the working-tree
+  // line endings of the machine that ran the build (autocrlf drift bit the
+  // CI drift gate on both runners once). Normalizing here (and in the agent
+  // body below) makes every artifact byte-identical on any checkout.
+  return fs.existsSync(p) ? fs.readFileSync(p, 'utf8').replace(/\r\n/g, '\n').replace(/\s+$/, '') : '';
 })();
 
 /** Append the shared emoji conventions to a skill or agent body */
@@ -133,7 +139,12 @@ function parseAgentMd(text) {
       }
     }
   }
-  return { meta, body: m[2].trim() };
+  return {
+    meta,
+    // LF-normalized on purpose: the body is embedded verbatim in the agent
+    // TOML instructions string, where CR bytes are content, not line endings.
+    body: m[2].replace(/\r\n/g, '\n').trim(),
+  };
 }
 
 /* Claude capability names / pack tool names -> Vibe tool names (approximate mapping) */

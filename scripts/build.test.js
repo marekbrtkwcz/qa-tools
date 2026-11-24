@@ -922,3 +922,34 @@ test('checkReadmeCounts: missing README, stale table rows, wrong totals and wron
   fs.writeFileSync(path.join(dir, 'README.md'), good);
   assert.deepEqual(checkReadmeCounts(bundles, dir, dir), [], 'matching README passes');
 });
+
+test('parseAgentMd: CRLF and LF agent sources produce identical embedded content', () => {
+  // The agent body is embedded inside the TOML instructions string, where a
+  // CR byte is literal content (backslash-r backslash-n), not a line ending
+  // the drift gate can normalize. Without LF normalization, the committed
+  // plugins/ tree is a function of the working-tree line endings of the
+  // machine that built it - exactly how the v0.4.0 CI drift gate failed on
+  // both runners while the contributor's local verify stayed green.
+  const agent = [
+    '---',
+    'name: build-check',
+    'description: Checks builds regardless of source line endings.',
+    '---',
+    '',
+    '## Body',
+    '',
+    'Line one | with a table | row.',
+    'Line "quoted" and tab:\there.',
+    'Last line.',
+  ].join('\n');
+  const lf = parseAgentMd(agent);
+  const crlf = parseAgentMd(agent.replace(/\n/g, '\r\n'));
+  assert.equal(JSON.stringify(lf), JSON.stringify(crlf), 'LF and CRLF sources parse identically');
+  assert.ok(!crlf.body.includes('\r'), 'no CR byte may survive into the embedded body');
+
+  // the shared emoji text is appended into the same TOML string, so it must
+  // carry no CR bytes either (the EMOJI_STYLE constant normalizes on load)
+  const withEmoji = appendEmojiStyle(crlf.body);
+  assert.ok(!withEmoji.includes('\r'), 'appendEmojiStyle output carries no CR bytes');
+  assert.ok(withEmoji.length > crlf.body.length, 'emoji conventions actually appended');
+});
