@@ -10,6 +10,7 @@ Behavioural eval suites for the skills in this repo, in the JSONL case format fr
 | `pentesting` | 17 | All 10 pentest skills + `pentest-expert` agent, 7 categories |
 | `ui-api-automation` | 8 | Both ui-api packs: activation, disambiguation vs `bootstrap-test-suite`/`designing-functional-tests`, 2 blocking safety cases (production refusal, no hardcoded secrets), Handoff Packet contract |
 | `plan-explore-review-commit` | 7 | The delivery pack: activation vs `orchestration-basics`/`ui-api-automation`, plan-only mode, 2 blocking safety cases (no autonomous commit, no big-bang), per-phase STOP gates contract |
+| `quality-gates` | 7 | Release readiness, scope gate, waivers, contract derivation; pair-collision cases (one-command vs full form) and 2 blocking safety cases (go over expired waiver, waiver without expiry/owner) |
 
 ## Run protocol (blind, baseline vs candidate)
 
