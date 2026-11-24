@@ -1,6 +1,6 @@
 ---
 name: recording-change-intent
-description: 'Requires an externalised rationale for high-risk changes - new public exports, new endpoints, auth edits, migrations, removed guards - recorded as an Intent commit trailer, an ADR reference, or a module intent register, and reports high-risk changes that carry none. Use when agent-generated or AI-assisted changes ship without a recorded why, when reviewers cannot tell what a diff was for, when a codebase is losing its decision history, or when setting up an intent gate alongside test and coverage gates.'
+description: 'Requires an externalised rationale for high-risk changes - new public exports, new endpoints, auth edits, migrations, removed guards - recorded as an Intent commit trailer, an ADR reference, or a module intent register, and reports high-risk changes that carry none. Use when agent-generated or AI-assisted changes ship without a recorded why, when reviewers cannot tell what a diff was for, when a codebase is losing its decision history, or when setting up an intent gate alongside test and coverage gates. To draft the Intent trailer for one specific change range, use record-change-intent.'
 argument-hint: 'Commit range or PR, and where rationale is expected to live (commit trailers, ADRs, issue tracker)'
 user-invocable: true
 ---

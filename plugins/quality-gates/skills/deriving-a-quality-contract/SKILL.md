@@ -1,6 +1,6 @@
 ---
 name: deriving-a-quality-contract
-description: 'Derives a project-specific quality contract from three axes - risk profile, team maturity, and product surface - labelling each testing practice MUST, SHOULD, or COULD, then produces a PRESENT/PARTIAL/MISSING/WAIVED gap matrix with an ordered remediation plan. Use when a project has no agreed testing strategy, when a team argues about which practices are mandatory, when onboarding a legacy or inherited repository, when a quality strategy document has to be derived from evidence instead of opinion, or when someone asks "what testing should we actually be doing here".'
+description: 'Derives a project-specific quality contract from three axes - risk profile, team maturity, and product surface - labelling each testing practice MUST, SHOULD, or COULD, then produces a PRESENT/PARTIAL/MISSING/WAIVED gap matrix with an ordered remediation plan. Use when a project has no agreed testing strategy, when a team argues about which practices are mandatory, when onboarding a legacy or inherited repository, when a quality strategy document has to be derived from evidence instead of opinion, or when someone asks "what testing should we actually be doing here". For the one-command gap-matrix form, use derive-quality-contract.'
 argument-hint: 'Repo path or product description, how critical the system is, how experienced the team is with testing, the stack, and any existing CI config'
 user-invocable: true
 ---
