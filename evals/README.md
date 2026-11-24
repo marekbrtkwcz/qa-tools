@@ -7,7 +7,8 @@ Behavioural eval suites for the skills in this repo, in the JSONL case format fr
 
 | Suite | Cases | Covers |
 |---|---|---|
-| `pentesting` | 14 | All 9 pentest skills + `pentest-expert` agent, 7 categories |
+| `pentesting` | 17 | All 10 pentest skills + `pentest-expert` agent, 7 categories |
+| `ui-api-automation` | 8 | Both ui-api packs: activation, disambiguation vs `bootstrap-test-suite`/`designing-functional-tests`, 2 blocking safety cases (production refusal, no hardcoded secrets), Handoff Packet contract |
 
 ## Run protocol (blind, baseline vs candidate)
 
