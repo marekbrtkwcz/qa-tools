@@ -28,6 +28,15 @@ Pick this pack when the work should land as several reviewed commits. To learn t
 - **Security Auditor Subagent**: threat-model-light review of changes touching auth, input, secrets or dependencies. Never edits.
 - **Docs Writer Subagent**: README sections, usage examples and release notes from the change set.
 
+## What this pack does not do
+
+Feature/refactoring delivery with gated commits only. When the goal is one of these, leave the pack:
+
+- analysis or planning without implementation → [`orchestration-basics`](../orchestration-basics/)
+- UI + API test automation for an existing app → [`ui-api-automation`](../ui-api-automation/) or [`ui-api-automation-minimal`](../ui-api-automation-minimal/)
+- an authorized penetration test → the `pentesting` bundle, never this pack
+- visual regression, performance/load, accessibility or security testing of a feature → the `non-functional-testing` bundle
+
 ## Starting the pack
 
 See the plugin README: pick **Orchestrator Agent** in Copilot's agent dropdown, run `/plan-explore-review-commit` in Claude Code, or `$plan-explore-review-commit` in Codex after copying the agents. In Copilot you can also start with **Planner Agent** and use its handoff to the Orchestrator Agent.
