@@ -154,3 +154,301 @@ One release = one version for the whole collection: `node scripts/build.js --set
 ## Provenance
 
 `src/` content is adapted from [awesome-agents-for-quality](https://github.com/jaktestowac/awesome-agents-for-quality) (MIT, jaktestowac.pl); native assets written for this repository are house-native.
+
+---
+
+## P4 Quality Gates
+
+P4 (Quality Gates) extends the automation with advanced quality assurance workflows:
+
+### Quality Gates Commands
+
+```bash
+# Run all P4 gates
+npm run p4                     # Security scan + flaky test detection + benchmarking
+
+# Individual P4 tools
+npm run security:scan          # Scan for security vulnerabilities
+npm run flaky:check            # Check for flaky tests (CI mode, exits 1 on flaky tests)
+npm run flaky:detect           # Detect flaky tests (report mode, 5 runs)
+npm run benchmark              # Run performance benchmarks (3 runs)
+npm run benchmark:full         # Run full benchmarks with save (5 runs, save results)
+```
+
+### P4 Test Commands
+
+```bash
+npm run test:p4        # Run all P4 unit tests
+npm run test:all:p4    # Run all tests (P2 + P3 + P4)
+```
+
+---
+
+### Security Scanning (P4.2)
+
+**Script:** `scripts/security-scan.js`
+
+**Features:**
+- **Secret detection:** Scans for API keys, passwords, tokens, private keys in code
+- **Dependency auditing:** Checks for vulnerable npm dependencies using `npm audit`
+- **File permission checks:** Detects world-writable and sensitive files
+- **Pattern matching:** Comprehensive regex patterns for common secret formats
+- **Safe output:** Secrets are automatically redacted in output
+
+**Checks:**
+- API keys (OpenAI, GitHub, AWS, etc.)
+- Passwords and credentials in files
+- Bearer tokens and JWTs
+- Private keys (RSA, EC, OpenSSH)
+- World-writable files
+- Sensitive files with incorrect permissions
+- Outdated dependency versions
+
+**Usage:**
+```bash
+# Scan the entire repository
+npm run security:scan
+
+# Scan with JSON output
+node scripts/security-scan.js --json
+
+# Run in CI (exits 1 on issues)
+npm run security:scan
+```
+
+**Example output:**
+```
+================================================================================
+🔒 SECURITY SCAN RESULTS
+================================================================================
+
+📊 Summary:
+   Total Issues: 0
+   Total Warnings: 1
+
+✅ No secrets detected
+✅ No vulnerabilities detected
+✅ No permission issues detected
+
+ℹ️  WARNINGS:
+--------------------------------------------------------------------------------
+   📁 package.json
+      Issue: Package @vitest/coverage-v8 uses caret (^) version
+      Version: ^5.1.1
+      Severity: info
+
+================================================================================
+```
+
+---
+
+### Flaky Test Detection (P4.3)
+
+**Script:** `scripts/detect-flaky-tests.js`
+
+**Features:**
+- **Multiple runs:** Executes tests multiple times to detect inconsistencies
+- **Statistical analysis:** Identifies tests with inconsistent pass/fail patterns
+- **Threshold configuration:** Configurable sensitivity for flaky detection
+- **Comprehensive reporting:** Detailed output with stability scores
+
+**Detection Criteria:**
+- **Inconsistent tests:** Pass sometimes, fail sometimes → **Flaky (0% stability)**
+- **Consistent failures:** Fail every time → **Broken (50% stability)**
+- **Consistent passes:** Pass every time → **Stable (100% stability)**
+
+**Usage:**
+```bash
+# Quick check (3 runs)
+npm run flaky:check
+
+# Detailed detection (5 runs)
+npm run flaky:detect
+
+# With custom options
+node scripts/detect-flaky-tests.js --runs 10 --threshold 2 --check
+```
+
+**Options:**
+- `--runs, -r`: Number of test runs (default: 5)
+- `--threshold, -T`: Failure threshold (default: 1)
+- `--check, -c`: Exit with code 1 if flaky tests found
+- `--json, -j`: Output results as JSON
+- `--test, -t`: Test specific file only
+
+**Example output:**
+```
+================================================================================
+🔍 FLAKY TEST DETECTION RESULTS
+================================================================================
+
+📊 Summary:
+   Runs: 5
+   Tests analyzed: 68
+   Flaky tests found: 1
+   Threshold: 1
+
+⚠️  FLAKY TESTS DETECTED:
+--------------------------------------------------------------------------------
+
+   📝 Network-dependent test
+      Type: INCONSISTENT
+      Passed: 3/5
+      Failed: 2/5
+      Stability: 0%
+      Results: ✅ ❌ ✅ ❌ ✅
+
+--------------------------------------------------------------------------------
+
+💡 Recommendations:
+   1. Investigate tests with inconsistent results (✅❌✅❌)
+   2. Check for timing issues, race conditions, or external dependencies
+   3. Add retries with quarantine for flaky tests
+   4. Consider marking flaky tests with test.skip() temporarily
+
+================================================================================
+```
+
+---
+
+### Performance Benchmarking (P4.4)
+
+**Script:** `scripts/benchmark-performance.js`
+
+**Features:**
+- **Comprehensive benchmarks:** Measures P2, P3, and build performance
+- **Statistical analysis:** Calculates min, max, mean, median, and standard deviation
+- **Trend tracking:** Compares with previous results to detect regressions
+- **Result persistence:** Saves benchmark data for historical comparison
+
+**Benchmarkable Scripts:**
+- P2 automation (changelog, readme stats, links)
+- P3 tests (unit tests)
+- Build process
+- Full check and verify
+- Linting
+
+**Usage:**
+```bash
+# Quick benchmark (3 runs)
+npm run benchmark
+
+# Full benchmark with save (5 runs)
+npm run benchmark:full
+
+# Benchmark specific script
+node scripts/benchmark-performance.js --script "npm run build" --runs 3
+
+# Compare with previous results
+node scripts/benchmark-performance.js --compare --runs 3
+```
+
+**Options:**
+- `--runs, -r`: Number of benchmark runs (default: 3)
+- `--script, -s`: Specific script to benchmark
+- `--save, -S`: Save results to file
+- `--compare, -c`: Compare with previous results
+- `--json, -j`: Output results as JSON
+
+**Example output:**
+```
+================================================================================
+⚡ PERFORMANCE BENCHMARKING RESULTS
+================================================================================
+
+📊 Summary:
+   Benchmarks: 10
+   Runs per benchmark: 3
+   Total execution time: 12.50s
+
+📋 P2: CHANGELOG check
+--------------------------------------------------------------------------------
+   Run 1: 1.23s ✅
+   Run 2: 1.18s ✅
+   Run 3: 1.21s ✅
+
+   📈 Statistics:
+      Min: 1.18s
+      Max: 1.23s
+      Mean: 1.21s
+      Median: 1.21s
+      Std Dev: 0.02s
+      Success Rate: 100.0%
+
+💡 Recommendations:
+   ✅ All benchmarks are performing well!
+
+================================================================================
+```
+
+---
+
+### Quality Gates Workflow (P4.1)
+
+**Workflow:** `.github/workflows/quality-gates.yml`
+
+**Features:**
+- **Automated execution:** Runs on every push, PR, and nightly
+- **Comprehensive gates:** Core gates, security scan, flaky detection, performance
+- **Non-blocking by default:** Reports warnings without blocking merges
+- **Detailed reporting:** Full summary of all gate results
+
+**Jobs:**
+
+1. **Core Gates** (Blocking)
+   - P2 automation checks
+   - P3 unit tests
+   - Full test suite
+   - Linting
+   - Build validation
+   - Drift gate
+
+2. **Security Scan** (Non-blocking)
+   - Dependency vulnerabilities
+   - Secret detection
+   - File permission checks
+
+3. **Flaky Test Detection** (Non-blocking)
+   - Runs tests 3 times
+   - Identifies inconsistent results
+
+4. **Performance Benchmarking** (Non-blocking)
+   - Measures all P2 and P3 scripts
+   - Tracks performance trends
+
+**Trigger Configuration:**
+```yaml
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '0 2 * * *'  # Nightly at 2 AM
+  workflow_dispatch:       # Manual trigger
+```
+
+**Integration with existing CI:**
+- Quality Gates workflow complements the existing `ci.yml` and `build.yml`
+- Core gates are enforced in `build.yml` quality-gates job
+- P4 workflows provide additional insights and trend analysis
+
+---
+
+## P4 Test Coverage
+
+All P4 scripts have comprehensive unit tests using `node:test`:
+
+| Script | Test File | Coverage |
+|--------|-----------|----------|
+| `security-scan.js` | `security-scan.test.js` | Secret detection, permission checks |
+| `detect-flaky-tests.js` | `detect-flaky-tests.test.js` | Flaky detection, statistical analysis |
+| `benchmark-performance.js` | `benchmark-performance.test.js` | Benchmarking, statistics |
+
+**Total P4 Tests:** 20+ new tests
+
+**Running P4 tests:**
+```bash
+npm run test:p4
+npm run test:all:p4
+```

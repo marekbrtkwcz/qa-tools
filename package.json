@@ -28,7 +28,15 @@
     "p2": "npm run changelog:check && npm run readme:stats:check && npm run links:check",
     "p2:all": "npm run changelog && npm run readme:stats && npm run links",
     "test:p3": "node --test scripts/validate-links.test.js scripts/generate-changelog.test.js scripts/update-readme-stats.test.js",
-    "test:all": "npm test && npm run test:p3"
+    "test:all": "npm test && npm run test:p3",
+    "p4": "npm run security:scan && npm run flaky:check && npm run benchmark",
+    "security:scan": "node scripts/security-scan.js",
+    "flaky:check": "node scripts/detect-flaky-tests.js --runs 3 --check",
+    "flaky:detect": "node scripts/detect-flaky-tests.js --runs 5",
+    "benchmark": "node scripts/benchmark-performance.js --runs 3",
+    "benchmark:full": "node scripts/benchmark-performance.js --runs 5 --save",
+    "test:p4": "node --test scripts/security-scan.test.js scripts/detect-flaky-tests.test.js scripts/benchmark-performance.test.js",
+    "test:all:p4": "npm run test:all && npm run test:p4"
   },
   "devDependencies": {
     "@biomejs/biome": "2.6.8",
