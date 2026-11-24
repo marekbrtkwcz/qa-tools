@@ -83,6 +83,7 @@ test-automation:
     - port-suite-to-python-java
     - property-based-testing
     - refactor-to-page-objects
+    - refactoring-api-tests
     - running-visual-regression-tests
     - self-healing-locators
     - stabilize-flaky-tests
