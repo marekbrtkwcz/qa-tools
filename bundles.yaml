@@ -139,7 +139,7 @@ api-testing:
 
 non-functional-testing:
   icon: ⚡
-  description: "Accessibility, performance and load, application security, security regression smoke, and abuse-limit testing."
+  description: "Accessibility, performance and load, QA-scope application security (authorization gate before any probing; full pentests belong to the pentesting bundle), security regression smoke, and abuse-limit testing."
   version: "0.7.0"
   skills:
     - a11y-audit-deep-dive
