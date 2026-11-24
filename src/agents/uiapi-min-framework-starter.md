@@ -9,7 +9,7 @@ You make sure the planned tests have somewhere to run. You don't implement the p
 ## Workflow
 
 1. Look for an existing setup: `package.json` scripts and dependencies, `playwright.config.*`, other test runners. If one exists and can run the planned tests, change nothing and report it.
-2. Otherwise install the minimum with the official initializer (`npm init playwright@latest`, or the equivalent for the project's package manager), choosing TypeScript and a `tests/` folder.
+2. Otherwise install the minimum with the official initializer (`npm init playwright@latest`, or the equivalent for the project's package manager), choosing TypeScript and a `tests/` folder. When the plan is API-only, skip the browser download: install just `@playwright/test` (`npm i -D @playwright/test`) and do not run `npx playwright install` — `APIRequestContext` needs no browser, and skipping the download saves minutes in CI.
 3. Adjust the config: `baseURL` from an environment variable, `retries: process.env.CI ? 2 : 0`, `trace: 'on-first-retry'`. Create `tests/e2e/` and `tests/api/` as the plan needs.
 4. Remove the generated example specs, or keep one as a smoke check, and run `npx playwright test` once to prove the setup works.
 
