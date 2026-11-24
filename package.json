@@ -26,11 +26,16 @@
     "links": "node scripts/validate-links.js",
     "links:check": "node scripts/validate-links.js --check",
     "p2": "npm run changelog:check && npm run readme:stats:check && npm run links:check",
-    "p2:all": "npm run changelog && npm run readme:stats && npm run links"
+    "p2:all": "npm run changelog && npm run readme:stats && npm run links",
+    "test:p3": "node --test scripts/validate-links.test.js scripts/generate-changelog.test.js scripts/update-readme-stats.test.js",
+    "test:all": "npm test && npm run test:p3"
   },
   "devDependencies": {
     "@biomejs/biome": "2.6.8",
+    "@vitest/coverage-v8": "^5.1.1",
     "conventional-changelog": "^6.0.0",
+    "jsdom": "^31.0.1",
+    "vitest": "^5.1.1",
     "yaml": "^2.6.0"
   }
 }

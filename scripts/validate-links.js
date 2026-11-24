@@ -97,7 +97,7 @@ function validateCrossBundle(url, bundles) {
   const bundle = bundles[bundleName];
   if (!bundle) return false;
 
-  return (
+  return Boolean(
     bundle.skills?.includes(ref) ||
     bundle.agents?.includes(ref) ||
     bundle.knowledge?.includes(ref) ||
@@ -192,4 +192,16 @@ function main() {
   }
 }
 
-main();
+// Export functions for unit testing
+if (require.main === module) {
+  main();
+}
+
+module.exports = {
+  getAllMdFiles,
+  extractLinks,
+  isRelative,
+  isCrossBundle,
+  loadBundles,
+  validateCrossBundle,
+};

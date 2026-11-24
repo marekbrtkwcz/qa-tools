@@ -317,4 +317,13 @@ function main() {
   }
 }
 
-main();
+// Export functions for unit testing
+if (require.main === module) {
+  main();
+}
+
+module.exports = {
+  loadBundles,
+  loadReadme,
+  countFromBundles,
+};

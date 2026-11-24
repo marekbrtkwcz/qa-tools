@@ -45,6 +45,7 @@ const TYPE_TO_SECTION = {
   tests: '🔄 Zmienione',
   docs: '🔄 Zmienione',
   documentation: '🔄 Zmienione',
+  zmieniono: '🔄 Zmienione',
   
   'BREAKING CHANGE': '⚠️ BREAKING CHANGE',
   'BREAKING-CHANGE': '⚠️ BREAKING CHANGE',
@@ -298,4 +299,15 @@ function main() {
   }
 }
 
-main();
+// Export functions for unit testing
+if (require.main === module) {
+  main();
+}
+
+module.exports = {
+  TYPE_TO_SECTION,
+  BREAKING_PATTERN,
+  getGitTags,
+  getCommits,
+  parseCommits,
+};
