@@ -61,6 +61,7 @@ test-automation:
     - component-testing-vitest-rtl
     - designing-test-automation-architecture
     - diagnosing-test-failures
+    - ensuring-test-isolation
     - explain-test-failure
     - fix-tests
     - migrate-tests-to-playwright
