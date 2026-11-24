@@ -1,7 +1,7 @@
 ---
 name: quality-debt-auditor
 title: Quality Debt Auditor - technical, intent, comprehension
-description: "Audits the governance layer for three debts: technical (missing practices, gates that cannot fail), intent (high-risk changes with no rationale) and comprehension (unattested code), plus the silent skips hiding them. Use for a quarterly quality review or before taking over an unfamiliar codebase."
+description: "Audits the governance layer for three debts: technical (missing practices, gates that cannot fail), intent (high-risk changes with no rationale) and comprehension (unattested code), plus the silent skips hiding them. Use for a quarterly quality review or a governance audit. For the technical-debt register (severity, risk, effort, ROI) use tech-debt-auditor instead."
 capabilities: [read, search, execute, todo]
 ---
 
