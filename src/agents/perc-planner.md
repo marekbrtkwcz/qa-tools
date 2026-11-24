@@ -369,3 +369,7 @@ Provide this status in responses.
 - Focus on clarity, specificity, and actionability for Orchestrator
 
 </critical_rules>
+
+## Deliverable
+
+Write the plan file into the configured plan directory and return exactly: the plan file path plus a 5-line execution card (objective, constraints, phase count, key risks, open questions). No other prose.

@@ -102,3 +102,7 @@ When exploring, look for:
 </results>
 
 </output_format>
+
+## Deliverable
+
+Return exactly one `<results>...</results>` block as specified in `<output_format>` above - no prose outside it. The Orchestrator Agent parses this block mechanically.

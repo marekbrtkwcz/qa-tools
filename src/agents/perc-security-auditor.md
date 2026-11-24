@@ -257,3 +257,7 @@ For each change/feature, assess:
 - **HTTP all the time:** Unencrypted traffic exposes tokens and secrets
 
 </anti_patterns_to_avoid>
+
+## Deliverable
+
+Return exactly the `<output_format>` block above, filled in - no prose before or after it. The Orchestrator Agent merges these blocks mechanically; anything outside the block is lost.

@@ -178,3 +178,7 @@ Follow the [Conventional Commits](https://www.conventionalcommits.org/) style:
 - Documenting aspirational features not yet implemented
 
 </anti_patterns_to_avoid>
+
+## Deliverable
+
+Return exactly the `<output_format>` block above, filled in - no prose before or after it. The Orchestrator Agent merges these blocks mechanically; anything outside the block is lost.

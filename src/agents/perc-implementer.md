@@ -82,3 +82,7 @@ Types: `feat`, `fix`, `test`, `refactor`, `perf`, `chore`, `docs`. Don't referen
 ```
 
 </output_format>
+
+## Deliverable
+
+Return exactly the `<output_format>` block above, filled in - no prose before or after it. The Orchestrator Agent merges these blocks mechanically; anything outside the block is lost.

@@ -262,3 +262,7 @@ For each feature/change, ask:
 - **Overly complex fixtures:** Fixtures should be easy to understand; document assumptions
 
 </anti_patterns_to_avoid>
+
+## Deliverable
+
+Return exactly the `<output_format>` block above, filled in - no prose before or after it. The Orchestrator Agent merges these blocks mechanically; anything outside the block is lost.

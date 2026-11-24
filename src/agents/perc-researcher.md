@@ -148,3 +148,7 @@ Before returning findings:
 - [ ] Ambiguous findings are flagged for expert review (Architect, Security-Auditor)
 
 </quality_gates>
+
+## Deliverable
+
+Return exactly the `<output_format>` block above, filled in - no prose before or after it. The Orchestrator Agent merges these blocks mechanically; anything outside the block is lost.

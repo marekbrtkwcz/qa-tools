@@ -194,3 +194,7 @@ Recommend concrete follow-ups (refactoring, additional tests, debt tracking).
 - Ignoring test flakiness (fixing with `Thread.sleep` instead of root cause)
 
 </anti_patterns_to_watch>
+
+## Deliverable
+
+Return exactly the `<output_format>` block above, filled in - no prose before or after it. The Orchestrator Agent merges these blocks mechanically; anything outside the block is lost.

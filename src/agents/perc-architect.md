@@ -138,3 +138,7 @@ Provide ADR-ready guidance:
 - **Underestimating observability:** If you can't measure it, you can't improve it; ensure sufficient instrumentation in the recommendation.
 
 </anti_patterns_to_avoid>
+
+## Deliverable
+
+Return exactly the `<output_format>` block above, filled in - no prose before or after it. The Orchestrator Agent merges these blocks mechanically; anything outside the block is lost.
