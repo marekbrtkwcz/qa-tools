@@ -96,6 +96,7 @@ test-automation:
     - testing-websockets
     - testing-with-testcontainers
     - unslop-tests
+    - writing-playwright-tests-best-practices
     - writing-unit-tests
     - writing-unit-tests-quick
   agents:
