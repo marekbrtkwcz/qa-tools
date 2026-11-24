@@ -58,6 +58,8 @@ test-automation:
   description: "Unit tests, TDD, Playwright, mocking, visual regression, migration and test code review, with a quality-gate hook against test anti-patterns."
   version: "0.3.0"
   skills:
+    - a11y-in-every-test
+    - ai-visual-testing
     - analyze-test-results
     - automating-ci-test-pipelines
     - bootstrap-test-suite
@@ -69,6 +71,8 @@ test-automation:
     - ensuring-test-isolation
     - explain-test-failure
     - fix-tests
+    - hybrid-ui-api-testing
+    - implementing-bdd-tests
     - migrate-tests-to-playwright
     - migrating-tests-to-playwright
     - mocking-network-and-time
@@ -80,6 +84,7 @@ test-automation:
     - property-based-testing
     - refactor-to-page-objects
     - running-visual-regression-tests
+    - self-healing-locators
     - stabilize-flaky-tests
     - stabilizing-flaky-tests
     - static-code-analysis-typescript
