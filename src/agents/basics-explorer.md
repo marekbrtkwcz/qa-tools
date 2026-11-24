@@ -108,3 +108,7 @@ Search strategy: Search for "X implementation", grep for "*.service.ts", search 
 ```
 
 </output_contract>
+
+## Deliverable
+
+Return exactly one `<results>...</results>` block as specified in `<output_contract>` above - no prose outside it. The Orchestrator parses this block mechanically.

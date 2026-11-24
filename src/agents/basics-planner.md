@@ -151,3 +151,7 @@ Present the plan with:
 - **Plan file**: the path of the plan you wrote
 - **Research needed**: open research requests for the Orchestrator, or "none"
 - **Next step**: Hand off to Orchestrator with clear handoff prompt
+
+## Deliverable
+
+Return exactly: the analysis/plan file path plus the summary bullets listed above (Summary, Evidence/Findings, Risks, Research needed or Unknowns, Next step) - no prose outside that structure. The Orchestrator merges these mechanically.

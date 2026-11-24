@@ -175,3 +175,7 @@ Provide analysis document with:
 - **Evidence**: File references and code snippets
 - **Recommendations**: Prioritized next steps
 - **Unknowns**: What needs more research
+
+## Deliverable
+
+Return exactly: the analysis file path plus the summary bullets listed above (Summary, Evidence, Recommendations, Unknowns) - no prose outside that structure. The Orchestrator merges these mechanically.
