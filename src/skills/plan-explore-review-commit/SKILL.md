@@ -140,7 +140,7 @@ For each phase:
 1. Implement: delegate to Implementer Subagent
 2. Review: delegate to Code Review Subagent
 3. Quality gates: if relevant, run Security Auditor Subagent and/or QA Strategy Subagent
-4. STOP for commit: present summary and a copy-paste commit message to the user. Wait for confirmation before proceeding.
+4. STOP for commit: present summary and a copy-paste commit message to the user. Save the phase report in the plan directory as `perc-phase-<N>-report-<YYYYMMDD-HHmm>.md` (never overwrite an earlier report). Wait for confirmation before proceeding.
 
 If review returns NEEDS_REVISION: send the precise issues back to the Implementer Subagent and re-review. After two revision rounds, or on FAILED, stop and present the open issues to the user instead of looping.
 

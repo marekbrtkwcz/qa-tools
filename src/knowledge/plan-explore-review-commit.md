@@ -40,7 +40,7 @@ See the plugin README: pick **Orchestrator Agent** in Copilot's agent dropdown, 
 1. **Intake**: the orchestrator restates the objective, constraints and definition of done as an execution card.
 2. **Discover**: Explorer first, then Researcher, Architect or QA Strategy where the task needs them, in parallel when independent.
 3. **Plan**: 3-10 phases, each with files, tests to write and acceptance criteria, saved to the plan directory (`plans/` unless `AGENTS.md` names another). **Stop:** you approve the plan.
-4. **Per phase**: Implementer → Code Review (→ Security Auditor / QA Strategy when relevant). A NEEDS_REVISION result goes back to the Implementer, at most twice; after that the orchestrator stops and shows you the open issues. **Stop:** you get a phase summary and a commit message, and you commit.
+4. **Per phase**: Implementer → Code Review (→ Security Auditor / QA Strategy when relevant). A NEEDS_REVISION result goes back to the Implementer, at most twice; after that the orchestrator stops and shows you the open issues. Each phase report is saved in the plan directory as `perc-phase-<N>-report-<YYYYMMDD-HHmm>.md`. **Stop:** you get a phase summary and a commit message, and you commit.
 5. **Closeout**: Docs Writer if user-facing behaviour changed, then a plan-complete summary. **Stop.**
 
 Subagents never call each other: every result comes back to the orchestrator, which passes on what the next agent needs. This keeps the flow the same in every tool.
