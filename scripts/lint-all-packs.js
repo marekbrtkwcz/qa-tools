@@ -9,6 +9,7 @@
  *   - lint-perc-pack.js         (plan-explore-review-commit: Deliverable + commit gate)
  *   - lint-quality-gates.js     (quality-gates: NO-GO, waiver expiry/owner, pair links)
  *   - lint-basics-pack.js       (orchestration-basics: Deliverable + STOP gates + no-code boundary)
+ *   - lint-nft-pack.js          (non-functional-testing: security authorization gate + a11y cross-links)
  *
  * Usage: node scripts/lint-all-packs.js
  * Exit 0 = all pass, 1 = first failing lint stops the run (its own output
@@ -23,6 +24,7 @@ const LINTS = [
   'lint-perc-pack.js',
   'lint-quality-gates.js',
   'lint-basics-pack.js',
+  'lint-nft-pack.js',
 ];
 
 for (const lint of LINTS) {
