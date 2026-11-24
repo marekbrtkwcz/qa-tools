@@ -1,6 +1,6 @@
 ---
 name: testing-application-security
-description: 'Applies OWASP-informed security testing within a tester scope: an authorization gate before any probing, role and permission matrices, broken access control and IDOR checks (one user seeing the data of another by changing an ID in the URL), input validation and injection observation, session and auth behaviour, and safe reporting of findings. Use when testing auth-protected features, when a security review needs QA coverage, when an exploratory session surfaced something security-shaped, or when access control needs a systematic check rather than a spot check.'
+description: "OWASP-informed security testing within an authorized tester scope: authorization gate first, then role/permission matrices, IDOR and broken access control, input validation, session/auth behaviour, safe reporting. Use for auth-protected features and systematic access-control checks. For a full authorized pentest with exploits, use the pentesting bundle starting at pentest-rules-of-engagement."
 argument-hint: 'Target system and its URL, written authorization to test it, roles and permissions in scope, and whether the environment is production'
 user-invocable: true
 ---

@@ -1,6 +1,6 @@
 ---
 name: scoping-change-relevance
-description: 'Classifies a diff into file tags and hunk tags - new public export, new endpoint, modified auth, SQL string, migration, added dependency, touched prompt - then maps each tag to the quality practices it makes relevant, producing a defensible per-change check scope instead of running everything or guessing. Use when deciding what to test for a specific pull request, when a full regression run is too slow to gate on, when a pre-push or PR gate needs a scope someone can argue with, or when asked "which checks does this change actually need". For reasoning about blast radius and which features to retest, use analyzing-regression-scope. For the one-command gate combining this with coverage and intent checks, use scope-change-gate.'
+description: "Classifies a diff into file and hunk tags (new export, endpoint, auth, SQL, migration, dependency, prompt) and maps each tag to the quality practices it makes relevant, producing a defensible per-change check scope. Use for PR/pre-push gate scoping when a full regression is too slow. For blast-radius reasoning use analyzing-regression-scope; for the one-command gate combining this with coverage and intent checks use scope-change-gate."
 argument-hint: 'Base branch or commit range (e.g. main...HEAD), plus the repo path or the diff itself'
 user-invocable: true
 ---
