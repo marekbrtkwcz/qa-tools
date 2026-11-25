@@ -89,6 +89,7 @@ test-automation:
     - playwright-generate-test
     - port-suite-to-python-java
     - property-based-testing
+    - python-for-testers
     - refactor-to-page-objects
     - refactoring-api-tests
     - running-visual-regression-tests

@@ -8,6 +8,7 @@ Unit/component/E2E test automation for JS/TS: TDD, Playwright, mocking, visual r
 - `unslop-tests` applies to any test code this bundle produces: no tests that pass without proving anything.
 - Browser work needs the Playwright MCP server from the `qa-mcp` plugin; live console/network/performance debugging uses the Chrome DevTools MCP from the same bundle (`debugging-with-chrome-devtools-mcp`); load tests run through the k6 MCP (`k6-load-testing`).
 - Bun is a first-class runtime here: unit/integration suites can run on `bun test` (`testing-with-bun`), E2E on `bunx playwright test`; lint/format/type gates stay Biome + `tsc --noEmit` regardless of runner (`static-code-analysis-typescript`).
+- Python is a supported alternative language for test automation: when the suite runs on pytest (Python team, Python product code, legacy Python suite), port the conventions via `port-suite-to-python-java` instead of rewriting them per language — the same unslop/flake/CI rules apply, mapped to pytest equivalents.
 
 ## Evidence and enforcement
 

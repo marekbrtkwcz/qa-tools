@@ -50,6 +50,22 @@ Artifact: CI with quality gates wired (lint/type/unit/API/E2E/perf-smoke/a11y-sm
 
 Rule of thumb: when unsure which skill applies, ask the `qa-strategist` / `test-automation-expert` agents, or grep this knowledge + skill descriptions.
 
+## Python track — when the suite is not JS/TS (pytest)
+
+Not every automation suite is JavaScript/TypeScript. When the project, team or legacy stack is Python, the same conventions apply, translated to pytest. This is the Python counterpart of Stage 0's `typescript-for-testers`:
+
+**Python foundations for a tester (before porting any convention):**
+
+- `python-for-testers` (+ resources: cheatsheet, pytest-project-config) — Python for test code: venv/uv + `pyproject.toml`, pytest core (fixtures, `conftest.py`, markers, parametrize), `typing` + `mypy --strict` (the counterpart of strict `tsc --noEmit`), `ruff` as the lint/format gate (counterpart of Biome), `pytest-playwright` + `httpx` for E2E/API
+
+Then the conventions:
+
+- `port-suite-to-python-java` — the translation layer: maps this collection's conventions (TDD loop, fixtures, unslop checks, fake clocks, CI-only retries with flake reporting, quarantine, naming, visual baselines) to pytest / JUnit 5 / NUnit equivalents; see its `resources/convention-mappings.md` for the per-convention table
+- Runner set to pin: `pytest` + `pytest-cov`, `pytest-xdist`, `pytest-rerunfailures` (or explicit retry mechanism); Playwright for Python (`playwright` package) when browser E2E is needed
+- Same quality bar as the JS/TS stages above: `unslop-tests` rules hold in pytest too — no tests that pass without proving anything
+
+Rule of thumb: pick Python when the team, the product code or the existing suite is already Python; otherwise stay on the JS/TS track (Stage 0–4).
+
 ## Mapping to the Playwright UI course outline
 
 This path maps 1:1 onto a typical Playwright UI course (modules: intro → environment setup → quick start → locators vs selectors → basic actions → advanced actions → storage state → Page Object → project smoke tests → git bonus):
