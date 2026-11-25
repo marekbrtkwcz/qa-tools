@@ -6,6 +6,16 @@ Wszystkie istotne zmiany tego projektu są dokumentowane tutaj. Format zbliżony
 
 ### ✅ Dodane
 
+- 7 nowych skillów dla testera automatyzującego (**P6**)
+  > - `testing-with-bun` (test-automation): `bun test` / `bun:test` API, `bunfig.toml` preload, coverage, wybór bun vs `node --test` vs Vitest, Playwright pod Bunem
+  > - `k6-load-testing` (non-functional-testing): anatomia skryptu k6, scenariusze i thresholds, uruchomienie przez CLI i k6 MCP z `qa-mcp`, bramka CI
+  > - `debugging-with-chrome-devtools-mcp` (test-automation): konsola/sieć/wydajność/pamięć przez Chrome DevTools MCP przy debugowaniu flaky i wydajności
+  > - `testing-email-and-notifications` (api-testing): catch-all SMTP (Mailpit/Mailosaur), polling API maila, magic linki/OTP, test mode SMS/push
+  > - `testing-feature-flags` (test-automation): kontrola stanu flagów per test, stany on/off/default, kill switch, cleanup
+  > - `testing-offline-and-pwa` (test-automation): service worker, `setOffline`/route abort, manifest PWA, push
+  > - `monorepo-affected-tests` (test-automation): `--affected` (Nx/Turbo), mapowanie ścieżek na projekty Playwright, fallback pełnej suity
+  > - ulepszenia istniejących: knowledge `test-automation.md` (Bun + MCP jako first-class), cross-linki `k6-load-testing` i `debugging-with-chrome-devtools-mcp` w `testing-performance-and-load` i `diagnosing-test-failures`
+
 - migracja `scripts/` na TypeScript + Bun w kolekcji (**A+B**)
   > - scripts/*.js → scripts/*.ts (33 pliki; hooki w scripts/assets/ zostają CJS .js — Vibe odpala je przez `node vibe-hooks/<name>.js`); runtime: Node ≥ 24 z natywnym type stripping (bez loadera/buildu), `engines.node: ">=24"`, CI na Node 24
   > - tsconfig.json (strict + noUncheckedIndexedAccess, noEmit) + `npm run typecheck` (`tsc --noEmit`); biome.json rozszerzony o override dla `**/*.ts` (noExplicitAny + useNodejsImportProtocol = error)

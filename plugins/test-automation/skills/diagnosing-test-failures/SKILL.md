@@ -156,6 +156,7 @@ Fill in `./resources/diagnosis-record.md`.
 - `mocking-network-and-time` - when the loop needs a stubbed service, a frozen clock, or a pinned timezone
 - `designing-test-data` - when the class is test data
 - `automating-ci-test-pipelines` - when CI does not keep the traces, screenshots, or logs a diagnosis needs
+- `debugging-with-chrome-devtools-mcp` - live console/network/performance inspection in the CI browser when the trace artifact is not enough
 - `writing-unit-tests` - for the standard a regression test at the unit seam must meet
 - `handling-sensitive-test-data` - when artifacts contain personal or production data
 

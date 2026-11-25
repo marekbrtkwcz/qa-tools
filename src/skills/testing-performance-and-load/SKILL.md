@@ -179,6 +179,7 @@ The load tool is the instrument; without it there are no load numbers, and none 
 - `designing-test-data` - when the load test needs a realistic hot set and data distribution
 - `handling-sensitive-test-data` - when load test data is derived from production traffic
 - `automating-ci-test-pipelines` - for running the CI regression check and storing its history
+- `k6-load-testing` - the hands-on k6 layer: script anatomy, scenarios, thresholds, MCP runs, CI gate
 - `tech-debt-analysis` - when the bottleneck is structural rather than a single query
 
 ## Definition of Done

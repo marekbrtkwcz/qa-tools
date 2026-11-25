@@ -70,6 +70,7 @@ test-automation:
     - coordinating-test-writing-roles
     - designing-test-automation-architecture
     - diagnosing-test-failures
+    - debugging-with-chrome-devtools-mcp
     - ensuring-test-isolation
     - explain-test-failure
     - fix-tests
@@ -79,6 +80,7 @@ test-automation:
     - migrate-tests-to-playwright
     - migrating-tests-to-playwright
     - mocking-network-and-time
+    - monorepo-affected-tests
     - mutation-testing
     - playwright-explore-website
     - playwright-explore-website-requests
@@ -102,8 +104,11 @@ test-automation:
     - test-reports-and-artifacts
     - testing-auth-flows
     - testing-event-driven-systems
+    - testing-feature-flags
+    - testing-offline-and-pwa
     - testing-server-sent-events
     - testing-websockets
+    - testing-with-bun
     - testing-with-testcontainers
     - unslop-tests
     - writing-playwright-tests-best-practices
@@ -136,6 +141,7 @@ api-testing:
     - testing-webhooks
     - testing-api-contracts
     - testing-file-uploads-and-exports
+    - testing-email-and-notifications
     - testing-graphql-apis
     - testing-grpc-apis
   agents:
@@ -155,6 +161,7 @@ non-functional-testing:
     - auditing-mobile-accessibility
     - data-pipeline-testing
     - disaster-recovery-testing
+    - k6-load-testing
     - performance-reliability-plan
     - privacy-compliance-audit
     - resilience-smoke-testing
