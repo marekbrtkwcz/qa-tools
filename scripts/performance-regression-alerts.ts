@@ -31,7 +31,6 @@
  */
 
 const fs = require('node:fs');
-const path = require('node:path');
 const { execSync } = require('node:child_process');
 
 interface BenchmarkStatistics {
@@ -289,7 +288,7 @@ function benchmarkCommand(command: string, name: string, runs: number = options.
       const endTime = process.hrtime.bigint();
       const durationMs = Number(endTime - startTime) / 1_000_000;
       durations.push(durationMs);
-    } catch (error) {
+    } catch {
       // Ignore errors for benchmarking
     }
   }
@@ -434,7 +433,7 @@ function checkPerformance() {
   saveHistory();
 
   // Summary
-  console.log('\n' + '='.repeat(60));
+  console.log(`\n${'='.repeat(60)}`);
   console.log('📊 Performance Check Summary:');
   console.log('-'.repeat(60));
   console.log(`   Total benchmarks: ${currentBenchmarks.length}`);

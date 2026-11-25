@@ -30,58 +30,53 @@ function levenshteinDistance(a: string, b: string): number {
   if (a.length === 0) return b.length;
   if (b.length === 0) return a.length;
 
-  const matrix: number[][] = [];
-  for (let i = 0; i <= b.length; i++) {
-    matrix[i] = [i];
-  }
-
-  for (let j = 0; j <= a.length; j++) {
-    matrix[0]![j] = j;
-  }
-
+  // Wiersz po wierszu (rolling row): previous[j] = edit distance dla
+  // b.slice(0, i-1) vs a.slice(0, j), current[j] = dla b.slice(0, i)
+  let previous = Array.from({ length: a.length + 1 }, (_, j) => j);
   for (let i = 1; i <= b.length; i++) {
+    const current = new Array<number>(a.length + 1).fill(0);
+    current[0] = i;
     for (let j = 1; j <= a.length; j++) {
-      if (b.charAt(i - 1) === a.charAt(j - 1)) {
-        matrix[i]![j] = matrix[i - 1]![j - 1]!;
-      } else {
-        matrix[i]![j] = Math.min(matrix[i - 1]![j - 1]! + 1, matrix[i]![j - 1]! + 1, matrix[i - 1]![j]! + 1);
-      }
+      const substitutionCost = b.charAt(i - 1) === a.charAt(j - 1) ? 0 : 1;
+      const substitution = (previous[j - 1] ?? 0) + substitutionCost;
+      const insertion = (current[j - 1] ?? 0) + 1;
+      const deletion = (previous[j] ?? 0) + 1;
+      current[j] = Math.min(substitution, insertion, deletion);
     }
+    previous = current;
   }
-
-  return matrix[b.length]![a.length]!;
+  return previous[a.length] ?? 0;
 }
+
+const LIST_TYPES: string[] = ['skills', 'agents', 'knowledge', 'hooks'];
 
 /** Parse bundles.yaml */
 function parseBundles(file: string): Bundles {
   const content = fs.readFileSync(file, 'utf8');
   const bundles: Bundles = {};
   const lines = content.split(/\r?\n/);
-  let currentBundle: string | null = null;
+  let currentBundle: BundleLists | null = null;
   let currentList: ListType | null = null;
 
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i]!;
-
+  for (const line of lines) {
     // Bundle name
     const bundleMatch = line.match(/^(\w[\w-]*):\s*$/);
-    if (bundleMatch) {
-      const name: string = bundleMatch[1]!;
-      currentBundle = name;
-      bundles[name] = { skills: [], agents: [], knowledge: [], hooks: [] };
+    const bundleName = bundleMatch?.[1];
+    if (bundleName) {
+      currentBundle = { skills: [], agents: [], knowledge: [], hooks: [] };
+      bundles[bundleName] = currentBundle;
       currentList = null;
       continue;
     }
-
     if (!currentBundle) continue;
 
     // List type (skills, agents, knowledge, hooks)
     const listMatch = line.match(/^\s+(\w+):\s*$/);
     if (listMatch) {
-      const listType = listMatch[1]!;
-      if (['skills', 'agents', 'knowledge', 'hooks'].includes(listType)) {
+      const listType = listMatch[1];
+      if (listType && LIST_TYPES.includes(listType)) {
         currentList = listType as ListType;
-        bundles[currentBundle]![currentList] = [];
+        currentBundle[currentList] = [];
       }
       continue;
     }
@@ -89,7 +84,7 @@ function parseBundles(file: string): Bundles {
     // List items
     if (currentList && line.match(/^\s+-\s/)) {
       const item = line.trim().replace(/^-\s*/, '');
-      bundles[currentBundle]![currentList].push(item);
+      currentBundle[currentList].push(item);
     }
   }
   return bundles;
@@ -111,10 +106,10 @@ function checkDuplicates(bundles: Bundles): { errors: string[]; warnings: string
   for (const [bundleName, bundle] of Object.entries(bundles)) {
     for (const type of Object.keys(allItems) as ListType[]) {
       for (const item of bundle[type] || []) {
-        if (allItems[type]![item]) {
-          errors.push(`Duplicate ${type}: "${item}" in bundle "${allItems[type]![item]}" and "${bundleName}"`);
+        if (allItems[type][item]) {
+          errors.push(`Duplicate ${type}: "${item}" in bundle "${allItems[type][item]}" and "${bundleName}"`);
         } else {
-          allItems[type]![item] = bundleName;
+          allItems[type][item] = bundleName;
         }
       }
     }
@@ -138,10 +133,14 @@ function checkDuplicates(bundles: Bundles): { errors: string[]; warnings: string
   for (const [type, itemsMap] of Object.entries(allItems) as [ListType, Record<string, string>][]) {
     const items = Object.keys(itemsMap);
     for (let i = 0; i < items.length; i++) {
+      const first = items[i];
+      if (first === undefined) continue;
       for (let j = i + 1; j < items.length; j++) {
-        const distance = levenshteinDistance(items[i]!, items[j]!);
+        const second = items[j];
+        if (second === undefined) continue;
+        const distance = levenshteinDistance(first, second);
         if (distance < 3) {
-          warnings.push(`Similar ${type} names: "${items[i]}" and "${items[j]}" (distance: ${distance})`);
+          warnings.push(`Similar ${type} names: "${first}" and "${second}" (distance: ${distance})`);
         }
       }
     }
@@ -156,7 +155,8 @@ function main() {
   const bundlesFlag = args.indexOf('--bundles');
   const warnFlag = args.indexOf('--warnings');
 
-  const bundlesFile = bundlesFlag >= 0 ? path.resolve(args[bundlesFlag + 1]!) : BUNDLES_FILE;
+  const bundlesArg = bundlesFlag >= 0 ? args[bundlesFlag + 1] : undefined;
+  const bundlesFile = bundlesArg !== undefined ? path.resolve(bundlesArg) : BUNDLES_FILE;
   const showWarnings = warnFlag >= 0;
 
   try {

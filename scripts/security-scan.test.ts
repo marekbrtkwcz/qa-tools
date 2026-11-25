@@ -28,7 +28,7 @@ function createTestFile(name: string, content: string): string {
 function cleanup() {
   try {
     fs.rmSync(testDir, { recursive: true, force: true });
-  } catch (error) {
+  } catch {
     // Ignore cleanup errors
   }
 }

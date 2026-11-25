@@ -7,8 +7,6 @@
  *
  * Options:
  *   --dry-run    Show what would be generated without writing
- *   --from <tag> Start from this tag (default: last tag)
- *   --to <tag>   End at this tag (default: HEAD)
  *   --output <file> Output file (default: CHANGELOG.md)
  */
 
@@ -17,8 +15,6 @@ const { readFileSync, writeFileSync, existsSync } = require('node:fs');
 const { resolve } = require('node:path');
 
 const DRY_RUN = process.argv.includes('--dry-run');
-const FROM_TAG = process.argv.find((a) => a.startsWith('--from='))?.split('=')[1];
-const TO_TAG = process.argv.find((a) => a.startsWith('--to='))?.split('=')[1] || 'HEAD';
 const OUTPUT_FILE = process.argv.find((a) => a.startsWith('--output='))?.split('=')[1] || 'CHANGELOG.md';
 
 // Emoji map for Polish CHANGELOG
@@ -108,10 +104,10 @@ function parseCommits(output: string): Commit[] {
   let currentCommit: Commit | null = null;
 
   for (let i = 0; i < lines.length; i++) {
-    const line = lines[i]!.trim();
+    const line = lines[i]?.trim() ?? '';
 
     if (!line) {
-      if (currentCommit && currentCommit.body) {
+      if (currentCommit?.body) {
         currentCommit.body += '\n';
       }
       continue;
@@ -153,7 +149,7 @@ function parseCommits(output: string): Commit[] {
 
 function parseCommitMessage(message: string): ParsedCommit {
   const lines = message.split('\n');
-  const header = lines[0]!;
+  const header = lines[0] ?? '';
   const body = lines.slice(1).join('\n').trim();
 
   const headerMatch = header.match(/^([\w-]+)(?:\(([^)]+)\))?:\s*(.+)$/);
@@ -162,24 +158,21 @@ function parseCommitMessage(message: string): ParsedCommit {
     return { type: null, scope: null, description: header, breaking: false, body };
   }
 
-  const [, type, scope, description] = headerMatch;
+  const type = headerMatch[1] ?? null;
+  const scope = headerMatch[2] ?? null;
+  const description = headerMatch[3] ?? '';
   const breaking = BREAKING_PATTERN.test(header) || BREAKING_PATTERN.test(body);
 
-  return { type: type!, scope: scope!, description: description!, breaking, body };
+  return { type, scope, description, breaking, body };
 }
 
 function formatDate(tag: string): string {
   try {
     const date = execSync(`git log -1 --format=%aI ${tag}`, { encoding: 'utf-8', cwd: resolve() }).trim();
-    return date.split('T')[0]!;
+    return date.split('T')[0] ?? '';
   } catch {
-    return new Date().toISOString().split('T')[0]!;
+    return new Date().toISOString().split('T')[0] ?? '';
   }
-}
-
-function getLatestTag(): string | null {
-  const tags = getGitTags();
-  return tags[0] || null;
 }
 
 function getPreviousTag(currentTag: string): string | null {
@@ -188,12 +181,14 @@ function getPreviousTag(currentTag: string): string | null {
   // Tagi są posortowane malejąco, więc poprzednik w czasie to tags[index + 1]
   // — również dla najnowszego taga (index 0). null oznacza brak starszego
   // taga (pierwsza wersja): wtedy getCommits bierze całą historię do taga.
-  return index >= 0 && index + 1 < tags.length ? tags[index + 1]! : null;
+  if (index < 0 || index + 1 >= tags.length) {
+    return null;
+  }
+  return tags[index + 1] ?? null;
 }
 
 function generateChangelog(): string {
   const tags = getGitTags();
-  const allCommits: Commit[] = [];
 
   const latestTag = tags[0] || null;
   const unreleasedCommits = latestTag ? getCommits(latestTag, 'HEAD') : getCommits(null, 'HEAD');
@@ -229,7 +224,7 @@ function generateChangelog(): string {
     };
 
     for (const commit of section.commits) {
-      const parsed = parseCommitMessage(commit.subject + (commit.body ? '\n' + commit.body : ''));
+      const parsed = parseCommitMessage(`${commit.subject}${commit.body ? `\n${commit.body}` : ''}`);
 
       if (!parsed.type && !parsed.breaking) {
         const lowerSubject = commit.subject.toLowerCase();
@@ -254,8 +249,8 @@ function generateChangelog(): string {
       } else {
         if (parsed.breaking) {
           sectionGroups['⚠️ BREAKING CHANGE'].push({ commit, parsed });
-        } else {
-          const sectionName = (TYPE_TO_SECTION as Record<string, SectionName>)[parsed.type!] || '🔄 Zmienione';
+        } else if (parsed.type) {
+          const sectionName = (TYPE_TO_SECTION as Record<string, SectionName>)[parsed.type] || '🔄 Zmienione';
           sectionGroups[sectionName].push({ commit, parsed });
         }
       }
@@ -265,8 +260,8 @@ function generateChangelog(): string {
     let hasContent = false;
 
     for (const sectionName of sectionOrder) {
-      const items = sectionGroups[sectionName]!;
-      if (items.length === 0) continue;
+      const items = sectionGroups[sectionName];
+      if (!items || items.length === 0) continue;
 
       hasContent = true;
       changelog += `### ${sectionName}\n\n`;
@@ -280,7 +275,7 @@ function generateChangelog(): string {
         const scopeStr = scope || (parsed.scope ? ` (${parsed.scope})` : '');
         const line = `- ${description}${scopeStr}${breaking} (${hash})`;
 
-        if (parsed.body && parsed.body.trim()) {
+        if (parsed.body?.trim()) {
           changelog += `${line}\n  > ${parsed.body.trim().replace(/\n/g, '\n  > ')}\n`;
         } else {
           changelog += `${line}\n`;
@@ -320,7 +315,7 @@ function main() {
       const newHeader = changelog.split('\n').slice(0, 3).join('\n');
 
       if (existingHeader !== newHeader && existingHeader.includes('CHANGELOG')) {
-        finalContent = existingHeader + '\n' + changelog.split('\n').slice(3).join('\n');
+        finalContent = `${existingHeader}\n${changelog.split('\n').slice(3).join('\n')}`;
       }
     }
 

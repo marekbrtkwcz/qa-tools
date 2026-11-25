@@ -59,7 +59,7 @@ test.describe('Performance Benchmarking', () => {
     test('should handle empty array', () => {
       const values: number[] = [];
       const median = benchmark.calculateMedian(values);
-      assert.ok(isNaN(median));
+      assert.ok(Number.isNaN(median));
     });
   });
 

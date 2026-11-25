@@ -24,7 +24,6 @@
 
 const { execSync } = require('node:child_process');
 const fs = require('node:fs');
-const path = require('node:path');
 
 interface BenchmarkRun {
   run: number;
@@ -181,7 +180,7 @@ function benchmarkCommand(command: string, name: string, runs: number = options.
       durationMs: durationMs,
       duration: formatDuration(durationMs),
       success: success,
-      output: output.length > 500 ? output.substring(0, 500) + '...' : output,
+      output: output.length > 500 ? `${output.substring(0, 500)}...` : output,
       error: error,
     });
 
@@ -281,7 +280,7 @@ function formatResults(): string {
 
   // Individual benchmarks
   results.benchmarks.forEach((benchmark) => {
-    lines.push('📋 ' + benchmark.name);
+    lines.push(`📋 ${benchmark.name}`);
     lines.push('-'.repeat(80));
 
     // Run details

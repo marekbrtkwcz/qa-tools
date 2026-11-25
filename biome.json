@@ -6,7 +6,9 @@
     "useIgnoreFile": true
   },
   "files": {
-    "includes": ["scripts/**"]
+    "includes": [
+      "scripts/**"
+    ]
   },
   "formatter": {
     "enabled": true,
@@ -26,14 +28,17 @@
   },
   "overrides": [
     {
-      "includes": ["**/*.ts"],
+      "includes": [
+        "**/*.ts"
+      ],
       "linter": {
         "rules": {
           "suspicious": {
             "noExplicitAny": "error"
           },
           "style": {
-            "useNodejsImportProtocol": "error"
+            "useNodejsImportProtocol": "error",
+            "noNonNullAssertion": "error"
           }
         }
       }

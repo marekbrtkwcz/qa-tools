@@ -61,30 +61,49 @@ test('findTwinPairs: komendy parują się tylko z model-skilami tego samego bund
 
   const pairs = findTwinPairs(bundles, isCommand);
   assert.strictEqual(pairs.length, 3);
-  assert.ok(pairs.some((p) => p.command === 'stabilize-flaky-tests' && p.skill === 'stabilizing-flaky-tests'));
-  assert.ok(pairs.some((p) => p.command === 'record-change-intent' && p.skill === 'recording-change-intent'));
-  assert.ok(pairs.some((p) => p.command === 'migrate-x' && p.skill === 'migrating-x' && p.bundle === 'other'));
+  assert.ok(
+    pairs.some(
+      (p: { command: string; skill: string; bundle: string }) =>
+        p.command === 'stabilize-flaky-tests' && p.skill === 'stabilizing-flaky-tests',
+    ),
+  );
+  assert.ok(
+    pairs.some(
+      (p: { command: string; skill: string; bundle: string }) =>
+        p.command === 'record-change-intent' && p.skill === 'recording-change-intent',
+    ),
+  );
+  assert.ok(
+    pairs.some(
+      (p: { command: string; skill: string; bundle: string }) =>
+        p.command === 'migrate-x' && p.skill === 'migrating-x' && p.bundle === 'other',
+    ),
+  );
 });
 
 /* ---------- checkMutualRefs ---------- */
 
 test('checkMutualRefs: para z wzajemnymi wskazaniami przechodzi', () => {
   const pairs = [{ command: 'stabilize-x', skill: 'stabilizing-x', bundle: 'b' }];
-  const descriptions = {
+  const descriptions: Record<string, string> = {
     'stabilize-x': 'Quick triage form. For the full workflow use the stabilizing-x skill.',
     'stabilizing-x': 'Full workflow. For the quick form use the stabilize-x command.',
   };
-  const issues = checkMutualRefs(pairs, (skill) => descriptions[skill] ?? '');
+  const issues = checkMutualRefs(pairs, (skill: string) => descriptions[skill] ?? '');
   assert.deepStrictEqual(issues, []);
 });
 
 test('checkMutualRefs: brak wskazania w описание = issue, w obie strony', () => {
   const pairs = [{ command: 'verify-x', skill: 'verifying-x', bundle: 'b' }];
-  const descriptions = {
+  const descriptions: Record<string, string> = {
     'verify-x': 'Quick matrix form, no mention of the sibling.',
     'verifying-x': 'Full workflow. For the quick form use the verify-x command.',
   };
-  const issues = checkMutualRefs(pairs, (skill) => descriptions[skill] ?? '');
+  const issues = checkMutualRefs(pairs, (skill: string) => descriptions[skill] ?? '');
   assert.strictEqual(issues.length, 1);
-  assert.match(issues[0]!, /verify-x: description does not mention verifying-x/);
+  const [first] = issues;
+  if (first === undefined) {
+    assert.fail('expected a missing-reference issue');
+  }
+  assert.match(first, /verify-x: description does not mention verifying-x/);
 });

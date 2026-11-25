@@ -35,38 +35,38 @@ function parseBundles(file: string): Bundles {
   const content = fs.readFileSync(file, 'utf8');
   const bundles: Bundles = {};
   const lines = content.split(/\r?\n/);
-  let currentBundle: string | null = null;
+  let currentBundle: BundleEntry | null = null;
 
   for (let i = 0; i < lines.length; i++) {
-    const line = lines[i]!;
+    const line = lines[i] ?? '';
     const bundleMatch = line.match(/^(\w[\w-]*):\s*$/);
-    if (bundleMatch) {
-      const name: string = bundleMatch[1]!;
-      currentBundle = name;
-      bundles[name] = { skills: [], agents: [], knowledge: [], hooks: [], version: null };
+    const bundleName = bundleMatch?.[1];
+    if (bundleName) {
+      currentBundle = { skills: [], agents: [], knowledge: [], hooks: [], version: null } as BundleEntry;
+      bundles[bundleName] = currentBundle;
       continue;
     }
 
     if (!currentBundle) continue;
 
     const versionMatch = line.match(/^\s+version:\s*["']?([^"'\s]+)["']?\s*$/);
-    if (versionMatch) {
-      bundles[currentBundle]!.version = versionMatch[1]!;
+    const bundleVersion = versionMatch?.[1];
+    if (bundleVersion) {
+      currentBundle.version = bundleVersion;
       continue;
     }
 
     const listMatch = line.match(/^\s+(-?\s*)(\w[\w-]*):?\s*$/);
     if (listMatch) {
-      const key = listMatch[2]!.replace(/-$/, '');
+      const key = (listMatch[2] ?? '').replace(/-$/, '');
       if (['skills', 'agents', 'knowledge', 'hooks'].includes(key)) {
         // Next lines will be list items
-        let j = i + 1;
-        while (j < lines.length && lines[j]!.startsWith('    - ')) {
-          const item = lines[j]!.trim().replace(/^-\s*/, '');
-          if (bundles[currentBundle]![key as ListType]) {
-            bundles[currentBundle]![key as ListType].push(item);
+        for (let j = i + 1, itemLine = lines[j]; itemLine?.startsWith('    - '); j++, itemLine = lines[j]) {
+          const item = itemLine.trim().replace(/^-\s*/, '');
+          const list = currentBundle[key as ListType];
+          if (list) {
+            list.push(item);
           }
-          j++;
         }
       }
     }
@@ -128,7 +128,7 @@ function checkChangelogFormat(changelogText: string): string[] {
   const lines = changelogText.split(/\r?\n/);
 
   // Must have header
-  if (!lines[0]!.includes('# CHANGELOG')) {
+  if (!lines[0]?.includes('# CHANGELOG')) {
     errors.push('CHANGELOG.md: Missing "# CHANGELOG" header');
   }
 
@@ -143,17 +143,19 @@ function checkChangelogFormat(changelogText: string): string[] {
   const foundVersions: string[] = [];
 
   for (let i = 0; i < lines.length; i++) {
-    const match = lines[i]!.match(versionHeaderRegex);
+    const match = lines[i]?.match(versionHeaderRegex);
     if (match) {
-      if (match[1] === 'Unreleased') {
+      const version = match[1];
+      if (version === 'Unreleased') {
         foundUnreleased = true;
-      } else {
-        foundVersions.push(match[1]!);
+      } else if (version) {
+        foundVersions.push(version);
         // Check if there's a date (can be on the same line as header or on the next line)
-        const hasDateOnSameLine = lines[i]!.match(/\d{4}-\d{2}-\d{2}/);
-        const hasDateOnNextLine = i + 1 < lines.length && lines[i + 1]!.match(/^\d{4}-\d{2}-\d{2}/);
+        const hasDateOnSameLine = /\d{4}-\d{2}-\d{2}/.test(lines[i] ?? '');
+        const nextLine = lines[i + 1] ?? '';
+        const hasDateOnNextLine = i + 1 < lines.length && /^\d{4}-\d{2}-\d{2}/.test(nextLine);
         if (!hasDateOnSameLine && !hasDateOnNextLine) {
-          errors.push(`CHANGELOG.md: Version [${match[1]}] missing date`);
+          errors.push(`CHANGELOG.md: Version [${version}] missing date`);
         }
       }
     }
@@ -190,7 +192,7 @@ function getCommitsSinceLastTag(): {
     }
 
     // Get the latest tag
-    const lastTag = tags[0]!;
+    const lastTag = tags[0] ?? null;
 
     // Get commits since last tag
     const range = lastTag ? `${lastTag}..HEAD` : 'HEAD';
@@ -203,7 +205,7 @@ function getCommitsSinceLastTag(): {
             .filter(Boolean)
             .map((c: string) => {
               const [hash, subject] = c.split('|', 2);
-              return { hash: hash!, subject: subject! };
+              return { hash: hash ?? '', subject: subject ?? '' };
             })
         : [],
       lastTag,
@@ -261,46 +263,25 @@ function checkBundlesChanges(bundles: Bundles, changelogText: string, lastTag: s
 function parseBundlesFromText(text: string): Record<string, Omit<BundleEntry, 'version'>> {
   const bundles: Record<string, Omit<BundleEntry, 'version'>> = {};
   const lines = text.split(/\r?\n/);
-  let currentBundle: string | null = null;
+  let currentBundle: Omit<BundleEntry, 'version'> | null = null;
 
   for (let i = 0; i < lines.length; i++) {
-    const line = lines[i]!;
+    const line = lines[i] ?? '';
     const bundleMatch = line.match(/^(\w[\w-]*):\s*$/);
-    if (bundleMatch) {
-      const name: string = bundleMatch[1]!;
-      currentBundle = name;
-      bundles[name] = { skills: [], agents: [], knowledge: [], hooks: [] };
+    const bundleName = bundleMatch?.[1];
+    if (bundleName) {
+      currentBundle = { skills: [], agents: [], knowledge: [], hooks: [] };
+      bundles[bundleName] = currentBundle;
       continue;
     }
 
     if (!currentBundle) continue;
 
-    if (line.match(/^\s+skills:\s*$/)) {
-      let j = i + 1;
-      while (j < lines.length && lines[j]!.startsWith('    - ')) {
-        bundles[currentBundle]!.skills.push(lines[j]!.trim().replace(/^-\s*/, ''));
-        j++;
-      }
-    }
-    if (line.match(/^\s+agents:\s*$/)) {
-      let j = i + 1;
-      while (j < lines.length && lines[j]!.startsWith('    - ')) {
-        bundles[currentBundle]!.agents.push(lines[j]!.trim().replace(/^-\s*/, ''));
-        j++;
-      }
-    }
-    if (line.match(/^\s+knowledge:\s*$/)) {
-      let j = i + 1;
-      while (j < lines.length && lines[j]!.startsWith('    - ')) {
-        bundles[currentBundle]!.knowledge.push(lines[j]!.trim().replace(/^-\s*/, ''));
-        j++;
-      }
-    }
-    if (line.match(/^\s+hooks:\s*$/)) {
-      let j = i + 1;
-      while (j < lines.length && lines[j]!.startsWith('    - ')) {
-        bundles[currentBundle]!.hooks.push(lines[j]!.trim().replace(/^-\s*/, ''));
-        j++;
+    const listKey = line.match(/^\s+(skills|agents|knowledge|hooks):\s*$/);
+    if (listKey) {
+      const key = listKey[1] as ListType;
+      for (let j = i + 1, itemLine = lines[j]; itemLine?.startsWith('    - '); j++, itemLine = lines[j]) {
+        currentBundle[key].push(itemLine.trim().replace(/^-\s*/, ''));
       }
     }
   }
@@ -336,7 +317,7 @@ function checkReadmeCounts(bundles: Bundles, readmeText: string): string[] {
     // Check model-visible count
     const visibleMatch = readmeText.match(/(\d+)\s+skilli widocznych dla modelu/);
     if (visibleMatch) {
-      const visible = parseInt(visibleMatch[1]!, 10);
+      const visible = parseInt(visibleMatch[1] ?? '0', 10);
       if (visible !== modelVisible) {
         errors.push(`README.md: Model-visible skills count (${visible}) != actual (${modelVisible})`);
       }
@@ -355,9 +336,12 @@ function main() {
   const changelogFlag = args.indexOf('--changelog');
   const readmeFlag = args.indexOf('--readme');
 
-  const bundlesFile = bundlesFlag >= 0 ? path.resolve(args[bundlesFlag + 1]!) : BUNDLES_FILE;
-  const changelogFile = changelogFlag >= 0 ? path.resolve(args[changelogFlag + 1]!) : CHANGELOG_FILE;
-  const readmeFile = readmeFlag >= 0 ? path.resolve(args[readmeFlag + 1]!) : README_FILE;
+  const bundlesArg = bundlesFlag >= 0 ? args[bundlesFlag + 1] : undefined;
+  const bundlesFile = bundlesArg !== undefined ? path.resolve(bundlesArg) : BUNDLES_FILE;
+  const changelogArg = changelogFlag >= 0 ? args[changelogFlag + 1] : undefined;
+  const changelogFile = changelogArg !== undefined ? path.resolve(changelogArg) : CHANGELOG_FILE;
+  const readmeArg = readmeFlag >= 0 ? args[readmeFlag + 1] : undefined;
+  const readmeFile = readmeArg !== undefined ? path.resolve(readmeArg) : README_FILE;
 
   let allErrors: string[] = [];
 

@@ -13,23 +13,13 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const fs = require('node:fs');
+
 const path = require('node:path');
-const os = require('node:os');
 
 // Import functions from generate-changelog.js
 const { TYPE_TO_SECTION, BREAKING_PATTERN, getGitTags, parseCommits } = require('./generate-changelog.ts');
 
 const REPO_ROOT = path.resolve(__dirname, '..');
-
-/* ---------- Helper: write temp file ---------- */
-
-function writeTmp(content: string, suffix = '.md') {
-  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'generate-changelog-test-'));
-  const filePath = path.join(tmpDir, `test${suffix}`);
-  fs.writeFileSync(filePath, content);
-  return { filePath, tmpDir, cleanup: () => fs.rmSync(tmpDir, { recursive: true, force: true }) };
-}
 
 /* ---------- TYPE_TO_SECTION tests ---------- */
 

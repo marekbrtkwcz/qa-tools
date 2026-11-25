@@ -18,19 +18,11 @@
  */
 
 const fs = require('node:fs');
-const path = require('node:path');
 const { execSync } = require('node:child_process');
 
 // Configuration
 const ALLOWED_COMMANDS = ['git add', 'git commit', 'git push', 'npm run'];
 const BLOCKED_FILES = ['package-lock.json', 'node_modules/'];
-const QUALITY_CHECKS = {
-  p2: 'npm run p2',
-  p3: 'npm run test:p3',
-  lint: 'npm run lint',
-  build: 'npm run build',
-  verify: 'npm run verify',
-};
 
 // State
 const state = {
@@ -46,7 +38,7 @@ function shouldRunQualityGate(operation, args) {
   // Check if this is a file modification
   if (operation === 'file_system.write_file' || operation === 'edit') {
     // Skip if modifying allowed files
-    if (args && args.file_path) {
+    if (args?.file_path) {
       for (const blocked of BLOCKED_FILES) {
         if (args.file_path.includes(blocked)) {
           return false;
@@ -196,7 +188,7 @@ function main() {
   // It receives tool call information from stdin
 
   const input = JSON.parse(fs.readFileSync(0, 'utf8'));
-  const { type, name, arguments: args, tool } = input;
+  const { name, arguments: args } = input;
 
   // Check if we should run quality gate
   if (!shouldRunQualityGate(name, args)) {

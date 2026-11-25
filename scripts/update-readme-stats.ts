@@ -15,7 +15,7 @@
  */
 
 const { readFileSync, writeFileSync, existsSync, readdirSync, statSync } = require('node:fs');
-const { resolve, relative, join } = require('node:path');
+const { resolve } = require('node:path');
 const { parse } = require('yaml');
 
 const DRY_RUN = process.argv.includes('--dry-run');
@@ -84,17 +84,19 @@ function countFromBundles(bundles: Bundles): Counts {
   };
 
   for (const [bundleName, bundleConfig] of Object.entries(bundles)) {
-    counts.perBundle[bundleName] = {
+    const bundleCounts: BundleCounts = {
       skills: bundleConfig.skills ? bundleConfig.skills.length : 0,
       agents: bundleConfig.agents ? bundleConfig.agents.length : 0,
       knowledge: bundleConfig.knowledge ? bundleConfig.knowledge.length : 0,
       hooks: bundleConfig.hooks ? bundleConfig.hooks.length : 0,
     };
 
-    counts.skills += counts.perBundle[bundleName]!.skills;
-    counts.agents += counts.perBundle[bundleName]!.agents;
-    counts.knowledge += counts.perBundle[bundleName]!.knowledge;
-    counts.hooks += counts.perBundle[bundleName]!.hooks;
+    counts.perBundle[bundleName] = bundleCounts;
+
+    counts.skills += bundleCounts.skills;
+    counts.agents += bundleCounts.agents;
+    counts.knowledge += bundleCounts.knowledge;
+    counts.hooks += bundleCounts.hooks;
   }
 
   // Count visible skills from source
@@ -158,7 +160,14 @@ function updateReadme(readme: string, counts: Counts, bundles: Bundles): { updat
 
     // For each bundle, update its row in the table
     for (const [bundleName, bundleConfig] of Object.entries(bundles)) {
-      const bundleCounts = counts.perBundle[bundleName]!;
+      // counts jest budowane z tego samego zbioru bundli, więc brak wpisu
+      // oznacza niespójność wejścia — traktujemy jak pusty licznik
+      const bundleCounts = counts.perBundle[bundleName] ?? {
+        skills: 0,
+        agents: 0,
+        knowledge: 0,
+        hooks: 0,
+      };
 
       // Wzorzec rzędu: | `bundleName` icon | N | N | N | hooks | Zakres |
       // Grupa 1 łapie początek rzędu z nazwą bundla, grupy 2/4/6 liczby
@@ -173,8 +182,7 @@ function updateReadme(readme: string, counts: Counts, bundles: Bundles): { updat
       const skills = fmt(bundleCounts.skills);
       const agents = fmt(bundleCounts.agents);
       const knowledge = fmt(bundleCounts.knowledge);
-      const hooks =
-        bundleCounts.hooks > 0 ? '✅ ' + (bundleConfig.hooks ? bundleConfig.hooks.join(', ') : '') : EM_DASH;
+      const hooks = bundleCounts.hooks > 0 ? `✅ ${bundleConfig.hooks ? bundleConfig.hooks.join(', ') : ''}` : EM_DASH;
 
       // Zamień komórki rzędu; stara komórka Hook jest skonsumowana przez regex,
       // a jej spacja wiodąca/wolna wraca z replacementu (oczekiwany format
@@ -228,15 +236,17 @@ function verifyReadme(readme: string, counts: Counts, bundles: Bundles): string[
   const issues: string[] = [];
 
   for (const bundleName of Object.keys(bundles)) {
-    const bundleCounts = counts.perBundle[bundleName]!;
+    // counts jest budowane z tego samego zbioru bundli, więc brak wpisu
+    // oznacza niespójność wejścia — traktujemy jak pusty licznik
+    const bundleCounts = counts.perBundle[bundleName] ?? { skills: 0, agents: 0, knowledge: 0, hooks: 0 };
 
     // Try to find the row for this bundle
     const rowRegex = new RegExp(`\\\`${bundleName}\\\`.+?\\|\\s*(\\d+|${EM_DASH})\\s*\\|\\s*(\\d+|${EM_DASH})`);
     const match = readme.match(rowRegex);
 
     if (match) {
-      const skillsStr = match[1]!;
-      const agentsStr = match[2]!;
+      const skillsStr = match[1] ?? EM_DASH;
+      const agentsStr = match[2] ?? EM_DASH;
       const skillsInReadme = skillsStr === EM_DASH ? 0 : parseInt(skillsStr, 10);
       const agentsInReadme = agentsStr === EM_DASH ? 0 : parseInt(agentsStr, 10);
 
@@ -253,7 +263,7 @@ function verifyReadme(readme: string, counts: Counts, bundles: Bundles): string[
 
   const razemMatch = readme.match(/Razem:\s*\*\*(\d+)\s*plugin/);
   if (razemMatch) {
-    const pluginsInReadme = parseInt(razemMatch[1]!, 10);
+    const pluginsInReadme = parseInt(razemMatch[1] ?? '0', 10);
     if (pluginsInReadme !== counts.plugins) {
       issues.push(`  ❌ Total plugins: ${pluginsInReadme} (README) != ${counts.plugins} (bundles.yaml)`);
     }
@@ -261,7 +271,7 @@ function verifyReadme(readme: string, counts: Counts, bundles: Bundles): string[
 
   const skillsMatch = readme.match(/Razem:[^\n]*\*\*(\d+)\s*skilli/);
   if (skillsMatch) {
-    const skillsInReadme = parseInt(skillsMatch[1]!, 10);
+    const skillsInReadme = parseInt(skillsMatch[1] ?? '0', 10);
     if (skillsInReadme !== counts.skills) {
       issues.push(`  ❌ Total skills: ${skillsInReadme} (README) != ${counts.skills} (bundles.yaml)`);
     }
@@ -269,7 +279,7 @@ function verifyReadme(readme: string, counts: Counts, bundles: Bundles): string[
 
   const agentsMatch = readme.match(/Razem:[^\n]*\*\*(\d+)\s*subagent/);
   if (agentsMatch) {
-    const agentsInReadme = parseInt(agentsMatch[1]!, 10);
+    const agentsInReadme = parseInt(agentsMatch[1] ?? '0', 10);
     if (agentsInReadme !== counts.agents) {
       issues.push(`  ❌ Total agents: ${agentsInReadme} (README) != ${counts.agents} (bundles.yaml)`);
     }
@@ -277,7 +287,7 @@ function verifyReadme(readme: string, counts: Counts, bundles: Bundles): string[
 
   const knowledgeMatch = readme.match(/Razem:[^\n]*\*\*(\d+)\s*knowledge/);
   if (knowledgeMatch) {
-    const knowledgeInReadme = parseInt(knowledgeMatch[1]!, 10);
+    const knowledgeInReadme = parseInt(knowledgeMatch[1] ?? '0', 10);
     if (knowledgeInReadme !== counts.knowledge) {
       issues.push(`  ❌ Total knowledge: ${knowledgeInReadme} (README) != ${counts.knowledge} (bundles.yaml)`);
     }
@@ -285,7 +295,7 @@ function verifyReadme(readme: string, counts: Counts, bundles: Bundles): string[
 
   const hooksMatch = readme.match(/Razem:[^\n]*\*\*(\d+)\s*quality-gate/);
   if (hooksMatch) {
-    const hooksInReadme = parseInt(hooksMatch[1]!, 10);
+    const hooksInReadme = parseInt(hooksMatch[1] ?? '0', 10);
     if (hooksInReadme !== counts.hooks) {
       issues.push(`  ❌ Total hooks: ${hooksInReadme} (README) != ${counts.hooks} (bundles.yaml)`);
     }
@@ -293,7 +303,7 @@ function verifyReadme(readme: string, counts: Counts, bundles: Bundles): string[
 
   const visibleMatch = readme.match(/(\d+) skilli widocznych dla modelu/);
   if (visibleMatch) {
-    const visibleInReadme = parseInt(visibleMatch[1]!, 10);
+    const visibleInReadme = parseInt(visibleMatch[1] ?? '0', 10);
     if (visibleInReadme !== counts.visibleSkills) {
       issues.push(`  ❌ Visible skills: ${visibleInReadme} (README) != ${counts.visibleSkills} (calculated)`);
     }
@@ -301,8 +311,8 @@ function verifyReadme(readme: string, counts: Counts, bundles: Bundles): string[
 
   const parenMatch = readme.match(/\((\d+)\s*−\s*(\d+)\s+z\s*`disable-model-invocation: true`/);
   if (parenMatch) {
-    const totalInReadme = parseInt(parenMatch[1]!, 10);
-    const disabledInReadme = parseInt(parenMatch[2]!, 10);
+    const totalInReadme = parseInt(parenMatch[1] ?? '0', 10);
+    const disabledInReadme = parseInt(parenMatch[2] ?? '0', 10);
     const disabledCount = counts.skills - counts.visibleSkills;
     if (totalInReadme !== counts.skills) {
       issues.push(`  ❌ Parenthetical total: ${totalInReadme} (README) != ${counts.skills} (bundles.yaml)`);

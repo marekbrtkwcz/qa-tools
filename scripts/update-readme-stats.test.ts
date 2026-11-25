@@ -45,7 +45,8 @@ test('loadBundles: returns object with expected structure', () => {
   const bundles = loadBundles();
 
   // Check first bundle has expected properties
-  const firstBundle = bundles[Object.keys(bundles)[0]!];
+  const [firstName] = Object.keys(bundles);
+  const firstBundle = firstName === undefined ? undefined : bundles[firstName];
   assert.ok(firstBundle);
 
   // Should have at least some of these properties
@@ -388,11 +389,15 @@ test('updateReadme: nadpisuje liczby i Hook bez zmiany liczby komórek', () => {
     assert.strictEqual(row.split('|').length, 8, `rząd zmienił liczbę komórek: ${row}`);
   }
 
-  assert.ok(rows[0]!.includes('| `demo` 🧭 | 12 | 3 | 1 | — |'), rows[0]);
-  assert.ok(rows[0]!.includes('| demo scope |'), 'kolumna Zakres ma zostać nietknięta');
+  const [demoRow, , hookedRow] = rows;
+  if (demoRow === undefined || hookedRow === undefined) {
+    assert.fail('fixture ma trzy rzędy bundli — brakuje demo/hooked');
+  }
+  assert.ok(demoRow.includes('| `demo` 🧭 | 12 | 3 | 1 | — |'), demoRow);
+  assert.ok(demoRow.includes('| demo scope |'), 'kolumna Zakres ma zostać nietknięta');
   // Stara komórka Hook została skonsumowana przez regex, nie podwojona
-  assert.ok(!rows[0]!.includes('✅ old-hook'), rows[0]);
-  assert.ok(rows[2]!.includes('| `hooked` 🤖 | 5 | 1 | 1 | ✅ test-file-guard |'), rows[2]);
+  assert.ok(!demoRow.includes('✅ old-hook'), demoRow);
+  assert.ok(hookedRow.includes('| `hooked` 🤖 | 5 | 1 | 1 | ✅ test-file-guard |'), hookedRow);
   assert.ok(changes.includes('Updated bundle table counts'));
 });
 

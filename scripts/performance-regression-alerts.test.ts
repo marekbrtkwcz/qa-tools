@@ -42,7 +42,7 @@ test.describe('Performance Regression Alerts', () => {
     test('should handle empty array', () => {
       const values: number[] = [];
       const mean = alerts.calculateMean(values);
-      assert.ok(isNaN(mean));
+      assert.ok(Number.isNaN(mean));
     });
   });
 

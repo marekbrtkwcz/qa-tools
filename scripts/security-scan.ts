@@ -118,7 +118,7 @@ function scanForSecrets(filePath: string): void {
   try {
     const content = fs.readFileSync(filePath, 'utf8');
 
-    SECRETS_PATTERNS.forEach((pattern, index) => {
+    SECRETS_PATTERNS.forEach((pattern) => {
       const matches = content.match(pattern);
       if (matches) {
         matches.forEach((match: string) => {
@@ -129,14 +129,14 @@ function scanForSecrets(filePath: string): void {
 
           results.secrets.push({
             file: filePath,
-            pattern: pattern.toString().substring(0, 50) + '...',
+            pattern: `${pattern.toString().substring(0, 50)}...`,
             match: maskedMatch,
             line: findLineNumber(content, match),
           });
         });
       }
     });
-  } catch (error) {
+  } catch {
     // Ignore binary files
   }
 }
@@ -197,7 +197,7 @@ function checkPermissions(filePath: string): void {
         mode: mode.toString(8),
       });
     }
-  } catch (error) {
+  } catch {
     // Ignore permission errors
   }
 }
@@ -215,9 +215,6 @@ function isSensitiveFile(filePath: string): boolean {
  */
 function checkDependencies(): void {
   try {
-    const packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8'));
-    const lockFile = fs.readFileSync('package-lock.json', 'utf8');
-
     // Run npm audit
     try {
       const auditOutput = execSync('npm audit --json --audit-level=moderate 2>/dev/null', {
@@ -282,7 +279,7 @@ function checkOutdated(): void {
         });
       }
     });
-  } catch (error) {
+  } catch {
     // Ignore
   }
 }
@@ -317,7 +314,7 @@ function scanFiles(directory: string, basePath: string = directory): void {
         // Check permissions
         checkPermissions(fullPath);
       }
-    } catch (error) {
+    } catch {
       // Ignore errors (permission denied, etc.)
     }
   }

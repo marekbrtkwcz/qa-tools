@@ -28,7 +28,6 @@
  */
 
 const fs = require('node:fs');
-const path = require('node:path');
 const { execSync } = require('node:child_process');
 
 // Parse command line arguments
@@ -243,7 +242,7 @@ function checkPermissions() {
         severity: 'high',
       });
     });
-  } catch (error) {
+  } catch {
     // Ignore errors (command not available on Windows)
   }
 }
@@ -286,7 +285,7 @@ function checkSensitiveFiles() {
         }
       }
     });
-  } catch (error) {
+  } catch {
     // Ignore errors (not a git repo or git not available)
   }
 }
@@ -535,7 +534,7 @@ function main() {
         } else {
           console.log('⚠️  Security scan is not configured in workflow');
         }
-      } catch (error) {
+      } catch {
         console.log('⚠️  Could not check workflow configuration');
       }
 
