@@ -128,6 +128,24 @@ Notes:
   # test: needs: build, then download-artifact app-build and start it in webServer
 ```
 
+### Bun-standardized repo (GitHub Actions)
+
+Replace `setup-node` + `npm ci` in the install step with Bun, and cache on `bun.lock` instead of `package-lock.json`:
+
+```yaml
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - run: bun install --frozen-lockfile
+      # cache: actions/cache@v4 with path ~/.bun/install/cache and key ${{ runner.os }}-bun-${{ hashFiles('bun.lock') }}
+```
+
+Rules:
+
+- One package manager per repo: if `bun.lock` is committed, do not also run `npm ci` anywhere in the pipeline.
+- Playwright Test is a Node tool: jobs that execute `playwright test` still need `actions/setup-node@v4` (Bun alone is not enough to run Playwright), or run Playwright inside its official container image. Biome, `tsc`, and pure-TS scripts run natively under Bun with no build step.
+- `bun test` can replace the unit-test job's runner only if the suite was written for it; Vitest runs under both runtimes, which keeps the pipeline portable.
+
 ### Path-filtered job
 
 ```yaml

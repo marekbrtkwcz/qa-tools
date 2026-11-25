@@ -88,7 +88,7 @@ Shard when one machine at full workers exceeds the layer's budget. Each shard wr
 
 ### Phase 4: Cache and set up once
 
-- dependencies: the provider's package-manager cache keyed on the lockfile
+- dependencies: the provider's package-manager cache keyed on the lockfile (`package-lock.json` for npm, `bun.lock` for Bun - see the Bun recipe in `./resources/provider-recipes.md`)
 - browsers: either cache `~/.cache/ms-playwright` keyed on the Playwright version (and still run `npx playwright install-deps` on a hit, since OS packages are not in that cache), or run in the official Playwright container image pinned to the same version. Measure both; a cache restore is not always faster than a download.
 - build the app once per pipeline and pass it to test jobs as an artifact, instead of building in every shard
 - cancel superseded runs on the same branch (a concurrency group) so a new push does not queue behind the old one

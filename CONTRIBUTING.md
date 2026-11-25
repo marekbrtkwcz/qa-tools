@@ -1,6 +1,6 @@
 # Contributing to qa-tools
 
-This collection is a set of **native Mistral Vibe CLI plugins** (Agent Plugins 1.0 format), built from single sources in `src/` into `plugins/` by `scripts/build.js`. Everything the build writes is regenerated — edit `src/` and `bundles.yaml`, never `plugins/`.
+This collection is a set of **native Mistral Vibe CLI plugins** (Agent Plugins 1.0 format), built from single sources in `src/` into `plugins/` by `scripts/build.ts`. Everything the build writes is regenerated — edit `src/` and `bundles.yaml`, never `plugins/`.
 
 ## Where things live
 
@@ -49,9 +49,12 @@ npm run build    # regenerate plugins/ from src/ (atomic swap, all-or-nothing)
 npm run verify   # drift gate: committed plugins/ must match a fresh build
 npm run validate-manifests   # plugin.json / mcp.json (JSON) + agent TOML syntax
 npm test         # build unit tests + hook guard tests (node:test, no deps)
-npm run lint     # Biome on scripts/
+npm run lint     # Biome on scripts/ (TS + JS)
+npm run typecheck  # tsc --noEmit — type gate for scripts/*.ts
 npm run ci       # all of the above
 ```
+
+Top-level scripts in `scripts/` are **TypeScript**, executed directly by Node ≥ 24 (native type stripping — no build step, no loader); `engines.node` requires `>=24` and CI runs Node 24. Biome lints and formats both `.ts` and `.js` under `scripts/`. Hooks in `scripts/assets/` stay plain CJS `.js` on purpose: Vibe runs them via `node vibe-hooks/<name>.js`, so they must not depend on type stripping.
 
 ### P2 Automation Commands
 
@@ -83,7 +86,7 @@ npm run test:all       # Run all tests (P2 + P3)
 ## Maintenance Workflows (P2)
 
 ### CHANGELOG Generation
-- **Script:** `scripts/generate-changelog.js`
+- **Script:** `scripts/generate-changelog.ts`
 - **Trigger:** Manual or CI (on tag push)
 - **Input:** Git commit history (conventional commits format)
 - **Output:** `CHANGELOG.md` with categorized changes
@@ -91,14 +94,14 @@ npm run test:all       # Run all tests (P2 + P3)
 - **Validation:** `npm run changelog:check` (dry-run mode)
 
 ### README Statistics
-- **Script:** `scripts/update-readme-stats.js`
+- **Script:** `scripts/update-readme-stats.ts`
 - **Trigger:** Manual or CI (on release)
 - **Input:** `bundles.yaml` + source directory structure
 - **Output:** Updated counts in README.md bundle table
 - **Validation:** `npm run readme:stats:check` (verifies counts match bundles.yaml)
 
 ### Link Validation
-- **Script:** `scripts/validate-links.js`
+- **Script:** `scripts/validate-links.ts`
 - **Trigger:** CI (on every push/PR)
 - **Scope:** All `.md` files (excluding `node_modules/`, `plugins/`, `resources/`, `.vibe/`, `.git/`)
 - **Checks:**
@@ -124,9 +127,9 @@ All P2 maintenance scripts have comprehensive unit tests:
 
 ```bash
 # Run P3 tests only
-node --test scripts/validate-links.test.js
-node --test scripts/generate-changelog.test.js
-node --test scripts/update-readme-stats.test.js
+node --test scripts/validate-links.test.ts
+node --test scripts/generate-changelog.test.ts
+node --test scripts/update-readme-stats.test.ts
 
 # Or use npm scripts
 npm run test:p3    # All P3 tests
@@ -149,7 +152,7 @@ The build also enforces two README properties in every mode: the MCP install lin
 
 ## Releases
 
-One release = one version for the whole collection: `node scripts/build.js --set-version x.y.z` (rewrites every bundle), a `## [x.y.z] - YYYY-MM-DD` header in `CHANGELOG.md`, the same version in `package.json`, and the tag `vx.y.z`. `scripts/check-release.js --tag vx.y.z` (CI runs it on tags) verifies all four agree.
+One release = one version for the whole collection: `node scripts/build.ts --set-version x.y.z` (rewrites every bundle), a `## [x.y.z] - YYYY-MM-DD` header in `CHANGELOG.md`, the same version in `package.json`, and the tag `vx.y.z`. `scripts/check-release.ts --tag vx.y.z` (CI runs it on tags) verifies all four agree.
 
 ## Provenance
 
@@ -186,7 +189,7 @@ npm run test:all:p4    # Run all tests (P2 + P3 + P4)
 
 ### Security Scanning (P4.2)
 
-**Script:** `scripts/security-scan.js`
+**Script:** `scripts/security-scan.ts`
 
 **Features:**
 - **Secret detection:** Scans for API keys, passwords, tokens, private keys in code
@@ -210,7 +213,7 @@ npm run test:all:p4    # Run all tests (P2 + P3 + P4)
 npm run security:scan
 
 # Scan with JSON output
-node scripts/security-scan.js --json
+node scripts/security-scan.ts --json
 
 # Run in CI (exits 1 on issues)
 npm run security:scan
@@ -244,7 +247,7 @@ npm run security:scan
 
 ### Flaky Test Detection (P4.3)
 
-**Script:** `scripts/detect-flaky-tests.js`
+**Script:** `scripts/detect-flaky-tests.ts`
 
 **Features:**
 - **Multiple runs:** Executes tests multiple times to detect inconsistencies
@@ -266,7 +269,7 @@ npm run flaky:check
 npm run flaky:detect
 
 # With custom options
-node scripts/detect-flaky-tests.js --runs 10 --threshold 2 --check
+node scripts/detect-flaky-tests.ts --runs 10 --threshold 2 --check
 ```
 
 **Options:**
@@ -313,7 +316,7 @@ node scripts/detect-flaky-tests.js --runs 10 --threshold 2 --check
 
 ### Performance Benchmarking (P4.4)
 
-**Script:** `scripts/benchmark-performance.js`
+**Script:** `scripts/benchmark-performance.ts`
 
 **Features:**
 - **Comprehensive benchmarks:** Measures P2, P3, and build performance
@@ -337,10 +340,10 @@ npm run benchmark
 npm run benchmark:full
 
 # Benchmark specific script
-node scripts/benchmark-performance.js --script "npm run build" --runs 3
+node scripts/benchmark-performance.ts --script "npm run build" --runs 3
 
 # Compare with previous results
-node scripts/benchmark-performance.js --compare --runs 3
+node scripts/benchmark-performance.ts --compare --runs 3
 ```
 
 **Options:**
@@ -555,8 +558,8 @@ hooks:
 
 ### Advanced Flaky Test Quarantine (P5.3)
 
-**Script:** `scripts/quarantine-flaky-tests.js`
-**Test File:** `scripts/quarantine-flaky-tests.test.js`
+**Script:** `scripts/quarantine-flaky-tests.ts`
+**Test File:** `scripts/quarantine-flaky-tests.test.ts`
 
 **Purpose:** Automatically quarantine flaky tests to prevent CI failures.
 
@@ -613,8 +616,8 @@ npm run quarantine:restore
 
 ### Performance Regression Alerts (P5.4)
 
-**Script:** `scripts/performance-regression-alerts.js`
-**Test File:** `scripts/performance-regression-alerts.test.js`
+**Script:** `scripts/performance-regression-alerts.ts`
+**Test File:** `scripts/performance-regression-alerts.test.ts`
 
 **Purpose:** Monitor performance and alert when regressions are detected.
 
@@ -691,8 +694,8 @@ npm run perf:monitor
 
 ### Security Gate Enforcement (P5.5)
 
-**Script:** `scripts/security-gate-enforce.js`
-**Test File:** `scripts/security-gate-enforce.test.js`
+**Script:** `scripts/security-gate-enforce.ts`
+**Test File:** `scripts/security-gate-enforce.test.ts`
 
 **Purpose:** Make security checks blocking instead of just reporting.
 

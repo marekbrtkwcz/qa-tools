@@ -1,6 +1,6 @@
 ---
 name: static-code-analysis-typescript
-description: 'Creates, reviews, and modernizes static code analysis setups for Node.js and TypeScript repositories using Biome: biome.json configuration, the Biome linter, formatter, and assist import organization, migration from ESLint/Prettier, tsconfig, Husky, lint-staged, package.json quality scripts, and CI quality gates with biome ci. Use when setting up or auditing linting, formatting, type-checking, commit hooks, or CI quality checks in a JavaScript or TypeScript project.'
+description: 'Creates, reviews, and modernizes static code analysis setups for Node.js and TypeScript repositories using Biome: biome.json configuration, the Biome linter, formatter, and assist import organization, migration from ESLint/Prettier, tsconfig, Husky, lint-staged, package.json quality scripts, and CI quality gates with biome ci, including Bun-based repos (bun install, bunx, bun run). Use when setting up or auditing linting, formatting, type-checking, commit hooks, or CI quality checks in a JavaScript or TypeScript project.'
 argument-hint: 'Repository type, current tooling, and target quality gate'
 user-invocable: true
 ---
@@ -17,6 +17,8 @@ This collection standardizes on a single-tool stack:
 - `husky` (plus `lint-staged` when staged-file workflows are wanted)
 - `package.json` scripts
 - CI quality gates (`biome ci`)
+
+Bun is a supported alternative runtime and package manager, not a different lint stack: `bun install` / `bun add -d` replace npm, `bunx biome ...` runs the same exact-pinned local binary, and Bun executes TypeScript natively with no build step. Biome and `tsc --noEmit` behave identically under Bun; `bun test` is a test-runner concern, not a lint one, and does not change anything below.
 
 Existing repositories that still run ESLint and/or Prettier are migrated to Biome as part of this workflow; the migration procedure is step 6.
 
@@ -224,7 +226,7 @@ CI principles:
 - use `permissions: contents: read` for least-privilege
 - cache `npm` dependencies for speed
 - match the CI Node version to `engines.node` from `package.json`
-- prefer running the pinned local Biome through `npm run check:ci`; the first-party `biomejs/setup-biome` GitHub Action is an alternative for jobs that do not install npm dependencies - pin a version instead of `latest` when you use it, or CI may drift from the repo's pin
+- prefer running the pinned local Biome through `npm run check:ci` (or `bun run check:ci` on a Bun repo); the first-party `biomejs/setup-biome` GitHub Action is an alternative for jobs that do not install npm dependencies - pin a version instead of `latest` when you use it, or CI may drift from the repo's pin. On Bun repos, `oven-sh/setup-bun@v2` + `bun install --frozen-lockfile` is the install-step equivalent of `setup-node` + `npm ci`
 
 ### 10. Update documentation
 
@@ -263,6 +265,8 @@ If verification hits unexpected behavior, consult `./resources/troubleshooting.m
 **Prefer `lint-staged` when:** the repo already uses it or needs partial-staging behaviour; a plain `biome check --staged --write` hook is enough otherwise.
 
 **Prefer a CI workflow when:** the repo is team-shared; quality enforcement should not depend on individual developer hooks; the project uses pull requests; even for solo projects, CI catches hook-bypass scenarios (`--no-verify`).
+
+**Use Bun when:** the repo already standardizes on Bun (a committed `bun.lock`) - install with `bun add -d -E @biomejs/biome` (the exact pin matters the same as with npm), and run checks via `bunx biome ci .` or the package.json scripts through `bun run`. Pick one package manager per repo and never mix lockfiles. In CI, `oven-sh/setup-bun@v2` plus `bun install --frozen-lockfile` can replace `setup-node` + `npm ci` for the install step (cache keyed on `bun.lock`) - but Node is still required wherever a Node-only tool runs, so keep `setup-node` in jobs that execute such tools.
 
 ## Quick Setup and Checklist
 
@@ -308,6 +312,19 @@ Emoji in this collection carry meaning; they never replace words. Use them in ch
 | ❌ | failed / confirmed defect | | ➡️ | skipped / not applicable / out of scope |
 | ⚠️ | risk / warning / needs attention | | 🔄 | rerun / retry / regenerated |
 | 🚧 | blocked / in progress / WIP | | 🧪 | test / under test / experimenting |
+| 🟢 | passing / healthy / green | | 🔴 | failing / broken / red |
+| 🟡 | flaky / unstable / needs investigation | | ⚪ | neutral / unknown / unset |
+
+### Test Types and Levels
+
+| Emoji | Meaning | | Emoji | Meaning |
+|---|---|---|---|---|
+| 🧪 | unit test / isolated test | | 🖥️ | integration test / component test |
+| 🌐 | end-to-end test / E2E | | 📱 | mobile test / device test |
+| 🎯 | acceptance test / ATDD | | 🔍 | exploratory test / ad-hoc |
+| 📊 | performance test / load test | | 🛡️ | security test / pentest |
+| ♿ | accessibility test / a11y | | 🧠 | AI test / LLM evaluation |
+| 📋 | regression test / smoke test | | ⚙️ | contract test / API validation |
 
 ### Findings and Issues
 
@@ -315,7 +332,11 @@ Emoji in this collection carry meaning; they never replace words. Use them in ch
 |---|---|---|---|---|
 | 🐛 | defect / bug / issue | | 🎲 | flaky / non-deterministic / unstable |
 | 🔍 | gap / missing coverage / investigation needed | | 🔙 | regression / broken / re-opened |
-| 💳 | technical debt / cleanup needed | | 🚨 | critical / severe / high priority |
+| 💳 | technical debt / cleanup needed | | 🚨 | critical / severe / P0/P1 |
+| 🟠 | medium priority / P2 | | 🔵 | low priority / P3 |
+| 📝 | documentation issue / missing docs | | ❓ | question / needs clarification |
+| ✅ | resolved / fixed / closed | | 🔄 | in progress / being fixed |
+| 🗑️ | duplicate / won't fix / invalid | | 🔒 | blocked / waiting on dependency |
 
 ### Quality, Metrics and Observability
 
@@ -325,6 +346,21 @@ Emoji in this collection carry meaning; they never replace words. Use them in ch
 | 📉 | degradation / trend down / getting worse | | 🔬 | analysis / deep dive / investigation |
 | 📋 | checklist / requirements / criteria | | 📖 | documentation / guide / reference |
 | 🎯 | target / goal / scope / objective | | 📌 | pinned / tracked / monitored |
+| 🔭 | observability / logging / tracing | | 📡 | monitoring / alert / signal |
+| 📏 | measurement / KPI / SLI | | 🎖️ | SLO / service level / quality gate |
+| 📊 | dashboard / visualization / report | | 🔢 | count / total / summary |
+
+### Code and Development
+
+| Emoji | Meaning | | Emoji | Meaning |
+|---|---|---|---|---|
+| 💻 | code / implementation / development | | 🔧 | refactor / cleanup / maintenance |
+| 📦 | library / dependency / package | | 🏗️ | architecture / design / structure |
+| 🧱 | building block / component | | 🔗 | interface / API / connection |
+| 📂 | file / directory / module | | 📄 | document / spec / contract |
+| 🎨 | styling / UI / design | | 🛠️ | utility / helper / tool |
+| 📝 | commit / change / PR | | 🏷️ | label / tag / version |
+| 🔁 | merge / rebase / sync | | 🔄 | update / upgrade / migrate |
 
 ### Process and Workflow
 
@@ -335,6 +371,9 @@ Emoji in this collection carry meaning; they never replace words. Use them in ch
 | 👀 | review / inspection / verification | | 🤝 | collaboration / handoff / paired |
 | 📅 | scheduled / planned / roadmap | | ⏰ | timeout / deadline / due |
 | ✏️ | draft / editing / work in progress | | 🔗 | linked / related / connected |
+| 🚦 | gate / approval / checkpoint | | 📍 | milestone / phase / checkpoint |
+| 🏁 | finish line / completion | | 🎯 | priority / focus / important |
+| 📤 | push / publish / upload | | 📥 | pull / fetch / download |
 
 ### Automation and Infrastructure
 
@@ -344,6 +383,10 @@ Emoji in this collection carry meaning; they never replace words. Use them in ch
 | 🏗️ | build / pipeline / CI | | 🚀 | deploy / delivery / launch |
 | 🛠️ | tool / utility / helper | | 🔌 | plugin / integration / connector |
 | 📦 | package / artifact / bundle | | 🗃️ | repository / storage / archive |
+| ⚡ | execution / run / trigger | | 📊 | CI job / workflow / step |
+| 🖨️ | build artifact / output | | 🗂️ | registry / registry / index |
+| 🌐 | network / remote / cloud | | 🖥️ | local / development / dev |
+| 🔐 | secret / token / credential | | 🛡️ | security / protection / safety |
 
 ### Security and Compliance
 
@@ -352,6 +395,9 @@ Emoji in this collection carry meaning; they never replace words. Use them in ch
 | 🔒 | secured / encrypted / locked | | 🛡️ | protected / guarded / safeguarded |
 | ♿ | accessibility / a11y / inclusive | | 🔐 | authorization / permissions / ACL |
 | 🕵️ | audit / pentest / security review | | 🚫 | denied / blocked / access refused |
+| 🔓 | vulnerability / exposure / leak | | 🛑 | critical security issue / CVE |
+| 📜 | compliance / standard / regulation | | ✅ | compliant / passed audit |
+| ❌ | non-compliant / failed audit | | 🔍 | security investigation |
 
 ### Performance and Load
 
@@ -360,6 +406,9 @@ Emoji in this collection carry meaning; they never replace words. Use them in ch
 | ⚡ | fast / performant / optimized | | 🐌 | slow / sluggish / underperforming |
 | 📉 | bottleneck / constraint / limitation | | 🌊 | load / traffic / volume |
 | ⚖️ | balanced / baseline / benchmark | | 📤 | throughput / output / capacity |
+| 📈 | latency / response time | | 🔥 | hot path / critical path |
+| ❄️ | cold start / cache miss | | 📊 | profiling / flame graph |
+| 🎯 | target SLO / performance goal | | 🏆 | performance optimization |
 
 ### Orchestration and Agents
 
@@ -369,6 +418,75 @@ Emoji in this collection carry meaning; they never replace words. Use them in ch
 | 🧠 | reasoning / thinking / cognition | | 💬 | message / prompt / input |
 | 🔁 | loop / iteration / repeat | | ⏹️ | stop / halt / interrupt |
 | 🧩 | component / module / part | | 🔀 | switch / change / toggle |
+| 📡 | signal / event / trigger | | 🌐 | distributed / network / remote |
+| 🏗️ | framework / scaffold | | 🎛️ | control / management / admin |
+
+### Data and Storage
+
+| Emoji | Meaning | | Emoji | Meaning |
+|---|---|---|---|---|
+| 🗃️ | database / storage / persistence | | 📋 | data / dataset / collection |
+| 🔍 | query / search / filter | | 📊 | analytics / aggregation |
+| 📤 | export / output / dump | | 📥 | import / input / load |
+| 🔄 | sync / replication / mirror | | 🗂️ | index / catalog / registry |
+| 📦 | backup / archive / snapshot | | 🗑️ | purge / cleanup / delete |
+| 🔒 | encrypted data | | 🔓 | decrypted / plaintext |
+
+### AI and LLMs
+
+| Emoji | Meaning | | Emoji | Meaning |
+|---|---|---|---|---|
+| 🧠 | AI / LLM / model | | 💬 | prompt / input / query |
+| 📝 | output / response / answer | | 🔍 | retrieval / RAG / search |
+| 🎯 | fine-tuning / training | | ⚖️ | evaluation / benchmark |
+| 🛡️ | guardrail / safety / moderation | | 🔒 | privacy / data protection |
+| 📊 | metrics / accuracy / score | | ⚡ | inference / generation |
+| 🔄 | context / history / memory | | 🧩 | plugin / tool / function |
+
+### Documentation and Knowledge
+
+| Emoji | Meaning | | Emoji | Meaning |
+|---|---|---|---|---|
+| 📖 | documentation / manual | | 📚 | knowledge base / wiki |
+| 📝 | notes / draft / scratch | | 🎓 | learning / tutorial |
+| 🏷️ | tag / label / category | | 🔗 | reference / link / citation |
+| 📋 | example / sample / template | | 📊 | diagram / visualization |
+| ✏️ | edit / update / revision | | 🗂️ | catalog / index / table of contents |
+| 📌 | pinned / important / must-read | | 🔍 | search / find / locate |
+
+### Communication and Collaboration
+
+| Emoji | Meaning | | Emoji | Meaning |
+|---|---|---|---|---|
+| 📧 | email / notification | | 💬 | chat / message / discussion |
+| 🎯 | announcement / update | | 📢 | broadcast / alert |
+| 👥 | team / group / contributors | | 👤 | user / person / author |
+| 🤝 | collaboration / partnership | | 📅 | meeting / sync / calendar |
+| ✅ | agreement / approval | | ❌ | disagreement / rejection |
+| ❓ | question / help needed | | 💡 | idea / suggestion / proposal |
+| 🙏 | request / ask / please | | 🎉 | celebration / success |
+
+### Time and Scheduling
+
+| Emoji | Meaning | | Emoji | Meaning |
+|---|---|---|---|---|
+| ⏰ | time / deadline / due | | ⏳ | waiting / pending / elapsed |
+| 📅 | date / schedule / calendar | | ⏸️ | pause / suspended / on hold |
+| ▶️ | start / resume / begin | | ⏹️ | stop / end / finish |
+| 🔄 | repeat / loop / retry | | ⏱️ | timer / duration / timeout |
+| ⏮️ | previous / before / earlier | | ⏭️ | next / after / later |
+| 📆 | roadmap / timeline / plan | | 🎯 | milestone / target date |
+
+### Environment and Platforms
+
+| Emoji | Meaning | | Emoji | Meaning |
+|---|---|---|---|---|
+| 🌐 | web / browser / HTTP | | 📱 | mobile / Android / iOS |
+| 💻 | desktop / local / development | | ☁️ | cloud / server / remote |
+| 🏢 | enterprise / on-prem | | 🌍 | global / distributed |
+| 🔌 | API / endpoint / service | | 📦 | container / Docker / VM |
+| ⚡ | CLI / command line | | 🖥️ | UI / frontend / interface |
+| 🗄️ | database / backend | | 📡 | network / connectivity |
 
 ---
 

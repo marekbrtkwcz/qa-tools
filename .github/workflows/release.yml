@@ -10,7 +10,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  NODE_VERSION: '20'
+  NODE_VERSION: '24'
 
 jobs:
   validate-release:
@@ -28,7 +28,7 @@ jobs:
 
       - name: Check tag consistency
         run: |
-          node scripts/check-release.js --tag "${GITHUB_REF_NAME}"
+          node scripts/check-release.ts --tag "${GITHUB_REF_NAME}"
 
   build-and-verify:
     name: Build plugins and verify drift gate
@@ -51,7 +51,7 @@ jobs:
         run: npm run validate-manifests
 
       - name: Build plugins
-        run: node scripts/build.js
+        run: node scripts/build.ts
 
       - name: Verify drift gate
         run: npm run verify
@@ -187,7 +187,7 @@ jobs:
       - name: Bump version in bundles.yaml
         run: |
           VERSION=${GITHUB_REF_NAME#v}
-          node scripts/build.js --set-version "${VERSION}"
+          node scripts/build.ts --set-version "${VERSION}"
 
       - name: Commit version bump
         run: |

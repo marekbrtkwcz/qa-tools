@@ -24,6 +24,21 @@
       }
     }
   },
+  "overrides": [
+    {
+      "includes": ["**/*.ts"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noExplicitAny": "error"
+          },
+          "style": {
+            "useNodejsImportProtocol": "error"
+          }
+        }
+      }
+    }
+  ],
   "javascript": {
     "formatter": {
       "quoteStyle": "single",

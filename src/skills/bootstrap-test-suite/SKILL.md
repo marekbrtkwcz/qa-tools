@@ -31,12 +31,12 @@ The characteristic failure of a bootstrap is not the missing config file, it is 
 ### Phase 0: Detect and decide
 
 1. Look for `package.json`, `playwright.config.*`, `vitest.config.*`, CI workflows, and existing `*.test.*` / `*.spec.*` files. Report what you found before creating anything.
-2. Ask only for missing essentials: the base URL or app entry, whether the app runs locally (and how to start it), and the package manager (`npm` / `pnpm` / `yarn` - the commands differ).
+2. Ask only for missing essentials: the base URL or app entry, whether the app runs locally (and how to start it), and the package manager (`npm` / `pnpm` / `yarn` / `bun` - the commands differ).
 3. Decide the scope of this bootstrap: E2E only, unit only, or both. Do not scaffold a layer nobody asked for.
 
 ### Phase 1: Install and scaffold
 
-4. Install with the packager the repo uses, never a guess: `npm init playwright@latest` asks the right scaffolding questions; `npm i -D @playwright/test vitest` is the manual equivalent. Install browsers with `npx playwright install --with-deps` (Linux CI needs the deps; Windows needs no extra step beyond the browsers).
+4. Install with the packager the repo uses, never a guess: `npm init playwright@latest` asks the right scaffolding questions; `npm i -D @playwright/test vitest` is the manual equivalent. With Bun the equivalents are `bun add -D @playwright/test vitest` and `bunx playwright install --with-deps`. Install browsers with `npx playwright install --with-deps` (Linux CI needs the deps; Windows needs no extra step beyond the browsers). Note: Playwright Test is a Node tool - in a Bun-standardized repo still run it through Node (`node_modules/.bin/playwright test`); reserve `bun test` for the unit layer, or use Vitest, which runs fine under both runtimes.
 5. Configure `playwright.config.ts` with the decisions visible: `baseURL`, `trace: 'on-first-retry'`, `retries` set for CI and lower locally (usually 0 local / 1-2 CI in one config via env), `forbidOnly: !!process.env.CI`, `workers` conscious (local often fewer), `reporter` list locally and HTML artifact in CI, one `chromium` project first - more browsers are added deliberately, not by scaffold.
 6. Scripts into `package.json` under the packager's conventions: `test`, `test:ui`, `test:headed`, plus a `pretest` or documented step that builds/serves the app if it cannot be reached without one.
 7. `tsconfig` for tests: either the project's or a small `tests/tsconfig.json` - never a second full compile config that fights the app's.

@@ -1,6 +1,6 @@
 ---
 name: static-code-analysis-typescript
-description: 'Creates, reviews, and modernizes static code analysis setups for Node.js and TypeScript repositories using Biome: biome.json configuration, the Biome linter, formatter, and assist import organization, migration from ESLint/Prettier, tsconfig, Husky, lint-staged, package.json quality scripts, and CI quality gates with biome ci. Use when setting up or auditing linting, formatting, type-checking, commit hooks, or CI quality checks in a JavaScript or TypeScript project.'
+description: 'Creates, reviews, and modernizes static code analysis setups for Node.js and TypeScript repositories using Biome: biome.json configuration, the Biome linter, formatter, and assist import organization, migration from ESLint/Prettier, tsconfig, Husky, lint-staged, package.json quality scripts, and CI quality gates with biome ci, including Bun-based repos (bun install, bunx, bun run). Use when setting up or auditing linting, formatting, type-checking, commit hooks, or CI quality checks in a JavaScript or TypeScript project.'
 argument-hint: 'Repository type, current tooling, and target quality gate'
 user-invocable: true
 ---
@@ -17,6 +17,8 @@ This collection standardizes on a single-tool stack:
 - `husky` (plus `lint-staged` when staged-file workflows are wanted)
 - `package.json` scripts
 - CI quality gates (`biome ci`)
+
+Bun is a supported alternative runtime and package manager, not a different lint stack: `bun install` / `bun add -d` replace npm, `bunx biome ...` runs the same exact-pinned local binary, and Bun executes TypeScript natively with no build step. Biome and `tsc --noEmit` behave identically under Bun; `bun test` is a test-runner concern, not a lint one, and does not change anything below.
 
 Existing repositories that still run ESLint and/or Prettier are migrated to Biome as part of this workflow; the migration procedure is step 6.
 
@@ -224,7 +226,7 @@ CI principles:
 - use `permissions: contents: read` for least-privilege
 - cache `npm` dependencies for speed
 - match the CI Node version to `engines.node` from `package.json`
-- prefer running the pinned local Biome through `npm run check:ci`; the first-party `biomejs/setup-biome` GitHub Action is an alternative for jobs that do not install npm dependencies - pin a version instead of `latest` when you use it, or CI may drift from the repo's pin
+- prefer running the pinned local Biome through `npm run check:ci` (or `bun run check:ci` on a Bun repo); the first-party `biomejs/setup-biome` GitHub Action is an alternative for jobs that do not install npm dependencies - pin a version instead of `latest` when you use it, or CI may drift from the repo's pin. On Bun repos, `oven-sh/setup-bun@v2` + `bun install --frozen-lockfile` is the install-step equivalent of `setup-node` + `npm ci`
 
 ### 10. Update documentation
 
@@ -263,6 +265,8 @@ If verification hits unexpected behavior, consult `./resources/troubleshooting.m
 **Prefer `lint-staged` when:** the repo already uses it or needs partial-staging behaviour; a plain `biome check --staged --write` hook is enough otherwise.
 
 **Prefer a CI workflow when:** the repo is team-shared; quality enforcement should not depend on individual developer hooks; the project uses pull requests; even for solo projects, CI catches hook-bypass scenarios (`--no-verify`).
+
+**Use Bun when:** the repo already standardizes on Bun (a committed `bun.lock`) - install with `bun add -d -E @biomejs/biome` (the exact pin matters the same as with npm), and run checks via `bunx biome ci .` or the package.json scripts through `bun run`. Pick one package manager per repo and never mix lockfiles. In CI, `oven-sh/setup-bun@v2` plus `bun install --frozen-lockfile` can replace `setup-node` + `npm ci` for the install step (cache keyed on `bun.lock`) - but Node is still required wherever a Node-only tool runs, so keep `setup-node` in jobs that execute such tools.
 
 ## Quick Setup and Checklist
 

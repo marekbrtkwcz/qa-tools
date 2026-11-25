@@ -62,7 +62,7 @@ Na Linuxie (Debian/Ubuntu, Fedora/CentOS) instalacja wymaga konfiguracji repo k6
 
 Wersje **celowo pływające** (`@latest`, winget/brew zawsze biorą aktualną): manifest pluginu niesie tylko nazwy komend, więc wersja i tak żyje w globalnym installu użytkownika — współdzielonym z innymi narzędziami — a przypinanie wymuszałoby downgrade komuś, kto już ma nowszy binarny. Repo nie trzyma pinów; jedyny wymóg pilnowany przez build (`checkGlobalBinaryInstallDoc`) to, żeby linie instalacyjne (npm ×2, winget, brew) nie zginęły z README — bez nich serwery wypadają błędem spawn na każdej maszynie.
 
-⚠️ **Dlaczego binarny, nie npx**: Vibe daje MCP-om z pluginów twardy budżet 10 s na handshake `initialize`, a schemat pluginowego `mcp.json` nie ma pola timeout. `npx` na Windows (shim `.cmd` + resolving npm + cache/rejestr) potrafił ten budżet przekraczać → `Request 'initialize' timed out`; globalny binarny startuje w ułamku sekundy, więc ta klasa awarii znika. Brak zainstalowanego binarnego objawia się od razu czytelnym błędem spawn przy starcie sesji. Gdybyś kiedyś mimo to potrzebował dłuższego budżetu: `startup_timeout_sec` działa tylko w `[[mcp_servers]]` w `config.toml` (user-config), a serwer pluginu o tej samej nazwie (`playwright`, `chrome-devtools`) zostaje przez taki wpis automatycznie wywalony (shadow).
+⚠️ **Dlaczego binarny, nie npx**: Vibe daje MCP-om z pluginów twardy budżet 10 s na handshake `initialize`, a schemat pluginowego `mcp.json` nie ma pola timeout. `npx` na Windows (shim `.cmd` + resolving npm + cache/rejestr) potrafił ten budżet przekraczać → `Request 'initialize' timed out`; to samo dotyczy `bunx` i `pnpm dlx` — każdy shim package managera robi zimny start (resolving + cache), który może zjeść 10 s. Globalny binarny startuje w ułamku sekundy, więc ta klasa awarii znika. Brak zainstalowanego binarnego objawia się od razu czytelnym błędem spawn przy starcie sesji. Gdybyś kiedyś mimo to potrzebował dłuższego budżetu: `startup_timeout_sec` działa tylko w `[[mcp_servers]]` w `config.toml` (user-config), a serwer pluginu o tej samej nazwie (`playwright`, `chrome-devtools`) zostaje przez taki wpis automatycznie wywalony (shadow).
 
 ⚠️ **Nazwy serwerów ujednolicone do krótkich**: wszystkie trzy serwery używają krótkiej, „produktowej" nazwy (`playwright`, `chrome-devtools`, `k6`) — celowo **nie** nazwy binarki (`playwright-mcp`, `chrome-devtools-mcp`; `k6` to jedyny przypadek, gdzie krótka nazwa i binarka to to samo słowo); konwencja jest jedna dla całego repo i Twojego `config.toml`. **Flagi QA żyją w pluginie**: `mcp.json` niesie stały zestaw flag (Playwright: `--caps vision,pdf,devtools,network,storage,testing`, timeouty akcji/nawigacji, `--snapshot-mode full`; DevTools: kategorie eksperymentalne, `--memoryDebugging`, `--no-usageStatistics`; k6: podkomenda `x mcp --quiet`), więc do zwykłej pracy **nie potrzebujesz żadnego wpisu `[[mcp_servers]]`**. Własne flagi, `startup_timeout_sec` czy dłuższy `tool_timeout_sec` (pól timeoutów nie ma w schemacie pluginu) konfigurujesz we własnym wpisie `config.toml` o tej samej nazwie — wtedy on **shadowuje** kopię pluginu zamiast odpalać drugą instancję. **Dla k6 wpis user-level to stan oczekiwany, nie wyjątek**: narzędzia k6 uruchamiają całe testy obciążeniowe, a domyślny budżet narzędzi MCP ucina dłuższe runy — `tool_timeout_sec` dla długich testów żyje tylko we wpisie user-level (np. 300 s).
 
@@ -104,9 +104,9 @@ qa-tools/
 ├── package.json                       # npm scripts: build / check / verify / lint / test
 ├── biome.json                         # Biome: lint+format scoped na scripts/ (npm run lint)
 ├── scripts/
-│   ├── build.js                       # build → plugins/ (natywny Vibe); --check, --verify
-│   ├── build.test.js                  # testy jednostkowe builda (node:test)
-│   ├── validate-manifests.js          # walidacja JSON manifestów w plugins/
+│   ├── build.ts                       # build → plugins/ (natywny Vibe); --check, --verify
+│   ├── build.test.ts                  # testy jednostkowe builda (node:test)
+│   ├── validate-manifests.ts          # walidacja JSON manifestów w plugins/
 │   └── assets/                        # skrypty hooków + ich testy (node --test)
 └── plugins/<bundle>/              # artefakt buildu — do skopiowania (13 pluginów)
     ├── plugin.json                    # manifest Agent Plugins 1.0 + rozszerzenie ai.mistral.vibe
@@ -122,10 +122,10 @@ qa-tools/
 ## 🔨 Build
 
 ```bash
-node scripts/build.js            # buduje plugins/<bundle>
-node scripts/build.js --check    # walidacja bez builda: członkostwo w bundles.yaml (skille + agenci + knowledge, duplikaty i sieroty), name rules (folder ↔ frontmatter), frontmatter i limity description; ostrzeżenia o obcięciach (agenci >300 zn. — build ucina przy generacji)
-node scripts/build.js --verify   # drift-gate: świeży build do katalogu tmp vs commitowany plugins/ (exit 1 przy różnicach, również dla katalogu pluginu w artefakcie, którego nie ma już w bundles.yaml; nie modyfikuje plugins/; porównanie ignoruje wyłącznie różnice EOL — core.autocrlf na Windows przepisuje working tree)
-node scripts/validate-manifests.js  # walidacja parsowania wszystkich JSON oraz składni wygenerowanych TOML (ageni, hooks.toml) w plugins/
+node scripts/build.ts            # buduje plugins/<bundle>
+node scripts/build.ts --check    # walidacja bez builda: członkostwo w bundles.yaml (skille + agenci + knowledge, duplikaty i sieroty), name rules (folder ↔ frontmatter), frontmatter i limity description; ostrzeżenia o obcięciach (agenci >300 zn. — build ucina przy generacji)
+node scripts/build.ts --verify   # drift-gate: świeży build do katalogu tmp vs commitowany plugins/ (exit 1 przy różnicach, również dla katalogu pluginu w artefakcie, którego nie ma już w bundles.yaml; nie modyfikuje plugins/; porównanie ignoruje wyłącznie różnice EOL — core.autocrlf na Windows przepisuje working tree)
+node scripts/validate-manifests.ts  # walidacja parsowania wszystkich JSON oraz składni wygenerowanych TOML (ageni, hooks.toml) w plugins/
 npm run lint                      # Biome: lint + format check na scripts/ (bez mutacji plików)
 npm test                          # testy jednostkowe builda (node:test, zero zależności)
 ```
@@ -136,7 +136,7 @@ npm test                          # testy jednostkowe builda (node:test, zero za
 
 ## 🏷️ Wersjonowanie
 
-- Wersja każdego pluginu = wersja kolekcji; jedyna prawda: `bundles.yaml`. Bump: `node scripts/build.js --set-version x.y.z` (wszystkie) albo `--bundle <n> --set-version x.y.z` (jeden) — zachowuje komentarze, wcięcia i EOL.
+- Wersja każdego pluginu = wersja kolekcji; jedyna prawda: `bundles.yaml`. Bump: `node scripts/build.ts --set-version x.y.z` (wszystkie) albo `--bundle <n> --set-version x.y.z` (jeden) — zachowuje komentarze, wcięcia i EOL.
 - Historia zmian: `CHANGELOG.md` (wpis per wydanie, sekcje Dodane/Zmienione/Naprawione + uwagi o upgrade).
 - **Release**: bump → wpis w `CHANGELOG.md` → `npm run ci` (przebudowa `plugins/` + bramki: członkostwo, manifesty, drift-gate, testy) → commit → `git tag -a vx.y.z -m "..."`. Tag zawiera artefakt zgodny ze `src/`, bo git commit go pilnuje drift-gate.
 
@@ -190,7 +190,7 @@ Słownictwo obowiązuje też w dokumentach repo: nagłówki CHANGELOG (`✅ Doda
 
 Ikonki bundli z `bundles.yaml` (`icon:`) są buildem podłączane tam, gdzie schemat na to pozwala: do `displayName` pluginu (np. `qa-core 🧭`) i `display_name` każdego subagenta (np. `Test Planner 🧭`). ⚠️ **Identyfikatory** (`name`, `config_name`, ścieżki) i `name` w frontmatter **pozostają bez emotek** — to wymóg walidacji builda i schematu Vibe.
 
-> **Zmiana konwencji** = edycja `src/shared/emoji-style.md` + `node scripts/build.js`.
+> **Zmiana konwencji** = edycja `src/shared/emoji-style.md` + `node scripts/build.ts`.
 > 🚫 **Nie edytuj** wygenerowanych `plugins/` ręcznie.
 
 ## 🔄 Konwersja formatów (Vibe ⚠ inne niż Claude/Copilot/Codex)

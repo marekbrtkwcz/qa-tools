@@ -76,9 +76,9 @@ test.describe('Quality Gate Hook', () => {
         build: { passed: true, error: null },
         verify: { passed: true, error: null },
       };
-      
+
       const formatted = qualityGate.formatResults(results);
-      
+
       assert.ok(formatted.includes('Quality Gate Check Results'));
       assert.ok(formatted.includes('✅ p2'));
       assert.ok(formatted.includes('✅ All quality gates passed!'));
@@ -92,9 +92,9 @@ test.describe('Quality Gate Hook', () => {
         build: { passed: true, error: null },
         verify: { passed: true, error: null },
       };
-      
+
       const formatted = qualityGate.formatResults(results);
-      
+
       assert.ok(formatted.includes('Quality Gate Check Results'));
       assert.ok(formatted.includes('❌ p2'));
       assert.ok(formatted.includes('❌ Some quality gates failed!'));
@@ -102,9 +102,9 @@ test.describe('Quality Gate Hook', () => {
 
     test('should format error results', () => {
       const results = { error: 'Unable to run checks' };
-      
+
       const formatted = qualityGate.formatResults(results);
-      
+
       assert.ok(formatted.includes('❌ Quality Gate Error'));
       assert.ok(formatted.includes('Unable to run checks'));
     });
@@ -117,7 +117,7 @@ test.describe('Quality Gate Hook', () => {
         p3: { passed: true },
         lint: { passed: true },
       };
-      
+
       const passed = qualityGate.allGatesPassed(results);
       assert.strictEqual(passed, true);
     });
@@ -128,14 +128,14 @@ test.describe('Quality Gate Hook', () => {
         p3: { passed: false },
         lint: { passed: true },
       };
-      
+
       const passed = qualityGate.allGatesPassed(results);
       assert.strictEqual(passed, false);
     });
 
     test('should return false on error', () => {
       const results = { error: 'Some error' };
-      
+
       const passed = qualityGate.allGatesPassed(results);
       assert.strictEqual(passed, false);
     });

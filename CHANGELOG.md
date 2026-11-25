@@ -6,6 +6,12 @@ Wszystkie istotne zmiany tego projektu są dokumentowane tutaj. Format zbliżony
 
 ### ✅ Dodane
 
+- migracja `scripts/` na TypeScript + Bun w kolekcji (**A+B**)
+  > - scripts/*.js → scripts/*.ts (33 pliki; hooki w scripts/assets/ zostają CJS .js — Vibe odpala je przez `node vibe-hooks/<name>.js`); runtime: Node ≥ 24 z natywnym type stripping (bez loadera/buildu), `engines.node: ">=24"`, CI na Node 24
+  > - tsconfig.json (strict + noUncheckedIndexedAccess, noEmit) + `npm run typecheck` (`tsc --noEmit`); biome.json rozszerzony o override dla `**/*.ts` (noExplicitAny + useNodejsImportProtocol = error)
+  > - devDependencies: typescript, @types/node; package.json scripts wskazują `.ts`
+  > - Bun w treściach kolekcji: static-code-analysis-typescript (bun install/bunx/bun run, setup-bun w CI), bootstrap-test-suite (bun add -D, bunx playwright, Playwright jako Node-tool), automating-ci-test-pipelines (recepta oven-sh/setup-bun + cache na bun.lock), README sekcja MCP (bunx/pnpm dlx mają ten sam cold-start co npx vs 10 s handshake)
+
 - automatyzacja CHANGELOG i statystyk README (**P2**) (d798621)
   > P2: Automatyzacja zadań konserwacyjnych:
   > - generate-changelog.js: automatyczne generowanie CHANGELOG z commitów
