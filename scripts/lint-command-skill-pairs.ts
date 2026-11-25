@@ -131,4 +131,4 @@ if (require.main === module) {
   main();
 }
 
-module.exports = { isGerund, areTwinNames, findTwinPairs, checkMutualRefs };
+module.exports = { isGerund, areTwinNames, findTwinPairs, checkMutualRefs, isCommandSkill };

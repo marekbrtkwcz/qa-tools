@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * run-evals.js — runner for skill eval suites (evals/*.cases.jsonl).
+ * run-evals.ts — runner for skill eval suites (evals/*.cases.jsonl).
  *
  * Usage:
  *   node scripts/run-evals.ts list <suite>                 List cases in a suite
@@ -145,6 +145,6 @@ if (cmd === 'list') {
     });
   }
 } else {
-  console.log('usage: run-evals.js <list|plan|record|score> <suite> [args]');
+  console.log('usage: run-evals.ts <list|plan|record|score> <suite> [args]');
   process.exit(1);
 }
