@@ -55,3 +55,18 @@ Artifact: CI with quality gates wired (lint/type/unit/API/E2E/perf-smoke/a11y-sm
 - Code quality of tests: `unslop-tests`, `code-review`, `fix-tests`
 
 Rule of thumb: when unsure which skill applies, ask the `qa-strategist` / `test-automation-expert` agents, or grep this knowledge + skill descriptions.
+
+## Mapping to the Playwright UI course outline
+
+This path maps 1:1 onto a typical Playwright UI course (modules: intro → environment setup → quick start → locators vs selectors → basic actions → advanced actions → storage state → Page Object → project smoke tests → git bonus):
+
+- **Environment setup** (Node/VSCode/Playwright, TS, Prettier/ESLint→Biome, scripts) → Stage 0: `bootstrap-test-suite`, `static-code-analysis-typescript`, `typescript-for-testers`
+- **Quick start** (test structure, `beforeAll`, run modes, projects, codegen, AAA, Trace Viewer) → Stage 2: `writing-playwright-tests-best-practices`, `playwright-generate-test`, `diagnosing-test-failures`
+- **Locators vs selectors** (ID/CSS/XPath/getByText, recommended selectors, filtering, tagging) → Stage 2: `selector-strategy`
+- **Basic + advanced actions** (inputs, dropdowns, dynamic elements, iframes, Shadow DOM, dialogs, uploads/downloads, screenshots/video, basic auth, multi-tab, parametrized tests, cookie banner, slow tag) → Stage 2: `writing-playwright-tests-best-practices`, `testing-file-uploads-and-exports`, `test-reports-and-artifacts`, `testing-auth-flows`, `flaky-test-policy`
+- **Storage state** (login once, global setup/teardown, project dependencies, `.env`) → Stage 2: `testing-auth-flows`, `handling-sensitive-test-data`, `automating-ci-test-pipelines`
+- **Page Object** (base class, components, manager/factory, fixtures, logger in fixtures) → Stage 2: `refactor-to-page-objects`, `designing-test-automation-architecture`, `api-request-response-logging`
+- **Project / smoke tests** (real app, cleanup after tests, attachments, headless env quirks) → Stage 3: `designing-smoke-and-sanity-suites`, `test-data-factories`, `test-reports-and-artifacts`, `diagnosing-test-failures`
+- **Git bonus module** (what is git, commands, init, commit, branch, clone) → Stage 0/4: `git-for-testers`
+
+Course logistics (quizzes, completion certificate) have no counterpart here — this collection covers the knowledge and the practical problems, not course administration.

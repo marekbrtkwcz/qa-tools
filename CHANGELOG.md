@@ -6,6 +6,8 @@ Wszystkie istotne zmiany tego projektu są dokumentowane tutaj. Format zbliżony
 
 ### ✅ Dodane
 
+- knowledge `automation-tester-learning-path`: mapowanie 1:1 kursu Playwright UI (moduł po module) na skille kolekcji (**P11**)
+
 - `git-for-testers` (test-automation, **P10**): wiedza i problemy gitowe dla testera — cykl życia plików, `git bisect run` przy łamaniu testów, hooki (Husky/.git/hooks) i ich testowanie, worktree, płytkie klony w CI, blame/log -L
 
 - `api-request-response-logging` (api-testing, **P9**): logger requestów/response API przez fixture `request` + Proxy (wzorzec z pwapi-logger), ale zero-dep (ANSI zamiast chalk), env-gated, z redakcją sekretów i wariantem attach-on-failure do artefaktów CI + gotowy fixture w resources
