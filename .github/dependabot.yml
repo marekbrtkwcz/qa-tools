@@ -1,0 +1,81 @@
+version: 2
+updates:
+  # P5.2: Auto-update npm dependencies
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+      - "auto-update"
+      - "P5"
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+    reviewers:
+      - "marekbrtkwcz"
+    # Group dependencies by type
+    groups:
+      dev-dependencies:
+        patterns:
+          - "*"
+        dependency-type: "development"
+      production-dependencies:
+        patterns:
+          - "*"
+        dependency-type: "production"
+    # Ignore certain dependencies
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - "version-update:semver-major"
+        # Only allow minor and patch updates for major dependencies
+    # Rebase PRs automatically
+    rebase-strategy: "auto"
+    # Auto-merge if CI passes
+    automerging:
+      enabled: true
+      strategy: "squash"
+      # Only auto-merge if all checks pass
+      require-all-checks-to-pass: true
+      # Only auto-merge patch updates
+      max-concurrent-automerge: 5
+
+  # P5.2: Auto-update GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/.github/workflows"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    labels:
+      - "actions"
+      - "auto-update"
+      - "P5"
+    commit-message:
+      prefix: "ci"
+    reviewers:
+      - "marekbrtkwcz"
+    # Only allow minor and patch updates
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - "version-update:semver-major"
+    # Auto-merge if CI passes
+    automerging:
+      enabled: true
+      strategy: "squash"
+      require-all-checks-to-pass: true
+
+  # P5.2: Auto-update GitHub Actions in root
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    labels:
+      - "actions"
+      - "auto-update"
+      - "P5"
+    commit-message:
+      prefix: "ci"

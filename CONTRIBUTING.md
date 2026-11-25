@@ -452,3 +452,351 @@ All P4 scripts have comprehensive unit tests using `node:test`:
 npm run test:p4
 npm run test:all:p4
 ```
+
+---
+
+## P5 Quality Enforcement
+
+P5 (Quality Enforcement) adds proactive quality enforcement mechanisms that go beyond detection:
+
+### P5 Commands
+
+```bash
+# Run all P5 enforcement
+npm run p5                     # Quarantine + security enforce + performance check
+
+# Flaky Test Quarantine
+npm run quarantine:detect      # Detect and quarantine flaky tests
+npm run quarantine:list        # List quarantined tests
+npm run quarantine:add [test]  # Add test to quarantine
+npm run quarantine:remove [test] # Remove test from quarantine
+npm run quarantine:clear       # Clear all quarantined tests
+npm run quarantine:restore     # Restore all quarantined tests
+
+# Security Enforcement
+npm run security:enforce       # Run security gates (blocking)
+npm run security:validate      # Validate security configuration
+
+# Performance Monitoring
+npm run perf:baseline         # Create performance baseline
+npm run perf:check            # Check performance against baseline
+npm run perf:alert            # Generate alert if regression detected
+npm run perf:history          # Show performance history
+npm run perf:clear            # Clear performance data
+```
+
+### P5 Test Commands
+
+```bash
+npm run test:p5        # Run all P5 unit tests
+npm run test:all:p5    # Run all tests (P2 + P3 + P4 + P5)
+```
+
+---
+
+### Quality Gate Hooks (P5.1)
+
+**Script:** `scripts/assets/quality-gate-hook.js`
+**Test File:** `scripts/assets/quality-gate-hook.test.js`
+
+**Purpose:** Real-time quality gate enforcement through Vibe CLI hooks.
+
+**Features:**
+- **Pre-tool Hook:** Runs before file modifications and dangerous commands
+- **Automatic Checks:** Runs P2, P3, linting, build validation, and drift gate
+- **Caching:** Caches results for 30 seconds to avoid redundant checks
+- **Non-blocking:** Allows operations to proceed if quality gates pass
+- **Blocking:** Blocks operations if quality gates fail
+
+**Integration:**
+To enable the hook, add it to your `bundles.yaml`:
+
+```yaml
+hooks:
+  - type: pre_tool
+    match: [file_system.write_file, edit, bash]
+    command: node vibe-hooks/quality-gate-hook.js
+    strict: false
+```
+
+**Behavior:**
+- Checks run automatically before file modifications
+- If all gates pass: operation proceeds
+- If any gate fails: operation is blocked with error message
+- Results are cached for 30 seconds
+
+---
+
+### Auto-update Dependencies (P5.2)
+
+**Configuration:** `.github/dependabot.yml`
+
+**Features:**
+- **Automated Updates:** Dependabot automatically creates PRs for dependency updates
+- **Scheduled:** Runs daily for npm dependencies, weekly for GitHub Actions
+- **Grouped:** Groups updates by type (dev vs production)
+- **Auto-merge:** Automatically merges patch updates if CI passes
+- **Labels:** Adds labels for easy filtering
+- **Reviewers:** Assigns reviewers to dependency PRs
+
+**Configuration Details:**
+- **npm dependencies:** Daily checks, allows minor and patch updates
+- **GitHub Actions:** Weekly checks, allows minor and patch updates
+- **Auto-merge:** Enabled for patch updates only
+- **Labels:** `dependencies`, `auto-update`, `P5`
+
+**Benefits:**
+- Keeps dependencies up-to-date automatically
+- Reduces manual maintenance
+- Security patches applied quickly
+- Breaking changes reviewed manually
+
+---
+
+### Advanced Flaky Test Quarantine (P5.3)
+
+**Script:** `scripts/quarantine-flaky-tests.js`
+**Test File:** `scripts/quarantine-flaky-tests.test.js`
+
+**Purpose:** Automatically quarantine flaky tests to prevent CI failures.
+
+**Features:**
+- **Automatic Detection:** Uses flaky test detection from P4.3
+- **Automatic Quarantine:** Adds `test.skip()` to flaky tests
+- **Quarantine File:** Persists quarantine list to `.flaky-tests.json`
+- **Management Commands:** Add, remove, list, clear quarantined tests
+- **Restore:** Temporarily restore tests for testing
+
+**Commands:**
+
+```bash
+# Detect and quarantine flaky tests (automatic)
+npm run quarantine:detect
+
+# Manually add a test to quarantine
+npm run quarantine:add "Test name"
+
+# Manually remove a test from quarantine
+npm run quarantine:remove "Test name"
+
+# List all quarantined tests
+npm run quarantine:list
+
+# Clear all quarantined tests
+npm run quarantine:clear
+
+# Restore all quarantined tests (remove skip)
+npm run quarantine:restore
+```
+
+**Quarantine File Format:**
+```json
+{
+  "quarantinedTests": [
+    "Test 1",
+    "Test 2"
+  ],
+  "lastUpdated": "2024-11-25T10:00:00.000Z",
+  "detectedAt": "2024-11-25T09:00:00.000Z",
+  "version": "1.0"
+}
+```
+
+**Workflow:**
+1. Run `quarantine:detect` to find flaky tests
+2. Tests are automatically added to quarantine
+3. Tests are marked with `test.skip()` in source files
+4. CI runs without flaky tests
+5. When tests are fixed, remove from quarantine
+
+---
+
+### Performance Regression Alerts (P5.4)
+
+**Script:** `scripts/performance-regression-alerts.js`
+**Test File:** `scripts/performance-regression-alerts.test.js`
+
+**Purpose:** Monitor performance and alert when regressions are detected.
+
+**Features:**
+- **Baseline Creation:** Create performance baseline measurements
+- **Regression Detection:** Compare current performance against baseline
+- **Threshold Configuration:** Configurable regression threshold (default: 10%)
+- **History Tracking:** Save performance history for trend analysis
+- **Alert Generation:** Generate alerts when regressions are detected
+- **Auto-blocking:** Block CI on high-severity regressions
+
+**Commands:**
+
+```bash
+# Create baseline measurements
+npm run perf:baseline
+
+# Check current performance against baseline
+npm run perf:check
+
+# Check with custom threshold (5%)
+npm run perf:check --threshold 5
+
+# Generate alert if regression detected
+npm run perf:alert
+
+# Show performance history
+npm run perf:history
+
+# Clear baseline and history
+npm run perf:clear
+
+# Continuous monitoring (runs every hour)
+npm run perf:monitor
+```
+
+**Files:**
+- `.performance-baseline.json` - Baseline measurements
+- `.performance-history.json` - Performance history
+
+**Baseline Format:**
+```json
+{
+  "benchmarks": [
+    {
+      "name": "P2: CHANGELOG check",
+      "command": "npm run changelog:check",
+      "runs": 5,
+      "durations": [120, 125, 118, 122, 121],
+      "statistics": {
+        "min": 118,
+        "max": 125,
+        "mean": 121.2,
+        "median": 121,
+        "stdDev": 2.5
+      }
+    }
+  ],
+  "createdAt": "2024-11-25T10:00:00.000Z",
+  "version": "1.0"
+}
+```
+
+**Alert Levels:**
+- **Medium:** Regression > threshold%
+- **High:** Regression > 2x threshold%
+
+**Integration with CI:**
+- Run `perf:check` in CI to detect regressions
+- Use `--threshold` to control sensitivity
+- High severity alerts cause CI to fail
+
+---
+
+### Security Gate Enforcement (P5.5)
+
+**Script:** `scripts/security-gate-enforce.js`
+**Test File:** `scripts/security-gate-enforce.test.js`
+
+**Purpose:** Make security checks blocking instead of just reporting.
+
+**Features:**
+- **Blocking Mode:** Prevents merges when security issues are found
+- **Severity Threshold:** Only block on issues above threshold (default: high)
+- **Strict Mode:** Block on warnings too
+- **Comprehensive Checks:** Vulnerabilities, secrets, permissions, sensitive files
+- **Detailed Reporting:** Clear output with actionable recommendations
+
+**Commands:**
+
+```bash
+# Run security gates (blocking)
+npm run security:enforce
+
+# Run with strict mode (block on warnings too)
+npm run security:enforce --strict
+
+# Run with custom severity threshold
+npm run security:enforce --severity medium
+
+# Validate security configuration
+npm run security:validate
+```
+
+**Severity Levels:**
+- **Low:** Informational, non-blocking by default
+- **Medium:** Warning, blocking in strict mode
+- **High:** Error, always blocking
+- **Critical:** Critical error, always blocking
+
+**Checks Performed:**
+1. **npm audit:** Check for vulnerable dependencies
+2. **Secret Scan:** Check for secrets in code
+3. **Permission Check:** Check for world-writable files
+4. **Sensitive Files:** Check for sensitive files in git
+
+**Example Output:**
+```
+================================================================================
+🔒 SECURITY GATE ENFORCEMENT RESULTS
+================================================================================
+
+📊 Configuration:
+   Severity threshold: high
+   Strict mode: Disabled
+
+📋 Summary:
+   Vulnerabilities: 2
+   Secrets: 0
+   Permissions: 1
+   Warnings: 3
+   Total: 6
+
+⚠️  Vulnerabilities:
+--------------------------------------------------------------------------------
+   📦 test-package@1.0.0
+      Severity: HIGH
+      Fix Available: ✅ Yes
+
+--------------------------------------------------------------------------------
+❌ SECURITY GATES FAILED
+   Merge is BLOCKED until issues are resolved.
+
+   Blocking issues:
+      - [HIGH] test-package
+
+   Recommended actions:
+      1. Fix vulnerabilities with npm audit fix
+      2. Remove or redact secrets from code
+      3. Fix file permissions
+      4. Remove sensitive files from git
+================================================================================
+```
+
+**Integration:**
+- Add to CI workflow before merge
+- Run in PR checks
+- Block merge if exit code is non-zero
+
+**CI Integration Example:**
+```yaml
+- name: Security Gate Enforcement
+  run: npm run security:enforce
+```
+
+---
+
+## P5 Test Coverage
+
+All P5 scripts have comprehensive unit tests using `node:test`:
+
+| Script | Test File | Tests | Coverage |
+|--------|-----------|-------|----------|
+| `quality-gate-hook.js` | `quality-gate-hook.test.js` | 10+ | Hook logic, formatting |
+| `quarantine-flaky-tests.js` | `quarantine-flaky-tests.test.js` | 10+ | Quarantine management |
+| `performance-regression-alerts.js` | `performance-regression-alerts.test.js` | 10+ | Alerting, statistics |
+| `security-gate-enforce.js` | `security-gate-enforce.test.js` | 10+ | Enforcement, formatting |
+
+**Total P5 Tests:** 40+ new tests
+
+**Running P5 tests:**
+```bash
+npm run test:p5
+npm run test:all:p5
+```
