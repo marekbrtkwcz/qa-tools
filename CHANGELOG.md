@@ -6,6 +6,8 @@ Wszystkie istotne zmiany tego projektu są dokumentowane tutaj. Format zbliżony
 
 ### ✅ Dodane
 
+- `api-request-response-logging` (api-testing, **P9**): logger requestów/response API przez fixture `request` + Proxy (wzorzec z pwapi-logger), ale zero-dep (ANSI zamiast chalk), env-gated, z redakcją sekretów i wariantem attach-on-failure do artefaktów CI + gotowy fixture w resources
+
 - 4 skille + ścieżka onboardingu (**P8**)
   > - `testing-cli-tools` (test-automation): exit codes, stdout/stderr, flagi/env/stdin, idempotentne uruchomienia, snapshot outputu przez subprocess
   > - `testing-idempotency-and-retries` (api-testing): idempotency keys, at-least-once, duplikaty, double-submit, retry storm
