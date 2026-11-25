@@ -6,6 +6,10 @@ Wszystkie istotne zmiany tego projektu są dokumentowane tutaj. Format zbliżony
 
 ### ✅ Dodane
 
+- prework dla zespołu: 2 skille wyrównujące poziom (**P7**)
+  > - `typescript-for-testers` (test-automation): podstawy TS pod testy — typy, uniony, gwardy, `Partial`/`satisfies`, `noUncheckedIndexedAccess`, typowanie fixtures/factories/Page Objectów/API clientów/mocków + resources (cheatsheet, wzorce, tsconfig dla testów)
+  > - `ai-concepts-for-testers` (ai-quality): słownik koncepcji AI dla testera (LLM, RAG, agenci, MCP, guardrails, evals) + mapa koncepcja→skill + glossary
+
 - 7 nowych skillów dla testera automatyzującego (**P6**)
   > - `testing-with-bun` (test-automation): `bun test` / `bun:test` API, `bunfig.toml` preload, coverage, wybór bun vs `node --test` vs Vitest, Playwright pod Bunem
   > - `k6-load-testing` (non-functional-testing): anatomia skryptu k6, scenariusze i thresholds, uruchomienie przez CLI i k6 MCP z `qa-mcp`, bramka CI

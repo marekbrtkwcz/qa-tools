@@ -110,6 +110,7 @@ test-automation:
     - testing-websockets
     - testing-with-bun
     - testing-with-testcontainers
+    - typescript-for-testers
     - unslop-tests
     - writing-playwright-tests-best-practices
     - writing-unit-tests
@@ -208,6 +209,7 @@ ai-quality:
   description: "Testing LLM features, guardrails, groundedness and agent skills."
   version: "0.7.0"
   skills:
+    - ai-concepts-for-testers
     - design-llm-eval-suite
     - evaluating-rag-retrieval
     - monitoring-llm-in-production
