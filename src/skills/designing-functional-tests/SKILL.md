@@ -1,6 +1,6 @@
 ---
 name: designing-functional-tests
-description: 'Designs risk-based functional and regression test plans, manual test cases, and automation handoff packs from requirements, URLs, or exploratory notes. Use when a new feature or page needs a test plan or manual QA coverage before automation, turning feature descriptions into scenario catalogs, or converting exploratory findings into structured test assets.'
+description: 'Designs risk-based functional and regression test plans, manual test cases, and automation handoff packs from requirements, URLs, or exploratory notes. Use when a new feature or page needs a test plan or manual QA coverage before automation, turning feature descriptions into scenario catalogs, or converting exploratory findings into structured test assets. For a quick step-by-step conversion of one artifact, use the manual-test-cases command.'
 argument-hint: 'Feature scope, requirements or URL, roles, environment, and whether you need a plan, cases, or regression scope'
 user-invocable: true
 ---
@@ -162,6 +162,7 @@ A plan is not done when it is written; it is done when the automate/manual split
 
 ## Related Skills
 
+- `manual-test-cases` - the quick conversion command when step-by-step cases are the only deliverable
 - `requirements-test-coverage-mapper` - when traceability to PRD, stories, or AC is the main deliverable
 - `reporting-bugs` - when the task has shifted from planning to documenting a defect
 - `auditing-accessibility` - when coverage needs a deeper accessibility pass instead of smoke checks

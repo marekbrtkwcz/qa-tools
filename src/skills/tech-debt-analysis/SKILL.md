@@ -1,6 +1,6 @@
 ---
 name: tech-debt-analysis
-description: "Analyzes technical debt in codebases, test suites, architecture, dependencies, and delivery workflows from observable signals, and produces a prioritized register and remediation roadmap with severity, risk, effort, and ROI. Use when auditing repository health, explaining slow delivery or flaky tests, planning refactoring, or deciding what to fix now versus defer. For skipped checks and expired waivers, use governing-quality-waivers; for code nobody on the team understands, use assessing-comprehension-debt."
+description: "Analyzes technical debt in codebases, test suites, architecture, dependencies, and delivery workflows from observable signals, and produces a prioritized register and remediation roadmap with severity, risk, effort, and ROI. Use when auditing repository health, explaining slow delivery or flaky tests, planning refactoring, or deciding what to fix now versus defer. For silently skipped checks use the audit-quality-debt command; for anti-patterns inside test code use the tech-debt-audit command; for expired waivers use governing-quality-waivers; for code nobody on the team understands use assessing-comprehension-debt."
 argument-hint: "Repository scope, system type, current pain points, and desired output"
 user-invocable: true
 ---
@@ -182,6 +182,8 @@ Debt is often hiding when you see patterns like:
 
 ## Related Skills
 
+- `audit-quality-debt` - the quick inventory command for silent CI and gate skips when a full debt register is more than the task needs
+- `tech-debt-audit` (test-automation) - when the debt register should start from anti-patterns inside test code itself
 - `code-review-advanced` - for reviewing a specific change instead of mapping broader debt
 - `static-code-analysis-typescript` - when the main issue is linting, formatting, or TypeScript quality gates
 - `requirements-test-coverage-mapper` - when the problem is coverage traceability rather than debt discovery

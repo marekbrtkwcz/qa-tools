@@ -1,6 +1,6 @@
 ---
 name: analyzing-regression-scope
-description: 'Analyzes diffs, changed files, hotfixes, and release candidates to find which features a change could break, where regression risk spreads, and what must be retested first. Use when scoping retest after a change, reviewing QA impact for a pull request, or building a minimal confidence suite for release validation. For a rule-based mapping from diff tags to the quality checks a pull request needs, use scoping-change-relevance.'
+description: 'Analyzes diffs, changed files, hotfixes, and release candidates to find which features a change could break, where regression risk spreads, and what must be retested first. Use when scoping retest after a change, reviewing QA impact for a pull request, or building a minimal confidence suite for release validation. For a rule-based mapping from diff tags to the quality checks a pull request needs, use scoping-change-relevance. For the quick diff-to-retest-pack command, use regression-scope (qa-core).'
 argument-hint: 'Diff, changed files, PR summary, release notes, critical flows, and any known risk areas'
 user-invocable: true
 ---
@@ -100,6 +100,7 @@ A strong report includes:
 
 ## Related Skills
 
+- `regression-scope` (qa-core) - the quick one-command form when a prioritized retest pack is the deliverable
 - `designing-functional-tests` - when the regression result should expand into manual scenarios or test cases
 - `verifying-acceptance-criteria` - when the question becomes whether the feature now meets its stated contract
 - `requirements-test-coverage-mapper` - when broader traceability matters more than tactical retest scope

@@ -1,6 +1,6 @@
 ---
 name: map-requirements-coverage
-description: "Builds a requirements traceability matrix from a PRD, user stories, or acceptance criteria against the existing tests: what is covered, at which level, what is missing, and which gaps carry the most risk. Saves it to .qa/requirements-coverage.md. Use when someone asks whether a feature is really tested, before a release sign-off, or when auditing coverage against a spec. To check a finished implementation against its criteria, use the verify-acceptance-criteria command."
+description: "Builds a requirements traceability matrix from a PRD, user stories, or acceptance criteria against the existing tests: what is covered, at which level, what is missing, and which gaps carry the most risk. Saves it to .qa/requirements-coverage.md. Use when someone asks whether a feature is really tested, before a release sign-off, or when auditing coverage against a spec. This is the quick shared form of requirements-test-coverage-mapper (spec before tests exist) and tracing-requirements-to-code (matrix extracted from existing tests). To check implementation against criteria, use the verify-acceptance-criteria command."
 argument-hint: "[requirements]"
 disable-model-invocation: true
 ---

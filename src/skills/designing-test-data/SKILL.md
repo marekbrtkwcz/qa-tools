@@ -1,6 +1,6 @@
 ---
 name: designing-test-data
-description: 'Designs realistic, boundary-heavy, and role-aware test data packs for manual and automated testing. Use when a feature needs deliberate inputs and fixtures before execution, when edge-case values keep being improvised, or when automation needs stable example data with setup notes.'
+description: 'Designs realistic, boundary-heavy, and role-aware test data packs for manual and automated testing. Use when a feature needs deliberate inputs and fixtures before execution, when edge-case values keep being improvised, or when automation needs stable example data with setup notes. For the quick generated pack from one artifact, use the generate-test-data command.'
 argument-hint: 'Entities, fields, constraints, roles, state combinations, and whether data is for manual or automated use'
 user-invocable: true
 ---
@@ -98,6 +98,8 @@ Before finishing, call out:
 
 ## Related Skills
 
+- `generate-test-data` - the quick generator command when one artifact needs to become a data pack, without the full design pass
+- `test-data-factories` - when the designed data should become code instead of literals
 - `designing-functional-tests` - when the data pack should map directly to scenarios or cases
 - `api-playwright-test-developer` - when the dataset needs to become automation fixtures or API payloads
 - `reporting-bugs` - when broken data handling should be captured as a defect

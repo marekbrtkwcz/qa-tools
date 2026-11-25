@@ -1,6 +1,6 @@
 ---
 name: verify-acceptance-criteria
-description: Checks implementation evidence (code, PR, screenshots, API responses, or a running app) against acceptance criteria and marks each criterion Met, Partial, Not Met, or Untestable, with cited evidence and a sign-off summary. Use when a story is ready for review or sign-off, or when someone asks whether a feature does what was agreed. To review the criteria themselves before implementation, use the review-requirements command; to map requirements to existing tests, use the map-requirements-coverage command.
+description: Checks implementation evidence (code, PR, screenshots, API responses, or a running app) against acceptance criteria and marks each criterion Met, Partial, Not Met, or Untestable, with cited evidence and a sign-off summary. Use when a story is ready for review or sign-off, or when someone asks whether a feature does what was agreed. This is the quick verification-matrix form of the verifying-acceptance-criteria skill; to review criteria before implementation use review-requirements, and for coverage planning use requirements-test-coverage-mapper or tracing-requirements-to-code.
 argument-hint: "[criteria] [evidence]"
 disable-model-invocation: true
 ---

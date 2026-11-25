@@ -1,6 +1,6 @@
 ---
 name: bug-report
-description: Turns rough tester notes, screenshots, logs, or observed behaviour into a developer-ready bug report with severity, reproducibility, confidence, and a missing-evidence checklist. Use when a defect has been observed and needs to be filed in Jira, GitHub Issues, or Linear. To diagnose why an automated test fails before filing, use the explain-test-failure command.
+description: Turns rough tester notes, screenshots, logs, or observed behaviour into a developer-ready bug report with severity, reproducibility, confidence, and a missing-evidence checklist. Use when a defect has been observed and needs to be filed in Jira, GitHub Issues, or Linear. To diagnose why an automated test fails before filing, use the explain-test-failure command. For the full reporting protocol with follow-up guidance and tracker-specific write-ups, use the reporting-bugs skill; this is its quick single-report form.
 disable-model-invocation: true
 ---
 

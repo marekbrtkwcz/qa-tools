@@ -1,6 +1,6 @@
 ---
 name: reporting-bugs
-description: 'Turns rough tester notes, screenshots, console output, or observed behavior into a reproducible bug report with severity, evidence, and follow-up guidance. Use when logging a bug or crash, triaging intermittent issues, or rewriting vague defect notes, and applies even when the user only describes what went wrong and asks to write it up for developers or a tracker such as Jira. To find the root cause of a failing test or defect, use diagnosing-test-failures.'
+description: 'Turns rough tester notes, screenshots, console output, or observed behavior into a reproducible bug report with severity, evidence, and follow-up guidance. Use when logging a bug or crash, triaging intermittent issues, or rewriting vague defect notes, and applies even when the user only describes what went wrong and asks to write it up for developers or a tracker such as Jira. To find the root cause of a failing test or defect, use diagnosing-test-failures. For the quick one-command report form, use the bug-report command.'
 argument-hint: 'Observed behavior, expected behavior, steps, environment, evidence, and any reproduction notes'
 user-invocable: true
 ---

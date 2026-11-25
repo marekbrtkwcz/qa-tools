@@ -1,6 +1,6 @@
 ---
 name: manual-test-cases
-description: Turns a feature description, acceptance criteria, exploratory notes, or a test plan into step-by-step manual test cases with priority, expected results, and automation candidates. Use when testers need executable cases for a feature, a release, or a UAT session. To derive cases from the code itself, use the derive-test-cases-from-code command; for exploratory session charters, use the generate-exploratory-charters command.
+description: Turns a feature description, acceptance criteria, exploratory notes, or a test plan into step-by-step manual test cases with priority, expected results, and automation candidates. Use when testers need executable cases for a feature, a release, or a UAT session. To derive cases from the code itself, use the derive-test-cases-from-code command; for exploratory session charters, use the generate-exploratory-charters command. For the full risk-based pack with plans and automation handoff, use the designing-functional-tests skill; this command is its quick conversion form.
 disable-model-invocation: true
 ---
 

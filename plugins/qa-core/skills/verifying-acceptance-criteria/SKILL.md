@@ -1,6 +1,6 @@
 ---
 name: verifying-acceptance-criteria
-description: 'Checks whether one build or feature meets its acceptance criteria (ACs), showing from implementation evidence which criteria are met, partial, missing, or untestable without inventing missing behavior. Use when checking whether a story is done, preparing QA sign-off, or turning criteria and observations into a verification matrix. For planning coverage across a whole PRD, use requirements-test-coverage-mapper; for linking existing tests to requirement IDs, use tracing-requirements-to-code.'
+description: 'Checks whether one build or feature meets its acceptance criteria (ACs), showing from implementation evidence which criteria are met, partial, missing, or untestable without inventing missing behavior. Use when checking whether a story is done, preparing QA sign-off, or turning criteria and observations into a verification matrix. For planning coverage across a whole PRD, use requirements-test-coverage-mapper; for linking existing tests to requirement IDs, use tracing-requirements-to-code. For the quick one-command verification matrix, use the verify-acceptance-criteria command.'
 argument-hint: 'Acceptance criteria source, implementation evidence, environment, and any known assumptions or blockers'
 user-invocable: true
 ---

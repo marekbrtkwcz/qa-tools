@@ -1,6 +1,6 @@
 ---
 name: regression-scope
-description: Turns a diff, PR summary, changed files, or hotfix description into a prioritized regression scope (must, should, sample, defer) with a minimal confidence suite and retest guidance for testers. Use when deciding what to retest before a release, after a hotfix, or when a full regression run does not fit the time available. For an automated gate on a diff with coverage and intent checks, use the scope-change-gate command.
+description: Turns a diff, PR summary, changed files, or hotfix description into a prioritized regression scope (must, should, sample, defer) with a minimal confidence suite and retest guidance for testers. Use when deciding what to retest before a release, after a hotfix, or when a full regression run does not fit the time available. For an automated gate on a diff with coverage and intent checks, use the scope-change-gate command. For the deeper blast-radius analysis, use the analyzing-regression-scope skill (quality-gates); this command is its quick diff-to-pack form.
 argument-hint: "[change]"
 disable-model-invocation: true
 ---

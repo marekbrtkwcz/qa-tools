@@ -1,6 +1,6 @@
 ---
 name: migrate-tests-to-playwright
-description: "Migrates UI tests from Cypress, Selenium, Puppeteer, or Protractor to Playwright Test while preserving what each test verifies: translates idioms instead of lines, runs both suites where possible, and reports a migration status per test. Use when moving a suite or part of one to Playwright. To restructure tests that are already in Playwright, use the refactor-to-page-objects command."
+description: "Migrates UI tests from Cypress, Selenium, WebdriverIO, or Protractor to Playwright Test while preserving what each test verifies: translates idioms instead of lines, runs both suites where possible, and reports a migration status per test. Use when moving a suite or part of one to Playwright. To restructure tests that are already in Playwright, use the refactor-to-page-objects command. For a staged whole-suite migration with parity gates, use the migrating-tests-to-playwright skill; this command is its quick translator form."
 argument-hint: "[sourceScope]"
 disable-model-invocation: true
 ---

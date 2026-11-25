@@ -1,6 +1,6 @@
 ---
 name: stabilize-flaky-tests
-description: Reproduces intermittently failing tests with repeated and parallel runs, classifies the root cause (timing, isolation, data, environment), fixes it, and proves stability with before/after failure rates. Use when tests pass on retry, fail only in CI, or fail under parallel workers. For tests that fail every time, use the fix-tests command.
+description: Reproduces intermittently failing tests with repeated and parallel runs, classifies the root cause (timing, isolation, data, environment), fixes it, and proves stability with before/after failure rates. Use when tests pass on retry, fail only in CI, or fail under parallel workers. For tests that fail every time, use the fix-tests command. For the full workflow with an owned, expiring quarantine, use the stabilizing-flaky-tests skill; this is its quick triage form.
 argument-hint: "[testScope]"
 disable-model-invocation: true
 ---
@@ -49,6 +49,7 @@ Then do the following:
 
 ## Related Skills
 
+- `stabilizing-flaky-tests` - the full workflow this command abbreviates, including the owned, expiring quarantine when the flake cannot be fixed yet
 - `flaky-test-policy` - the quarantine/ownership rules when a flake cannot be fixed now
 - `diagnosing-test-failures` - when the failure is deterministic, not intermittent
 - `unslop-tests` - retries and hardcoded waits are the classic flake masks

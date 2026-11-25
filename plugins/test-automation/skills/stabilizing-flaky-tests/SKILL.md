@@ -1,6 +1,6 @@
 ---
 name: stabilizing-flaky-tests
-description: 'Diagnoses and fixes tests that fail intermittently, by root cause - timing, shared state, data collision, environment, order dependence, external dependency, or a real race in the application - proves the fix under the conditions that broke it, and contains what cannot be fixed yet with an owned, expiring quarantine. Use when a test fails randomly or passes on retry, passes locally but fails in CI, when a pipeline goes green after a re-run, or when raising a timeout is proposed as a fix. A test that fails on every run goes to diagnosing-test-failures.'
+description: 'Diagnoses and fixes tests that fail intermittently, by root cause - timing, shared state, data collision, environment, order dependence, external dependency, or a real race in the application - proves the fix under the conditions that broke it, and contains what cannot be fixed yet with an owned, expiring quarantine. Use when a test fails randomly or passes on retry, passes locally but fails in CI, when a pipeline goes green after a re-run, or when raising a timeout is proposed as a fix. For the quick one-command triage loop, use the stabilize-flaky-tests command. A test that fails on every run goes to diagnosing-test-failures.'
 argument-hint: 'The flaky test(s) or suite, CI evidence (failure history, retry logs, traces), the runner, and how often it fails'
 user-invocable: true
 ---
@@ -159,6 +159,7 @@ For each test, fill in `./resources/flake-record-template.md`: class, evidence, 
 
 ## Related Skills
 
+- `stabilize-flaky-tests` - the quick one-command triage loop this skill expands into the full workflow
 - `mocking-network-and-time` - when the cause is an external service, the clock, or the timezone
 - `unslop-tests` - when the flaky test also proves little; retries and hardcoded waits are tells it flags
 - `analyzing-quality-metrics` - the flake rate and quarantine definitions used for before and after

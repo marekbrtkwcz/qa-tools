@@ -1,6 +1,6 @@
 ---
 name: migrating-tests-to-playwright
-description: 'Migrates Cypress, Selenium, WebdriverIO, or Protractor suites to Playwright in staged slices, each with a parity gate before the old test is deleted. Use when porting a legacy browser suite, when deciding which tests are not worth porting, when a half-finished migration has stalled with two suites running in parallel, or when a suite migration needs a plan before anyone starts translating files.'
+description: 'Migrates Cypress, Selenium, WebdriverIO, or Protractor suites to Playwright in staged slices, each with a parity gate before the old test is deleted. Use when porting a legacy browser suite, when deciding which tests are not worth porting, when a half-finished migration has stalled with two suites running in parallel, or when a suite migration needs a plan before anyone starts translating files. For quick single-test translations, use the migrate-tests-to-playwright command.'
 argument-hint: 'Source framework and suite path, test count, CI setup, and how much of the suite is currently trusted'
 user-invocable: true
 ---
@@ -163,6 +163,7 @@ A stalled migration is usually a migration nobody was reporting on.
 
 ## Related Skills
 
+- `migrate-tests-to-playwright` - the quick one-test translator; use it for a spot port, not a staged migration
 - `designing-test-automation-architecture` - to decide the target shape before the first file is translated
 - `unslop-tests` - to triage the source suite so weak tests are rewritten rather than ported
 - `playwright-automation-engineer-ts` agent - for how the ported tests should be written

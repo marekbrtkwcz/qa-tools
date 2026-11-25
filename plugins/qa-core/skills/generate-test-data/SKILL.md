@@ -1,6 +1,6 @@
 ---
 name: generate-test-data
-description: Designs a reusable test data catalog (valid baselines, boundaries, invalid inputs, role and state combinations) from requirements, constraints, a test plan, or the codebase, for manual and automated testing. Use when tests need concrete data sets, fixtures, or seed data, or when existing data misses boundaries and invalid cases.
+description: Designs a reusable test data catalog (valid baselines, boundaries, invalid inputs, role and state combinations) from requirements, constraints, a test plan, or the codebase, for manual and automated testing. Use when tests need concrete data sets, fixtures, or seed data, or when existing data misses boundaries and invalid cases. For the full catalog design with roles, boundaries, and state combinations, use the designing-test-data skill; this command is its quick generator form.
 disable-model-invocation: true
 ---
 
