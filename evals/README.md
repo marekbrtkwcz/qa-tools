@@ -75,5 +75,7 @@ categories are scored for routing quality, reported, not gated.
 Run records are committed under `evals/runs/<suite>/`. Current state:
 
 - `pentesting` — recorded: run-001 (baseline), run-002 and run-003 (candidate).
-- All other suites — case files pass the static lint on every CI run; they await
-  their first live run. A suite that has never run is a test plan, not evidence.
+- `qa-core` — recorded: run-001 (candidate, 19/20 trials; baseline still awaits
+  a plugin-free operator run).
+- `qa-core` — run-001 (candidate, 2026-11-25): 19/20 trials via independent child agents (the missing trial is the 5th of the safety case). Baseline still pending an operator-side plugin-less session.
+- All other suites — case files pass the static lint on every CI run; they await their first live run. A suite that has never run is a test plan, not evidence.
