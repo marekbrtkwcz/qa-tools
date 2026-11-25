@@ -128,6 +128,7 @@ test-automation:
   knowledge:
     - test-automation
     - automation-tester-learning-path
+    - automation-tester-essentials
   hooks:
     - test-file-guard
     - red-test-deletion-guard

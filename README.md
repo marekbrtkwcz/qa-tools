@@ -9,7 +9,7 @@ Repozytorium inspirowane ideą i strukturą projektu **[awesome-agents-for-quali
 | Plugin | Skille | Agenci | Knowledge | Hook | Zakres |
 |---|---|---|---|---|---|
 | `qa-core` 🧭 | 39 | 5 | 1 | — | planowanie testów, eksploracja, bug reporty, RTM, kryteria akceptacji, integracja trackerów (Xray/TestRail/Jira), manualny release pass (instalacja/upgrade/rollback), usability quick-pass, testowanie dokumentacji, standard zapisu rekordów testowych |
-| `test-automation` 🤖 | 59 | 5 | 2 | ✅ test-file-guard, red-test-deletion-guard | unit testy, TDD, Playwright, mocki, flakiness, review, bootstrap suity, raporty/artefakty CI, mutacja (Stryker), portowanie na pytest/JUnit/NUnit |
+| `test-automation` 🤖 | 59 | 5 | 3 | ✅ test-file-guard, red-test-deletion-guard | unit testy, TDD, Playwright, mocki, flakiness, review, bootstrap suity, raporty/artefakty CI, mutacja (Stryker), portowanie na pytest/JUnit/NUnit |
 | `api-testing` 🔌 | 16 | 2 | 1 | — | automatyzacja API (Playwright), contract testing: schema/OpenAPI (L25) + Pact (consumer-driven) |
 | `non-functional-testing` ⚡ | 22 | 1 | 1 | — | accessibility, performance/load, security: macierz authz + IDOR, security regression smoke po zmianach auth, limity/lockouty (abuse), API security checklist |
 | `pentesting` 🕵️ | 11 | 1 | 1 | — | pentest web + API + warstwa sieci/infra na autoryzowanych targetach: rules of engagement (charter + gate autoryzacji + pre-autoryzowane laby), recon i mapa powierzchni ataku, testy klas OWASP Top 10 (access control, injection, auth/session, XSS/CSRF, SSRF), triage eksponowanych usług, słabości TLS i konfiguracji cloud/IaC, raport CVSS z wariantami per odbiorca i retest planem, weryfikacja napraw na fixed buildzie |
@@ -23,7 +23,7 @@ Repozytorium inspirowane ideą i strukturą projektu **[awesome-agents-for-quali
 | `ui-api-automation` 🖥️ | 1 | 7 | 1 | — | paczka: pipeline testów UI + API (explorers → plan → implement → run) |
 | `ui-api-automation-minimal` 🧪 | 1 | 4 | 1 | — | paczka: minimalna wersja powyższego |
 
-Razem: **14 pluginów**, **194 skilli**, **44 subagentów**, **13 knowledge**, **2 quality-gate hooki**.
+Razem: **14 pluginów**, **194 skilli**, **44 subagentów**, **14 knowledge**, **2 quality-gate hooki**.
 
 Paczki orkiestracyjne działają jak w źródle: driver-skill (user-invocable) prowadzi orkiestrację, każdy krok delegujesz do subagenta przez `tools.agents` + `config_name` (np. `plan-explore-review-commit:perc-implementer`); GUIDE paczki jest jej knowledge. Build przepisuje instrukcje hostów (Claude Code / Codex) na Vibe: tabela agentów dostaje kolumnę `Vibe` z dokładnie tymi `config_name`, które Vibe potrafi zespawnować.
 

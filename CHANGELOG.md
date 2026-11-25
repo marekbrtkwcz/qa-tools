@@ -6,6 +6,8 @@ Wszystkie istotne zmiany tego projektu są dokumentowane tutaj. Format zbliżony
 
 ### ✅ Dodane
 
+- knowledge `automation-tester-essentials` (test-automation, **P13**): skondensowana lista "co powinien wiedzieć tester automatyzujący" wyciągnięta z kursów UI+API — każdy punkt = wiedza + problem, któremu zapobiega + skill; cross-link z learning-path
+
 - `api-concepts-for-testers` (api-testing, **P12**): podstawy REST/HTTP dla testera — zasoby, metody + idempotentność, kody statusów, JSON, 6 zasad REST, anatomia request/response, gdzie pasuje SOAP; resources: glossary + HTTP quick-reference; w knowledge api-testing sekcja "Beyond REST" (SOAP/WSDL, GraphQL, gRPC)
 
 - knowledge `automation-tester-learning-path`: mapowanie 1:1 kursu Playwright UI (moduł po module) na skille kolekcji (**P11**)

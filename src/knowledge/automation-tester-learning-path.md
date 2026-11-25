@@ -63,4 +63,6 @@ This path maps 1:1 onto a typical Playwright UI course (modules: intro → envir
 - **Project / smoke tests** (real app, cleanup after tests, attachments, headless env quirks) → Stage 3: `designing-smoke-and-sanity-suites`, `test-data-factories`, `test-reports-and-artifacts`, `diagnosing-test-failures`
 - **Git bonus module** (what is git, commands, init, commit, branch, clone) → Stage 0/4: `git-for-testers`
 
+For the condensed must-know list (knowledge + the problem each item prevents + the skill that covers it), see `automation-tester-essentials`.
+
 Course logistics (quizzes, completion certificate) have no counterpart here — this collection covers the knowledge and the practical problems, not course administration.
