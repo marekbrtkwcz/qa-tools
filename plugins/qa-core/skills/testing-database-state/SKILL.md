@@ -1,6 +1,6 @@
 ---
 name: testing-database-state
-description: 'Verifies the persisted state a feature leaves behind: checks rows, constraints, indexes, and transaction outcomes directly in the database after an API call, UI action, or background job, and designs database-level test data and cleanup. Use when the user-visible result looks correct but the stored state may be wrong, when a migration or job needs verification, or when tests need deterministic database fixtures.'
+description: 'Verifies the persisted state a feature leaves behind: checks rows, documents, constraints, indexes, and transaction outcomes directly in the database or document store after an API call, UI action, or background job, and designs database-level test data and cleanup. Use when the user-visible result looks correct but the stored state may be wrong, when the state lives in a document store (MongoDB, DynamoDB), when a migration or job needs verification, or when tests need deterministic database fixtures.'
 argument-hint: 'Database connection details for the test environment, the feature or job under test, and the tables in scope'
 user-invocable: true
 ---
@@ -16,6 +16,7 @@ Use this skill when "the API returned 200" is not the end of the story. Most int
 - a transaction boundary is in question (partial commit, rollback behaviour)
 - tests need deterministic database fixtures and reliable cleanup between runs
 - a constraint (unique, foreign key, check) fires or should have fired
+- the state lives in a document store (MongoDB, DynamoDB): collections, embedded documents, TTL - recipes in `./resources/document-store-recipes.md`
 
 ## Operating Principles
 
@@ -23,6 +24,7 @@ Use this skill when "the API returned 200" is not the end of the story. Most int
 - **Test environments only.** Never run verification queries that modify data against production; read-only checks only there, and only with approval.
 - **Clean up what you create.** Every test inserts its own rows and deletes them (or uses a transaction that rolls back); shared databases make leftover rows other tests' flaky data.
 - **Verify constraints, not just data.** A unique violation swallowed by the app is a defect the row check alone will miss.
+- **Schemaless is not assertionless.** A document store has no FK to lean on, so shape bugs move into the documents themselves: assert whole documents (embedded fields and arrays included), not a field here and there. Full mapping of the checklist to stores is in `./resources/document-store-recipes.md`.
 - **Check the invisible columns.** timestamps, soft-delete flags, version/optimistic-lock columns, and audit fields are where state bugs hide.
 
 ## Workflow
@@ -61,6 +63,7 @@ Defects found at the database layer go to `reporting-bugs` with the query, the e
 ## Resource Map
 
 - `./resources/state-verification-checklist.md` - per-action verification matrix: existence, values, cascades, constraints, transactions, soft-delete, jobs. Read during Phases 2–3.
+- `./resources/document-store-recipes.md` - the same matrix mapped onto MongoDB and DynamoDB: connections, whole-document assertions, unique indexes and conditional puts, TTL behaviour, testcontainers wiring. Read when the store is a document store.
 
 ## Related Skills
 

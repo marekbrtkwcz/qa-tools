@@ -1,6 +1,6 @@
 ---
 name: mobile-app-testing
-description: "Automates mobile app testing Maestro-first, Appium as deliberate fallback: flow files as coverage unit, accessibility-id selectors, deterministic device setup, CI matrices. Use when an Android/iOS app has no coverage or runs flake on dialogs. For screenshot baselines use visual-regression-mobile; for native-app a11y use auditing-mobile-accessibility; for product test plans use designing-functional-tests."
+description: "Automates mobile app testing Maestro-first, Appium as deliberate fallback: flow files as coverage unit, accessibility-id selectors, deterministic device setup, CI matrices - for native, React Native, and Flutter apps alike. Use when an Android/iOS app has no coverage or runs flake on dialogs. For screenshot baselines use visual-regression-mobile; for native-app a11y use auditing-mobile-accessibility; for product test plans use designing-functional-tests."
 argument-hint: 'The app under test (apk/ipa or workspace), platforms (Android/iOS), available devices or emulators, and whether CI device access exists'
 user-invocable: true
 ---
@@ -48,6 +48,25 @@ If the CLI cannot be installed right now:
 - do not substitute claimable outputs: screenshots from a manual session are evidence of a manual check, not of a flow passing
 - the environment prep (step 2) and identifier work (step 3) can proceed - they are prerequisites for whatever harness ends up running, including Appium
 
+## React Native and Flutter Apps
+
+The harness default (Maestro first, Appium when scale demands it) does not change for non-native stacks - what changes is **selectors** and **the build CI runs**.
+
+### React Native
+
+- `testID` is the id property: it surfaces as the native accessibility id on both platforms (Maestro's `id:` and Detox's `element.id` match it). `accessibilityLabel` stays the human-readable label - assert against it when the label is the product, do not hunt elements by it.
+- **Detox is the RN-native alternative harness** (grey-box, `testID`-driven). If the RN team already runs Detox, respect it instead of forcing a rewrite; its device APIs cover territory Maestro does not (biometrics: `device.setBiometricEnrollment`, face-match simulation for Face ID flows).
+- CI builds: dev builds talk to the Metro dev server. E2E runs against a bundled release-ish build (`assembleRelease`, or the Detox release configuration) - faster, deterministic, no dev-server dependency in the pipeline. Build once per pipeline and cache the artifact; the build itself is the long pole, the tests are not.
+
+### Flutter
+
+- Flutter paints into a single canvas: **native automation sees nothing inside the app**. The handles automation can reach come from Flutter's `Semantics` tree or a Flutter-aware driver:
+  - `integration_test` (the official package) with **Patrol** when native-device interactions are needed (permissions, notifications, biometrics) - finders by `ValueKey`, tests written in Dart.
+  - Maestro supports Flutter behind an integration step (driver embedded in the app) - use it only if its coverage reaches your flows; do not promise selector parity with native apps.
+  - Appium reaches Flutter through a Flutter-driver module, not the a11y tree of native UI.
+- Widget keys (`ValueKey`) are to integration tests what accessibility ids are to Maestro: the stable handle that survives refactors. Screen-reader parity goes through `Semantics` labels - that audit is `auditing-mobile-accessibility` work, and unlabeled widgets are invisible there too.
+- A Flutter app does not excuse skipping UI coverage with "we test via the API": the canvas is exactly where gesture and state bugs live.
+
 ## What People Say vs What Happens
 
 | They say | What happens | Do instead |
@@ -66,6 +85,8 @@ If the CLI cannot be installed right now:
 - Device state from previous run leaking in (logged-in user not reset).
 - No accessibility ids anywhere - selectors are text or coordinates.
 - iOS mentioned but no macOS anywhere in the plan (silent assumption it will be fine).
+- Flutter app, and the plan uses only native automation - the whole app reads as one canvas view unless the app embeds the driver.
+- React Native E2E pipeline that depends on a Metro dev server running.
 
 ## Related Skills
 

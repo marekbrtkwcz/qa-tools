@@ -1,6 +1,6 @@
 ---
 name: testing-mfa-and-credentials
-description: 'Tests credential handling and multi-factor authentication: password policy enforcement, account lockout and throttling, credential-stuffing resistance, MFA enrolment and verification (TOTP, WebAuthn, SMS), MFA bypass paths, and recovery flows (password reset, backup codes). Use when login security is under review, when accounts can be brute-forced, or when a reset link can be abused.'
+description: 'Tests credential handling and multi-factor authentication: password policy enforcement, account lockout and throttling, credential-stuffing resistance, MFA enrolment and verification (TOTP, WebAuthn passkeys, SMS), MFA bypass paths, and recovery flows (password reset, backup codes). Use when login security is under review, when accounts can be brute-forced, when a reset link can be abused, or when passkey enrolment and sign-in flows need automation (CDP virtual authenticator).'
 argument-hint: 'The auth endpoints in a test environment, test accounts per role, and which MFA factors are enabled'
 user-invocable: true
 ---
@@ -14,6 +14,7 @@ Use this skill when the question is "can an attacker get in with someone else's 
 ## When to Use
 
 - MFA is being rolled out or changed (TOTP / WebAuthn / SMS)
+- passkeys are being introduced: enrolment, usernameless sign-in, and recovery need automated verification
 - password reset or account recovery flows exist and their token handling is unknown
 - lockout / throttling behaviour needs verification
 - a bypass of the second factor is suspected (e.g. endpoint that skips MFA)
@@ -50,6 +51,34 @@ Work through `./resources/mfa-credentials-checklist.md`:
 - MFA required on all protected endpoints — check for bypass paths (API endpoints, old sessions, "remember this device" scope)
 - disable/change MFA requires re-authentication (current password or a valid second factor)
 - backup codes: work once each, stored hashed, regeneration invalidates the old set
+
+### WebAuthn and passkeys (automating the ceremony)
+
+The WebAuthn prompt is OS-chrome the page cannot drive — typing into it is impossible from normal automation. Automate the ceremony with a **CDP virtual authenticator** instead of the real prompt:
+
+```ts
+// Playwright: a virtual authenticator replaces the platform prompt
+const cdp = await context.newCDPSession(page);
+await cdp.send('WebAuthn.enable');
+const { authenticatorId } = await cdp.send('WebAuthn.addVirtualAuthenticator', {
+  protocol: 'ctap2',
+  transport: 'internal',        // platform authenticator = the passkey profile
+  hasResidentKey: true,         // passkeys are discoverable credentials
+  hasLargeBlob: true,
+  hasUserVerification: true,
+  isUserVerified: true,         // auto-passes the biometric/PIN step
+});
+// enrolment: the page's navigator.credentials.create() completes without UI
+// sign-in:   navigator.credentials.get() returns the stored credential
+await cdp.send('WebAuthn.clearCredentials', { authenticatorId }); // reset between tests
+```
+
+- The test drives the real JS flow — only the OS sheet is virtual. Say exactly that in the notes: ceremony executed, platform prompt not exercised.
+- Assertions stay server-side: after sign-in, verify the credential is bound to the account (credential list endpoint or the stored record), not just that the dashboard rendered.
+- **Conditional UI** (the username field's passkey autofill, `mediation: 'conditional'`) cannot be clicked by automation either — it lives in the browser's autofill surface. Verify the code path (the `credentials.get` call is present and callable) and mark the visual autofill row as a manual check, honestly.
+- Cross-device passkeys (QR / hybrid transport) are out of UI-automation scope: verify the policy level — `allowCredentials` and the transport regular expression state whether cross-device is permitted.
+- `addVirtualAuthenticator` gained fields across CDP versions — if a field is rejected, check the protocol version before improvising.
+- **Passkey recovery is launch-blocking surface**: removing a passkey must require re-auth with a remaining factor, and with all passkeys removed the account must still be recoverable through the reset path. A passkey-only account with a dead recovery flow is a high-severity finding, not a backlog note.
 
 ### Phase 4: Recovery flows
 

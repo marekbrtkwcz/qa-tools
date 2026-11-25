@@ -92,6 +92,7 @@ test-automation:
     - python-for-testers
     - refactor-to-page-objects
     - refactoring-api-tests
+    - robot-framework-automation
     - running-visual-regression-tests
     - self-healing-locators
     - selector-strategy
@@ -172,6 +173,7 @@ non-functional-testing:
     - auditing-mobile-accessibility
     - data-pipeline-testing
     - disaster-recovery-testing
+    - jmeter-load-testing
     - k6-load-testing
     - performance-reliability-plan
     - privacy-compliance-audit

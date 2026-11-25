@@ -1,12 +1,12 @@
 ---
 name: test-automation
-description: "Unit/component/E2E test automation for JS/TS: TDD, Playwright, mocking, visual regression, flaky tests, CI pipelines, migration. This bundle writes tests; test design lives in `qa-core`, contracts and gates in `quality-gates`."
+description: "Unit/component/E2E test automation for JS/TS (plus Robot Framework for keyword-driven suites): TDD, Playwright, mocking, visual regression, flaky tests, CI pipelines, migration. This bundle writes tests; test design lives in `qa-core`, contracts and gates in `quality-gates`."
 display_name: "Test automation"
 icon: book
 ---
 # Test automation
 
-Unit/component/E2E test automation for JS/TS: TDD, Playwright, mocking, visual regression, flaky tests, CI pipelines, migration. This bundle writes tests; test design lives in `qa-core`, contracts and gates in `quality-gates`.
+Unit/component/E2E test automation for JS/TS (plus Robot Framework for keyword-driven suites): TDD, Playwright, mocking, visual regression, flaky tests, CI pipelines, migration. This bundle writes tests; test design lives in `qa-core`, contracts and gates in `quality-gates`.
 
 ## Conventions
 
@@ -15,6 +15,7 @@ Unit/component/E2E test automation for JS/TS: TDD, Playwright, mocking, visual r
 - Browser work needs the Playwright MCP server from the `qa-mcp` plugin; live console/network/performance debugging uses the Chrome DevTools MCP from the same bundle (`debugging-with-chrome-devtools-mcp`); load tests run through the k6 MCP (`k6-load-testing`).
 - Bun is a first-class runtime here: unit/integration suites can run on `bun test` (`testing-with-bun`), E2E on `bunx playwright test`; lint/format/type gates stay Biome + `tsc --noEmit` regardless of runner (`static-code-analysis-typescript`).
 - Python is a supported alternative language for test automation: when the suite runs on pytest (Python team, Python product code, legacy Python suite), port the conventions via `port-suite-to-python-java` instead of rewriting them per language — the same unslop/flake/CI rules apply, mapped to pytest equivalents.
+- Robot Framework is deliberately in the canon (PL/EU teams run real keyword-driven suites, so requests like "make it in robot" must not misroute): `robot-framework-automation` owns it — Resources are its reuse unit, tags filter smoke from regression, `robocop`/`robotidy` are its lint/format pair, and Browser Library embeds Playwright so selector discipline is shared with the JS/TS skills. It is not a Playwright replacement: a whole-suite move to Playwright is `migrating-tests-to-playwright`'s deliberate path, and porting conventions to pytest/JUnit/NUnit stays with `port-suite-to-python-java`.
 
 ## Evidence and enforcement
 
