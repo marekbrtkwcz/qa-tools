@@ -137,6 +137,7 @@ api-testing:
   description: "API test automation with Playwright and contract testing."
   version: "0.7.0"
   skills:
+    - api-concepts-for-testers
     - api-playwright-test-developer
     - api-request-response-logging
     - api-test-plan-and-tests

@@ -6,6 +6,8 @@ Wszystkie istotne zmiany tego projektu są dokumentowane tutaj. Format zbliżony
 
 ### ✅ Dodane
 
+- `api-concepts-for-testers` (api-testing, **P12**): podstawy REST/HTTP dla testera — zasoby, metody + idempotentność, kody statusów, JSON, 6 zasad REST, anatomia request/response, gdzie pasuje SOAP; resources: glossary + HTTP quick-reference; w knowledge api-testing sekcja "Beyond REST" (SOAP/WSDL, GraphQL, gRPC)
+
 - knowledge `automation-tester-learning-path`: mapowanie 1:1 kursu Playwright UI (moduł po module) na skille kolekcji (**P11**)
 
 - `git-for-testers` (test-automation, **P10**): wiedza i problemy gitowe dla testera — cykl życia plików, `git bisect run` przy łamaniu testów, hooki (Husky/.git/hooks) i ich testowanie, worktree, płytkie klony w CI, blame/log -L
