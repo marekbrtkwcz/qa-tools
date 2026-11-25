@@ -67,7 +67,7 @@ npm run p2:all          # Generate CHANGELOG, update README stats, validate link
 
 # Individual maintenance tasks
 npm run changelog              # Generate CHANGELOG.md from conventional commits
-npm run changelog:check        # Validate CHANGELOG format and consistency
+npm run changelog:preview      # Preview generator output (real CHANGELOG validation runs in npm run check)
 npm run readme:stats           # Update README.md statistics (bundle counts)
 npm run readme:stats:check     # Validate README stats match bundles.yaml
 npm run links                  # Validate all markdown links (report mode)
@@ -91,7 +91,7 @@ npm run test:all       # Run all tests (P2 + P3)
 - **Input:** Git commit history (conventional commits format)
 - **Output:** `CHANGELOG.md` with categorized changes
 - **Types:** `feat`/`feature`/`dodano` → ✅ Dodane, `fix`/`naprawiono` → 🐛 Naprawione, `chore`/`refactor`/`docs` → 🔄 Zmienione, `BREAKING CHANGE` → ⚠️ BREAKING CHANGE
-- **Validation:** `npm run changelog:check` (dry-run mode)
+- **Preview:** `npm run changelog:preview` (dry-run generatora; prawdziwa walidacja CHANGELOG siedzi w `npm run check`)
 
 ### README Statistics
 - **Script:** `scripts/update-readme-stats.ts`
@@ -119,9 +119,9 @@ All P2 maintenance scripts have comprehensive unit tests:
 
 | Script | Test File | Coverage |
 |--------|-----------|----------|
-| `validate-links.js` | `validate-links.test.js` | Link extraction, validation logic |
-| `generate-changelog.js` | `generate-changelog.test.js` | Commit parsing, type mapping |
-| `update-readme-stats.js` | `update-readme-stats.test.js` | Bundle counting, stats validation |
+| `validate-links.ts` | `validate-links.test.ts` | Link extraction, validation logic |
+| `generate-changelog.ts` | `generate-changelog.test.ts` | Commit parsing, type mapping |
+| `update-readme-stats.ts` | `update-readme-stats.test.ts` | Bundle counting, stats validation, table rewrite |
 
 ### Running Tests
 
@@ -432,9 +432,9 @@ on:
 ```
 
 **Integration with existing CI:**
-- Quality Gates workflow complements the existing `ci.yml` and `build.yml`
-- Core gates are enforced in `build.yml` quality-gates job
-- P4 workflows provide additional insights and trend analysis
+- Quality Gates workflow is **nightly-only** (schedule + workflow_dispatch): full regression at rest plus what only makes sense on a schedule (security scan, flake detection, performance history)
+- Core gates on push/PR live in `ci.yml` (job `full`); `release.yml` is the single owner of `v*` tags
+- P4 jobs call the same npm scripts (`security:scan`, `flaky:check`, `benchmark:full`) the repo ships in `package.json` — one source of truth
 
 ---
 
@@ -663,8 +663,8 @@ npm run perf:monitor
 {
   "benchmarks": [
     {
-      "name": "P2: CHANGELOG check",
-      "command": "npm run changelog:check",
+      "name": "P2: CHANGELOG preview",
+      "command": "npm run changelog:preview",
       "runs": 5,
       "durations": [120, 125, 118, 122, 121],
       "statistics": {

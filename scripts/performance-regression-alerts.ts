@@ -318,7 +318,7 @@ function getBenchmarkableScripts(): { name: string; command: string }[] {
   }
 
   return [
-    { name: 'P2: CHANGELOG check', command: 'npm run changelog:check' },
+    { name: 'P2: CHANGELOG preview', command: 'npm run changelog:preview' },
     { name: 'P2: README stats check', command: 'npm run readme:stats:check' },
     { name: 'P2: Links check', command: 'npm run links:check' },
     { name: 'P2: All checks', command: 'npm run p2' },

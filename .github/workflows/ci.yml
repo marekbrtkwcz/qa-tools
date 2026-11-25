@@ -3,7 +3,6 @@ name: CI
 on:
   push:
     branches: [main]
-    tags: ['v*']
   pull_request:
 
 # Parallel pushes to the same ref should queue, not multiply: keep the latest.
@@ -11,9 +10,13 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
+# One workflow, two jobs, each gate once:
+# - fast: zero-dependency gates on both OSes (the suite runs on plain node --test)
+# - full: everything that needs node_modules (biome, tsc, P2 script tests)
+# The former tag reaction lives in release.yml (single owner of v* tags).
 jobs:
-  build:
-    name: check + manifest validation + drift gate (${{ matrix.os }})
+  fast:
+    name: fast gates (zero-dep, ${{ matrix.os }})
     # The suite is fast (~10 s); a hung job should fail by timeout, not hold runners.
     timeout-minutes: 10
     strategy:
@@ -42,20 +45,30 @@ jobs:
       - name: Drift gate - committed plugins/ must match a fresh build (orphan plugin dirs included)
         run: npm run verify
 
-  release-gate:
-    # A v* tag is a release claim: the tag, every bundles.yaml version, the
-    # CHANGELOG header and the repo package.json must agree before the tag
-    # is trusted.
-    name: tag = bundles.yaml versions = CHANGELOG header
-    if: startsWith(github.ref, 'refs/tags/v')
-    timeout-minutes: 5
+  full:
+    name: full gates (lint, typecheck, P2, P3)
+    timeout-minutes: 10
     runs-on: ubuntu-latest
+    # Runs in parallel with fast: independent signals, no waiting for the matrix.
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
         with:
           node-version: 24
+          cache: 'npm'
 
-      - name: Release consistency gate
-        run: node scripts/check-release.ts --tag "${GITHUB_REF_NAME}"
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint (Biome on scripts/ + pack lints)
+        run: npm run lint
+
+      - name: Typecheck (tsc --noEmit)
+        run: npm run typecheck
+
+      - name: P2 checks (changelog preview, README stats, links - read-only)
+        run: npm run p2
+
+      - name: P3 script tests (validate-links, generate-changelog, update-readme-stats)
+        run: npm run test:p3

@@ -5,6 +5,8 @@ on:
     tags:
       - 'v*'
 
+# Single owner of v* tags. The tag is a release claim, so every gate runs in
+# this workflow (and gates each run once - no per-push duplication).
 concurrency:
   group: release-${{ github.ref }}
   cancel-in-progress: true
@@ -14,122 +16,33 @@ env:
 
 jobs:
   validate-release:
-    name: Validate release tag consistency
+    # A v* tag claims: tag = every bundles.yaml version = CHANGELOG header
+    # = package.json. Versions are bumped BEFORE tagging (README: how to
+    # release), so nothing is auto-bumped or auto-committed here.
+    name: tag = bundles.yaml versions = CHANGELOG header
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Need full history for changelog generation
+          fetch-depth: 0
 
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      - name: Check tag consistency
-        run: |
-          node scripts/check-release.ts --tag "${GITHUB_REF_NAME}"
+      - name: Release consistency gate
+        run: node scripts/check-release.ts --tag "${GITHUB_REF_NAME}"
 
-  build-and-verify:
-    name: Build plugins and verify drift gate
+  release:
+    # All release gates in one job - all-or-nothing by design: a red gate
+    # means no release, without hunting across jobs.
+    name: gates + GitHub Release (plugins/ artifacts)
     needs: validate-release
     runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Validate manifests
-        run: npm run validate-manifests
-
-      - name: Build plugins
-        run: node scripts/build.ts
-
-      - name: Verify drift gate
-        run: npm run verify
-
-      - name: Lint scripts
-        run: npm run lint
-
-      - name: Run unit tests
-        run: npm test
-
-      - name: Validate README stats
-        run: npm run readme:stats:check
-
-      - name: Validate CHANGELOG
-        run: npm run changelog:check
-
-  update-changelog:
-    name: Generate CHANGELOG for release
-    needs: build-and-verify
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Generate CHANGELOG
-        run: npm run changelog
-
-      - name: Commit CHANGELOG update
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add CHANGELOG.md
-          git commit -m "docs: update CHANGELOG for ${GITHUB_REF_NAME}" || echo "No CHANGELOG changes"
-
-  update-readme:
-    name: Update README statistics
-    needs: build-and-verify
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Update README stats
-        run: npm run readme:stats
-
-      - name: Commit README update
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add README.md
-          git commit -m "docs: update README stats for ${GITHUB_REF_NAME}" || echo "No README changes"
-
-  create-release:
-    name: Create GitHub Release
-    needs: [validate-release, build-and-verify, update-changelog, update-readme]
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 15
     permissions:
       contents: write
-      packages: write
     steps:
       - uses: actions/checkout@v4
         with:
@@ -138,11 +51,42 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Get changelog for release
+      - name: Full check (build --check, pack lints, CHANGELOG/README consistency, duplicates)
+        run: npm run check
+
+      - name: Validate generated manifests (plugin.json, mcp.json) and agent TOML syntax
+        run: npm run validate-manifests
+
+      - name: Build plugins (proves committed plugins/ matches a fresh build)
+        run: npm run build
+
+      - name: Drift gate - committed plugins/ must match the fresh build
+        run: npm run verify
+
+      - name: Unit tests (node:test)
+        run: npm test
+
+      - name: Script tests (P3)
+        run: npm run test:p3
+
+      - name: Lint (Biome on scripts/ + pack lints)
+        run: npm run lint
+
+      - name: Typecheck (tsc --noEmit)
+        run: npm run typecheck
+
+      - name: README stats gate
+        run: npm run readme:stats:check
+
+      - name: CHANGELOG preview (the generator still parses history; hand-curated sections stay ours)
+        run: npm run changelog:preview
+
+      - name: Extract changelog section for this version
         id: changelog
         run: |
           # Extract changelog section for this version
@@ -150,14 +94,14 @@ jobs:
           CHANGELOG=$(node -e "
             const fs = require('fs');
             const changelog = fs.readFileSync('CHANGELOG.md', 'utf8');
-            const match = changelog.match(new RegExp(\"## \\[${VERSION}\\] - ([^\\n]+)\\\n\\n((?:(?!## \\\[).)*\\n*?)(?=## |$)\", 's'));
+            const match = changelog.match(new RegExp(\\\"## \\\\[${VERSION}\\\\] - ([^\\\\n]+)\\\\n\\\\n((?:(?!## \\\\\\[).)*\\\\n*?)(?=## |$)\\\", 's'));
             process.stdout.write(match ? match[0].trim() : 'No changelog entry');
           ")
           echo "changelog<<EOF" >> $GITHUB_OUTPUT
           echo "$CHANGELOG" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
-      - name: Create Release
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ github.ref_name }}
@@ -166,37 +110,8 @@ jobs:
           draft: false
           prerelease: false
           generate_release_notes: false
-
-  bump-version:
-    name: Bump version in bundles.yaml
-    needs: create-release
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Bump version in bundles.yaml
-        run: |
-          VERSION=${GITHUB_REF_NAME#v}
-          node scripts/build.ts --set-version "${VERSION}"
-
-      - name: Commit version bump
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add bundles.yaml
-          git commit -m "chore: bump version to ${GITHUB_REF_NAME}"
-
-      - name: Push changes
-        run: |
-          git push origin main
-          git push origin ${{ github.ref_name }}
+          files: |
+            plugins/**/*.json
+            plugins/**/*.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

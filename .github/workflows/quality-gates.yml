@@ -1,143 +1,83 @@
 name: Quality Gates
 
+# Nightly only: full regression at rest. Push/PR gates live in ci.yml
+# (one gate, one place); nightly adds what only makes sense on a schedule:
+# security scan, flake detection across repeated runs and performance history.
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
   schedule:
-    # Run nightly for trend analysis
     - cron: '0 2 * * *'
   workflow_dispatch:
 
 concurrency:
-  group: quality-gates-${{ github.ref }}
-  cancel-in-progress: true
+  group: quality-gates-nightly
+  cancel-in-progress: false
+
+env:
+  NODE_VERSION: '24'
 
 jobs:
-  # P4.1: Core Quality Gates - must pass for merge
+  # Nightly full regression: the same gates the PR path runs, once a night,
+  # on the tip of main.
   core-gates:
-    name: Core Quality Gates
+    name: Core gates
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
 
-      # Gate 1: All P2 checks must pass
-      - name: P2 Automation Checks
-        id: p2-checks
-        run: |
-          echo "Running P2 checks..."
-          npm run p2 || exit 1
-          echo "p2_passed=true" >> $GITHUB_OUTPUT
+      - name: P2 checks (changelog preview, README stats, links)
+        run: npm run p2
 
-      # Gate 2: All P3 tests must pass
-      - name: P3 Unit Tests
-        id: p3-tests
-        run: |
-          echo "Running P3 tests..."
-          npm run test:p3 || exit 1
-          echo "p3_passed=true" >> $GITHUB_OUTPUT
+      - name: P3 unit tests
+        run: npm run test:p3
 
-      # Gate 3: Full test suite
-      - name: Full Test Suite
-        id: all-tests
-        run: |
-          echo "Running all tests..."
-          npm run test:all || exit 1
-          echo "all_tests_passed=true" >> $GITHUB_OUTPUT
+      - name: Full test suite
+        run: npm run test:all
 
-      # Gate 4: Linting
-      - name: Linting
-        id: lint
-        run: |
-          echo "Running lint..."
-          npm run lint || exit 1
-          echo "lint_passed=true" >> $GITHUB_OUTPUT
+      - name: Lint
+        run: npm run lint
 
-      # Gate 5: Full check (build validation)
-      - name: Full Check
-        id: full-check
-        run: |
-          echo "Running full check..."
-          npm run check || exit 1
-          echo "check_passed=true" >> $GITHUB_OUTPUT
+      - name: Full check
+        run: npm run check
 
-      # Gate 6: Drift gate
-      - name: Drift Gate
-        id: drift-gate
-        run: |
-          echo "Running drift gate..."
-          npm run verify || exit 1
-          echo "drift_gate_passed=true" >> $GITHUB_OUTPUT
+      - name: Drift gate
+        run: npm run verify
 
-      - name: Summary
-        run: |
-          echo "✅ All Quality Gates Passed!"
-          echo "  - P2 Automation: PASSED"
-          echo "  - P3 Unit Tests: PASSED"
-          echo "  - Full Test Suite: PASSED"
-          echo "  - Linting: PASSED"
-          echo "  - Build Validation: PASSED"
-          echo "  - Drift Gate: PASSED"
-
-  # P4.2: Security Scanning
+  # P4.2: security scanning via the repo's own script (npm audit + secret
+  # patterns + file permissions). Trufflehog stays as an advisory second
+  # opinion: a skills collection legitimately contains example tokens in
+  # fixtures, so its verdict is informational, not a gate.
   security-scan:
-    name: Security Scan
+    name: Security scan
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    permissions:
-      contents: read
-      security-events: write
-    
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
 
-      # Security Gate 1: Dependency vulnerabilities
-      - name: Audit dependencies
-        id: npm-audit
-        run: |
-          echo "Running npm audit..."
-          npm audit --audit-level=moderate --json > audit-results.json || true
-          
-          # Check if there are any vulnerabilities
-          VULN_COUNT=$(node -e "const data = require('./audit-results.json'); console.log(Object.keys(data.vulnerabilities || {}).length)")
-          echo "vulnerability_count=$VULN_COUNT" >> $GITHUB_OUTPUT
-          
-          if [ "$VULN_COUNT" -gt 0 ]; then
-            echo "⚠️  Found $VULN_COUNT vulnerabilities"
-            cat audit-results.json
-            echo "security_failed=true" >> $GITHUB_OUTPUT
-          else
-            echo "✅ No vulnerabilities found"
-            echo "security_failed=false" >> $GITHUB_OUTPUT
-          fi
+      - name: Install dependencies
+        run: npm ci
 
-      # Security Gate 2: Check for secrets
-      - name: Detect secrets
-        id: secret-scan
+      - name: Security scan (deps + secrets + permissions; exit 1 on findings)
+        run: npm run security:scan
+
+      - name: Trufflehog (advisory second opinion)
         uses: trufflesecurity/trufflehog@main
         with:
           path: ./
@@ -146,201 +86,47 @@ jobs:
           filter: files
         continue-on-error: true
 
-      # Security Gate 3: Check file permissions
-      - name: Check file permissions
-        id: permission-check
-        run: |
-          echo "Checking file permissions..."
-          # Find world-writable files (security risk)
-          WORLD_WRITABLE=$(find . -type f -perm -o=w ! -path './node_modules/*' ! -path './.git/*' 2>/dev/null | wc -l)
-          
-          if [ "$WORLD_WRITABLE" -gt 0 ]; then
-            echo "⚠️  Found $WORLD_WRITABLE world-writable files"
-            find . -type f -perm -o=w ! -path './node_modules/*' ! -path './.git/*' 2>/dev/null
-            echo "permissions_failed=true" >> $GITHUB_OUTPUT
-          else
-            echo "✅ No world-writable files found"
-            echo "permissions_failed=false" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Security Summary
-        run: |
-          if [ "${{ steps.npm-audit.outputs.vulnerability_count }}" -eq 0 ] && 
-             [ "${{ steps.permission-check.outputs.permissions_failed }}" != "true" ]; then
-            echo "✅ All Security Gates Passed!"
-          else
-            echo "⚠️  Security warnings detected (non-blocking for now)"
-            [ "${{ steps.npm-audit.outputs.vulnerability_count }}" -gt 0 ] && echo "  - Dependencies: ${VULN_COUNT} vulnerabilities"
-            [ "${{ steps.permission-check.outputs.permissions_failed }}" = "true" ] && echo "  - Permissions: World-writable files detected"
-          fi
-
-  # P4.3: Flaky Test Detection
+  # P4.3: flake detection - the npm script runs the suite 3x and exits 1 on
+  # inconsistent results. A red nightly flake job is the signal.
   flaky-detection:
-    name: Flaky Test Detection
+    name: Flaky test detection (3 runs)
     runs-on: ubuntu-latest
-    timeout-minutes: 10
-    
+    timeout-minutes: 15
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
 
-      # Run tests multiple times to detect flakiness
-      - name: Run tests multiple times
-        id: flaky-check
-        run: |
-          echo "Running tests 3 times to detect flakiness..."
-          FAIL_COUNT=0
-          RESULTS=()
-          
-          for i in {1..3}; do
-            echo "Run $i/3..."
-            if npm run test:all 2>&1 | tee run_$i.log; then
-              echo "✅ Run $i passed"
-              RESULTS+=("PASS")
-            else
-              echo "❌ Run $i failed"
-              RESULTS+=("FAIL")
-              FAIL_COUNT=$((FAIL_COUNT + 1))
-            fi
-          done
-          
-          # Check for inconsistent results
-          UNIQUE_RESULTS=$(printf "%s\n" "${RESULTS[@]}" | sort -u | wc -l)
-          echo "unique_results=$UNIQUE_RESULTS" >> $GITHUB_OUTPUT
-          echo "fail_count=$FAIL_COUNT" >> $GITHUB_OUTPUT
-          
-          if [ "$UNIQUE_RESULTS" -gt 1 ]; then
-            echo "⚠️  FLAKY TESTS DETECTED!"
-            echo "flaky_detected=true" >> $GITHUB_OUTPUT
-            for i in {1..3}; do
-              echo "--- Run $i ---"
-              cat run_$i.log
-            done
-          else
-            echo "✅ No flaky tests detected"
-            echo "flaky_detected=false" >> $GITHUB_OUTPUT
-          fi
+      - name: Flaky check
+        run: npm run flaky:check
 
-      - name: Flaky Test Summary
-        run: |
-          if [ "${{ steps.flaky-check.outputs.flaky_detected }}" = "true" ]; then
-            echo "⚠️  FLAKY TESTS DETECTED!"
-            echo "  Please investigate test stability"
-          else
-            echo "✅ All tests stable across 3 runs"
-          fi
-
-  # P4.4: Performance Benchmarking
+  # P4.4: performance history. benchmark:full measures the P2 scripts and
+  # saves results (--runs 5 --save), which is the baseline perf:check compares
+  # against later.
   performance:
-    name: Performance Benchmarking
+    name: Performance benchmark (5 runs, save history)
     runs-on: ubuntu-latest
-    timeout-minutes: 10
-    
+    timeout-minutes: 15
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Run performance benchmarks
-        id: benchmark
-        run: |
-          echo "Running performance benchmarks..."
-          
-          # Benchmark each P2 script
-          echo "::group::Benchmarking P2 scripts"
-          
-          for script in "changelog" "readme:stats" "links"; do
-            echo "Benchmarking npm run $script..."
-            TIME=$( { time -p npm run "${script}:check" 2>&1 > /dev/null; } 2>&1 | grep real | awk '{print $2}' )
-            echo "  $script: ${TIME}s"
-            echo "time_$script=${TIME}" >> $GITHUB_OUTPUT
-          done
-          
-          echo "::endgroup::"
-          
-          # Benchmark build
-          echo "::group::Benchmarking build"
-          TIME=$( { time -p npm run build 2>&1 > /dev/null; } 2>&1 | grep real | awk '{print $2}' )
-          echo "  build: ${TIME}s"
-          echo "time_build=${TIME}" >> $GITHUB_OUTPUT
-          
-          # Benchmark all tests
-          TIME=$( { time -p npm run test:all 2>&1 > /dev/null; } 2>&1 | grep real | awk '{print $2}' )
-          echo "  test:all: ${TIME}s"
-          echo "time_test_all=${TIME}" >> $GITHUB_OUTPUT
-          
-          echo "::endgroup::"
-          
-          echo "✅ Performance benchmarks completed"
-
-      - name: Performance Summary
-        run: |
-          echo "✅ Performance Benchmarks:"
-          echo "  - CHANGELOG check: ${{ steps.benchmark.outputs.time_changelog }}s"
-          echo "  - README stats check: ${{ steps.benchmark.outputs.time_readme_stats }}s"
-          echo "  - Links check: ${{ steps.benchmark.outputs.time_links }}s"
-          echo "  - Build: ${{ steps.benchmark.outputs.time_build }}s"
-          echo "  - All tests: ${{ steps.benchmark.outputs.time_test_all }}s"
-
-  # Summary job - aggregates all P4 results
-  summary:
-    name: P4 Summary
-    needs: [core-gates, security-scan, flaky-detection, performance]
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: Generate P4 Summary
-        run: |
-          echo "# 📊 P4 Quality Gates Summary"
-          echo ""
-          echo "## ✅ Core Gates"
-          echo "  - P2 Automation: PASSED"
-          echo "  - P3 Unit Tests: PASSED"
-          echo "  - Full Test Suite: PASSED"
-          echo "  - Linting: PASSED"
-          echo "  - Build Validation: PASSED"
-          echo "  - Drift Gate: PASSED"
-          echo ""
-          echo "## 🔒 Security Scan"
-          echo "  - Dependencies: ${{ needs.security-scan.result }}"
-          echo "  - Secrets: ${{ needs.security-scan.result }}"
-          echo "  - Permissions: ${{ needs.security-scan.result }}"
-          echo ""
-          echo "## 🎯 Flaky Test Detection"
-          echo "  - Status: ${{ needs.flaky-detection.result }}"
-          echo ""
-          echo "## ⚡ Performance"
-          echo "  - Status: ${{ needs.performance.result }}"
-          echo ""
-          
-          if [ "${{ needs.core-gates.result }}" = "success" ] && 
-             [ "${{ needs.security-scan.result }}" = "success" ] && 
-             [ "${{ needs.flaky-detection.result }}" = "success" ] && 
-             [ "${{ needs.performance.result }}" = "success" ]; then
-            echo "✅ ALL P4 GATES PASSED!"
-            exit 0
-          else
-            echo "⚠️  Some P4 gates have warnings"
-            exit 0  # Non-blocking for now
-          fi
+      - name: Run benchmarks and save history
+        run: npm run benchmark:full
