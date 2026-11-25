@@ -253,14 +253,14 @@ test('Stats: total counts are reasonable', () => {
   assert.ok(counts.hooks >= 0);
 });
 
-test('Stats: known repo state (14 bundles, 192 skills, 44 agents)', () => {
+test('Stats: known repo state (14 bundles, 193 skills, 44 agents)', () => {
   const bundles = loadBundles();
   const counts = countFromBundles(bundles);
 
   // These are the known values from the compaction summary
   // Note: These may change as the repo evolves
   assert.strictEqual(counts.plugins, 14);
-  assert.strictEqual(counts.skills, 192);
+  assert.strictEqual(counts.skills, 193);
   assert.strictEqual(counts.agents, 44);
 });
 

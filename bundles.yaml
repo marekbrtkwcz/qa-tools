@@ -76,6 +76,7 @@ test-automation:
     - explain-test-failure
     - fix-tests
     - flaky-test-policy
+    - git-for-testers
     - hybrid-ui-api-testing
     - implementing-bdd-tests
     - migrate-tests-to-playwright
