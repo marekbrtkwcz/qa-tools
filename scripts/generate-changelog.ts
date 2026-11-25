@@ -185,7 +185,10 @@ function getLatestTag(): string | null {
 function getPreviousTag(currentTag: string): string | null {
   const tags = getGitTags();
   const index = tags.findIndex((t: string) => t === currentTag);
-  return index > 0 ? tags[index + 1]! : null;
+  // Tagi są posortowane malejąco, więc poprzednik w czasie to tags[index + 1]
+  // — również dla najnowszego taga (index 0). null oznacza brak starszego
+  // taga (pierwsza wersja): wtedy getCommits bierze całą historię do taga.
+  return index >= 0 && index + 1 < tags.length ? tags[index + 1]! : null;
 }
 
 function generateChangelog(): string {

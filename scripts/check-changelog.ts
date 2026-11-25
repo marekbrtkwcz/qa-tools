@@ -334,7 +334,7 @@ function checkReadmeCounts(bundles: Bundles, readmeText: string): string[] {
     }
 
     // Check model-visible count
-    const visibleMatch = readmeText.match(/widocznych dla modelu\s+(\d+)/);
+    const visibleMatch = readmeText.match(/(\d+)\s+skilli widocznych dla modelu/);
     if (visibleMatch) {
       const visible = parseInt(visibleMatch[1]!, 10);
       if (visible !== modelVisible) {

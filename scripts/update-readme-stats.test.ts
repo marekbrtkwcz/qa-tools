@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Unit tests for scripts/update-readme-stats.ts
- * Run: npm run test:p3 or node --test scripts/update-readme-stats.test.js
+ * Run: npm run test:p3 or node --test scripts/update-readme-stats.test.ts
  *
  * Tests cover:
  * - bundles.yaml parsing
@@ -17,8 +17,8 @@ const fs = require('node:fs');
 const path = require('node:path');
 const os = require('node:os');
 
-// Import functions from update-readme-stats.js
-const { loadBundles, loadReadme, countFromBundles } = require('./update-readme-stats.ts');
+// Import functions from update-readme-stats.ts
+const { loadBundles, loadReadme, countFromBundles, updateReadme } = require('./update-readme-stats.ts');
 
 const REPO_ROOT = path.resolve(__dirname, '..');
 
@@ -253,15 +253,24 @@ test('Stats: total counts are reasonable', () => {
   assert.ok(counts.hooks >= 0);
 });
 
-test('Stats: known repo state (14 bundles, 194 skills, 44 agents)', () => {
+test('Stats: known repo state — manifest liczy tyle, co pliki na dysku', () => {
   const bundles = loadBundles();
   const counts = countFromBundles(bundles);
 
-  // These are the known values from the compaction summary
-  // Note: These may change as the repo evolves
+  // Kanarek: liczba pluginów odpowiada tabeli „Razem:" w README
   assert.strictEqual(counts.plugins, 14);
-  assert.strictEqual(counts.skills, 194);
-  assert.strictEqual(counts.agents, 44);
+
+  // bundles.yaml musi pokrywać dokładnie to, co leży na dysku — łapie
+  // przypadkowe usunięcie assetu z bundles.yaml albo z src/skills
+  const skillsOnDisk = fs
+    .readdirSync(path.join(REPO_ROOT, 'src', 'skills'), { withFileTypes: true })
+    .filter((d: import('node:fs').Dirent) => d.isDirectory()).length;
+  const agentsOnDisk = fs
+    .readdirSync(path.join(REPO_ROOT, 'src', 'agents'))
+    .filter((f: string) => f.endsWith('.md')).length;
+
+  assert.strictEqual(counts.skills, skillsOnDisk);
+  assert.strictEqual(counts.agents, agentsOnDisk);
 });
 
 /* ---------- Edge cases ---------- */
@@ -302,6 +311,124 @@ test('countFromBundles: handles bundle with empty arrays', () => {
   assert.strictEqual(counts.plugins, 1);
   assert.strictEqual(counts.skills, 0);
   assert.strictEqual(counts.agents, 0);
+});
+
+/* ---------- updateReadme: table rewrite (fixture) ---------- */
+
+interface FixtureBundle {
+  skills?: string[];
+  agents?: string[];
+  knowledge?: string[];
+  hooks?: string[];
+}
+
+interface FixtureCounts {
+  plugins: number;
+  skills: number;
+  agents: number;
+  knowledge: number;
+  hooks: number;
+  visibleSkills: number;
+  perBundle: Record<string, { skills: number; agents: number; knowledge: number; hooks: number }>;
+}
+
+const fixtureBundles = (): Record<string, FixtureBundle> => ({
+  demo: {
+    skills: Array.from({ length: 12 }, (_: number, i: number) => `skill-${i}`),
+    agents: ['a', 'b', 'c'],
+    knowledge: ['k'],
+  },
+  empty: {},
+  hooked: {
+    skills: ['h1', 'h2', 'h3', 'h4', 'h5'],
+    agents: ['x'],
+    knowledge: ['k2'],
+    hooks: ['test-file-guard'],
+  },
+});
+
+const fixtureCounts = (): FixtureCounts => ({
+  plugins: 3,
+  skills: 17,
+  agents: 4,
+  knowledge: 2,
+  hooks: 1,
+  visibleSkills: 13,
+  perBundle: {
+    demo: { skills: 12, agents: 3, knowledge: 1, hooks: 0 },
+    empty: { skills: 0, agents: 0, knowledge: 0, hooks: 0 },
+    hooked: { skills: 5, agents: 1, knowledge: 1, hooks: 1 },
+  },
+});
+
+const fixtureReadme = (): string =>
+  [
+    '# qa-tools (fixture)',
+    '',
+    '| Plugin | Skille | Agenci | Knowledge | Hook | Zakres |',
+    '|---|---|---|---|---|---|',
+    '| `demo` 🧭 | 999 | 99 | 9 | ✅ old-hook | demo scope |',
+    '| `empty` 🎭 | 0 | 0 | 0 | — | zero-count bundle |',
+    '| `hooked` 🤖 | 7 | 2 | 1 | — | hooked scope |',
+    '',
+    'Razem: **3 pluginów**, **5 skilli**, **1 subagentów**, **0 knowledge**, **0 quality-gate hooki**.',
+    '',
+    '152 skilli widocznych dla modelu (10 − 5 z `disable-model-invocation: true`; fixture).',
+    '',
+  ].join('\n');
+
+test('updateReadme: nadpisuje liczby i Hook bez zmiany liczby komórek', () => {
+  const { updated, changes } = updateReadme(fixtureReadme(), fixtureCounts(), fixtureBundles());
+  const rows = updated.split('\n').filter((l: string) => l.startsWith('| `'));
+
+  assert.strictEqual(rows.length, 3);
+  for (const row of rows) {
+    // Rząd ma 6 komórek => 8 fragmentów po split('|'); duplikacja komórki
+    // (bug pustej alternatywy w regexie rzędu) psuje ten invariant
+    assert.strictEqual(row.split('|').length, 8, `rząd zmienił liczbę komórek: ${row}`);
+  }
+
+  assert.ok(rows[0]!.includes('| `demo` 🧭 | 12 | 3 | 1 | — |'), rows[0]);
+  assert.ok(rows[0]!.includes('| demo scope |'), 'kolumna Zakres ma zostać nietknięta');
+  // Stara komórka Hook została skonsumowana przez regex, nie podwojona
+  assert.ok(!rows[0]!.includes('✅ old-hook'), rows[0]);
+  assert.ok(rows[2]!.includes('| `hooked` 🤖 | 5 | 1 | 1 | ✅ test-file-guard |'), rows[2]);
+  assert.ok(changes.includes('Updated bundle table counts'));
+});
+
+test('updateReadme: zero liczone jako em-dash, nie jako 0', () => {
+  const { updated } = updateReadme(fixtureReadme(), fixtureCounts(), fixtureBundles());
+  const emptyRow = updated.split('\n').find((l: string) => l.startsWith('| `empty`'));
+  assert.ok(emptyRow, 'brak rzędu empty w wyniku');
+  assert.ok(emptyRow.includes('| `empty` 🎭 | — | — | — | — |'), emptyRow);
+});
+
+test('updateReadme: linia Razem i licznik widocznych z nawiasem', () => {
+  const { updated } = updateReadme(fixtureReadme(), fixtureCounts(), fixtureBundles());
+  assert.ok(
+    updated.includes(
+      'Razem: **3 pluginów**, **17 skilli**, **4 subagentów**, **2 knowledge**, **1 quality-gate hooki**.',
+    ),
+    'linia Razem nie została podbita',
+  );
+  assert.ok(updated.includes('13 skilli widocznych dla modelu'), 'licznik widocznych nietknięty');
+  // 17 skilli - 13 widocznych = 4 z disable-model-invocation
+  assert.ok(updated.includes('(17 − 4 z `disable-model-invocation: true`'), 'nawias z liczbami rozjechał się z counts');
+});
+
+test('updateReadme: idempotentny — drugi run nic nie zmienia', () => {
+  const first = updateReadme(fixtureReadme(), fixtureCounts(), fixtureBundles());
+  const second = updateReadme(first.updated, fixtureCounts(), fixtureBundles());
+  assert.strictEqual(second.updated, first.updated);
+});
+
+test('updateReadme: CRLF — wynik zostaje w CRLF, treść równa wersji LF', () => {
+  const lf = updateReadme(fixtureReadme(), fixtureCounts(), fixtureBundles());
+  const crlfInput = fixtureReadme().replace(/\n/g, '\r\n');
+  const crlf = updateReadme(crlfInput, fixtureCounts(), fixtureBundles());
+
+  assert.ok(crlf.updated.includes('\r\n'), 'CRLF zaginął z wyniku');
+  assert.strictEqual(crlf.updated.replace(/\r\n/g, '\n'), lf.updated);
 });
 
 /* ---------- Integration: end-to-end stats update ---------- */

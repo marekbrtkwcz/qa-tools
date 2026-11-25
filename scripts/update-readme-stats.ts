@@ -133,7 +133,11 @@ function countFromBundles(bundles: Bundles): Counts {
 }
 
 function updateReadme(readme: string, counts: Counts, bundles: Bundles): { updated: string; changes: string[] } {
-  let updated = readme;
+  // README.md bywa CRLF (Windows, core.autocrlf); wyszukiwania typu "\n\n"
+  // trafiają tylko na LF, więc na wejściu normalizujemy, a na wyjściu
+  // przywracamy oryginalny styl końca linii.
+  const usesCrlf = readme.includes('\r\n');
+  let updated = usesCrlf ? readme.replace(/\r\n/g, '\n') : readme;
   const changes: string[] = [];
 
   // Find the table section and update each bundle row
@@ -156,21 +160,26 @@ function updateReadme(readme: string, counts: Counts, bundles: Bundles): { updat
     for (const [bundleName, bundleConfig] of Object.entries(bundles)) {
       const bundleCounts = counts.perBundle[bundleName]!;
 
-      // Create regex to match the bundle's row
-      // The row format is: | `bundleName` icon | skills | agents | knowledge | hooks | description |
+      // Wzorzec rzędu: | `bundleName` icon | N | N | N | hooks | Zakres |
+      // Grupa 1 łapie początek rzędu z nazwą bundla, grupy 2/4/6 liczby
+      // (Skille/Agenci/Knowledge), grupy 3/5/7 separatory; końcowe [^|\n]*
+      // konsumuje starą komórkę Hook, żeby zamienić ją na nową, nie zdublować.
       const rowRegex = new RegExp(
-        `(|s*\`${bundleName}\`s*[^|]*)\\|\\s*(\\d+|${EM_DASH})\\s*\\|\\s*(\\d+|${EM_DASH})\\s*\\|\\s*(\\d+|${EM_DASH})`,
+        `(\\|\\s*\\\`${bundleName}\\\`\\s*[^|]*\\|\\s*)(\\d+|${EM_DASH})(\\s*\\|\\s*)(\\d+|${EM_DASH})(\\s*\\|\\s*)(\\d+|${EM_DASH})(\\s*\\|\\s*)[^|\\n]*`,
         'g',
       );
 
-      const skills = bundleCounts.skills;
-      const agents = bundleCounts.agents;
-      const knowledge = bundleCounts.knowledge || EM_DASH;
+      const fmt = (value: number) => (value === 0 ? EM_DASH : String(value));
+      const skills = fmt(bundleCounts.skills);
+      const agents = fmt(bundleCounts.agents);
+      const knowledge = fmt(bundleCounts.knowledge);
       const hooks =
         bundleCounts.hooks > 0 ? '✅ ' + (bundleConfig.hooks ? bundleConfig.hooks.join(', ') : '') : EM_DASH;
 
-      // Replace the numbers in the row
-      newTableSection = newTableSection.replace(rowRegex, `$1| ${skills} | ${agents} | ${knowledge} | ${hooks}`);
+      // Zamień komórki rzędu; stara komórka Hook jest skonsumowana przez regex,
+      // a jej spacja wiodąca/wolna wraca z replacementu (oczekiwany format
+      // tabeli to równo "| N | N | N | hooks | Zakres |")
+      newTableSection = newTableSection.replace(rowRegex, `$1${skills}$3${agents}$5${knowledge}$7${hooks} `);
     }
 
     if (newTableSection !== tableSection) {
@@ -189,11 +198,27 @@ function updateReadme(readme: string, counts: Counts, bundles: Bundles): { updat
   }
 
   // Update visible skills count if present
-  const visibleMatch = updated.match(/widocznych dla modelu (\d+)/);
+  const visibleMatch = updated.match(/(\d+) skilli widocznych dla modelu/);
   if (visibleMatch) {
-    const newVisibleText = `widocznych dla modelu ${counts.visibleSkills}`;
-    updated = updated.replace(visibleMatch[0], newVisibleText);
+    updated = updated.replace(visibleMatch[0], `${counts.visibleSkills} skilli widocznych dla modelu`);
     changes.push(`Updated visible skills count to: ${counts.visibleSkills}`);
+  }
+
+  // Utrzymuj nawias "(195 − 43 z `disable-model-invocation: true`)" — obie
+  // liczby muszą nadążyć za counts, inaczej linia rozjedzie się po pierwszej
+  // automatycznej aktualizacji samego licznika widocznych.
+  const parenMatch = updated.match(/\((\d+)\s*−\s*(\d+)\s+z\s*`disable-model-invocation: true`/);
+  if (parenMatch) {
+    const disabledCount = counts.skills - counts.visibleSkills;
+    const newParen = `(${counts.skills} − ${disabledCount} z \`disable-model-invocation: true\``;
+    if (parenMatch[0] !== newParen) {
+      updated = updated.replace(parenMatch[0], newParen);
+      changes.push('Updated visible-skills parenthetical');
+    }
+  }
+
+  if (usesCrlf) {
+    updated = updated.replace(/\n/g, '\r\n');
   }
 
   return { updated, changes };
@@ -266,11 +291,24 @@ function verifyReadme(readme: string, counts: Counts, bundles: Bundles): string[
     }
   }
 
-  const visibleMatch = readme.match(/widocznych dla modelu (\d+)/);
+  const visibleMatch = readme.match(/(\d+) skilli widocznych dla modelu/);
   if (visibleMatch) {
     const visibleInReadme = parseInt(visibleMatch[1]!, 10);
     if (visibleInReadme !== counts.visibleSkills) {
       issues.push(`  ❌ Visible skills: ${visibleInReadme} (README) != ${counts.visibleSkills} (calculated)`);
+    }
+  }
+
+  const parenMatch = readme.match(/\((\d+)\s*−\s*(\d+)\s+z\s*`disable-model-invocation: true`/);
+  if (parenMatch) {
+    const totalInReadme = parseInt(parenMatch[1]!, 10);
+    const disabledInReadme = parseInt(parenMatch[2]!, 10);
+    const disabledCount = counts.skills - counts.visibleSkills;
+    if (totalInReadme !== counts.skills) {
+      issues.push(`  ❌ Parenthetical total: ${totalInReadme} (README) != ${counts.skills} (bundles.yaml)`);
+    }
+    if (disabledInReadme !== disabledCount) {
+      issues.push(`  ❌ Parenthetical disabled: ${disabledInReadme} (README) != ${disabledCount} (calculated)`);
     }
   }
 
@@ -351,4 +389,5 @@ module.exports = {
   loadBundles,
   loadReadme,
   countFromBundles,
+  updateReadme,
 };
