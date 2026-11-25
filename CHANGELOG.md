@@ -6,6 +6,11 @@ Wszystkie istotne zmiany tego projektu są dokumentowane tutaj. Format zbliżony
 
 ### ✅ Dodane
 
+- case'e eval dla nowych skili — jmeter i robot (**P22**) (1c0b9d2)
+  > - jmeter-load-testing (non-functional-testing 9→11): act-pos na zdziedziczonym planie .jmx („było zielone bez wzglęgu na wszystko" — gate z results.jtl/statistics, nie z exit code) + kolizja k6-vs-jmeter (from-scratch scriptable vs inherited plan) — pierwszy case behawioralny k6 w tej suite
+  > - robot-framework-automation (test-automation 6→9): act-pos „make it in robot" (activation bez nazwania, tags=route), contract no-drive-by-library-swap (migracja świadoma przez parity gate), act-neg python≠robot (porting → port-suite-to-python-java)
+  > - kolekcja evalów: 94 → 99 case'ów; tabela evals/README zsynchronizowana bramką lint-eval-suites
+
 - luki treściowe z audytu — kolekcja 195 → 197 skilli (**P20**) (bb2f373)
   > - `jmeter-load-testing` (non-functional-testing): czytanie/parametryzacja .jmx (thread groups, samplery, kontrolery, asercje, CSV Data Set), `__P()` + `-J`, non-GUI `-n -l -e -o`, dashboard percentyle-first; CI gate czyta results.jtl i statistics.json — non-GUI JMeter wychodzi 0 nawet przy 100% błędów
   > - `robot-framework-automation` (test-automation, decyzja „oba" + wpis w knowledge `test-automation`): keyword-driven, Resources jako jednostka reużytku, tagi=route smoke/regression, Browser Library (Playwright-backed) vs SeleniumLibrary, robocop/robotidy jako para linter/formatter, pabot+rebot
@@ -76,6 +81,11 @@ Wszystkie istotne zmiany tego projektu są dokumentowane tutaj. Format zbliżony
   > Marek Bortkiewicz
 
 ### 🐛 Naprawione
+
+- fast CI zero-dep — bramki bez `require('yaml')` (**P23**) (5643d56)
+  > - pierwszy realny run skonsolidowanego ci.yml (push P16–P21): fast gates ×2 OS czerwone (`Cannot find module 'yaml'`), full zielone — bramki twin-pairs (P17) i eval-suites (P19) łamały zero-dep kontrakt fast joba
+  > - obie bramki parsują bundles.yaml domowym zero-dep parserem `parseBundles` eksportowanym z check-bundles-duplicates; pakiet `yaml` zostaje wyłącznie w skryptach P2 (biegają w full z npm ci)
+  > - weryfikacja odtworzona z warunków runnera: node_modules schowany → fast chain (test, check, validate-manifests, verify) exit 0 ×4 bez zależności; na GitHubie run 45677147842 **success w 24 s** — CI zielone end-to-end w produkcji
 
 - kosmetyka z audytu — bramki strict bez wyjątków (**P18**) (7cdc073)
   > - `noNonNullAssertion`: 91 → 0 wystąpień przez refaktor (guard-lokale, `?? fallback`, capture-on-create, rolling-row Levenshteina), rule podbity do ERROR w biome.json — bez wyłączania rule'a
