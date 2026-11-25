@@ -202,7 +202,7 @@ function checkReadmeCounts(table: Map<string, number>, actual: Map<string, numbe
 
 const fs = require('node:fs');
 const path = require('node:path');
-const { parse } = require('yaml');
+const { parseBundles } = require('./check-bundles-duplicates.ts');
 const { findTwinPairs, isCommandSkill } = require('./lint-command-skill-pairs.ts');
 
 const ROOT = path.resolve(__dirname, '..');
@@ -211,7 +211,7 @@ const BUNDLES_PATH = path.join(ROOT, 'bundles.yaml');
 const README_PATH = path.join(EVALS_DIR, 'README.md');
 
 function main() {
-  const bundles = parse(fs.readFileSync(BUNDLES_PATH, 'utf-8')) as Bundles;
+  const bundles = parseBundles(BUNDLES_PATH) as Bundles;
   const assets = collectAssetNames(bundles);
   const suites = new Map<string, EvalCase[]>();
   const issues: string[] = [];

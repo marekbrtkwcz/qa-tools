@@ -81,7 +81,7 @@ function checkMutualRefs(pairs: TwinPair[], getDescription: (skill: string) => s
 
 const fs = require('node:fs');
 const path = require('node:path');
-const { parse } = require('yaml');
+const { parseBundles } = require('./check-bundles-duplicates.ts');
 
 const ROOT = path.resolve(__dirname, '..');
 const BUNDLES_PATH = path.join(ROOT, 'bundles.yaml');
@@ -104,7 +104,7 @@ function readDescription(skillName: string): string {
 }
 
 function main() {
-  const bundles = parse(fs.readFileSync(BUNDLES_PATH, 'utf-8')) as Bundles;
+  const bundles = parseBundles(BUNDLES_PATH) as Bundles;
   const pairs = findTwinPairs(bundles, isCommandSkill);
 
   console.log(`🧪 Lint command+skill twin pairs: ${pairs.length} pair(s) found`);
