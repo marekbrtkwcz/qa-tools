@@ -6,6 +6,8 @@ Wszystkie istotne zmiany tego projektu są dokumentowane tutaj. Format zbliżony
 
 ### ✅ Dodane
 
+- `python-for-testers` (test-automation, **P14**): Python jako równoległy tor obok `typescript-for-testers` — venv/uv + `pyproject.toml`, rdzeń pytest (fixtures, `conftest.py`, markery, parametrize), `typing` + `mypy --strict` (odpowiednik strict `tsc --noEmit`), dataclass/TypedDict na fixture i DTO, TypeGuard, `ruff` jako bramka lint/format (odpowiednik Biome), `pytest-playwright` + `httpx` do E2E/API; resources: cheatsheet + pytest-project-config; Python wpina się w learning-path jako alternatywny stack; routing do `port-suite-to-python-java` przy portowaniu konwencji JS/TS na pytest
+
 - knowledge `automation-tester-essentials` (test-automation, **P13**): skondensowana lista "co powinien wiedzieć tester automatyzujący" wyciągnięta z kursów UI+API — każdy punkt = wiedza + problem, któremu zapobiega + skill; cross-link z learning-path
 
 - `api-concepts-for-testers` (api-testing, **P12**): podstawy REST/HTTP dla testera — zasoby, metody + idempotentność, kody statusów, JSON, 6 zasad REST, anatomia request/response, gdzie pasuje SOAP; resources: glossary + HTTP quick-reference; w knowledge api-testing sekcja "Beyond REST" (SOAP/WSDL, GraphQL, gRPC)
@@ -60,6 +62,26 @@ Wszystkie istotne zmiany tego projektu są dokumentowane tutaj. Format zbliżony
   > Marek Bortkiewicz
 
 ### 🐛 Naprawione
+
+- naprawa bugów infra z audytu kolekcji (`.qa/review-2026-11-25.md`) (**P15**) (2f87682)
+  > - `update-readme-stats.ts`: regex rzędu z pustą alternatywą (regresja migracji JS→TS) psuł
+  > tabelę README — duplikował komórki i nadpisywał cudze rzędy; teraz konsumuje starą
+  > komórkę Hook, zero liczy jako em-dash, CRLF normalizowany przed parsowaniem (z powrotem
+  > do oryginalnego EOL), nawias "(195 − 43 z `disable-model-invocation`)" pielęgnowany —
+  > realny run już nic nie zmienia (README nietknięte)
+  > - licznik skilli widocznych: regex `widocznych dla modelu (\d+)` nie matchował realnego
+  > README (liczba stoi przed frazą, po niej nawias) — feature martwa i bramka ślepa w
+  > update, verify i check-changelog; naprawione na `(\d+) skilli widocznych dla modelu`
+  > - `generate-changelog.ts`: `getPreviousTag` zwracał `null` dla najnowszego taga, więc
+  > sekcja wydania dublowała całą historię; CHANGELOG: [0.7.0] ścięta 1645→35 linii (210 KB→125 KB),
+  > nagłówek build.js→build.ts
+  > - `update-readme-stats.test.ts`: kruchy hardkod 194 → invariant "manifest = dysk";
+  > 5 testów `updateReadme` (liczby komórek, em-dash, Razem, CRLF, idempotencja);
+  > EOL pliku LF→CRLF — to był jedyny error biomu w scripts/
+  > - `plugins/`: rebuild po P12–P14 — drift-gate (7 artefaktów) zamknięty, łącznie z
+  > brakującym `python-for-testers` w artefakcie
+  > - `npm run ci` zielone end-to-end po raz pierwszy od migracji TS (verify ✓,
+  > 80 testów/0 fail, biome 0 errorów)
 
 - krytyczne bramki walidacji (CHANGELOG, duplikaty, Biome) (**P1**) (b3497ac)
   > - check-changelog.js: walidacja formatu CHANGELOG + spójność z README
