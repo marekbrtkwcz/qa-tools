@@ -6,6 +6,20 @@ Wszystkie istotne zmiany tego projektu są dokumentowane tutaj. Format zbliżony
 
 ### ✅ Dodane
 
+- luki treściowe z audytu — kolekcja 195 → 197 skilli (**P20**) (bb2f373)
+  > - `jmeter-load-testing` (non-functional-testing): czytanie/parametryzacja .jmx (thread groups, samplery, kontrolery, asercje, CSV Data Set), `__P()` + `-J`, non-GUI `-n -l -e -o`, dashboard percentyle-first; CI gate czyta results.jtl i statistics.json — non-GUI JMeter wychodzi 0 nawet przy 100% błędów
+  > - `robot-framework-automation` (test-automation, decyzja „oba" + wpis w knowledge `test-automation`): keyword-driven, Resources jako jednostka reużytku, tagi=route smoke/regression, Browser Library (Playwright-backed) vs SeleniumLibrary, robocop/robotidy jako para linter/formatter, pabot+rebot
+  > - `testing-mfa-and-credentials`: sekcja WebAuthn/passkeys — CDP virtual authenticator (Playwright), conditional UI jawnie jako manual check, recovery passkeyów = launch-blocking; checklist +8 wierszy
+  > - `mobile-app-testing`: sekcja React Native/Flutter — testID vs accessibilityLabel, Detox (biometria), single-canvas → integration_test/Patrol/ValueKey, dev-build w CI; +2 red flags
+  > - `testing-database-state`: zasób `document-store-recipes.md` — mapa checklisty na Mongo/DynamoDB (+ testcontainers), TTL uczciwie odnotowane (Mongo sweep ~60 s; Dynamo ~48 h — znikanie dokumentu nieweryfikowalne w runie)
+  > - `automating-ci-test-pipelines`: recipes Jenkins (per-shard blob dirs — kolizja na współdzielonym workspace; junit emitowany z merge) i Azure Pipelines (matrix, download patterns, PublishTestResults)
+
+- evals: suita authoring, case'e par bliźniaczych, bramka statyczna (**P19**) (a657adc)
+  > - `evals/authoring.cases.jsonl`: 12 case'ów na wszystkie 10 assetów authoringu (placement skill/komenda/reguły/wiedza, hook vs instruction, agent vs pack, audyt strukturalny vs behavior testing, routing `create-skill`, blocking safety: hook nie auto-aprobatuje force-push); kolekcja case'ów 78 → 94
+  > - 4 case'e kolizyjne par bliźniaczych z P17 (qa-core `verify-acceptance-criteria`, test-automation `migrate-`/`stabilize-`, quality-gates `record-change-intent`); para `test-llm-guardrails` miała już pokrycie
+  > - nowa bramka `scripts/lint-eval-suites.ts` w `npm run check` (+11 testów w test:p3): schema pól, unikalność id, istnienie assetów w bundles.yaml, higiena activation (prompt nie nazywa assetu), pokrycie split par 5/5, zgodność liczników README↔pliki
+  > - `create-skill` ↔ `creating-skills`: wzajemne wskazania w description (para różni się dwoma słowami — poza lintem gerundowym, domknięta ręcznie)
+
 - `python-for-testers` (test-automation, **P14**): Python jako równoległy tor obok `typescript-for-testers` — venv/uv + `pyproject.toml`, rdzeń pytest (fixtures, `conftest.py`, markery, parametrize), `typing` + `mypy --strict` (odpowiednik strict `tsc --noEmit`), dataclass/TypedDict na fixture i DTO, TypeGuard, `ruff` jako bramka lint/format (odpowiednik Biome), `pytest-playwright` + `httpx` do E2E/API; resources: cheatsheet + pytest-project-config; Python wpina się w learning-path jako alternatywny stack; routing do `port-suite-to-python-java` przy portowaniu konwencji JS/TS na pytest
 
 - knowledge `automation-tester-essentials` (test-automation, **P13**): skondensowana lista "co powinien wiedzieć tester automatyzujący" wyciągnięta z kursów UI+API — każdy punkt = wiedza + problem, któremu zapobiega + skill; cross-link z learning-path
@@ -63,6 +77,16 @@ Wszystkie istotne zmiany tego projektu są dokumentowane tutaj. Format zbliżony
 
 ### 🐛 Naprawione
 
+- kosmetyka z audytu — bramki strict bez wyjątków (**P18**) (7cdc073)
+  > - `noNonNullAssertion`: 91 → 0 wystąpień przez refaktor (guard-lokale, `?? fallback`, capture-on-create, rolling-row Levenshteina), rule podbity do ERROR w biome.json — bez wyłączania rule'a
+  > - martwy kod 25 → 0 (zombie-opcje `--from/--to` w generate-changelog, `QUALITY_CHECKS` w hooku, martwe odczyty packageJson/lockFile, nieużywane catch)
+  > - useTemplate/useOptionalChain 16 → 0; description `typescript-for-testers` 749 zn. → 600 — lista WARN builda pusta po raz pierwszy
+
+- rozgraniczenie 7 par kolizyjnych command+skill + bramka twin-pairs (**P17**) (14f36cb)
+  > - pary rozgraniczone zdaniem w obu description (wzór `derive-quality-contract`): `stabilize-/stabilizing-flaky-tests`, `verify-/verifying-acceptance-criteria`, `bug-report`→`reporting-bugs`, `generate-test-data`→`designing-test-data`, `map-requirements-coverage`, `regression-scope`→`analyzing-regression-scope`, `manual-test-cases`→`designing-functional-tests`
+  > - `migrate-/migrating-tests-to-playwright` rozgraniczone + ujednolicona lista frameworków; `tech-debt-analysis` wskaźniki do `audit-quality-debt`
+  > - nowa bramka `scripts/lint-command-skill-pairs.ts` w `npm run check`: pary command+gerund-skill w bundlu muszą wskazywać się nawzajem w description (testy w test:p3)
+
 - naprawa bugów infra z audytu kolekcji (`.qa/review-2026-11-25.md`) (**P15**) (2f87682)
   > - `update-readme-stats.ts`: regex rzędu z pustą alternatywą (regresja migracji JS→TS) psuł
   > tabelę README — duplikował komórki i nadpisywał cudze rzędy; teraz konsumuje starą
@@ -97,6 +121,11 @@ Wszystkie istotne zmiany tego projektu są dokumentowane tutaj. Format zbliżony
   > Marek Bortkiewicz
 
 ### 🔄 Zmienione
+
+- konsolidacja CI — bramka raz na ścieżkę (**P16**) (14265a7)
+  > - ci.yml = jedyna bramka push/PR: job fast (zero-dep, 2 OS) + full (lint, typecheck, p2, test:p3); wcześniejsze nakładki (check ×4, verify ×3, lint ×3) zlikwidowane; build.yml usunięty w całości
+  > - release.yml jedynym właścicielem tagów v* (Release z artefaktami plugins/); quality-gates.yml tylko nightly na skryptach repo — usunięty summary-job „Non-blocking for now"
+  > - `changelog:check` → `changelog:preview` (nazwa mówiła „check", robił sam `--dry-run`)
 
 - rozszerzone słowniki emotek (10→64) w 8 kategoriach (372f87e)
   > - Core Testing Status, Findings and Issues, Quality & Metrics,
