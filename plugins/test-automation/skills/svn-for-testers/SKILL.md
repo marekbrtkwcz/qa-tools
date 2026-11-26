@@ -1,6 +1,6 @@
 ---
 name: svn-for-testers
-description: "Subversion as a daily tool and debugging instrument for testers: the working-copy lifecycle (`svn status/add/update/commit` — commit publishes straight to the server, there is no local history), trunk/branches/tags layout, changelists instead of staging, `svn:ignore`, externals, server-side hooks in `repo/hooks/`, finding the revision that broke a test by binary search over `svn update -r`, and `svn blame`/`svn log` when behavior changed. Use when the working copy is an SVN checkout (`.svn/`), the trunk/branch layout is unclear, or a git-based workflow needs its SVN equivalent. Closest neighbour: `git-for-testers` — same workflows in a git repo."
+description: "Subversion for testers as a daily debugging instrument: the working-copy lifecycle (`svn status/add/update/commit` — commit publishes immediately, no local history), trunk/branches/tags layout, changelists instead of staging, `svn:ignore`, externals, server-side hooks, binary search over `svn update -r` for the revision that broke a test, `svn blame`/`svn log` when behavior changed. Use when the working copy is an SVN checkout (`.svn/`), the trunk/branch layout is unclear, or a git-based workflow needs its SVN equivalent. Closest neighbour: `git-for-testers` — same workflows in a git repo."
 argument-hint: "The SVN problem at hand: broken test after update, repo layout, ignore rules, or workflow onboarding"
 user-invocable: true
 ---
