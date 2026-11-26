@@ -1,6 +1,6 @@
 ---
 name: testing-documentation
-description: 'Tests documentation and onboarding the way its audience consumes it: follows setup, install, and onboarding steps verbatim in a clean environment and records every step that fails, misleads, or assumes undocumented knowledge - covering READMEs, quick-starts, runbooks, and the error messages the product itself emits. Produces a per-step findings table with quoted doc lines, actual results, and evidence. Use when a repo or product is about to onboard new people, when docs must be re-verified after a big change, or when user-facing docs are suspected to lag behind the product. For writing test-suite docs use documenting-test-suites; for API schema conformance use testing-api-contracts.'
+description: 'Tests docs and onboarding the way its audience consumes it: follows setup and onboarding steps verbatim in a clean environment and records every step that fails, misleads, or assumes undocumented knowledge - READMEs, quick-starts, runbooks, and the product\'s own error messages. Produces a per-step findings table with quoted doc lines and actual results. Use when a repo is about to onboard new people, docs must be re-verified after a big change, or docs are suspected of lagging behind the product. Test-suite docs: documenting-test-suites. API schema conformance: testing-api-contracts.'
 argument-hint: 'The doc artifact to verify, its intended audience, and how clean an environment is available'
 user-invocable: true
 ---

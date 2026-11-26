@@ -1,6 +1,6 @@
 ---
 name: bootstrap-test-suite
-description: 'Boots a Playwright Test (and optionally Vitest) setup from zero into a first green smoke test: detects an existing setup first, scaffolds config with CI-aware retries, trace and forbidOnly, wires scripts, tsconfig and env, writes the first smoke test, and runs it. Use when a repository or workspace has no automated tests yet, when a new repo needs the first suite scaffolded deterministically, or when a team asks "set up Playwright for us". For deciding what belongs at which layer before scaffolding, use designing-test-automation-architecture; for porting an existing Cypress/Selenium suite, use migrating-tests-to-playwright.'
+description: 'Boots a Playwright Test (and optionally Vitest) setup from zero into a first green smoke test: detects an existing setup first, scaffolds config with CI-aware retries, trace and forbidOnly, wires scripts, tsconfig and env, writes the smoke test, and runs it. Use when a repository has no automated tests yet, when a new repo needs its first suite scaffolded deterministically, or when a team asks "set up Playwright for us". For layer planning first use designing-test-automation-architecture; for porting a Cypress/Selenium suite use migrating-tests-to-playwright.'
 argument-hint: 'Workspace root, target test type (E2E, component, unit, or all), preferred runner if any, and CI provider if known'
 user-invocable: true
 ---

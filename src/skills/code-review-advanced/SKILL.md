@@ -1,6 +1,6 @@
 ---
 name: code-review-advanced
-description: "Performs a thorough, evidence-driven code review of pull requests, legacy modules, and quality-critical changes, returning severity-ranked findings with evidence and a merge recommendation. Use when the user asks for a deep or thorough review, or when the change spans many files, refactors architecture, or touches auth, payments, persistence, CI, shared test fixtures, or hot paths, and needs analysis of correctness, maintainability, security, performance, test quality, and operability risks. For a fast sanity check of a small, low-risk diff, use code-review; for a test-code-only audit of tests that prove nothing, use unslop-tests."
+description: "Performs a thorough, evidence-driven code review of pull requests, legacy modules, and quality-critical changes, returning severity-ranked findings with evidence and a merge recommendation. Use when asked for a deep or thorough review, or when the change spans many files, refactors architecture, or touches auth, payments, persistence, CI, shared fixtures, or hot paths - covering correctness, maintainability, security, performance, test quality, and operability. For a fast sanity check of a small, low-risk diff use code-review; for a test-code-only audit use unslop-tests."
 argument-hint: "Repository context, changed files, review goal, and known risk areas"
 user-invocable: true
 ---

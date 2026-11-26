@@ -1,6 +1,6 @@
 ---
 name: test-llm-guardrails
-description: Maps the trust boundaries of an LLM feature, tests the runtime guardrails around model output (schema, PII, moderation, rendering, tool authorization, resource caps, fail-closed behaviour), and runs an adversarial corpus through every content channel, including retrieval and tool results. Use when an LLM feature reads untrusted content, calls tools, or renders model output, and before such a feature ships. Runs only after written authorization for a named environment. For output-quality regression evals, use the design-llm-eval-suite command. For the full runtime-validation test suite (schema, PII, moderation, refusal, tool-call safety plus the adversarial corpus) use testing-llm-guardrails.
+description: 'Maps the trust boundaries of an LLM feature, tests runtime guardrails around model output (schema, PII, moderation, rendering, tool authorization, fail-closed behaviour), and runs an adversarial corpus through every content channel, including retrieval and tool results. Use when an LLM feature reads untrusted content, calls tools, or renders model output, and before such a feature ships. Runs only after written authorization for a named environment. Output-quality evals: the design-llm-eval-suite command. Full runtime-validation suite with adversarial corpus: testing-llm-guardrails.'
 argument-hint: "[authorization] [environment]"
 disable-model-invocation: true
 ---

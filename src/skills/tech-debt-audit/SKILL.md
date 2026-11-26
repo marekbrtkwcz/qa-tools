@@ -1,6 +1,6 @@
 ---
 name: tech-debt-audit
-description: Audits automated test code for anti-patterns (fragile selectors, hardcoded waits, missing or swallowed assertions, test interdependence, CI misconfiguration, credential leaks) and produces a severity-ranked debt report with line citations, fixes, and an A-F health score. Use when reviewing a test suite or test PR, or when a suite has become slow, flaky, or hard to maintain. For repository-level debt such as skipped tests, disabled lint rules, and weakened CI gates, use the audit-quality-debt command; for debt beyond test code (full codebase, architecture, dependencies), use the tech-debt-analysis skill.
+description: 'Audits automated test code for anti-patterns - fragile selectors, hardcoded waits, swallowed assertions, test interdependence, CI misconfiguration, credential leaks - and produces a severity-ranked debt report with line citations, fixes, and an A-F health score. Use when reviewing a test suite or test PR, or when a suite is slow, flaky, or hard to maintain. For repository-level debt (skipped tests, disabled lint rules, weakened CI gates) use the audit-quality-debt command; for debt beyond test code use tech-debt-analysis.'
 argument-hint: "[targetPath]"
 disable-model-invocation: true
 ---

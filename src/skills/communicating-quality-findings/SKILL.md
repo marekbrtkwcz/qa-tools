@@ -1,6 +1,6 @@
 ---
 name: communicating-quality-findings
-description: 'Shapes QA output for the person who has to act on it: result and blocker in the first two lines, one decision per report, findings ordered by what they cost, the long artifact in a file and the decisions in the message, and magnitude stated in units the reader can count. Use when a report is accurate but nobody acts on it, when a finding set is too long to read under time pressure, when the same findings must be retold for a developer, a release manager, and an on-call engineer, or when the request mentions "too long", "make this readable", "just tell me what to do", "so what", or "summarize this for stakeholders". Pairs with unslop-answers, which makes the same report honest.'
+description: 'Shapes QA output for the person who has to act on it: result and blocker in the first two lines, one decision per report, findings ordered by what they cost, the long artifact in a file, the decisions in the message, magnitude in units the reader can count. Use when a report is accurate but nobody acts on it, a finding set is too long to read under time pressure, the same findings must be retold for a developer, a release manager, and an on-call engineer, or the request says "too long", "just tell me what to do", or "so what". Pairs with unslop-answers, which makes the same report honest.'
 argument-hint: 'The findings, report, or summary to shape, plus who reads it and what they have to decide'
 user-invocable: true
 ---

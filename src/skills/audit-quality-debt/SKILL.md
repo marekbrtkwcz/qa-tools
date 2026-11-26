@@ -1,6 +1,6 @@
 ---
 name: audit-quality-debt
-description: "Audits repository-level quality debt (technical, intent, and comprehension) and inventories every silent skip: skipped tests, disabled lint rules, ts-expect-error, continue-on-error, coverage ignores, lowered thresholds, raised retries, and expired waivers. Use when a team wants to know what its CI and quality gates have quietly stopped enforcing, before a quality review, or when taking over a repository. For anti-patterns inside test code itself (selectors, waits, assertions), use the tech-debt-audit command. For the full repo-wide debt register with an ROI-ordered roadmap, use the tech-debt-analysis skill; this command is its quick inventory form."
+description: "Audits repository-level quality debt (technical, intent, comprehension) and inventories every silent skip: skipped tests, disabled lint rules, ts-expect-error, continue-on-error, coverage ignores, lowered thresholds, raised retries, and expired waivers. Use when a team wants to know what its CI and gates have quietly stopped enforcing, before a quality review, or when taking over a repository. For anti-patterns inside test code use the tech-debt-audit command; for the full repo-wide register with an ROI-ordered roadmap use tech-debt-analysis - this command is its quick inventory form."
 argument-hint: "[repoPath]"
 disable-model-invocation: true
 ---

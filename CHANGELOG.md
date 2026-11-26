@@ -136,6 +136,11 @@ Wszystkie istotne zmiany tego projektu są dokumentowane tutaj. Format zbliżony
 
 ### 🔄 Zmienione
 
+- kompresja opisów skilli — zawsze-ładowany budżet startowy (**P27**)
+  > - 44 opisy SKILL.md (wszystkie >600 znaków, max 700) przycięte do ≤597 znaków: zachowane klauzule "Use when", frazy-trigger („prove it", „set up Playwright for us", 'robot'...), wzajemne wskazania par bliźniaczych i cross-linków wymaganych przez lintersy (twin pairs, a11y trio, guardrails pair, pary quality-gates) — weryfikacja przez pełny `npm run check`
+  > - budżet opisów (w kontekście każdej sesji i subagenta): ~25 032 → ~24 126 tok (−906 tok, 99 855 → 96 222 znaków w 44 plikach)
+  > - baseline `token-budget-baseline.json` re-freeze na niższą wartość — ratchet z P26 blokuje teraz powrót do stanu sprzed kompresji
+
 - konsolidacja CI — bramka raz na ścieżkę (**P16**) (14265a7)
   > - ci.yml = jedyna bramka push/PR: job fast (zero-dep, 2 OS) + full (lint, typecheck, p2, test:p3); wcześniejsze nakładki (check ×4, verify ×3, lint ×3) zlikwidowane; build.yml usunięty w całości
   > - release.yml jedynym właścicielem tagów v* (Release z artefaktami plugins/); quality-gates.yml tylko nightly na skryptach repo — usunięty summary-job „Non-blocking for now"

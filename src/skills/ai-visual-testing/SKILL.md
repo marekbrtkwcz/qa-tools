@@ -1,6 +1,6 @@
 ---
 name: ai-visual-testing
-description: 'Adds LLM-powered visual verification to complement pixel-based visual regression: compares screenshots using a vision model to judge whether a visual change is a real defect or acceptable (layout shift, dynamic content, font rendering), reducing false positives from screenshot diffs. Use when pixel-based visual tests produce too many false positives, when dynamic content makes screenshot comparison unreliable, when reviewing visual changes semantically rather than pixel-by-pixel, or when deciding which snapshot failures need human eyes. For classic pixel-diff visual regression setup, use running-visual-regression-tests.'
+description: 'Adds LLM-powered visual verification to complement pixel-based visual regression: a vision model judges whether a visual change is a real defect or acceptable (layout shift, dynamic content, font rendering), cutting false positives from screenshot diffs. Use when pixel-based visual tests produce too many false positives, dynamic content makes screenshot comparison unreliable, or when deciding which snapshot failures need human eyes. For classic pixel-diff visual regression setup, use running-visual-regression-tests.'
 argument-hint: 'Screenshots or pages to verify, the baseline to compare against, and what kind of change is acceptable'
 user-invocable: true
 ---

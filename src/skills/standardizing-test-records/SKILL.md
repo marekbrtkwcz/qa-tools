@@ -1,6 +1,6 @@
 ---
 name: standardizing-test-records
-description: 'Defines the organization-wide test record standard and brings existing records up to it: one invariants set per record type (test case, exploratory session, execution result, defect, attestation) covering stable IDs, mandatory fields, status vocabulary, evidence rules, and a single source of truth per record type; maps existing templates onto those invariants and audits a sample of live records for conformance. Use when test records drift between people or teams, when a tracker import needs stable IDs, when an audit asks what a record must contain, or when per-team formats keep multiplying. For generating cases use manual-test-cases; for suite docs structure use documenting-test-suites.'
+description: 'Defines the organization-wide test record standard and brings existing records up to it: one invariants set per record type (test case, session, execution result, defect, attestation) covering stable IDs, mandatory fields, status vocabulary, and evidence rules; maps existing templates onto the invariants and audits a sample of live records. Use when test records drift between people or teams, a tracker import needs stable IDs, or per-team formats keep multiplying. Generating cases: manual-test-cases. Suite docs structure: documenting-test-suites.'
 argument-hint: 'The organization scope (team, product, several teams) and the record types already in use'
 user-invocable: true
 ---

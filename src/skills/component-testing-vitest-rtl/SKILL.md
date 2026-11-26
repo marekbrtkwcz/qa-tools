@@ -1,6 +1,6 @@
 ---
 name: component-testing-vitest-rtl
-description: 'Writes component tests with Vitest and Testing Library (or Playwright Component Testing where a real browser is required): behaviour through rendered output accessible to a user, role-based queries, userEvent over fireEvent, cleanup and query-order discipline, and a clear line between component tests and unit or E2E tests. Use when a component is being verified by testing its props instead of what it renders, when React/Vue/Svelte components need fast feedback below E2E, or when a team argues what belongs at the component layer. For where component tests belong in the layer plan, use designing-test-automation-architecture; for module-level doubles, use writing-unit-tests.'
+description: 'Writes component tests with Vitest and Testing Library (or Playwright Component Testing for a real browser): behaviour through rendered output accessible to a user, role-based queries, userEvent over fireEvent, cleanup and query-order discipline, and a clear line between component and unit/E2E tests. Use when a component is verified by testing its props instead of what it renders, React/Vue/Svelte components need fast feedback below E2E, or a team argues what belongs at the component layer. Layer plan: designing-test-automation-architecture. Module-level doubles: writing-unit-tests.'
 argument-hint: 'The component(s) under test, the framework and renderer, the behaviours to verify, and the existing runner setup if any'
 user-invocable: true
 ---

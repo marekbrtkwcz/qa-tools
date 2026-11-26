@@ -1,6 +1,6 @@
 ---
 name: ai-concepts-for-testers
-description: "Introduction to AI concepts for testers before they test AI-powered features: what an LLM is (tokens, context window, temperature, determinism), prompts and system prompts, RAG (embeddings, chunking, retrieval), agents and tool calling, MCP servers and tools, hallucination vs groundedness, guardrails, evals, and cost/latency basics — plus a map from each concept to the skill in this collection that tests it. Use when onboarding testers to AI products, leveling up a QA team on AI terminology, or planning what an AI feature needs tested. For testing a specific LLM feature, start at testing-llm-features."
+description: "Introduction to AI concepts for testers before they test AI-powered features: LLMs (tokens, context window, temperature), prompts and system prompts, RAG (embeddings, chunking, retrieval), agents and tool calling, MCP servers, hallucination vs groundedness, guardrails, evals, cost/latency - plus a map from each concept to the skill in this collection that tests it. Use when onboarding testers to AI products, leveling up a QA team on AI terminology, or planning what an AI feature needs tested. For testing a specific LLM feature, start at testing-llm-features."
 argument-hint: "Team's current AI familiarity and the AI-powered feature/product to be tested"
 user-invocable: true
 ---

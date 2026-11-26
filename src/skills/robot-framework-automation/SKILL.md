@@ -1,6 +1,6 @@
 ---
 name: robot-framework-automation
-description: "Writes and runs Robot Framework suites: keyword-driven .robot files (Settings, Variables, Test Cases, Keywords), Resources as the reuse unit, tags that route smoke vs regression, setup and teardown, data-driven templates, the Browser Library (Playwright-backed) and SeleniumLibrary, static analysis with Robocop, and pabot parallel runs merged by rebot for CI gates. Use for keyword-driven or acceptance-style automation, an inherited .robot codebase, or when the team simply says 'robot'. For porting these conventions to pytest/JUnit/NUnit use port-suite-to-python-java; a whole-suite move to Playwright goes through migrating-tests-to-playwright."
+description: "Writes and runs Robot Framework suites: keyword-driven .robot files, Resources as the reuse unit, tags routing smoke vs regression, setup/teardown, data-driven templates, Browser Library (Playwright-backed) and SeleniumLibrary, Robocop for static analysis, and pabot parallel runs merged by rebot for CI gates. Use for keyword-driven or acceptance-style automation, an inherited .robot codebase, or when the team simply says 'robot'. For porting these conventions to pytest/JUnit/NUnit use port-suite-to-python-java; a whole-suite move to Playwright goes through migrating-tests-to-playwright."
 argument-hint: "The app under test, the suite or resource files to work on, and the browser library in use"
 user-invocable: true
 ---

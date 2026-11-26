@@ -1,6 +1,6 @@
 ---
 name: unslop-answers
-description: 'Cuts AI tells from what the agent says about its own work: completion claimed without a run, invented file paths and API names, terminal output that was never produced, findings with no file or line, percentages with no denominator, absence claimed from one grep, effort narration instead of results, hedge stacking, buried blockers, puffery in a bug title. Use whenever reporting a result, a fix, a review finding, a test outcome, a coverage or flake number, a root cause, or a release recommendation, and when the request mentions "prove it", "did you actually run it", "be specific", "no fluff", "stop hedging", or "is this real". Must always apply to answers about your own work.'
+description: 'Cuts AI tells from the agent reporting of its own work: completion claimed without a run, invented paths and API names, terminal output never produced, findings with no file or line, percentages with no denominator, effort narration instead of results, hedge stacking, buried blockers. Use whenever reporting a result, a fix, a test outcome, a coverage or flake number, a root cause, or a release recommendation, and when the request mentions "prove it", "did you actually run it", "be specific", "no fluff", "stop hedging", or "is this real". Must always apply to answers about your own work.'
 argument-hint: 'The answer, report, or finding set to audit (defaults to the answer currently being written)'
 user-invocable: true
 ---

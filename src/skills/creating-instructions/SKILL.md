@@ -1,6 +1,6 @@
 ---
 name: creating-instructions
-description: "Creates instruction files and scoped rules that agents apply automatically: repository-wide guidance (`copilot-instructions.md`, `CLAUDE.md`, `AGENTS.md`) and file-scoped rules (Copilot `.instructions.md` with `applyTo`, Claude Code `.claude/rules/` with `paths`, Codex `AGENTS.md`), plus rules in this collection's single-source format. Use when encoding project conventions, choosing how narrowly a rule should apply, splitting an overgrown instructions file, or porting rules from one tool to another. For step-by-step workflows, use `creating-skills`; for enforcement that must not depend on the model, use `creating-hooks`."
+description: "Creates instruction files and scoped rules that agents apply automatically: repository-wide guidance (`copilot-instructions.md`, `CLAUDE.md`, `AGENTS.md`) and file-scoped rules (Copilot `.instructions.md`, Claude Code `.claude/rules/`, Codex AGENTS.md), plus this collection's single-source format. Use when encoding project conventions, choosing how narrowly a rule applies, splitting an overgrown instructions file, or porting rules between tools. For step-by-step workflows use `creating-skills`; for enforcement that must not depend on the model, use `creating-hooks`."
 argument-hint: "Repository context, target files or folders, the conventions to encode, and which tools the team uses"
 user-invocable: true
 ---

@@ -1,6 +1,6 @@
 ---
 name: api-request-response-logging
-description: "Adds request/response logging to Playwright API tests via a custom `request` fixture that wraps APIRequestContext in a transparent Proxy — zero extra dependencies (raw ANSI colors, no chalk), env-gated (LOGGER=true), with automatic redaction of Authorization/Cookie/API-key headers so secrets never reach CI logs, plus an attach-on-failure variant (test.info().attach) for CI artifacts instead of console noise. Adapted from the pwapi-logger pattern (AkademiaQA), adjusted to Biome + strict TS. Use when API tests are hard to debug locally, when CI failures lack the request/response evidence, or when you want readable API traffic in test output without plugins."
+description: "Adds request/response logging to Playwright API tests via a custom `request` fixture wrapping APIRequestContext in a transparent Proxy: zero dependencies (raw ANSI colors, no chalk), env-gated (LOGGER=true), automatic redaction of Authorization/Cookie/API-key headers so secrets never reach CI logs, plus an attach-on-failure variant for CI artifacts instead of console noise. Use when API tests are hard to debug locally, CI failures lack request/response evidence, or you want readable API traffic in test output without plugins."
 argument-hint: "Whether logging is for local debugging, CI artifacts on failure, or both"
 user-invocable: true
 ---

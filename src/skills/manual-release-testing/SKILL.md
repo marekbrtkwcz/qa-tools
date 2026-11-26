@@ -1,6 +1,6 @@
 ---
 name: manual-release-testing
-description: 'Plans and runs the manual part of release validation: fresh install, upgrade from supported older versions, rollback, data migration, configuration drift, and the first-run smoke of the deployed release. Produces a dated release checklist with per-item verdicts, evidence, and blockers. Use when preparing or gatekeeping a release from a tester standpoint, when an installer or upgrade path is about to ship untested, or when rollback must be proven to work before sign-off. For the overall go/no-go recommendation use assessing-release-readiness; for designing the broader test plan use designing-functional-tests.'
+description: 'Plans and runs the manual part of release validation: fresh install, upgrade from supported versions, rollback, data migration, configuration drift, and first-run smoke - a dated release checklist with per-item verdicts, evidence, and blockers. Use when preparing or gatekeeping a release from a tester standpoint, when an installer or upgrade path is about to ship untested, or when rollback must be proven before sign-off. For the go/no-go recommendation use assessing-release-readiness; for the broader test plan use designing-functional-tests.'
 argument-hint: 'Product, release version, supported upgrade paths, and environments available'
 user-invocable: true
 ---

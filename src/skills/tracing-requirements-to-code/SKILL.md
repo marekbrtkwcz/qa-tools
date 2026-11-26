@@ -1,6 +1,6 @@
 ---
 name: tracing-requirements-to-code
-description: 'Builds and maintains bidirectional traceability between requirements and the tests that verify them: extracts a matrix from an existing codebase, annotates tests with requirement IDs, finds orphan tests and uncovered requirements, verifies that each link is real, and enforces linkage in CI. Use when a suite exists but nobody can say what it proves, when an auditor or stakeholder asks which tests cover a requirement, when a traceability matrix has gone stale, or when a requirement changes and its blast radius must be found. To plan coverage from a spec before tests exist, use requirements-test-coverage-mapper; to check whether one build is done, use verifying-acceptance-criteria.'
+description: 'Builds and maintains bidirectional traceability between requirements and the tests that verify them: extracts a matrix from the existing codebase, annotates tests with requirement IDs, finds orphan tests and uncovered requirements, verifies each link, and enforces linkage in CI. Use when nobody can say what the suite proves, an auditor asks which tests cover a requirement, a matrix has gone stale, or a requirement changed and its blast radius must be found. Coverage plan from a spec: requirements-test-coverage-mapper. One build done: verifying-acceptance-criteria.'
 argument-hint: 'Test suite path, where requirements live (tracker, PRD, specs), any existing matrix or ID convention, and whether the goal is a one-off extraction or an enforced link'
 user-invocable: true
 ---

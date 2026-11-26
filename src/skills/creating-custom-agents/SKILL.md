@@ -1,6 +1,6 @@
 ---
 name: creating-custom-agents
-description: "Creates custom agents (subagents): a focused role with its own instructions, the fewest tools the job needs, explicit boundaries, stop conditions and an output contract, written as a Copilot `.agent.md`, a Claude Code agent file, a Codex agent TOML, or this collection's single-source agent format. Use when a recurring job needs its own role or tool limits, when an existing agent has grown too broad or has too many tools, or when a review step should run separately from the work it reviews. For several cooperating agents with an orchestrator, use `creating-orchestration-packs`; for reusable procedure without a role, use `creating-skills`."
+description: "Creates custom agents (subagents): a focused role with its own instructions, the fewest tools the job needs, explicit boundaries, stop conditions, and an output contract - as a Copilot `.agent.md`, a Claude Code agent file, a Codex agent TOML, or this collection's single-source format. Use when a recurring job needs its own role or tool limits, an existing agent has grown too broad, or a review step should run separately from the work it reviews. For cooperating agents with an orchestrator use `creating-orchestration-packs`; for reusable procedure without a role use `creating-skills`."
 argument-hint: "Agent purpose, who invokes it, the tools it needs, and nearby agents or skills"
 user-invocable: true
 ---
