@@ -1,6 +1,6 @@
 ---
 name: openapi-spec-quality
-description: 'Audits the quality of an OpenAPI/Swagger specification itself: lint rules (Spectral or similar), valid examples, complete error responses, consistent naming, required vs optional accuracy, security scheme coverage, and documentation completeness — before the spec is used to generate clients, docs, or tests. Use when the spec is the product\'s public contract, when generated clients or docs have wrong types, or when the spec has visibly diverged from what developers expect.'
+description: 'Audits the quality of an OpenAPI/Swagger specification itself: lint rules (Spectral or similar), valid examples, complete error responses, consistent naming, required vs optional accuracy, security scheme coverage, and documentation completeness — before the spec is used to generate clients, docs, or tests. Use when the spec is the product''s public contract, when generated clients or docs have wrong types, or when the spec has visibly diverged from what developers expect.'
 argument-hint: 'OpenAPI spec file path or URL, the lint ruleset in use, and which consumers (docs, codegen, tests) depend on the spec'
 user-invocable: true
 ---
