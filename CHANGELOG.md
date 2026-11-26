@@ -6,6 +6,10 @@ Wszystkie istotne zmiany tego projektu są dokumentowane tutaj. Format zbliżony
 
 ### ✅ Dodane
 
+- bramka budżetu tokenowego kolekcji — `scripts/token-budget-audit.ts` (**P26**)
+  > - wymuszenie w `npm run check`: twarde limity per skill (description ≤700 znaków — zawsze w kontekście; body ≤~5000 tok — ładowane przy aktywacji, nad tym split do `resources/`) oraz ratchet sum w `scripts/token-budget-baseline.json` (zamrożone: 197 skilli, ~25,0k tok opisów, ~308k tok ciał) — każdy wzrost sum nad baseline fails; świadomy re-freeze przez `--update-baseline`
+  > - npm scripts `tokens` / `tokens:check` / `tokens:baseline` + 14 testów w `test:p3`; estymacja tok = chars/4 (deterministyczna, konserwatywna); weryfikacja e2e: sztuczny rozrost description o 32 znaki failuje bramką (+8 tok nad baseline), przywrócenie przechodzi czysto
+
 - case'e eval dla nowych skili — jmeter i robot (**P22**) (1c0b9d2)
   > - jmeter-load-testing (non-functional-testing 9→11): act-pos na zdziedziczonym planie .jmx („było zielone bez wzglęgu na wszystko" — gate z results.jtl/statistics, nie z exit code) + kolizja k6-vs-jmeter (from-scratch scriptable vs inherited plan) — pierwszy case behawioralny k6 w tej suite
   > - robot-framework-automation (test-automation 6→9): act-pos „make it in robot" (activation bez nazwania, tags=route), contract no-drive-by-library-swap (migracja świadoma przez parity gate), act-neg python≠robot (porting → port-suite-to-python-java)
