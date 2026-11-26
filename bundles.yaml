@@ -98,6 +98,7 @@ test-automation:
     - selector-strategy
     - stabilize-flaky-tests
     - stabilizing-flaky-tests
+    - svn-for-testers
     - static-code-analysis-typescript
     - tech-debt-audit
     - test-data-factories

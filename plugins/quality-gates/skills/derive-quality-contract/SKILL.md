@@ -1,6 +1,6 @@
 ---
 name: derive-quality-contract
-description: Derives which testing practices are MUST, SHOULD, or COULD for this project from its risk profile, team maturity, and product surfaces, then reports a PRESENT/PARTIAL/MISSING/WAIVED gap matrix and an ordered remediation plan. Use when a team asks what testing it should be doing, when setting up quality gates for a new or inherited repository, or when the contract must be rebuilt after a change in risk. To audit what existing gates have stopped enforcing, use the audit-quality-debt command. For the full step-by-step derivation workflow, use deriving-a-quality-contract; this is its one-command gap-matrix form.
+description: 'Derives which testing practices are MUST, SHOULD, or COULD for this project from its risk profile, team maturity, and product surfaces, then reports a PRESENT/PARTIAL/MISSING/WAIVED gap matrix with an ordered remediation plan. Use when a team asks what testing it should be doing, when setting up quality gates for a new or inherited repository, or when the contract must be rebuilt after a change in risk. To audit what gates have stopped enforcing, use the audit-quality-debt command. For the full step-by-step workflow use deriving-a-quality-contract; this is its one-command form.'
 argument-hint: "[repoPath] [criticality]"
 disable-model-invocation: true
 ---

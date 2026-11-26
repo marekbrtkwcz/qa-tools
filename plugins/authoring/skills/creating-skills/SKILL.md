@@ -1,6 +1,6 @@
 ---
 name: creating-skills
-description: "Creates agent skills (a `SKILL.md` folder plus optional resources) that load in GitHub Copilot, Claude Code and OpenAI Codex: a description that triggers on the right requests, a lean body with progressive disclosure, checkable steps, and a validation pass. Use when packaging repeatable know-how as a skill the agent picks up on its own, splitting a bloated SKILL.md into body plus resources, fixing a skill that fires on the wrong requests, or adding a skill to this collection. For a guided single-skill build as a fixed command, use `create-skill`; for a command the user runs on purpose, use `creating-prompts`; to test how an existing skill behaves, use `testing-agent-skills`."
+description: "Creates agent skills (a SKILL.md folder plus resources) that load in GitHub Copilot, Claude Code and OpenAI Codex: a description that triggers on the right requests, a lean body with progressive disclosure, checkable steps, and a validation pass. Use when packaging repeatable know-how as a skill the agent picks up on its own, splitting a bloated SKILL.md into body plus resources, fixing a skill that fires on the wrong requests, or adding a skill to this collection. Guided build: `create-skill`. User-run commands: `creating-prompts`. Testing a skill: `testing-agent-skills`."
 argument-hint: "Capability to package, the requests that should trigger it, the expected output, and any reference material"
 user-invocable: true
 ---

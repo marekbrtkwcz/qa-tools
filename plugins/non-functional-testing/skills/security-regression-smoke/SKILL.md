@@ -1,6 +1,6 @@
 ---
 name: security-regression-smoke
-description: 'Builds and runs a repeatable security smoke pack over the core of an authorization matrix: for every change touching auth, permissions, or session handling, a scripted cross-role pass proves the high-signal protection paths still hold. Produces a dated run record with per-path verdicts, plus wired triggers - run after any diff tagged auth or modified-auth. Use when access control changes merge regularly, when the one-off authz audit keeps aging, or when an incident demands evidence the core paths were recently rechecked. For the full authorization audit use testing-application-security; for scoping what else a change can break use analyzing-regression-scope.'
+description: 'Builds and runs a repeatable security smoke pack over the core of an authorization matrix: for every change touching auth, permissions, or session handling, a scripted cross-role pass proves the high-signal protection paths still hold. Produces a dated run record with per-path verdicts, plus wired triggers - run after any auth-tagged diff. Use when access control changes merge regularly, the one-off authz audit keeps aging, or an incident demands proof the core paths were rechecked. Full authorization audit: testing-application-security; blast radius: analyzing-regression-scope.'
 argument-hint: 'The authorization matrix or its source, environments with seeded role accounts, and how security changes usually arrive (PRs, releases, incidents)'
 user-invocable: true
 ---

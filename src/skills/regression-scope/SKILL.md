@@ -27,7 +27,7 @@ Decide what must be retested after <change> and what can safely stay out of the 
 
 | Input | If missing |
 | --- | --- |
-| The change: <change> | If the workspace is a git repo, use `git diff main...HEAD --stat` and the diff itself, and say so. Otherwise ask for it and stop until you have it. |
+| The change: <change> | If the workspace is a git repo, use `git diff main...HEAD --stat` and the diff itself, and say so. If it is an SVN working copy, use `svn diff --summarize -r <base>:HEAD` (`svn-for-testers`). Otherwise ask for it and stop until you have it. |
 | Critical user journeys or business flows | Infer them from the codebase, routes, and existing tests, and list them as assumptions |
 | Release context (hotfix, major release, time available) | Assume a normal release and say so |
 

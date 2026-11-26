@@ -6,6 +6,11 @@ Wszystkie istotne zmiany tego projektu są dokumentowane tutaj. Format zbliżony
 
 ### ✅ Dodane
 
+- svn obok gita — skill `svn-for-testers` + SVN-owe odpowiedniki w kluczowych skillach (**P28**)
+  > - nowy skill `svn-for-testers` (test-automation): working-copy lifecycle (commit publikuje od razu — brak lokalnej historii), trunk/branches/tags jako konwencja, changelisty zamiast stage'owania, `svn:ignore` (nie `.gitignore`), externals, hooki server-side w `repo/hooks/`, ręczny bisect po `svn update -r`, `svn blame`/`svn log`; + zasób `git-svn-for-testers.md` — pełna mapa odpowiedników git↔svn (197 → 198 skillów; test-automation 61 → 62)
+  > - stan wyjściowy: kolekcja zakładała gita w ~40 plikach; SVN-owe odpowiedniki wpisane inline w kluczowych workflowach: `diagnosing-test-failures` (+`resources/feedback-loops.md`, bisect → binarny search rewizji), `scoping-change-relevance` (pin diffu po rewizji zamiast refa), `regression-scope`, `release-notes-from-diff` (`svn log -r`), `monorepo-affected-tests`, `test-impact-analysis`, `assessing-comprehension-debt` i `recording-change-intent` (trailery gita → `Key: value` w treści komunikatu SVN), routing w wiedzy `test-automation` + `automation-tester-essentials`
+  > - granice: czysty SVN; most git-svn traktowany jako git (working copy zachowuje się jak git dla wszystkich narzędzi), migracja historii SVN→git poza zakresem
+
 - bramka budżetu tokenowego kolekcji — `scripts/token-budget-audit.ts` (**P26**)
   > - wymuszenie w `npm run check`: twarde limity per skill (description ≤700 znaków — zawsze w kontekście; body ≤~5000 tok — ładowane przy aktywacji, nad tym split do `resources/`) oraz ratchet sum w `scripts/token-budget-baseline.json` (zamrożone: 197 skilli, ~25,0k tok opisów, ~308k tok ciał) — każdy wzrost sum nad baseline fails; świadomy re-freeze przez `--update-baseline`
   > - npm scripts `tokens` / `tokens:check` / `tokens:baseline` + 14 testów w `test:p3`; estymacja tok = chars/4 (deterministyczna, konserwatywna); weryfikacja e2e: sztuczny rozrost description o 32 znaki failuje bramką (+8 tok nad baseline), przywrócenie przechodzi czysto

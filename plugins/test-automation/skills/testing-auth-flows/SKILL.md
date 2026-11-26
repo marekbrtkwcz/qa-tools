@@ -1,6 +1,6 @@
 ---
 name: testing-auth-flows
-description: 'Automates login and authenticated sessions correctly: a dedicated Playwright setup project that logs in once and saves storageState, API-first token acquisition, refresh and expiry handling, service accounts, SSO/OAuth test tenancy, and session sharing between UI and API tests. Use when a suite logs in inside every test, when login is the slowest or flakiest step, when CI fails on token expiry, or when tests need one identity across UI and API. For testing authorization rules themselves (who may see whose data), use testing-application-security; for mocking the identity provider, use mocking-network-and-time.'
+description: 'Automates login and authenticated sessions correctly: a Playwright setup project that logs in once and saves storageState, API-first token acquisition, refresh and expiry handling, service accounts, SSO/OAuth test tenancy, and session sharing between UI and API tests. Use when a suite logs in inside every test, login is the slowest or flakiest step, CI fails on token expiry, or tests need one identity across UI and API. For authorization rules themselves (who may see whose data) use testing-application-security; for mocking the identity provider use mocking-network-and-time.'
 argument-hint: 'The application under test, how it authenticates (form, OIDC, SAML, API), whether a test account exists, and how many tests currently log in'
 user-invocable: true
 ---

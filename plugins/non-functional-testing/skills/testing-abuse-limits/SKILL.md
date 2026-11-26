@@ -1,6 +1,6 @@
 ---
 name: testing-abuse-limits
-description: 'Verifies documented protection limits against real behavior with single-actor, low-volume methods: rate limits, lockouts, session and device caps, batch size caps, and quota responses - proving thresholds, recovery, and observability rather than taking the system down. Produces one limit card per control (documented vs actual behavior) and files the deltas as findings. Use when an API introduces or changes rate limits, when abuse controls are claimed but never verified, or when a review removed a rate limit and nobody can say what it protected. For capacity and throughput under load use testing-performance-and-load; for authorization use testing-application-security.'
+description: 'Verifies documented protection limits against real behavior with single-actor, low-volume methods: rate limits, lockouts, session/device/batch caps, quota responses - proving thresholds, recovery, and observability, not taking the system down. Produces one limit card per control (documented vs actual) and files the deltas as findings. Use when an API introduces or changes rate limits, abuse controls are claimed but never verified, or a removed rate limit leaves no record of what it protected. Load and throughput: testing-performance-and-load. Authorization: testing-application-security.'
 argument-hint: 'The API or endpoint set, its documented (or claimed) limits, and the environment allowed for testing'
 user-invocable: true
 ---

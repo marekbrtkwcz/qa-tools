@@ -19,13 +19,13 @@ In a monorepo, most PRs touch one package; running the whole suite wastes CI tim
 ## Approaches, best first
 
 1. **Tool-native affected (preferred):** Nx (`nx affected -t test`, `nx run-many -t test --projects=...`) or Turborepo (`turbo run test --filter=[HEAD^1]` / `--filter=...^...`). The tool owns the dependency graph; do not reimplement it.
-2. **Playwright projects per package:** define one Playwright `project` per app/package with a `testDir`/`testMatch` scoped to it; in CI compute affected projects from changed files (`git diff --name-only origin/main...HEAD` → map path prefix → project name) and pass `--project=a --project=b`. If the diff touches `playwright.config.ts` or shared test utils, run all projects.
+2. **Playwright projects per package:** define one Playwright `project` per app/package with a `testDir`/`testMatch` scoped to it; in CI compute affected projects from changed files (`git diff --name-only origin/main...HEAD` → map path prefix → project name; SVN: `svn diff --summarize -r <base>:HEAD` — `svn-for-testers`) and pass `--project=a --project=b`. If the diff touches `playwright.config.ts` or shared test utils, run all projects.
 3. **Tag + grep fallback:** when projects are not per-package, tag tests (`test('...', { tag: '@cart' })`) and run `--grep @cart` for diffs under `**/cart/**`. Coarser, but works in any setup.
 4. **Full suite as fallback:** if the changed-file → test mapping is ambiguous (shared config, codegen, migrations, lockfile), run everything. A false "affected" set that misses a break is worse than a slow green run.
 
 ## CI wiring
 
-- Compute the base: `git fetch origin main` then `git diff --name-only origin/main...HEAD` (merge-base, not `HEAD^1` — rebases break the latter).
+- Compute the base: `git fetch origin main` then `git diff --name-only origin/main...HEAD` (merge-base, not `HEAD^1` — rebases break the latter). SVN working copies: pin the base as a revision number — `svn diff --summarize -r <last-green-rev>:HEAD` (`svn-for-testers`).
 - Cache the dependency graph between runs (Nx Cloud or Turbo remote cache) so `--affected` is fast.
 - Emit the affected project list as a CI artifact/summary line so reviewers can see what ran.
 - Nightly or merge-queue job runs the **full** suite — affected runs are the PR gate, not the only signal.

@@ -1,6 +1,6 @@
 ---
 name: creating-hooks
-description: "Creates lifecycle hooks: small scripts the host runs at session start, before or after a tool call, on prompt submit or at stop, to log, add context, warn or block deterministically. Covers GitHub Copilot `hooks.json`, Claude Code hooks in settings or a plugin, OpenAI Codex `.codex/hooks.json`, and this collection's per-host hook source. Use when a guardrail must hold regardless of what the model decides (block a dangerous command such as git push or rm -rf, check a file after every edit, inject context at start), when porting a hook between tools, or when a hook is slow, noisy or blocks the wrong things. For guidance the agent may weigh, use `creating-instructions`."
+description: "Creates lifecycle hooks: small scripts the host runs at session start, around a tool call, on prompt submit, or at stop, to log, add context, warn, or block deterministically. Covers GitHub Copilot `hooks.json`, Claude Code hooks, OpenAI Codex `.codex/hooks.json`, and this collection's per-host hook source. Use when a guardrail must hold regardless of what the model decides (block git push or rm -rf, inject context at start), when porting a hook between tools, or when a hook is slow, noisy, or blocks the wrong things. For guidance the agent may weigh use `creating-instructions`."
 argument-hint: "What the hook must enforce or record, the lifecycle event, allow/warn/deny behaviour, target tools and operating systems"
 user-invocable: true
 ---

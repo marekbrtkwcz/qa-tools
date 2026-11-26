@@ -1,6 +1,6 @@
 ---
 name: hybrid-ui-api-testing
-description: 'Designs and writes hybrid tests that combine UI and API in one flow: seed state via API calls (fast, deterministic setup), drive the user journey through the UI, and verify outcomes via API responses (precise assertions) as well as UI. Use when UI tests are slow because of UI-only setup, when you need to verify backend state after a UI action, when testing flows that span both layers (e.g. place order in UI, verify in database via API), or when reducing test runtime by replacing UI setup with API calls. For pure API tests, use api-playwright-test-developer; for pure UI tests, use writing-playwright-tests-best-practices.'
+description: 'Designs and writes hybrid UI+API tests in one flow: seed state via API (fast, deterministic setup), drive the journey through the UI, verify outcomes via API responses as well as UI. Use when UI tests are slow because of UI-only setup, backend state must be verified after a UI action, flows span both layers (place order in UI, verify via API), or UI setup should be replaced with API calls to cut runtime. For pure API tests use api-playwright-test-developer; for pure UI tests use writing-playwright-tests-best-practices.'
 argument-hint: 'The user flow to test, available API endpoints for setup/verification, and the Playwright suite structure'
 user-invocable: true
 ---

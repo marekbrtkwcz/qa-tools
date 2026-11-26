@@ -1,6 +1,6 @@
 ---
 name: creating-plugins
-description: "Packages skills, commands, agents, hooks and MCP servers as installable plugins with a marketplace for GitHub Copilot, Claude Code and OpenAI Codex: choosing what to bundle, writing each host's manifest and marketplace entry, and checking the result installs. In this collection, plugins are generated from `bundles.yaml` by `npm run build`. Use when a skill or group of assets should install as a unit, when adding or reshaping a bundle here, when publishing a plugin from your own repository, or when CI reports generated plugin files out of date. For the skill being packaged, use `creating-skills` first."
+description: "Packages skills, commands, agents, hooks and MCP servers as installable plugins with a marketplace entry for GitHub Copilot, Claude Code and OpenAI Codex. In this collection plugins are generated from `bundles.yaml` by `npm run build`. Use when a group of assets should install as a unit, when adding or reshaping a bundle, when publishing a plugin from your own repository, or when CI reports generated files out of date. For the skill being packaged, use `creating-skills` first."
 argument-hint: "What to bundle, the plugin name and description, the target tools, and whether this is this collection or your own repository"
 user-invocable: true
 ---

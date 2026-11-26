@@ -1,6 +1,6 @@
 ---
 name: test-data-factories
-description: 'Builds test data as code instead of literals: factory functions with composable traits, seeded Faker for deterministic runs, uniqueness strategies that survive parallel workers, and teardown that actually cleans persistent state. Use when tests fail on data collisions, when fixture literals are copy-pasted and drifted, when each test needs its own rows but the suite shares a database, or when a seed script has become the hidden second test author. For designing what data should exist (roles, boundaries, personas), use designing-test-data; for keeping personal data out of fixtures, use handling-sensitive-test-data.'
+description: 'Builds test data as code instead of literals: factory functions with composable traits, seeded Faker for deterministic runs, uniqueness strategies that survive parallel workers, and teardown that actually cleans persistent state. Use when tests fail on data collisions, fixture literals are copy-pasted and drifted, each test needs its own rows but the suite shares a database, or a seed script has become the hidden second test author. For designing what data should exist use designing-test-data; for keeping personal data out of fixtures use handling-sensitive-test-data.'
 argument-hint: 'The domain entities to build, where data is created and cleaned (in-memory, API, database), the runner, and how many parallel workers share the backend'
 user-invocable: true
 ---

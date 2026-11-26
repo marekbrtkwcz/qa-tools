@@ -18,7 +18,7 @@ Running everything on every commit is the reason suites get bypassed. This skill
 
 ## Workflow
 
-1. **Get the diff** (`git diff main...HEAD`) and extract changed line ranges per file.
+1. **Get the diff** (`git diff main...HEAD`; SVN working copies: `svn diff -r <base>:HEAD` — `svn-for-testers`) and extract changed line ranges per file.
 2. **Get coverage data** (LCOV/Cobertura from the last full run) and map each changed line to executing tests. Tools: `danger` + coverage, `jest --findRelatedTests`, `pytest --lf` with coverage, or a small script over the LCOV.
 3. **Classify:** changed lines covered -> their tests are the impact set; changed lines uncovered -> list them as gaps; test-only changes -> run those tests.
 4. **Combine with risk tags** from `scoping-change-relevance` (new endpoint, auth change, migration => add the matching smoke/regression set even if coverage is thin).

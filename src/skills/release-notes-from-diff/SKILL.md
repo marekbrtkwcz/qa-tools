@@ -19,7 +19,7 @@ Release notes written from memory miss the breaking change. This skill derives t
 
 ## Workflow
 
-1. **Collect the range:** `git log main..HEAD --oneline` plus PR titles, or the merged PR list from the tracker.
+1. **Collect the range:** `git log main..HEAD --oneline` plus PR titles, or the merged PR list from the tracker. SVN working copies: `svn log -r <last-release-rev>:HEAD` — revisions are already linearly ordered (`svn-for-testers`).
 2. **Classify each change:** feature / fix / breaking / security / performance / chore. Diff inspection beats title parsing for breaking detection (removed export, changed response field, renamed env var, migration).
 3. **Group by audience:** users, operators, developers (API changes).
 4. **Draft entries** in the project's changelog format (Keep a Changelog sections: Added/Changed/Deprecated/Removed/Fixed/Security).

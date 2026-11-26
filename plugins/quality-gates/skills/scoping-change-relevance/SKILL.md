@@ -41,6 +41,8 @@ git log <base>..HEAD --oneline
 
 Use `main...HEAD` for a branch, `HEAD` for uncommitted work. Confirm the base ref resolves and the diff is non-empty before going further - a bad ref silently produces an empty scope, which reads as "nothing to check".
 
+SVN working copies have no refs: pin the base as a revision number instead - `svn diff --summarize -r <base>:HEAD` for the file list, `svn diff -r <base>:HEAD -- <path>` for hunks, `svn log -r <base>:HEAD` for the changes (`svn-for-testers`). `svn status` covers uncommitted work. The same non-empty-diff check applies: confirm `<base>` is a real revision before tagging anything.
+
 Exclude non-source noise from tagging, but **list what you excluded**: lockfiles are excluded from hunk tagging yet are themselves a `added-dependency` signal; snapshots, generated clients, and build output are excluded; docs are excluded unless they are the deliverable.
 
 ### Phase 1: Assign file tags

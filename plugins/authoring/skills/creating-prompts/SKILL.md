@@ -1,6 +1,6 @@
 ---
 name: creating-prompts
-description: "Creates reusable commands the user starts on purpose (`/name`, or `$name` in Codex): one job, declared inputs with hints, ask-when-missing behaviour, a concrete output and location, a verification step and guardrails. Writes them as a Copilot `.prompt.md`, a Claude Code user-run skill or command, a Codex skill with implicit invocation turned off, or a command in this collection's source format. Use when a team keeps re-typing the same request, when a workflow needs a fixed entry point that routes to an agent, or when an existing prompt produces vague output. For know-how the agent should pick up on its own, use `creating-skills`."
+description: "Creates reusable commands the user starts on purpose (`/name`, `$name` in Codex): one job, declared inputs with hints, ask-when-missing behaviour, a concrete output and location, verification step, and guardrails - as a Copilot `.prompt.md`, a Claude Code user-run skill or command, a Codex skill with implicit invocation off, or this collection's source format. Use when a team keeps re-typing the same request, a workflow needs a fixed entry point that routes to an agent, or an existing prompt produces vague output. For know-how the agent should pick up on its own, use `creating-skills`."
 argument-hint: "Command goal, the agent it should hand to, the inputs it needs, and the output it must produce"
 user-invocable: true
 ---

@@ -1,6 +1,6 @@
 ---
 name: tech-debt-analysis
-description: "Analyzes technical debt in codebases, test suites, architecture, dependencies, and delivery workflows from observable signals, and produces a prioritized register and remediation roadmap with severity, risk, effort, and ROI. Use when auditing repository health, explaining slow delivery or flaky tests, planning refactoring, or deciding what to fix now versus defer. For silently skipped checks use the audit-quality-debt command; for anti-patterns inside test code use the tech-debt-audit command; for expired waivers use governing-quality-waivers; for code nobody on the team understands use assessing-comprehension-debt."
+description: "Analyzes technical debt in codebases, test suites, architecture, dependencies, and delivery workflows from observable signals, and produces a prioritized register with severity, risk, effort, and ROI. Use when auditing repository health, explaining slow delivery or flaky tests, planning refactoring, or deciding what to fix now versus defer. For silently skipped checks use the audit-quality-debt command; for anti-patterns inside test code use tech-debt-audit; for expired waivers use governing-quality-waivers; for code nobody understands use assessing-comprehension-debt."
 argument-hint: "Repository scope, system type, current pain points, and desired output"
 user-invocable: true
 ---

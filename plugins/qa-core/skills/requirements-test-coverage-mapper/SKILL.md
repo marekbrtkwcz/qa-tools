@@ -1,6 +1,6 @@
 ---
 name: requirements-test-coverage-mapper
-description: 'Maps requirements (PRD, user stories, acceptance criteria) to planned test coverage via a Requirements Traceability Matrix, exposing coverage gaps, risks, test levels, prioritization, and automation candidates. Use when designing coverage from a specification, checking coverage completeness for a PRD or user story, finding missing acceptance criteria, or building a risk-based regression strategy. When the tests already exist and the matrix has to be extracted from them, verified, and kept accurate, use tracing-requirements-to-code; to check whether one build is done, use verifying-acceptance-criteria.'
+description: 'Maps requirements (PRD, user stories, acceptance criteria) to planned test coverage via a Requirements Traceability Matrix, exposing coverage gaps, risks, test levels, prioritization, and automation candidates. Use when designing coverage from a specification, checking coverage completeness for a PRD or user story, finding missing acceptance criteria, or building a risk-based regression strategy. For a matrix extracted from existing tests use tracing-requirements-to-code; to check whether one build is done use verifying-acceptance-criteria.'
 argument-hint: 'PRD, user stories, or acceptance criteria to map, plus scope boundaries and known constraints'
 user-invocable: true
 ---

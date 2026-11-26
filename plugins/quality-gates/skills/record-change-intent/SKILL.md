@@ -1,6 +1,6 @@
 ---
 name: record-change-intent
-description: Finds the high-risk surface in a change range, checks whether a rationale already exists in commit trailers, ADRs, or a module intent register, and drafts an Intent trailer for the author to confirm (why now, what constrained the shape, what was rejected). Use when a change touches auth, schemas, public APIs, or removed guards and its reason is not written down, or before merging a change someone will need to understand later. For a full scope, coverage, and intent gate on a diff, use the scope-change-gate command. For the standing intent-gate rule that reports every high-risk change without a rationale, use recording-change-intent.
+description: 'Finds the high-risk surface in a change range, checks whether a rationale already exists in commit trailers, ADRs, or a module intent register, and drafts an Intent trailer for the author to confirm. Use when a change touches auth, schemas, public APIs, or removed guards and its reason is not written down - or before merging a change someone will need to understand later. For a full scope-and-intent gate on a diff use the scope-change-gate command; for the standing rule that reports every high-risk change without a rationale, use recording-change-intent.'
 argument-hint: "[range]"
 disable-model-invocation: true
 ---

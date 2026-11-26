@@ -105,6 +105,8 @@ git bisect reset
 
 The command must exit 0 on green and non-zero on red. If the test itself changed in the range, bisect with a copy of the current test file kept outside the repo, so every commit is judged by the same question.
 
+SVN working copies have no `git bisect` - run the same binary search by hand: `svn update -r <N>`, run the one deterministic test command, halve the range until a single revision remains (`svn-for-testers`). The same rules hold: deterministic command, the current test kept outside the working copy if the test changed in the range.
+
 ## Differential loop
 
 Run the same input against two states and diff the outputs: two app versions, two configs, CI image vs local, two browser projects. Useful when nothing errors but a value differs.

@@ -71,7 +71,7 @@ Problems and how to test hooks:
 
 ## Related Skills
 
-- `diagnosing-test-failures` - root-causing the failure bisect points at (mentions `git bisect run`)
+- `svn-for-testers` - the same tester workflows in an SVN checkout (its resources hold the git↔svn command map; a git-svn bridge working copy still counts as git here)- `diagnosing-test-failures` - root-causing the failure bisect points at (mentions `git bisect run`)
 - `stabilizing-flaky-tests` - a flake must be deterministic before bisect
 - `testing-cli-tools` - hooks are testable as subprocesses
 - `creating-hooks` / `static-code-analysis-typescript` - authoring hooks and Husky+Biome setup in this collection's stack

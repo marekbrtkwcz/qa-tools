@@ -13,6 +13,7 @@ Skondensowana lista z kursów (Playwright UI + Playwright API) i praktyki: każd
 - Node/Bun + VSCode + Playwright zainstalowane i pierwszy test zielony → problem: "u mnie działa" przez różne wersje → `bootstrap-test-suite`, `test-environment-provisioning`, `testing-with-bun`
 - Jeden linter/formatter (Biome) + `tsc --noEmit` w CI → problem: konflikty formatowania i literówki łapane dopiero w review → `static-code-analysis-typescript`, `typescript-for-testers`
 - Git na poziomie: init, add, commit, branch, push, clone, `.gitignore` → problem: sekrety/artefakty w historii, popsute branche → `git-for-testers`, `handling-sensitive-test-data`
+- SVN obok gita (starsze projekty: trunk/branches/tags, commit od razu na serwer, `svn:ignore`) → problem: gitowe nawyki nie działają, brak bisect → `svn-for-testers`
 
 ## Playwright UI
 

@@ -1,6 +1,6 @@
 ---
 name: usability-quick-pass
-description: 'Runs a short heuristic usability pass over one flow or screen: learnability, efficiency, guidance, error recovery, consistency, terminology, escape routes - one tester, no lab equipment, no test users. Returns friction findings ranked by how many users they block, phrased as observable behaviors with evidence and questions for the product owner. Use when a UI feature is about to ship with no UX review, when exploratory notes keep mentioning confusion or dead ends, or when a fast is-this-usable check is wanted that is deliberately not an accessibility audit. For WCAG conformance use auditing-accessibility; for functional coverage use planning-exploratory-testing.'
+description: 'Runs a short heuristic usability pass over one flow or screen: learnability, efficiency, guidance, error recovery, consistency, terminology, escape routes - one tester, no lab equipment, no test users. Returns friction findings ranked by how many users they block, phrased as observable behaviors with evidence. Use when a UI feature is about to ship with no UX review, or a fast is-this-usable check is wanted that is deliberately not an accessibility audit. WCAG conformance: auditing-accessibility. Functional coverage: planning-exploratory-testing.'
 argument-hint: 'The flow or screen to pass over, the persona to run it as, and the timebox available'
 user-invocable: true
 ---

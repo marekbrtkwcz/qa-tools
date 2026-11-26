@@ -68,6 +68,8 @@ git log <base>..HEAD --format='%(trailers:key=Intent-Ref,valueonly)'
 
 Trailers are the standard `Key: value` block at the end of a commit message - the same mechanism as `Signed-off-by:`. No tooling, no external service, and they survive rebase and squash if written into the final message. See `./resources/intent-trailer-spec.md`.
 
+SVN working copies: there are no git trailers, but the same evidence belongs in the commit message as plain `Key: value` lines (`svn commit -F message.txt`) - write the block in the trailer format, and read it back by parsing `svn log` output rather than `%(trailers)`. The full translation is in `svn-for-testers`.
+
 ### Phase 3: Classify each high-risk change
 
 | Status | Meaning | Action |

@@ -49,6 +49,8 @@ git log <range> --numstat
 
 If `Assisted-by:` trailers are not in use, provenance is **unknown** - report it as unknown and move on. Do not infer AI authorship from commit size, style, or timing; those inferences are wrong often enough to poison the whole report.
 
+SVN working copies: there is no `%(trailers)` machinery. Pull the same signals from `svn log -r <range>` (author and full message per revision) and parse the message text for `Intent:` / `Assisted-by:` lines — only meaningful if `recording-change-intent`'s SVN convention (plain `Key: value` lines in the commit message) was actually followed; the command map is `svn-for-testers`.
+
 ### Phase 2: Compute the risk band per change or module
 
 Three inputs, from `./resources/risk-band-rubric.md`:

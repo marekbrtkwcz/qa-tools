@@ -63,7 +63,7 @@ When the expected behaviour itself is in doubt (the test and the app disagree an
 
 This phase is the skill. With a tight, red-capable loop, the cause falls out of Phases 4 and 5; without one, reading code produces theories nobody can check.
 
-Build the cheapest loop that reaches the bug, in roughly this order: the failing test itself narrowed with `--grep` or `-t`; a new test at the seam that reaches the reported symptom; an HTTP call against a running app; a replayed captured request or trace; a throwaway harness around one function; `git bisect run` between a known-good and a known-bad commit; a differential run of old and new versions. For a reported defect with no test yet, the loop is a new failing test that reproduces the symptom. `./resources/feedback-loops.md` has commands for Playwright, Vitest, Jest, and pytest, including trace, debug, and bisect.
+Build the cheapest loop that reaches the bug, in roughly this order: the failing test itself narrowed with `--grep` or `-t`; a new test at the seam that reaches the reported symptom; an HTTP call against a running app; a replayed captured request or trace; a throwaway harness around one function; `git bisect run` between a known-good and a known-bad commit (SVN checkouts: the same binary search driven by hand over `svn update -r` — `svn-for-testers`); a differential run of old and new versions. For a reported defect with no test yet, the loop is a new failing test that reproduces the symptom. `./resources/feedback-loops.md` has commands for Playwright, Vitest, Jest, and pytest, including trace, debug, and bisect.
 
 Tighten it: narrow the scope, pin time, seed randomness, stub what you do not own, turn retries off.
 

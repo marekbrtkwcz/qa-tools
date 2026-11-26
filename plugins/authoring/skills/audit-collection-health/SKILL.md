@@ -1,6 +1,6 @@
 ---
 name: audit-collection-health
-description: "Audits a collection of skills, agents, commands, and rules as one system: inventory, conformance to the house conventions, description trigger quality, overlap between near neighbours, broken cross-references, orphaned resources, drift between sources and generated copies, and which assets have no behavioural test. Use when preparing a release of the collection, after a batch of new assets, or when assets start colliding or triggering on the wrong requests. Read-only: it reports and never fixes. For behaviour testing of individual skills (activation, collision, before/after gates), use the testing-agent-skills skill."
+description: "Audits a collection of skills, agents, commands, and rules as one system: inventory, conformance to house conventions, description trigger quality, overlap between near neighbours, broken cross-references, orphaned resources, source/generated drift, and which assets have no behavioural test. Use when preparing a collection release, after a batch of new assets, or when assets start colliding or triggering on the wrong requests. Read-only: reports, never fixes. For behaviour testing of individual skills use testing-agent-skills."
 argument-hint: "[collectionRoot] [scope]"
 disable-model-invocation: true
 ---

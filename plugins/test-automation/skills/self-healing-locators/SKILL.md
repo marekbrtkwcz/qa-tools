@@ -1,6 +1,6 @@
 ---
 name: self-healing-locators
-description: 'Designs and implements resilient, self-healing selectors for Playwright and other UI test suites: fallback chains, role-based and label-based locators over CSS/XPath, AI-assisted locator repair when the UI changes, and a drift-detection loop that reports broken selectors before they become flaky failures. Use when selectors break after UI changes, when tests are flaky due to brittle locators, when adopting accessibility-first selector strategy, or when a suite needs to survive frontend refactors. For fixing individual failing tests, use diagnosing-test-failures; for stabilizing intermittent failures in general, use stabilizing-flaky-tests.'
+description: 'Designs and implements resilient, self-healing selectors for Playwright and other UI suites: fallback chains, role- and label-based locators over CSS/XPath, AI-assisted locator repair when the UI changes, and a drift-detection loop that reports broken selectors before they become flaky failures. Use when selectors break after UI changes, tests are flaky from brittle locators, or a suite must survive frontend refactors. For fixing individual failing tests use diagnosing-test-failures; for intermittent failures in general use stabilizing-flaky-tests.'
 argument-hint: 'Test suite path, framework in use (Playwright default), and examples of broken or brittle selectors'
 user-invocable: true
 ---
