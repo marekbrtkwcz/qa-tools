@@ -367,7 +367,7 @@ const GLOBAL_BINARY_SERVERS = [
     line: 'npm i -g @playwright/mcp@latest',
     args: [
       '--caps',
-      'vision,pdf,devtools,network,storage,testing',
+      'vision,pdf,devtools,network,storage,testing,config',
       '--ignore-https-errors',
       '--timeout-action',
       '30000',
