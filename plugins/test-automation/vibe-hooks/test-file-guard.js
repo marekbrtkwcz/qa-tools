@@ -99,6 +99,24 @@ const BLOCK = [
     why: 'skipped test (xit()/xdescribe()): silently disabled, easy to commit by accident',
     pardonable: true,
   },
+  {
+    re: /\bt\.Skipf?\s*\(/,
+    why: 'skipped test (Go t.Skip/t.Skipf): a committed skip silently disables the test',
+    pardonable: true,
+  },
+  {
+    re: /@(?:pytest\.mark\.skip(?:if)?|unittest\.skip\w*)\b|\bpytest\.skip\s*\(/i,
+    why: 'skipped test (pytest.mark.skip/skipif, pytest.skip, unittest.skip): silently disabled',
+    pardonable: true,
+  },
+  {
+    // Robot's BuiltIn Skip keyword: a line starting with "Skip" inside a
+    // .robot file. File-scoped: the same words in JS/Python prose are not it.
+    re: /^[ \t]*Skip[ \t]+\S+/m,
+    why: 'skipped test (Robot Framework Skip keyword): skips the rest of the test case',
+    pardonable: true,
+    file: /\.robot$/i,
+  },
 ];
 
 // Warning smells: logged and surfaced, never blocking on their own.
@@ -110,6 +128,20 @@ const WARN = [
   {
     re: /(?:cy\.wait|Thread\.sleep)\s*\(\s*\d+\s*\)/,
     why: 'hardcoded sleep — prefer a deterministic condition',
+  },
+  {
+    re: /\btime\.sleep\s*\(/i,
+    why: 'hardcoded sleep (Python time.sleep) — prefer a deterministic condition',
+  },
+  {
+    re: /\btime\.Sleep\s*\(/,
+    why: 'hardcoded sleep (Go time.Sleep) — prefer a deterministic condition',
+  },
+  {
+    // Robot's Sleep keyword (BuiltIn/OperatingSystem), file-scoped like Skip.
+    re: /^[ \t]*Sleep[ \t]+\S+/m,
+    why: 'hardcoded sleep (Robot Sleep keyword) — prefer Wait Until ... conditions',
+    file: /\.robot$/i,
   },
   {
     re: /expect\s*\(\s*true\s*\)\s*\.\s*toBe\s*\(\s*true\s*\)/,
@@ -174,9 +206,13 @@ if (info.bash) {
     );
   }
   for (const b of BLOCK) {
+    // file-scoped patterns (e.g. Robot keywords) have no path to check in a
+    // bare command string - skip them here rather than guess
+    if (b.file) continue;
     if (b.re.test(info.command) && !reasons.includes(b.why)) reasons.push(b.why);
   }
   for (const w of WARN) {
+    if (w.file) continue;
     if (w.re.test(info.command) && !reasons.includes(w.why)) reasons.push(w.why);
   }
   if (reasons.length) {
@@ -198,6 +234,7 @@ const warnFindings = [];
 for (const text of info.texts) {
   const pardoned = PARDON.test(text);
   for (const b of BLOCK) {
+    if (b.file && !b.file.test(info.filePath)) continue;
     if (!b.re.test(text)) continue;
     if (b.pardonable && pardoned) {
       const note = `${b.why} — annotated skip (waiver present) accepted as a visible quarantine; keep the waiver dated and owned`;
@@ -207,6 +244,7 @@ for (const text of info.texts) {
     if (!blockFindings.includes(b.why)) blockFindings.push(b.why);
   }
   for (const w of WARN) {
+    if (w.file && !w.file.test(info.filePath)) continue;
     if (w.re.test(text) && !warnFindings.includes(w.why)) warnFindings.push(w.why);
   }
 }

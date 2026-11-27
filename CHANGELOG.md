@@ -9,6 +9,8 @@ Wszystkie istotne zmiany tego projektu są dokumentowane tutaj. Format zbliżony
 - split `test-automation` (63 → 57 skilli): nowy opcjonalny bundle `test-automation-stacks` (`go-for-testers`, `python-for-testers`, `port-suite-to-python-java`, `robot-framework-automation`, `svn-for-testers`, `testing-with-bun`) — projekt TS/Playwright nie ładuje już opisów obcych stacków przy starcie sesji; 6 case'ów eval przeniesionych do suite `test-automation-stacks` (12 → 6 + 6)
 - `src/shared/emoji-style.md` skrócony z 199 linii (~2493 tok) do 13 linii / 16 jednoznacznych statusów (~271 tok) — build wstrzykuje ten blok do każdego SKILL.md i TOML agenta, więc `plugins/` maleje z 5,27 MB do ~3,1 MB (~2,4 MB duplikatów → ~66 KB); `scripts/token-budget-audit.ts` audytuje teraz też zbudowane `plugins/` i w `--check` bramkuje rozmiar wstrzykiwanego bloku (warn ~300, fail ~450 tok/plik)
 - hooki `test-file-guard` i `red-test-deletion-guard` rozpoznają też pliki testowe Go (`*_test.go`), Pythona (`test_*.py`, `*_test.py`) i Robota (`*.robot`)
+- hooki łapią też wzorce w kodzie, nie tylko nazwy plików: `test-file-guard` blokuje `t.Skip` (Go), `@pytest.mark.skip`/`pytest.skip`/`unittest.skip` (Python), słowo kluczowe `Skip` (Robot, tylko w `.robot`) i ostrzega o `time.sleep`/`time.Sleep`/Robot `Sleep`; `red-test-deletion-guard` liczy asercje per język — samo `assert x == y` (pytest), `t.Error/t.Fatal/t.Fail` (Go), `Should ...` (Robot) — więc usunięcie wszystkich asercji blokuje też w tych językach; +7 testów jednostkowych (41 → 48 w hookach)
+- README: sekcja emotek zsynchronizowana z kompaktowym słownikiem (16 statusów), policzby wiedzy (14), opis hooków wielojęzycznych, usunięte stwierdzenie że bundle bez `knowledge/` nie przechodzi `check`
 
 ### ✅ Dodane
 

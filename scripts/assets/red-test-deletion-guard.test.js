@@ -96,6 +96,46 @@ test('SILENT: rm of non-test lookalikes (contest.go, latest.py, robotics.md) sta
   }
 });
 
+/* ---------- multilingual assertion shapes (Go bare assert / t.Fatal / Robot Should) ---------- */
+
+test('BLOCK: edit stripping every assertion from a pytest / Go / Robot test file is denied', () => {
+  const py = runHook(
+    edit(
+      'tests/test_checkout.py',
+      'def test_checkout():\n    assert cart.total == 100\n',
+      'def test_checkout():\n    cart.checkout()\n',
+    ),
+  );
+  assert.equal(py.decision?.decision, 'deny', 'bare assert (no parens) must count as an assertion');
+  const go = runHook(edit('api/handler_test.go', 'if got != 1 {\n\tt.Fatal("bad")\n}', 'if got != 1 {\n\t_ = got\n}'));
+  assert.equal(go.decision?.decision, 'deny', 't.Fatal must count as an assertion');
+  const robot = runHook(
+    edit(
+      'e2e/smoke.robot',
+      'Smoke\n    ${total}=    Get Total\n    Should Be Equal    ${total}    100',
+      'Smoke\n    ${total}=    Get Total\n',
+    ),
+  );
+  assert.equal(robot.decision?.decision, 'deny', 'Robot Should Be Equal must count as an assertion');
+});
+
+test('WARN: shrinking assertions in a Python test file warns (2 -> 1), never denies', () => {
+  const { decision } = runHook(
+    edit(
+      'tests/test_cart.py',
+      'def test_cart():\n    assert a == 1\n    assert b == 2\n',
+      'def test_cart():\n    assert a == 1\n',
+    ),
+  );
+  assert.equal(decision.decision, 'allow');
+  assert.ok(decision.system_message.includes('shrinks assertions'), decision.system_message);
+});
+
+test('SILENT: stripping a t.Error from a non-test lookalike (contest.go) stays silent', () => {
+  const { decision } = runHook(edit('api/contest.go', 'if x {\n\tt.Error("bad")\n}', 'if x {\n}'));
+  assert.equal(decision, null);
+});
+
 test('BLOCK is downgraded to a warning when the command carries a waiver annotation', () => {
   const { decision } = runHook(
     bash('git rm tests/deprecated.spec.ts # waiver: owner=qa until=2026-12-31 ticket=QA-101'),

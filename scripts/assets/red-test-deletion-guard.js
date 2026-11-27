@@ -119,10 +119,23 @@ function commandStartToken(re) {
   return new RegExp(`(?:^|&&|\\|\\||[;&])(?:\\s|[a-z]-[a-z]\\s)*${re.source}`, re.flags);
 }
 
-const _ASSERTION = /\b(?:expect|assert)(?:\.[a-zA-Z]+)?\s*\(/;
+// Assertion shapes per language: JS/TS expect()/assert(...), Python's bare
+// `assert x == y` statement (no parens - a paren-only pattern was blind to
+// idiomatic pytest), Go's t.Error/t.Fatal/t.Fail family, and Robot's
+// `Should ...` library keywords at line start.
+const ASSERTION_PATTERNS = [
+  /\b(?:expect|assert)(?:\.[a-zA-Z]+)?\s*\(/g,
+  /^[ \t]*assert[ \t]+\S/gm,
+  /\bt\.(?:Error|Fatal|Fail)(?:f|Now)?\s*\(/g,
+  /^[ \t]*Should[ \t]+\S+/gm,
+];
 function countAssertions(text) {
-  const m = text.match(/\b(?:expect|assert)(?:\.[a-zA-Z]+)?\s*\(/g);
-  return m ? m.length : 0;
+  let n = 0;
+  for (const re of ASSERTION_PATTERNS) {
+    const m = text.match(re);
+    if (m) n += m.length;
+  }
+  return n;
 }
 
 /**

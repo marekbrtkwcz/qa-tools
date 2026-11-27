@@ -131,6 +131,48 @@ test('BASH: heredoc into a test_*.py warns about the bypass', () => {
   assert.ok(decision.system_message.includes('bypasses test-file-guard'), decision.system_message);
 });
 
+/* ---------- multilingual skip/sleep code patterns (Go / Python / Robot) ---------- */
+
+test('BLOCK: Go t.Skip, pytest.mark.skip and Robot Skip keyword in test files are denied with the waiver hint', () => {
+  const cases = [
+    ['internal/api/handler_test.go', 'func TestX(t *testing.T) {\n\tt.Skip("not now")\n}\n'],
+    ['tests/test_checkout.py', '@pytest.mark.skip(reason="flaky")\ndef test_checkout():\n    pass\n'],
+    ['tests/test_other.py', 'import pytest\npytest.skip("later")\n'],
+    ['e2e/smoke.robot', '*** Test Cases ***\nSmoke\n    Skip    not ready\n'],
+  ];
+  for (const [p, content] of cases) {
+    const { status, decision } = runHook(writeFile(p, content));
+    assert.equal(status, 0);
+    assert.equal(decision?.decision, 'deny', `expected deny for ${p}`);
+    assert.ok(decision.reason.includes('waiver'), `deny reason must name the waiver hatch for ${p}`);
+  }
+});
+
+test('PARDON: t.Skip with a waiver annotation is allowed with a warning', () => {
+  const { decision } = runHook(
+    writeFile('internal/api/handler_test.go', 't.Skip("x") // waiver: owner=qa until=2026-12-31\n'),
+  );
+  assert.equal(decision.decision, 'allow');
+  assert.ok(decision.system_message.includes('waiver'), decision.system_message);
+});
+
+test('WARN: time.sleep / time.Sleep / Robot Sleep in test files warn, never deny', () => {
+  const py = runHook(writeFile('tests/test_api.py', 'import time\n\ndef test_x():\n    time.sleep(2)\n'));
+  assert.equal(py.decision.decision, 'allow');
+  assert.ok(py.decision.system_message.includes('time.sleep'), py.decision.system_message);
+  const go = runHook(writeFile('api/handler_test.go', 'time.Sleep(500 * time.Millisecond)\n'));
+  assert.equal(go.decision.decision, 'allow');
+  assert.ok(go.decision.system_message.includes('time.Sleep'), go.decision.system_message);
+  const robot = runHook(writeFile('e2e/smoke.robot', '*** Test Cases ***\nSmoke\n    Sleep    2s\n'));
+  assert.equal(robot.decision.decision, 'allow');
+  assert.ok(robot.decision.system_message.includes('Sleep'), robot.decision.system_message);
+});
+
+test('Robot Skip/Sleep keywords do not fire outside .robot files', () => {
+  const { decision } = runHook(writeFile('src/app.test.ts', 'const x = 1;\nSkip this for now\nSleep tight\n'));
+  assert.equal(decision, null, 'file-scoped Robot patterns must stay silent in JS test files');
+});
+
 test('PARDON: a skip with a waiver annotation is allowed with a pointed warning', () => {
   const { status, decision } = runHook(
     writeFile(
