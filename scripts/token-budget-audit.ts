@@ -14,6 +14,11 @@
  *     body budget over scripts/token-budget-baseline.json fails, so new fat
  *     cannot land silently. Shrinking is reported and baseline can be
  *     re-frozen with --update-baseline.
+ *   - built plugins/ audit: the src/ numbers are blind to what the build
+ *     appends to every generated SKILL.md / agent TOML (the shared style
+ *     block from src/shared/emoji-style.md). --check fails when that block
+ *     exceeds CONFIG.sharedStyleFailTokens per file; report mode prints the
+ *     duplicated total (per-file tokens x injected file count).
  *
  * Token estimate is chars/4 — deliberately crude but deterministic and
  * conservative for English/Polish prose.
@@ -27,6 +32,8 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const SRC_SKILLS = path.join(__dirname, '..', 'src', 'skills');
+const PLUGINS_DIR = path.join(__dirname, '..', 'plugins');
+const SHARED_STYLE_FILE = path.join(__dirname, '..', 'src', 'shared', 'emoji-style.md');
 const BASELINE_FILE = path.join(__dirname, 'token-budget-baseline.json');
 
 const CONFIG = {
@@ -34,6 +41,11 @@ const CONFIG = {
   descFailChars: 700,
   bodyWarnTokens: 4500,
   bodyFailTokens: 5000,
+  // The shared style block (src/shared/emoji-style.md) is appended by the build
+  // to every generated SKILL.md and agent TOML, so its size is pure duplicated
+  // context: injectedFiles x block tokens on every activation of any asset.
+  sharedStyleWarnTokens: 300,
+  sharedStyleFailTokens: 450,
   maxWarningsShown: 10,
 };
 
@@ -132,6 +144,99 @@ function collectTotals(audits: SkillAudit[]): Totals {
   };
 }
 
+/* ---------- built plugins/ audit (post-build overhead) ---------- */
+
+type BuiltAudit = {
+  packCount: number;
+  skillCount: number;
+  agentCount: number;
+  builtBodyTokensEst: number;
+  sharedStyleTokensEst: number;
+  injectedFiles: number;
+  duplicatedTokensEst: number;
+};
+
+/**
+ * Audits the BUILT plugins/ tree, not src/: the src audit above is blind to
+ * what scripts/build.ts appends to every generated SKILL.md and agent TOML
+ * (the shared emoji/style block). That block is copied into every built file,
+ * so its cost is duplicatedTokensEst = per-file tokens x injected file count.
+ */
+function auditBuiltPlugins(pluginsDir: string = PLUGINS_DIR): BuiltAudit | null {
+  if (!fs.existsSync(pluginsDir)) return null;
+  const shared = fs.existsSync(SHARED_STYLE_FILE) ? fs.readFileSync(SHARED_STYLE_FILE, 'utf8') : '';
+  const marker =
+    shared
+      .split(/\r?\n/)
+      .find((l: string) => l.trim().length > 0)
+      ?.trim() ?? '';
+  const sharedStyleTokensEst = estimateTokens(shared.replace(/\s+$/, '').length);
+
+  let packCount = 0;
+  let skillCount = 0;
+  let agentCount = 0;
+  let builtBodyTokensEst = 0;
+  let injectedFiles = 0;
+
+  for (const pack of fs.readdirSync(pluginsDir, { withFileTypes: true })) {
+    if (!pack.isDirectory()) continue;
+    packCount++;
+    const packDir = path.join(pluginsDir, pack.name);
+
+    const skillsDir = path.join(packDir, 'skills');
+    if (fs.existsSync(skillsDir)) {
+      for (const skill of fs.readdirSync(skillsDir, { withFileTypes: true })) {
+        if (!skill.isDirectory()) continue;
+        const file = path.join(skillsDir, skill.name, 'SKILL.md');
+        if (!fs.existsSync(file)) continue;
+        skillCount++;
+        const text = fs.readFileSync(file, 'utf8');
+        const parsed = splitFrontmatter(text);
+        if (parsed) builtBodyTokensEst += estimateTokens(parsed.body.length);
+        if (marker && text.includes(marker)) injectedFiles++;
+      }
+    }
+
+    const agentsDir = path.join(packDir, 'ai.mistral.vibe', 'agents');
+    if (fs.existsSync(agentsDir)) {
+      for (const agent of fs.readdirSync(agentsDir)) {
+        if (!agent.endsWith('.toml')) continue;
+        agentCount++;
+        const text = fs.readFileSync(path.join(agentsDir, agent), 'utf8');
+        if (marker && text.includes(marker)) injectedFiles++;
+      }
+    }
+  }
+
+  return {
+    packCount,
+    skillCount,
+    agentCount,
+    builtBodyTokensEst,
+    sharedStyleTokensEst,
+    injectedFiles,
+    duplicatedTokensEst: sharedStyleTokensEst * injectedFiles,
+  };
+}
+
+/** Gate on the shared injected block: warn/fail on per-file size, report the duplication. */
+function checkSharedStyle(built: BuiltAudit | null): { violations: string[]; warnings: string[] } {
+  if (!built || built.sharedStyleTokensEst === 0) return { violations: [], warnings: [] };
+  const msg = `shared style block (src/shared/emoji-style.md) is ~${built.sharedStyleTokensEst} tok/file, injected into ${built.injectedFiles} built files (~${built.duplicatedTokensEst} tok duplicated across plugins/)`;
+  if (built.sharedStyleTokensEst > CONFIG.sharedStyleFailTokens) {
+    return {
+      violations: [
+        `${msg} — max ~${CONFIG.sharedStyleFailTokens} tok/file; shrink the shared block or stop injecting it per file`,
+      ],
+      warnings: [],
+    };
+  }
+  if (built.sharedStyleTokensEst > CONFIG.sharedStyleWarnTokens) {
+    return { violations: [], warnings: [`${msg} — warn threshold ~${CONFIG.sharedStyleWarnTokens} tok/file`] };
+  }
+  return { violations: [], warnings: [] };
+}
+
 /* ---------- gates ---------- */
 
 function checkBudgets(audits: SkillAudit[], errors: string[]): { violations: string[]; warnings: string[] } {
@@ -211,7 +316,11 @@ function main(): void {
 
   const { audits, errors } = auditCollection();
   const totals = collectTotals(audits);
-  const { violations } = checkBudgets(audits, errors);
+  const built = auditBuiltPlugins();
+  const { violations, warnings } = checkBudgets(audits, errors);
+  const sharedStyle = checkSharedStyle(built);
+  violations.push(...sharedStyle.violations);
+  warnings.push(...sharedStyle.warnings);
 
   if (mode === 'update') {
     writeBaseline(totals);
@@ -255,6 +364,15 @@ function main(): void {
     `  always-loaded:  ~${totals.descriptionTokensEst} tok descriptions (avg ~${Math.round(totals.descriptionTokensEst / Math.max(totals.skillCount, 1))}/skill)`,
   );
   console.log(`  load-on-activate: ~${totals.bodyTokensEst} tok bodies`);
+  if (built) {
+    console.log(
+      `  built plugins/: ${built.packCount} packs, ${built.skillCount} skills + ${built.agentCount} agents, ~${built.builtBodyTokensEst} tok bodies`,
+    );
+    console.log(
+      `  shared injected block: ~${built.sharedStyleTokensEst} tok/file × ${built.injectedFiles} files = ~${built.duplicatedTokensEst} tok duplicated across plugins/`,
+    );
+  }
+  for (const w of warnings.slice(0, CONFIG.maxWarningsShown)) console.log(`  ⚠️ ${w}`);
   const baseline = readBaseline();
   if (
     baseline &&
@@ -286,11 +404,15 @@ if (require.main === module) {
 module.exports = {
   CONFIG,
   BASELINE_FILE,
+  PLUGINS_DIR,
+  SHARED_STYLE_FILE,
   splitFrontmatter,
   extractDescription,
   estimateTokens,
   auditSkillFile,
   auditCollection,
+  auditBuiltPlugins,
+  checkSharedStyle,
   collectTotals,
   checkBudgets,
   checkRatchet,

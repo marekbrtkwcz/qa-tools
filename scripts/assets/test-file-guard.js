@@ -10,7 +10,8 @@
  * Severity model (Vibe hooks wire protocol):
  * - BLOCK: test.only()/it.only()/fit() (focused run) and it.skip()/xit()/
  *   describe.skip() (silenced tests) in a file whose name says it is a test
- *   file (.test/.spec, tests/, e2e/, __tests__). Zero false positives, so it
+ *   file (.test/.spec, *_test.go, test_*.py, *_test.py, *.robot, tests/,
+ *   e2e/, __tests__). Zero false positives, so it
  *   is denied via the structured-response JSON on stdout:
  *   {"decision": "deny", "reason": "..."} with exit code 0. A committed
  *   .only() silently runs a subset; a committed .skip() silently disables
@@ -62,13 +63,18 @@ function logLine(line) {
   }
 }
 
-const TEST_FILE = /\.(test|spec)\.[jt]sx?$|(^|[\\/])(tests?|e2e|__tests__)[\\/]/i;
+// Test-file name classes: JS/TS (.test/.spec.[jt]sx?), Go (*_test.go),
+// Python (test_*.py, *_test.py), Robot Framework (*.robot), plus test
+// directories (tests/, test/, e2e/, __tests__/).
+const TEST_FILE =
+  /\.(?:test|spec)\.[jt]sx?$|\.robot$|_test\.go$|_test\.py$|(^|[\\/])test_[^\\/]*\.py$|(^|[\\/])(?:tests?|e2e|__tests__)[\\/]/i;
 
 // In bash commands a test path is embedded mid-command, so TEST_FILE's
 // anchors ($ for the extension, ^ or a slash before the directory) never
 // fire. The loose matcher trades precision for recall - it is only used in
 // warn-only bash mode, where a false hit costs a warning, not a deny.
-const TEST_FILE_BASH = /\.(?:test|spec)\.[jt]sx?\b|\b(?:tests?|e2e|__tests__)\//i;
+const TEST_FILE_BASH =
+  /\.(?:test|spec)\.[jt]sx?\b|\.robot\b|_test\.go\b|_test\.py\b|\btest_[^\s"'|;&]*\.py\b|\b(?:tests?|e2e|__tests__)\//i;
 
 // Blocking smells: focused-run filters and silenced tests. `pardonable`
 // skips are downgraded to a warning when the same write carries a waiver

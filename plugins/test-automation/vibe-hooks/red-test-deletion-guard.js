@@ -61,11 +61,16 @@ function logLine(line) {
   }
 }
 
-const TEST_FILE = /\.(test|spec)\.[jt]sx?$|(^|[\\/])(tests?|e2e|__tests__)[\\/]/i;
+// Test-file name classes: JS/TS (.test/.spec.[jt]sx?), Go (*_test.go),
+// Python (test_*.py, *_test.py), Robot Framework (*.robot), plus test
+// directories (tests/, test/, e2e/, __tests__/).
+const TEST_FILE =
+  /\.(?:test|spec)\.[jt]sx?$|\.robot$|_test\.go$|_test\.py$|(^|[\\/])test_[^\\/]*\.py$|(^|[\\/])(?:tests?|e2e|__tests__)[\\/]/i;
 
 // Loose matcher for bash mode (anchors never fire mid-command); warn-only
 // contexts only, where a false hit costs a warning, not a deny.
-const TEST_FILE_BASH = /\.(?:test|spec)\.[jt]sx?\b|\b(?:tests?|e2e|__tests__)\//i;
+const TEST_FILE_BASH =
+  /\.(?:test|spec)\.[jt]sx?\b|\.robot\b|_test\.go\b|_test\.py\b|\btest_[^\s"'|;&]*\.py\b|\b(?:tests?|e2e|__tests__)\//i;
 // Deletion directories also count: removing "tests/" or "e2e/" as a whole
 // removes every test inside without naming a single test file. The trailing
 // slash is required on purpose: a bare "test" token at the end of a command

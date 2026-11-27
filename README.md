@@ -4,12 +4,13 @@ Narzędzia dla testera automatyzującego — **natywne pluginy dla [Mistral Vibe
 
 Repozytorium inspirowane ideą i strukturą projektu **[awesome-agents-for-quality](https://github.com/jaktestowac/awesome-agents-for-quality)** (MIT, jaktestowac.pl). Wszystkie treści `src/` pochodzą z tego projektu (adaptacja na format natywny Vibe).
 
-## ✨ Kolekcja — 9 bundle'ów + 4 orkiestracje + 1 wtyczka MCP
+## ✨ Kolekcja — 10 bundle'ów + 4 orkiestracje + 1 wtyczka MCP
 
 | Plugin | Skille | Agenci | Knowledge | Hook | Zakres |
 |---|---|---|---|---|---|
 | `qa-core` 🧭 | 39 | 5 | 1 | — | planowanie testów, eksploracja, bug reporty, RTM, kryteria akceptacji, integracja trackerów (Xray/TestRail/Jira), manualny release pass (instalacja/upgrade/rollback), usability quick-pass, testowanie dokumentacji, standard zapisu rekordów testowych |
-| `test-automation` 🤖 | 63 | 5 | 3 | ✅ test-file-guard, red-test-deletion-guard | unit testy, TDD, Playwright, mocki, flakiness, review, bootstrap suity, raporty/artefakty CI, mutacja (Stryker), portowanie na pytest/JUnit/NUnit |
+| `test-automation` 🤖 | 57 | 5 | 3 | ✅ test-file-guard, red-test-deletion-guard | unit testy, TDD, Playwright, mocki, flakiness, review, bootstrap suity, raporty/artefakty CI, mutacja (Stryker) |
+| `test-automation-stacks` 🧰 | 6 | — | — | — | opcjonalne stacki językowe/narzędziowe obok `test-automation`: Go, Python/pytest, portowanie na pytest/JUnit/NUnit, Robot Framework, SVN, Bun |
 | `api-testing` 🔌 | 16 | 2 | 1 | — | automatyzacja API (Playwright), contract testing: schema/OpenAPI (L25) + Pact (consumer-driven) |
 | `non-functional-testing` ⚡ | 23 | 1 | 1 | — | accessibility, performance/load, security: macierz authz + IDOR, security regression smoke po zmianach auth, limity/lockouty (abuse), API security checklist |
 | `pentesting` 🕵️ | 11 | 1 | 1 | — | pentest web + API + warstwa sieci/infra na autoryzowanych targetach: rules of engagement (charter + gate autoryzacji + pre-autoryzowane laby), recon i mapa powierzchni ataku, testy klas OWASP Top 10 (access control, injection, auth/session, XSS/CSRF, SSRF), triage eksponowanych usług, słabości TLS i konfiguracji cloud/IaC, raport CVSS z wariantami per odbiorca i retest planem, weryfikacja napraw na fixed buildzie |
@@ -23,7 +24,7 @@ Repozytorium inspirowane ideą i strukturą projektu **[awesome-agents-for-quali
 | `ui-api-automation` 🖥️ | 1 | 7 | 1 | — | paczka: pipeline testów UI + API (explorers → plan → implement → run) |
 | `ui-api-automation-minimal` 🧪 | 1 | 4 | 1 | — | paczka: minimalna wersja powyższego |
 
-Razem: **14 pluginów**, **199 skilli**, **44 subagentów**, **14 knowledge**, **2 quality-gate hooki**.
+Razem: **15 pluginów**, **199 skilli**, **44 subagentów**, **14 knowledge**, **2 quality-gate hooki**.
 
 Paczki orkiestracyjne działają jak w źródle: driver-skill (user-invocable) prowadzi orkiestrację, każdy krok delegujesz do subagenta przez `tools.agents` + `config_name` (np. `plan-explore-review-commit:perc-implementer`); GUIDE paczki jest jej knowledge. Build przepisuje instrukcje hostów (Claude Code / Codex) na Vibe: tabela agentów dostaje kolumnę `Vibe` z dokładnie tymi `config_name`, które Vibe potrafi zespawnować.
 
@@ -108,7 +109,7 @@ qa-tools/
 │   ├── build.test.ts                  # testy jednostkowe builda (node:test)
 │   ├── validate-manifests.ts          # walidacja JSON manifestów w plugins/
 │   └── assets/                        # skrypty hooków + ich testy (node --test)
-└── plugins/<bundle>/              # artefakt buildu — do skopiowania (13 pluginów)
+└── plugins/<bundle>/              # artefakt buildu — do skopiowania (15 pluginów)
     ├── plugin.json                    # manifest Agent Plugins 1.0 + rozszerzenie ai.mistral.vibe
     ├── skills/                        # 1:1 ze src
     ├── mcp.json                       # tylko w pluginach deklarujących mcp: (dziś: qa-mcp)
@@ -210,7 +211,7 @@ Konwencje potwierdzone testami (patrz historia commitów): klucze TOML **snake_c
 
 ## ✅ Co zostało zwalidowane (Vibe headless)
 
-- 13 pluginów ładuje się bez błędów walidacji (`plugin.*.invalid`); `mobile-testing` potwierdzony headless po instalacji 2026-11 (bramki builda i manifestów + walidacja instalacji: parzystość plików `plugins/`↔`~/.vibe/plugins`, wersje manifestów, obecność skilli/agentów + załadowanie w sesji Vibe)
+- 15 pluginów ładuje się bez błędów walidacji (`plugin.*.invalid`); `mobile-testing` potwierdzony headless po instalacji 2026-11 (bramki builda i manifestów + walidacja instalacji: parzystość plików `plugins/`↔`~/.vibe/plugins`, wersje manifestów, obecność skilli/agentów + załadowanie w sesji Vibe)
 - 156 skilli widocznych dla modelu (199 − 43 z `disable-model-invocation: true`; policzone z frontmatterów `src/skills`, pilnuje tego bramka `checkReadmeCounts` w buildzie; user-invocable dostępne na wywołanie — w tym 4 driver-skille paczek)
 - spawn subagentów z personami z instrukcji: `qa-core:rubber-duck` 🦆, `quality-gates:change-gate-reviewer`, `test-automation:test-code-reviewer`, `orchestration-basics:basics-analyst`
 - 7 knowledge folders (3 z bundle'ów + 4 GUIDE paczek orkiestracyjnych)

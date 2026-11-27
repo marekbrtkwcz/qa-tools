@@ -259,7 +259,7 @@ test('Stats: known repo state — manifest liczy tyle, co pliki na dysku', () =>
   const counts = countFromBundles(bundles);
 
   // Kanarek: liczba pluginów odpowiada tabeli „Razem:" w README
-  assert.strictEqual(counts.plugins, 14);
+  assert.strictEqual(counts.plugins, 15);
 
   // bundles.yaml musi pokrywać dokładnie to, co leży na dysku — łapie
   // przypadkowe usunięcie assetu z bundles.yaml albo z src/skills

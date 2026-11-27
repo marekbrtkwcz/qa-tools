@@ -107,6 +107,30 @@ test('BLOCK: describe-skip added via edit to an e2e/ file is denied', () => {
   assert.ok(decision.reason.includes(C.describeSkip));
 });
 
+/* ---------- multilingual test-file names (Go / Python / Robot) ---------- */
+
+test('BLOCK: a blocked smell in a Go _test.go, pytest test_*.py or *.robot file is denied, not just warned', () => {
+  for (const p of ['internal/api/handler_test.go', 'tests/test_checkout.py', 'unit/calc_test.py', 'e2e/smoke.robot']) {
+    const { status, decision } = runHook(writeFile(p, `${C.itSkip}"x", () => {});\n`));
+    assert.equal(status, 0);
+    assert.equal(decision?.decision, 'deny', `expected deny for ${p}`);
+  }
+});
+
+test('the same smell in a non-test lookalike (contest.go, latest.py) stays warn-only', () => {
+  for (const p of ['internal/api/contest.go', 'scripts/latest.py', 'docs/robotics.md']) {
+    const { decision } = runHook(writeFile(p, `${C.itSkip}"x", () => {});\n`));
+    assert.equal(decision?.decision, 'allow', `expected warn-only for ${p}`);
+    assert.ok(decision.system_message.includes('outside a test-named file'), p);
+  }
+});
+
+test('BASH: heredoc into a test_*.py warns about the bypass', () => {
+  const { decision } = runHook(bash(`cat > tests/test_login.py <<EOF\n${C.testOnly}"x", () => {})\nEOF\n`));
+  assert.equal(decision.decision, 'allow');
+  assert.ok(decision.system_message.includes('bypasses test-file-guard'), decision.system_message);
+});
+
 test('PARDON: a skip with a waiver annotation is allowed with a pointed warning', () => {
   const { status, decision } = runHook(
     writeFile(

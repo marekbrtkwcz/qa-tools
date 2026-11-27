@@ -77,7 +77,6 @@ test-automation:
     - fix-tests
     - flaky-test-policy
     - git-for-testers
-    - go-for-testers
     - hybrid-ui-api-testing
     - implementing-bdd-tests
     - migrate-tests-to-playwright
@@ -88,18 +87,14 @@ test-automation:
     - playwright-explore-website
     - playwright-explore-website-requests
     - playwright-generate-test
-    - port-suite-to-python-java
     - property-based-testing
-    - python-for-testers
     - refactor-to-page-objects
     - refactoring-api-tests
-    - robot-framework-automation
     - running-visual-regression-tests
     - self-healing-locators
     - selector-strategy
     - stabilize-flaky-tests
     - stabilizing-flaky-tests
-    - svn-for-testers
     - static-code-analysis-typescript
     - tech-debt-audit
     - test-data-factories
@@ -116,7 +111,6 @@ test-automation:
     - testing-server-sent-events
     - testing-scheduled-jobs
     - testing-websockets
-    - testing-with-bun
     - testing-with-testcontainers
     - typescript-for-testers
     - unslop-tests
@@ -136,6 +130,21 @@ test-automation:
   hooks:
     - test-file-guard
     - red-test-deletion-guard
+
+# Optional stack-specific skills split out of test-automation so a TS/Playwright
+# project does not load routing descriptions for Go/Python/Robot/SVN/Bun.
+# Install alongside test-automation only when the project uses that stack.
+test-automation-stacks:
+  icon: 🧰
+  description: "Optional language and tool stacks for test automation: Go, Python/pytest, Robot Framework, SVN, Bun, and porting conventions to pytest/JUnit/NUnit. Install alongside test-automation only when the project uses that stack."
+  version: "0.7.0"
+  skills:
+    - go-for-testers
+    - port-suite-to-python-java
+    - python-for-testers
+    - robot-framework-automation
+    - svn-for-testers
+    - testing-with-bun
 
 api-testing:
   icon: 🔌

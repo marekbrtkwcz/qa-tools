@@ -161,3 +161,75 @@ test('checkRatchet: spadek i bez zmian przechodzi czysto', () => {
   assert.deepEqual(checkRatchet({ ...baseline, descriptionTokensEst: 1000, bodyTokensEst: 4900 }, baseline), []);
   assert.deepEqual(checkRatchet(baseline, baseline), []);
 });
+
+/* ---------- auditBuiltPlugins / checkSharedStyle ---------- */
+
+const { auditBuiltPlugins, checkSharedStyle } = require('./token-budget-audit.ts');
+
+function makeBuiltPack(root: string, pack: string, skills: string[], agents: string[], styleBlock: string): void {
+  for (const s of skills) {
+    const dir = path.join(root, pack, 'skills', s);
+    fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(path.join(dir, 'SKILL.md'), `---\nname: ${s}\ndescription: 'd'\n---\nbody of ${s}\n${styleBlock}`);
+  }
+  for (const a of agents) {
+    const dir = path.join(root, pack, 'ai.mistral.vibe', 'agents');
+    fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(
+      path.join(dir, `${a}.toml`),
+      `name = "${a}"\ninstructions = "body\\n${styleBlock.replace(/\n/g, '\\n')}"\n`,
+    );
+  }
+}
+
+test('auditBuiltPlugins: liczy pliki, body i duplikację wstrzykniętego bloku', () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'token-audit-built-'));
+  // checkSharedStyle czyta rozmiar bloku z prawdziwego src/shared/emoji-style.md,
+  // więc marker bloku bierzemy stamtąd, żeby injectedFiles było realne.
+  const realStyle = fs.readFileSync(path.join(__dirname, '..', 'src', 'shared', 'emoji-style.md'), 'utf8');
+  const marker =
+    realStyle
+      .split(/\r?\n/)
+      .find((l: string) => l.trim().length > 0)
+      ?.trim() ?? '';
+  const styleBlock = `\n${marker}\n| ✅ | ok |\n`;
+  makeBuiltPack(root, 'pack-a', ['s1', 's2'], ['a1'], styleBlock);
+  makeBuiltPack(root, 'pack-b', ['s3'], [], styleBlock);
+
+  const built = auditBuiltPlugins(root);
+  assert.ok(built);
+  assert.equal(built.packCount, 2);
+  assert.equal(built.skillCount, 3);
+  assert.equal(built.agentCount, 1);
+  assert.equal(built.injectedFiles, 4);
+  assert.ok(built.builtBodyTokensEst > 0);
+  // duplicated = per-file tokens of the REAL shared block x injected files
+  const expectedPerFile = Math.ceil(realStyle.replace(/\s+$/, '').length / 4);
+  assert.equal(built.sharedStyleTokensEst, expectedPerFile);
+  assert.equal(built.duplicatedTokensEst, expectedPerFile * 4);
+  fs.rmSync(root, { recursive: true, force: true });
+});
+
+test('auditBuiltPlugins: brak katalogu plugins/ zwraca null', () => {
+  assert.equal(auditBuiltPlugins(path.join(os.tmpdir(), 'definitely-not-there-qa-tools')), null);
+});
+
+test('checkSharedStyle: blok ponad fail = violation, ponad warn = warning, mały = czysto', () => {
+  const mk = (tok: number) => ({
+    packCount: 1,
+    skillCount: 1,
+    agentCount: 0,
+    builtBodyTokensEst: 10,
+    sharedStyleTokensEst: tok,
+    injectedFiles: 243,
+    duplicatedTokensEst: tok * 243,
+  });
+  const over = checkSharedStyle(mk(CONFIG.sharedStyleFailTokens + 1));
+  assert.equal(over.violations.length, 1);
+  assert.ok(over.violations[0].includes('duplicated across plugins/'));
+  const warn = checkSharedStyle(mk(CONFIG.sharedStyleWarnTokens + 1));
+  assert.equal(warn.violations.length, 0);
+  assert.equal(warn.warnings.length, 1);
+  assert.deepEqual(checkSharedStyle(mk(10)), { violations: [], warnings: [] });
+  assert.deepEqual(checkSharedStyle(null), { violations: [], warnings: [] });
+});

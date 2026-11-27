@@ -4,6 +4,12 @@ Wszystkie istotne zmiany tego projektu są dokumentowane tutaj. Format zbliżony
 
 ## [Unreleased]
 
+### 🔄 Zmienione
+
+- split `test-automation` (63 → 57 skilli): nowy opcjonalny bundle `test-automation-stacks` (`go-for-testers`, `python-for-testers`, `port-suite-to-python-java`, `robot-framework-automation`, `svn-for-testers`, `testing-with-bun`) — projekt TS/Playwright nie ładuje już opisów obcych stacków przy starcie sesji; 6 case'ów eval przeniesionych do suite `test-automation-stacks` (12 → 6 + 6)
+- `src/shared/emoji-style.md` skrócony z 199 linii (~2493 tok) do 13 linii / 16 jednoznacznych statusów (~271 tok) — build wstrzykuje ten blok do każdego SKILL.md i TOML agenta, więc `plugins/` maleje z 5,27 MB do ~3,1 MB (~2,4 MB duplikatów → ~66 KB); `scripts/token-budget-audit.ts` audytuje teraz też zbudowane `plugins/` i w `--check` bramkuje rozmiar wstrzykiwanego bloku (warn ~300, fail ~450 tok/plik)
+- hooki `test-file-guard` i `red-test-deletion-guard` rozpoznają też pliki testowe Go (`*_test.go`), Pythona (`test_*.py`, `*_test.py`) i Robota (`*.robot`)
+
 ### ✅ Dodane
 
 - skill `go-for-testers` (test-automation): odpowiednik `python-for-testers` dla Go — single toolchain + `go.mod`, table-driven tests z subtestami (`t.Run`, `t.Parallel`), narzędzia `t` (`t.Helper`/`t.Cleanup`/`t.TempDir`/`t.Setenv`), `httptest` jako double API, interfejsy consumer-side zamiast mock-frameworków, gate `-race -count=1 -shuffle=on`, `golangci-lint` jako bramka CI, chromedp/playwright-go na E2E; + zasoby `cheatsheet.md` i `go-project-config.md` (198 → 199 skilli; test-automation 62 → 63)

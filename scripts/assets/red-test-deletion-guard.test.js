@@ -79,6 +79,23 @@ test('BLOCK: mv of a test file out of the suite is denied', () => {
   assert.ok(decision.reason.includes('mv'), decision.reason);
 });
 
+/* ---------- deny: multilingual test-file names (Go / Python / Robot) ---------- */
+
+test('BLOCK: rm of Go _test.go, pytest test_*.py / *_test.py and *.robot files is denied', () => {
+  for (const p of ['internal/api/handler_test.go', 'tests/test_checkout.py', 'unit/calc_test.py', 'e2e/smoke.robot']) {
+    const { status, decision } = runHook(bash(`rm ${p}`));
+    assert.equal(status, 0);
+    assert.equal(decision?.decision, 'deny', `expected deny for ${p}`);
+  }
+});
+
+test('SILENT: rm of non-test lookalikes (contest.go, latest.py, robotics.md) stays silent', () => {
+  for (const p of ['internal/api/contest.go', 'scripts/latest.py', 'docs/robotics.md']) {
+    const { decision } = runHook(bash(`rm ${p}`));
+    assert.equal(decision, null, `expected silence for ${p}`);
+  }
+});
+
 test('BLOCK is downgraded to a warning when the command carries a waiver annotation', () => {
   const { decision } = runHook(
     bash('git rm tests/deprecated.spec.ts # waiver: owner=qa until=2026-12-31 ticket=QA-101'),

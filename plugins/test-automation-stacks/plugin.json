@@ -1,0 +1,25 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "test-automation-stacks",
+  "version": "0.7.0",
+  "description": "Optional language and tool stacks for test automation: Go, Python/pytest, Robot Framework, SVN, Bun, and porting conventions to pytest/JUnit/NUnit. Install alongside test-automation only when the project uses that stack.",
+  "author": {
+    "name": "qa-tools contributors",
+    "url": "https://github.com/marekbrtkwcz/qa-tools"
+  },
+  "homepage": "https://github.com/marekbrtkwcz/qa-tools",
+  "repository": "https://github.com/marekbrtkwcz/qa-tools",
+  "license": "MIT",
+  "keywords": [
+    "testing",
+    "quality-engineering",
+    "vibe-cli",
+    "test-automation-stacks"
+  ],
+  "extensions": {
+    "ai.mistral.vibe": {
+      "schemaVersion": 1,
+      "displayName": "test-automation-stacks 🧰 (qa-tools)"
+    }
+  }
+}
