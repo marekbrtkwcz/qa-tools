@@ -48,7 +48,7 @@ The one that matters most for AI-assisted teams: **intent debt is the debt an ag
 **First run, on a project with no agreed strategy:**
 
 1. Install the `quality-gates` plugin (see the quick start in the main README) and copy the two rules for your tool from `rules/`.
-2. Run `/derive-quality-contract` (`$derive-quality-contract` in Codex). Answer the criticality questions - the profile they set drives every requirement level. Confirm the triple.
+2. Run `/derive-quality-contract`. Answer the criticality questions - the profile they set drives every requirement level. Confirm the triple.
 3. Read the blockers. If there are more than a handful, the profile was probably aspirational; re-derive.
 4. Run `/audit-quality-debt` to find what the repo has quietly stopped enforcing. Expect more suppressions than anyone predicted.
 5. Fix, waive or delete each finding. Register every waiver with a reason, an owner and an expiry (`governing-quality-waivers`).

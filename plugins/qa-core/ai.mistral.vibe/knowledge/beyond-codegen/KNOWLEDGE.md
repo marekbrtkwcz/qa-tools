@@ -31,8 +31,8 @@ Skip it for a static page, a one-field form, or a quick smoke test. There, the s
 
 ## How to use
 
-1. Install the `qa-core` and `test-automation` plugins (see the quick start in the main README). In Codex, also copy `qa-core`'s `codex/agents/ai-architect.toml` into `.codex/agents/`.
-2. Run `/edge-case-scenario-generator` (`$edge-case-scenario-generator` in Codex). Give it the user story and, separately, the states the main entity can be in (`Pending Payment`, `Paid`, `Cancelled`, …). Without the states it cannot produce invalid-transition scenarios, and those are the ones one-shot generation never finds.
+1. Install the `qa-core` and `test-automation` plugins (see the quick start in the main README). In Vibe, the plugin's agents install with the plugin itself - spawn them with `tools.agents`.
+2. Run `/edge-case-scenario-generator`. Give it the user story and, separately, the states the main entity can be in (`Pending Payment`, `Paid`, `Cancelled`, …). Without the states it cannot produce invalid-transition scenarios, and those are the ones one-shot generation never finds.
 3. Review `spec/edge-cases.md` before any code is written (see below). Edit the file directly; it is the contract for stage 2.
 4. Run `/test-generator` with `spec/edge-cases.md` as the plan, or `/playwright-generate-test` with a single scenario when you want it verified in the live app first.
 5. Check the generated tests against the scenarios: one test (or one `test.step` group) per approved scenario, each `Then` backed by an assertion. A scenario with no matching assertion was dropped on the way, so put it back.

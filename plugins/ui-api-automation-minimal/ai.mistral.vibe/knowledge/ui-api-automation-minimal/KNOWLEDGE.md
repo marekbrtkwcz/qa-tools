@@ -30,11 +30,11 @@ The orchestrator stops and asks when the app URL, the spec, credentials or the s
 
 ## Starting the pack
 
-See the plugin README: pick **QA Orchestrator (Minimal)** in Copilot's agent dropdown, run `/ui-api-automation-minimal` in Claude Code, or `$ui-api-automation-minimal` in Codex after copying the agents.
+See the plugin README: run `/ui-api-automation-minimal` in Vibe.
 
 ## Prerequisites
 
-- For UI exploration, the **Playwright MCP server**. The plugin configures it in Claude Code and Codex; in Copilot, configure it in VS Code. See [microsoft/playwright-mcp](https://github.com/microsoft/playwright-mcp).
+- For UI exploration, the **Playwright MCP server**. The `qa-mcp` plugin configures it in Vibe. See [microsoft/playwright-mcp](https://github.com/microsoft/playwright-mcp).
 - For API exploration, an OpenAPI spec (file or URL).
 
 ## Output contract

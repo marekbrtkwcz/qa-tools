@@ -8,7 +8,7 @@ disable-model-invocation: true
 
 ## Who does the work
 
-Hand this task to the `accessibility-expert` agent (`accessibility_expert` in Codex). If that agent is not installed, do the task yourself, following the steps below.
+Hand this task to the `accessibility-expert` agent (in Vibe: `non-functional-testing:accessibility-expert`, spawned with `tools.agents` via `config_name`). If that agent is not installed, do the task yourself, following the steps below.
 
 # Task
 

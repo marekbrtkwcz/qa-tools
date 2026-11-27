@@ -49,7 +49,7 @@ Only the orchestrator delegates. When the Planner or the Analyst needs more disc
 
 ## Starting the pack
 
-See the plugin README: pick **Orchestrator** in Copilot's agent dropdown, run `/orchestration-basics` in Claude Code, or `$orchestration-basics` in Codex after copying the agents. Then describe the job, for example "Analyze this codebase for tech debt and modernization opportunities".
+See the plugin README: run `/orchestration-basics` in Vibe. Then describe the job, for example "Analyze this codebase for tech debt and modernization opportunities".
 
 ## Stop gates
 

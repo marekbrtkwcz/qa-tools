@@ -15,7 +15,7 @@ Take these from what the user typed after the command, or from the conversation.
 
 ## Who does the work
 
-Hand this task to the `change-gate-reviewer` agent (`change_gate_reviewer` in Codex). If that agent is not installed, do the task yourself, following the steps below.
+Hand this task to the `change-gate-reviewer` agent (in Vibe: `quality-gates:change-gate-reviewer`, spawned with `tools.agents` via `config_name`). If that agent is not installed, do the task yourself, following the steps below.
 
 # Task
 

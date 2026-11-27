@@ -15,7 +15,7 @@ Take these from what the user typed after the command, or from the conversation.
 
 ## Who does the work
 
-Hand this task to the `quality-debt-auditor` agent (`quality_debt_auditor` in Codex). If that agent is not installed, do the task yourself, following the steps below.
+Hand this task to the `quality-debt-auditor` agent (in Vibe: `quality-gates:quality-debt-auditor`, spawned with `tools.agents` via `config_name`). If that agent is not installed, do the task yourself, following the steps below.
 
 # Task
 

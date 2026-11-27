@@ -11,6 +11,9 @@ Wszystkie istotne zmiany tego projektu są dokumentowane tutaj. Format zbliżony
 - hooki `test-file-guard` i `red-test-deletion-guard` rozpoznają też pliki testowe Go (`*_test.go`), Pythona (`test_*.py`, `*_test.py`) i Robota (`*.robot`)
 - hooki łapią też wzorce w kodzie, nie tylko nazwy plików: `test-file-guard` blokuje `t.Skip` (Go), `@pytest.mark.skip`/`pytest.skip`/`unittest.skip` (Python), słowo kluczowe `Skip` (Robot, tylko w `.robot`) i ostrzega o `time.sleep`/`time.Sleep`/Robot `Sleep`; `red-test-deletion-guard` liczy asercje per język — samo `assert x == y` (pytest), `t.Error/t.Fatal/t.Fail` (Go), `Should ...` (Robot) — więc usunięcie wszystkich asercji blokuje też w tych językach; +7 testów jednostkowych (41 → 48 w hookach)
 - README: sekcja emotek zsynchronizowana z kompaktowym słownikiem (16 statusów), policzby wiedzy (14), opis hooków wielojęzycznych, usunięte stwierdzenie że bundle bez `knowledge/` nie przechodzi `check`
+- wycieki obcych hostów wyczyszczone z `src/` (27 plików): boilerplate „(`agent` in Codex)” → `tools.agents` + `config_name` `<bundle>:<agent>`, składnie `$x in Codex` → `/x`, instrukcje kopiowania `.codex/agents/` i „run in Claude Code / Copilot dropdown” → Vibe; `plugins/` poza `authoring/` ma teraz 0 wzmianek Codex/Claude Code/Copilot (było 58/35 plików); authoring i `running-evals.md` (tabela porównawcza hostów) celowo zwolnione
+- nowa bramka `scripts/lint-host-leaks.ts` (w `npm run check` + test w `test:p3`): skanuje zbudowane `plugins/` i failuje na wzorcach `in Codex` / `Claude Code` / `Copilot` poza `plugins/authoring/` i `running-evals.md`
+- re-freeze baseline budżetu tokenów (`token-budget-baseline.json`: body ~313237 → ~313522 tok) — świadomy wzrost z zamienników hostów na `tools.agents` + `config_name` w 20 skillach, zatwierdzony w tym commicie
 
 ### ✅ Dodane
 

@@ -39,7 +39,7 @@ Feature/refactoring delivery with gated commits only. When the goal is one of th
 
 ## Starting the pack
 
-See the plugin README: pick **Orchestrator Agent** in Copilot's agent dropdown, run `/plan-explore-review-commit` in Claude Code, or `$plan-explore-review-commit` in Codex after copying the agents. In Copilot you can also start with **Planner Agent** and use its handoff to the Orchestrator Agent.
+See the plugin README: run `/plan-explore-review-commit` in Vibe. You can also start with the **Planner Agent** and follow its handoff to the Orchestrator Agent.
 
 ## How a run goes
 

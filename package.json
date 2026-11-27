@@ -13,7 +13,7 @@
   },
   "scripts": {
     "build": "node scripts/build.ts",
-    "check": "node scripts/build.ts --check && node scripts/lint-all-packs.ts && node scripts/check-changelog.ts && node scripts/check-bundles-duplicates.ts && node scripts/lint-command-skill-pairs.ts && node scripts/lint-eval-suites.ts && node scripts/token-budget-audit.ts --check",
+    "check": "node scripts/build.ts --check && node scripts/lint-all-packs.ts && node scripts/check-changelog.ts && node scripts/check-bundles-duplicates.ts && node scripts/lint-command-skill-pairs.ts && node scripts/lint-eval-suites.ts && node scripts/lint-host-leaks.ts && node scripts/token-budget-audit.ts --check",
     "verify": "node scripts/build.ts --verify",
     "validate-manifests": "node scripts/validate-manifests.ts",
     "lint": "biome check scripts && node scripts/lint-all-packs.ts",
@@ -31,7 +31,7 @@
     "links:check": "node scripts/validate-links.ts --check",
     "p2": "npm run changelog:preview && npm run readme:stats:check && npm run links:check",
     "p2:all": "npm run changelog && npm run readme:stats && npm run links",
-    "test:p3": "node --test scripts/validate-links.test.ts scripts/generate-changelog.test.ts scripts/update-readme-stats.test.ts scripts/lint-command-skill-pairs.test.ts scripts/lint-eval-suites.test.ts scripts/token-budget-audit.test.ts",
+    "test:p3": "node --test scripts/validate-links.test.ts scripts/generate-changelog.test.ts scripts/update-readme-stats.test.ts scripts/lint-command-skill-pairs.test.ts scripts/lint-eval-suites.test.ts scripts/lint-host-leaks.test.ts scripts/token-budget-audit.test.ts",
     "test:all": "npm test && npm run test:p3",
     "p4": "npm run security:scan && npm run flaky:check && npm run benchmark",
     "security:scan": "node scripts/security-scan.ts",

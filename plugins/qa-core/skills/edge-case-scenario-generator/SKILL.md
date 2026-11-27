@@ -16,7 +16,7 @@ Take these from what the user typed after the command, or from the conversation.
 
 ## Who does the work
 
-Hand this task to the `ai-architect` agent (`ai_architect` in Codex). If that agent is not installed, do the task yourself, following the steps below.
+Hand this task to the `ai-architect` agent (in Vibe: `qa-core:ai-architect`, spawned with `tools.agents` via `config_name`). If that agent is not installed, do the task yourself, following the steps below.
 
 # Task
 

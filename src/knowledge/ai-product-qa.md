@@ -39,7 +39,7 @@ Injection and jailbreak testing is security testing. The guardrails skill opens 
 ## How to use
 
 1. Install the `ai-quality` plugin (see the quick start in the main README) and copy the `llm-evals` rule for your tool from `rules/`.
-2. Run `/design-llm-eval-suite` (`$design-llm-eval-suite` in Codex). Supply the feature and - this one is required - what "good output" means as a sentence. Without a stated promise the suite ends up asserting that the output is non-empty.
+2. Run `/design-llm-eval-suite`. Supply the feature and - this one is required - what "good output" means as a sentence. Without a stated promise the suite ends up asserting that the output is non-empty.
 3. Let it build the cheap deterministic layer first, then golden cases, then the gate. Measure the noise band before turning the gate on.
 4. Run `/test-llm-guardrails` once authorization is confirmed. Expect the guardrail coverage table to produce findings before a single adversarial case runs - prompt-only tool authorization and fail-open moderation are the usual two.
 5. Run a groundedness review (`reviewing-ai-output-groundedness`) on a sample before launch, and feed every fabricated or contradicted claim back into the eval suite as a permanent regression case. That feedback loop is what makes the human review compound instead of evaporate.
