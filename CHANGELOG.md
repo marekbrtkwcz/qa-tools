@@ -6,6 +6,13 @@ Wszystkie istotne zmiany tego projektu są dokumentowane tutaj. Format zbliżony
 
 ### ✅ Dodane
 
+- skill `go-for-testers` (test-automation): odpowiednik `python-for-testers` dla Go — single toolchain + `go.mod`, table-driven tests z subtestami (`t.Run`, `t.Parallel`), narzędzia `t` (`t.Helper`/`t.Cleanup`/`t.TempDir`/`t.Setenv`), `httptest` jako double API, interfejsy consumer-side zamiast mock-frameworków, gate `-race -count=1 -shuffle=on`, `golangci-lint` jako bramka CI, chromedp/playwright-go na E2E; + zasoby `cheatsheet.md` i `go-project-config.md` (198 → 199 skilli; test-automation 62 → 63)
+  > - 3 case'y eval w `test-automation` (9 → 12; kolekcja 99 → 102): act-pos onboardingu Go (aktywacja bez nazwania), act-neg „port na Go ≠ pytest" (routing vs `port-suite-to-python-java`), kontrakt zielonego-cache (`-count=1`, bez podnoszenia timeoutów); treść skilla zweryfikowana na żywym toolchainie Go 1.27 (panic `t.Setenv`+`t.Parallel`, goleak, synctest, fuzzing, pułapka zakresu `assert.New(t)`, `Example` stdout vs `println` stderr)
+
+### 🐛 Naprawione
+
+- cap `config` playwright-mcp wpisany w źródło budowania (`scripts/build.ts`) — commit 77eb70b edytował wygenerowany `plugins/qa-mcp/mcp.json`, więc każdy `npm run build` po cichu cofał cap; po poprawce rebuild odtwarza plik 1:1
+
 - svn obok gita — skill `svn-for-testers` + SVN-owe odpowiedniki w kluczowych skillach (**P28**)
   > - nowy skill `svn-for-testers` (test-automation): working-copy lifecycle (commit publikuje od razu — brak lokalnej historii), trunk/branches/tags jako konwencja, changelisty zamiast stage'owania, `svn:ignore` (nie `.gitignore`), externals, hooki server-side w `repo/hooks/`, ręczny bisect po `svn update -r`, `svn blame`/`svn log`; + zasób `git-svn-for-testers.md` — pełna mapa odpowiedników git↔svn (197 → 198 skillów; test-automation 61 → 62)
   > - stan wyjściowy: kolekcja zakładała gita w ~40 plikach; SVN-owe odpowiedniki wpisane inline w kluczowych workflowach: `diagnosing-test-failures` (+`resources/feedback-loops.md`, bisect → binarny search rewizji), `scoping-change-relevance` (pin diffu po rewizji zamiast refa), `regression-scope`, `release-notes-from-diff` (`svn log -r`), `monorepo-affected-tests`, `test-impact-analysis`, `assessing-comprehension-debt` i `recording-change-intent` (trailery gita → `Key: value` w treści komunikatu SVN), routing w wiedzy `test-automation` + `automation-tester-essentials`

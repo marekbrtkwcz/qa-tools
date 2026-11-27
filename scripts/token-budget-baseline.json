@@ -1,10 +1,10 @@
 {
   "_comment": "Frozen context budget of src/skills. --check fails on any growth over these totals; shrink is reported. Re-freeze consciously: node scripts/token-budget-audit.ts --update-baseline",
-  "generated": "2026-11-26T10:38:19.212Z",
+  "generated": "2026-11-27T10:00:23.081Z",
   "totals": {
-    "skillCount": 198,
-    "descriptionChars": 96819,
-    "descriptionTokensEst": 24275,
-    "bodyTokensEst": 310789
+    "skillCount": 199,
+    "descriptionChars": 97394,
+    "descriptionTokensEst": 24419,
+    "bodyTokensEst": 313237
   }
 }
