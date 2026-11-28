@@ -46,6 +46,8 @@ cp -r plugins/qa-core <projekt>/.vibe/plugins/qa-core
 
 ⚠️ **MCP bez duplikatów**: serwery MCP są tylko w pluginie `qa-mcp` — **Playwright MCP** (`playwright`) i **Chrome DevTools MCP** (`chrome-devtools`) do sterowania przeglądarką oraz **k6 MCP** (`k6`) do testów obciążeniowych. Jeśli używasz browser automation lub k6 (test-automation, non-functional-testing, paczki UI/API), doinstaluj `cp -r plugins/qa-mcp ~/.vibe/plugins/` **raz** — same bundle nie deklarują już `mcp:`, więc instalacja kilku nie powiela serwerów.
 
+⚠️ **MCP a subagenty (sprawdzone runtime, Vibe 3.1.5, 2026-11-28)**: `enabled_tools = ["mcp_playwright.*"]` u agenta jest poprawnym globem (główny agent rozwiązuje `tools.mcp_playwright.browser_navigate`), ale spawn subagenta przez `tools.agents` dostaje tylko konektory `file_system`/`process`/`self` — konektory MCP nie są podłączane do dziecka. Agent przeglądarkowy (np. `qa-core:test-planner`) jako subagent potrafi pisać pliki (zweryfikowane: `.qa/test-plan.md`), ale przeglądarkę musi prowadzić agent główny; dziecko dostanie jej rezultaty jako tekst.
+
 Wszystkie trzy serwery działają na **globalnych binarnych** (`playwright-mcp`, `chrome-devtools-mcp`, `k6` — nie na `npx`), więc wymagają jednorazowej instalacji. Przeglądarkowe binarne instalujesz przez npm (każdy system):
 
 ```

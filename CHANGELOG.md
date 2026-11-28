@@ -4,6 +4,10 @@ Wszystkie istotne zmiany tego projektu są dokumentowane tutaj. Format zbliżony
 
 ## [Unreleased]
 
+## [0.8.0] - 2026-11-28
+
+Wydanie „odchudzające”: kompaktowy słownik emotek (−~2,2 MB z `plugins/`), split `test-automation-stacks`, wielojęzyczne hooki (Go/Python/Robot), naprawa `enabled_tools` MCP u agentów, wyczyszczenie wycieków obcych hostów + bramka `lint-host-leaks`.
+
 ### 🔄 Zmienione
 
 - split `test-automation` (63 → 57 skilli): nowy opcjonalny bundle `test-automation-stacks` (`go-for-testers`, `python-for-testers`, `port-suite-to-python-java`, `robot-framework-automation`, `svn-for-testers`, `testing-with-bun`) — projekt TS/Playwright nie ładuje już opisów obcych stacków przy starcie sesji; 6 case'ów eval przeniesionych do suite `test-automation-stacks` (12 → 6 + 6)

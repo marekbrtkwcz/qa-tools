@@ -109,12 +109,14 @@ test('BLOCK: edit stripping every assertion from a pytest / Go / Robot test file
   assert.equal(py.decision?.decision, 'deny', 'bare assert (no parens) must count as an assertion');
   const go = runHook(edit('api/handler_test.go', 'if got != 1 {\n\tt.Fatal("bad")\n}', 'if got != 1 {\n\t_ = got\n}'));
   assert.equal(go.decision?.decision, 'deny', 't.Fatal must count as an assertion');
-  const rv = '$' + '{total}'; // Robot var via concatenation (biome noTemplateCurlyInString)
+  // Robot var ${total} held in rv: a literal "${" in a plain string trips
+  // biome noTemplateCurlyInString, and a raw interpolation would not be literal
+  const rv = '$' + '{total}';
   const robot = runHook(
     edit(
       'e2e/smoke.robot',
-      ['Smoke', '    ' + rv + '=    Get Total', '    Should Be Equal    ' + rv + '    100'].join('\n'),
-      ['Smoke', '    ' + rv + '=    Get Total'].join('\n'),
+      ['Smoke', `    ${rv}=    Get Total`, `    Should Be Equal    ${rv}    100`].join('\n'),
+      ['Smoke', `    ${rv}=    Get Total`].join('\n'),
     ),
   );
   assert.equal(robot.decision?.decision, 'deny', 'Robot Should Be Equal must count as an assertion');

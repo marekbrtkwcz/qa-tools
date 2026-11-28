@@ -1,6 +1,6 @@
 {
   "name": "qa-tools",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "private": true,
   "description": "Native Mistral Vibe CLI plugins for test automation: skills, subagents, knowledge and quality-gate hooks (Agent Plugins 1.0 format).",
   "license": "MIT",

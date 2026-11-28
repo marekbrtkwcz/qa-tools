@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "qa-mcp",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "QA MCP servers for qa-tools (browser: Playwright MCP + Chrome DevTools MCP; load testing: k6 MCP): install once alongside any automation bundle (test-automation, non-functional-testing, ui-api-automation, ui-api-automation-minimal) so browser control and load testing are never duplicated by multiple bundles.",
   "author": {
     "name": "qa-tools contributors",

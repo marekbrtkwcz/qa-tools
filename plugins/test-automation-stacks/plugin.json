@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "test-automation-stacks",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Optional language and tool stacks for test automation: Go, Python/pytest, Robot Framework, SVN, Bun, and porting conventions to pytest/JUnit/NUnit. Install alongside test-automation only when the project uses that stack.",
   "author": {
     "name": "qa-tools contributors",
