@@ -2,7 +2,7 @@
 name: test-planner
 title: Test Planner
 description: "Explores a web app and its API in a browser and writes a risk-prioritized plan of UI, API and integration scenarios; also turns requirements or notes into test cases, charters, traceability matrices and bug reports. Use when a feature needs a plan or a URL is all there is to start from."
-capabilities: [read, search, edit, web, todo]
+capabilities: [read, search, edit, write, web, todo]
 mcp: [playwright]
 ---
 

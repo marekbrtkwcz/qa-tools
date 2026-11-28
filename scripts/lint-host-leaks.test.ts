@@ -7,7 +7,6 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
-const os = require('node:os');
 const path = require('node:path');
 const { LEAK, EXEMPT_DIRS, EXEMPT_FILES } = require('./lint-host-leaks.ts');
 

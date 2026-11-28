@@ -319,6 +319,13 @@ test('toolsOf: maps capabilities and pack tool names, lowercases, dedupes', () =
   assert.deepEqual(toolsOf({}), []);
 });
 
+test('toolsOf: mcp: frontmatter and Claude-style mcp__server__* map to Vibe mcp_<server>.* globs', () => {
+  assert.deepEqual(toolsOf({ capabilities: ['read'], mcp: ['playwright'] }), ['read_file', 'mcp_playwright.*']);
+  assert.deepEqual(toolsOf({ tools: 'Read, mcp__playwright__*' }), ['read_file', 'mcp_playwright.*']);
+  // already-Vibe glob passes through unchanged
+  assert.deepEqual(toolsOf({ mcp: ['chrome-devtools'] }), ['mcp_chrome_devtools.*']);
+});
+
 test('isMutating: edit/write/execute/bash flip safety to neutral', () => {
   assert.equal(isMutating({ capabilities: ['read', 'search'] }), false);
   assert.equal(isMutating({ capabilities: ['execute'] }), true);

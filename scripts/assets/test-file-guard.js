@@ -100,8 +100,8 @@ const BLOCK = [
     pardonable: true,
   },
   {
-    re: /\bt\.Skipf?\s*\(/,
-    why: 'skipped test (Go t.Skip/t.Skipf): a committed skip silently disables the test',
+    re: /\bt\.(?:Skipf?|SkipNow)\s*\(/,
+    why: 'skipped test (Go t.Skip/t.Skipf/t.SkipNow): a committed skip silently disables the test',
     pardonable: true,
   },
   {
@@ -130,7 +130,9 @@ const WARN = [
     why: 'hardcoded sleep — prefer a deterministic condition',
   },
   {
-    re: /\btime\.sleep\s*\(/i,
+    // case-sensitive on purpose: with /i this also matched Go's time.Sleep
+    // and every Go sleep was reported twice (Python + Go warning)
+    re: /\btime\.sleep\s*\(/,
     why: 'hardcoded sleep (Python time.sleep) — prefer a deterministic condition',
   },
   {

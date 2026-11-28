@@ -202,7 +202,25 @@ function toolsOf(meta: AgentMeta): string[] {
   } else if (Array.isArray(meta.tools)) {
     caps.push(...meta.tools);
   }
-  return [...new Set(caps.flatMap((c) => CAPABILITY_TOOLS[String(c).toLowerCase()] || []))];
+  // `mcp: [playwright]` frontmatter -> the server's MCP tools in Vibe naming
+  // (mcp_<server>.<tool>, glob mcp_<server>.*). Pack-style Claude tool names
+  // (mcp__playwright__*) map the same way.
+  for (const server of meta.mcp || []) {
+    caps.push(
+      `mcp_${String(server)
+        .toLowerCase()
+        .replace(/[^a-z0-9_$]/g, '_')}.*`,
+    );
+  }
+  const mapped = caps.flatMap((c) => {
+    const key = String(c).toLowerCase();
+    // already-Vibe MCP glob (from `mcp:` frontmatter) passes through
+    if (/^mcp_[a-z0-9_$]+\.\*$/.test(key)) return [key];
+    const claudeMcp = key.match(/^mcp__([a-z0-9_]+)__\*$/);
+    if (claudeMcp) return [`mcp_${claudeMcp[1]}.*`];
+    return CAPABILITY_TOOLS[key] || [];
+  });
+  return [...new Set(mapped)];
 }
 
 function isMutating(meta: AgentMeta): boolean {

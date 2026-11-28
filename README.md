@@ -31,11 +31,12 @@ Paczki orkiestracyjne działają jak w źródle: driver-skill (user-invocable) p
 ## 🚀 Instalacja
 
 ```bash
-# wszystkie pluginy (globalnie dla użytkownika):
-cp -r plugins/* ~/.vibe/plugins/
-
-# albo wybrane:
+# zacznij od profilu minimalnego (najmniejszy narzut opisów skilli w kontekście sesji):
 cp -r plugins/qa-core ~/.vibe/plugins/qa-core
+
+# wszystkie pluginy (globalnie dla użytkownika) — pełna kolekcja to ~19 tys. tok
+# opisów skilli widocznych na starcie każdej sesji, doinstaluj bundle'e, których używasz:
+cp -r plugins/* ~/.vibe/plugins/
 
 # albo projektowo (wymaga trusted folder):
 cp -r plugins/qa-core <projekt>/.vibe/plugins/qa-core
@@ -91,7 +92,7 @@ src/agents/*.md           ← kontrakty agentów: scope, hands-off, deliverable,
 ```
 
 **Zasada:** dokumentacja mieszka przy assetcie, który opisuje — nie w osobnym `docs/`.
-Bundle może być czysto skillo wy — `test-automation-stacks` nie ma `knowledge/` i przechodzi `npm run check`; bramka pilnuje spójności `bundles.yaml` ↔ `src/` ↔ `plugins/`.
+Bundle może być czysto skillowy — `test-automation-stacks` nie ma `knowledge/` i przechodzi `npm run check`; bramka pilnuje spójności `bundles.yaml` ↔ `src/` ↔ `plugins/`.
 
 ## 🗂️ Struktura
 
@@ -199,14 +200,14 @@ Konwencje potwierdzone testami (patrz historia commitów): klucze TOML **snake_c
 - 156 skilli widocznych dla modelu (199 − 43 z `disable-model-invocation: true`; policzone z frontmatterów `src/skills`, pilnuje tego bramka `checkReadmeCounts` w buildzie; user-invocable dostępne na wywołanie — w tym 4 driver-skille paczek)
 - spawn subagentów z personami z instrukcji: `qa-core:rubber-duck` 🦆, `quality-gates:change-gate-reviewer`, `test-automation:test-code-reviewer`, `orchestration-basics:basics-analyst`
 - 14 knowledge folders (10 z bundle'ów + 4 GUIDE paczek orkiestracyjnych)
-- hook `pre_tool` test-file-guard (w `test-automation`, 3 wpisy: `write_file`/`edit`/`bash`): **blokuje** zapis `.only()`/`fit()` oraz `.skip()`/`xit()`/`xdescribe()` w plikach testowych JS/TS, `t.Skip()` w Go, `@pytest.mark.skip`/`pytest.skip`/`unittest.skip` w Pythonie i słowo kluczowe `Skip` w `.robot` (structured `decision: deny`, klasyfikacja po nazwie pliku — `.test/.spec`, `*_test.go`, `test_*.py`, `*_test.py`, `*.robot`, katalogi `tests/`/`e2e/`; świadoma kwarantanna przechodzi — zapis z adnotacją `waiver` (owner + expiry) jest zamieniany na ostrzeżenie), **ostrzega** o `waitForTimeout`, `time.sleep`/`time.Sleep`/Robot `Sleep`, tautologiach oraz zapisie pliku testowego przez `bash` (heredoc/tee/sed — omija bramki plikowe; parsowanie komendy jest zawodne, więc bash jest zawsze warn-only); wszystko logowane w `$PLUGIN_DATA`. Awaria hooka = fail-open (ostrzeżenie, edyt przechodzi), reguły w `vibe-hooks/test-file-guard.js`, 16 testów jednostkowych przypina model severity (`scripts/assets/test-file-guard.test.js`; walidacja `.only()`/fit headless — z 0.2.0, rodzina skip i tryb bash — testy jednostkowe, headless w toku)
+- hook `pre_tool` test-file-guard (w `test-automation`, 3 wpisy: `write_file`/`edit`/`bash`): **blokuje** zapis `.only()`/`fit()` oraz `.skip()`/`xit()`/`xdescribe()` w plikach testowych JS/TS, `t.Skip()` w Go, `@pytest.mark.skip`/`pytest.skip`/`unittest.skip` w Pythonie i słowo kluczowe `Skip` w `.robot` (structured `decision: deny`, klasyfikacja po nazwie pliku — `.test/.spec`, `*_test.go`, `test_*.py`, `*_test.py`, `*.robot`, katalogi `tests/`/`e2e/`; świadoma kwarantanna przechodzi — zapis z adnotacją `waiver` (owner + expiry) jest zamieniany na ostrzeżenie), **ostrzega** o `waitForTimeout`, `time.sleep`/`time.Sleep`/Robot `Sleep`, tautologiach oraz zapisie pliku testowego przez `bash` (heredoc/tee/sed — omija bramki plikowe; parsowanie komendy jest zawodne, więc bash jest zawsze warn-only); wszystko logowane w `$PLUGIN_DATA`. Awaria hooka = fail-open (ostrzeżenie, edyt przechodzi), reguły w `vibe-hooks/test-file-guard.js`, 25 testów jednostkowych przypina model severity (`scripts/assets/test-file-guard.test.js`; walidacja `.only()`/fit headless — z 0.2.0, rodzina skip i tryb bash — testy jednostkowe, headless w toku)
 
 ## 🧭 Roadmapa
 
 - 🔍 `connectors.json` (GitHub, k6) dla bundle'i automatyzujących
 - ✅ GitHub Actions CI (`.github/workflows/ci.yml`): skonsolidowane bramki na push/PR — **fast** (zero-dep: testy, `check`, manifesty, drift-gate; matrysa ubuntu + windows) i **full** (npm ci: `lint`, `typecheck`, P2, P3); tagi `v*` ma wyłącznie `release.yml` (walidacja taga + wszystkie bramki + GitHub Release z artefaktami `plugins/`, bez auto-bumpów i auto-commitów), `quality-gates.yml` działa tylko jako nightly (`security:scan`, `flaky:check`, `benchmark:full`)
 - 🔍 weryfikacja ładowania pluginu w Vibe headless w CI (wymaga zainstalowanego CLI i auth — świadomie poza pierwszą iteracją CI)
-- hook `pre_tool` red-test-deletion-guard (w `test-automation`, 3 wpisy: `write_file`/`edit`/`bash`, w tym samym modelu severity co test-file-guard): **blokuje** green-by-amnesia — `rm`/`git rm`/`mv`/`unlink` celujące w pliki czy katalogi testowe oraz edity w plikach testowych, które usuwają wszystkie asercje z zastąpionego fragmentu (asercje liczone per język: `expect()`/`assert()` JS/TS, samo `assert x == y` w pytest, `t.Error/t.Fatal` w Go, `Should ...` w Robot; structured `decision: deny`, exit 0; escape hatch jak wyżej — adnotacja `waiver` zamienia deny w ostrzeżenie), **ostrzega** o `rimraf`/`Remove-Item`/`del` na ścieżkach testowych, in-place edycjach `sed`/`perl`/`dd`/`tee` w plikach testowych oraz edytach zmniejszających liczbę asercji; `rm`/`mv` bez ścieżki testowej = cisza (zero fałszywych trafień), 20 testów jednostkowych przypina model severity (`scripts/assets/red-test-deletion-guard.test.js`)
+- hook `pre_tool` red-test-deletion-guard (w `test-automation`, 3 wpisy: `write_file`/`edit`/`bash`, w tym samym modelu severity co test-file-guard): **blokuje** green-by-amnesia — `rm`/`git rm`/`mv`/`unlink` celujące w pliki czy katalogi testowe oraz edity w plikach testowych, które usuwają wszystkie asercje z zastąpionego fragmentu (asercje liczone per język: `expect()`/`assert()` JS/TS, samo `assert x == y` w pytest, `t.Error/t.Fatal` w Go, `Should ...` w Robot; structured `decision: deny`, exit 0; escape hatch jak wyżej — adnotacja `waiver` zamienia deny w ostrzeżenie), **ostrzega** o `rimraf`/`Remove-Item`/`del` na ścieżkach testowych, in-place edycjach `sed`/`perl`/`dd`/`tee` w plikach testowych oraz edytach zmniejszających liczbę asercji; `rm`/`mv` bez ścieżki testowej = cisza (zero fałszywych trafień), 25 testów jednostkowych przypina model severity (`scripts/assets/red-test-deletion-guard.test.js`)
 - ✅ hook blokujący dla `.only()`/`fit()` w plikach testowych — deny przez structured response (exit 0), fail-open na awarię hooka
 - 🔍 pełna polityka jakości hooka: kolejne wzorce (mock-only tests, retries jako „fix"), decyzja fail-open vs strict fail-closed
 - 🔍 hook-only pluginy źródła (`always-on-skills`, `print-tool-info`) — częściowo pokryte przez `test-file-guard`

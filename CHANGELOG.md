@@ -14,6 +14,10 @@ Wszystkie istotne zmiany tego projektu są dokumentowane tutaj. Format zbliżony
 - wycieki obcych hostów wyczyszczone z `src/` (27 plików): boilerplate „(`agent` in Codex)” → `tools.agents` + `config_name` `<bundle>:<agent>`, składnie `$x in Codex` → `/x`, instrukcje kopiowania `.codex/agents/` i „run in Claude Code / Copilot dropdown” → Vibe; `plugins/` poza `authoring/` ma teraz 0 wzmianek Codex/Claude Code/Copilot (było 58/35 plików); authoring i `running-evals.md` (tabela porównawcza hostów) celowo zwolnione
 - nowa bramka `scripts/lint-host-leaks.ts` (w `npm run check` + test w `test:p3`): skanuje zbudowane `plugins/` i failuje na wzorcach `in Codex` / `Claude Code` / `Copilot` poza `plugins/authoring/` i `running-evals.md`
 - re-freeze baseline budżetu tokenów (`token-budget-baseline.json`: body ~313237 → ~313522 tok) — świadomy wzrost z zamienników hostów na `tools.agents` + `config_name` w 20 skillach, zatwierdzony w tym commicie
+- `toolsOf` w build.ts mapuje teraz `mcp: [playwright]` i claude'owe `mcp__playwright__*` na vibe'owy glob `mcp_playwright.*` — agenci z Playwright MCP (test-planner, accessibility-expert, uiapi explorers itd.) dostają narzędzia MCP w `enabled_tools`; `test-planner` dostał też `write` (zapis `.qa/test-plan.md`); +test w build.test.ts
+- test-file-guard: `t.SkipNow()` do rodziny skip (Go), `time.sleep` bez flagi /i — Go `time.Sleep` nie raportuje już podwójnie (Python+Go); +2 testy (50 w hookach)
+- sprzątanie legacy: usunięty niepodpięty `scripts/assets/quality-gate-hook.js` (+test, wpis w `test:p5`) i nieużywane devDependencies (`vitest`, `jsdom`, `@vitest/coverage-v8`, `conventional-changelog` — testy chodzą na `node:test`); lockfile zsynchronizowany
+- README: literówka „skillowy”, liczniki testów hooków 16/20 → 25/25, instalacja zaczyna od profilu minimalnego (`qa-core`) zamiast pełnego `cp -r plugins/*`
 
 ### ✅ Dodane
 

@@ -168,6 +168,18 @@ test('WARN: time.sleep / time.Sleep / Robot Sleep in test files warn, never deny
   assert.ok(robot.decision.system_message.includes('Sleep'), robot.decision.system_message);
 });
 
+test('BLOCK: Go t.SkipNow is denied like t.Skip', () => {
+  const { decision } = runHook(writeFile('api/handler_test.go', 'func TestX(t *testing.T) {\n\tt.SkipNow()\n}\n'));
+  assert.equal(decision?.decision, 'deny');
+});
+
+test('WARN: Go time.Sleep reports only the Go warning, not the Python one twice', () => {
+  const { decision } = runHook(writeFile('api/handler_test.go', 'time.Sleep(time.Second)\n'));
+  assert.equal(decision.decision, 'allow');
+  assert.ok(decision.system_message.includes('Go time.Sleep'), decision.system_message);
+  assert.ok(!decision.system_message.includes('Python time.sleep'), decision.system_message);
+});
+
 test('Robot Skip/Sleep keywords do not fire outside .robot files', () => {
   const { decision } = runHook(writeFile('src/app.test.ts', 'const x = 1;\nSkip this for now\nSleep tight\n'));
   assert.equal(decision, null, 'file-scoped Robot patterns must stay silent in JS test files');

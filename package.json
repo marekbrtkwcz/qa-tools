@@ -55,17 +55,13 @@
     "perf:alert": "node scripts/performance-regression-alerts.ts alert",
     "perf:history": "node scripts/performance-regression-alerts.ts history",
     "perf:clear": "node scripts/performance-regression-alerts.ts clear",
-    "test:p5": "node --test scripts/assets/quality-gate-hook.test.js scripts/quarantine-flaky-tests.test.ts scripts/performance-regression-alerts.test.ts scripts/security-gate-enforce.test.ts",
+    "test:p5": "node --test scripts/quarantine-flaky-tests.test.ts scripts/performance-regression-alerts.test.ts scripts/security-gate-enforce.test.ts",
     "test:all:p5": "npm run test:all:p4 && npm run test:p5"
   },
   "devDependencies": {
     "@biomejs/biome": "2.6.8",
     "@types/node": "^26.6.10",
-    "@vitest/coverage-v8": "^5.1.1",
-    "conventional-changelog": "^6.0.0",
-    "jsdom": "^31.0.1",
     "typescript": "^7.0.2",
-    "vitest": "^5.1.1",
     "yaml": "^2.6.0"
   }
 }
