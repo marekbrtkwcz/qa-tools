@@ -4,6 +4,11 @@ Wszystkie istotne zmiany tego projektu są dokumentowane tutaj. Format zbliżony
 
 ## [Unreleased]
 
+### 🔄 Zmienione
+
+- runtime note o MCP w subagentach (Vibe 3.1.5, sprawdzone `vibe -p`): dzieci z `tools.agents` nie dostają konektorów MCP — notka w 9 agentach przeglądarkowych (`test-planner`, `uiapi-fe-explorer`, `uiapi-min-explorer` i in.) oraz w driver-skillach `ui-api-automation` / `ui-api-automation-minimal`: główny agent prowadzi przeglądarkę przez Playwright MCP (z `qa-mcp`) i przekazuje dziecku snapshoty/ruch sieciowy jako tekst; fallback to Playwright CLI przez `bash`
+- re-freeze baseline budżetu tokenów (body ~313522 → ~313691 tok) — +169 tok to dwie notki runtime w driver-skillach packów, zatwierdzone w tym commicie
+
 ## [0.8.0] - 2026-11-28
 
 Wydanie „odchudzające”: kompaktowy słownik emotek (−~2,2 MB z `plugins/`), split `test-automation-stacks`, wielojęzyczne hooki (Go/Python/Robot), naprawa `enabled_tools` MCP u agentów, wyczyszczenie wycieków obcych hostów + bramka `lint-host-leaks`.

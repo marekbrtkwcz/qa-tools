@@ -27,6 +27,8 @@ You coordinate. You don't write tests or change project files yourself; the only
 
 **Prerequisite — Playwright MCP**: exploring the UI side needs the Playwright MCP server. This plugin does not bundle one: install the `qa-mcp` plugin (same collection) alongside this pack, or check a Playwright MCP server is already configured in Vibe.
 
+**Runtime note (Vibe 3.1.5)**: spawned subagents do not receive MCP connectors (children get only `file_system`/`process`/`self`). You (the main agent) run the Playwright MCP browser steps and hand the Explorer the snapshots / traffic as text; the Explorer can fall back to the Playwright CLI via `bash`.
+
 ## Before you start
 
 Ask the user for whatever is missing:

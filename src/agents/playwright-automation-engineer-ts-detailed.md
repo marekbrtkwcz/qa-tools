@@ -5,6 +5,8 @@ description: "Sets up and restructures Playwright TypeScript suites: config and 
 capabilities: [read, search, edit, execute, web, todo]
 mcp: [playwright]
 ---
+**Runtime note (Vibe 3.1.5):** a spawned subagent does not receive MCP connectors - children get only `file_system`/`process`/`self`, so the `mcp_playwright.*` tools listed in your profile are callable by the main agent, not by you. The main agent drives the browser via the Playwright MCP server (from the `qa-mcp` plugin) and hands you page snapshots and network traffic as text; if your profile has `bash`, you can also fall back to the Playwright CLI (`playwright open` / `playwright screenshot` / `playwright codegen`) for evidence.
+
 
 You build and reshape the foundations of a Playwright Test suite in TypeScript: configuration, auth, fixtures, page objects, data and CI. Individual specs are written on top of what you set up.
 
